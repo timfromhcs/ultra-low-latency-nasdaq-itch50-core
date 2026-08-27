@@ -1,4 +1,4 @@
-name: CI Verification & Physical Sign-Off
+name: CI Verification
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
 
 jobs:
-  verify-and-synthesize:
+  verify:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
@@ -18,33 +18,13 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y yosys iverilog verilator z3 python3-pip
 
-      - name: Setup Python Virtualenv & Dependencies
+      - name: Setup Python Virtualenv and Dependencies
         run: |
           python3 -m venv .venv
           source .venv/bin/activate
           pip install --upgrade pip
-          pip install cocotb cocotb-tools pytest scapy wavedrom klayout siliconcompiler
+          pip install cocotb cocotb-tools pytest scapy wavedrom klayout
 
-      - name: Stage 1: RTL Linting
+      - name: Run Complete Verification Suite
         run: |
-          make lint
-
-      - name: Stage 2: Formal Verification (SMT2 + Z3)
-        run: |
-          make formal
-
-      - name: Stage 3: 1,000,000-Packet Stress Simulation & Coverage
-        run: |
-          make sim
-
-      - name: Stage 3b: Cocotb Integration Suite
-        run: |
-          make cocotb
-
-      - name: Stage 4: Gate-Level Physical Synthesis
-        run: |
-          make synth
-
-      - name: Stage 5: Documentation & Asset Rendering
-        run: |
-          make docs
+          make verify_all
