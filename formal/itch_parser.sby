@@ -1,0 +1,23 @@
+[options]
+mode bmc
+depth 25
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -I. -formal itch_pkg.sv
+read_verilog -I. -formal itch_drop_gate.sv
+read_verilog -I. -formal itch_parser_core.sv
+read_verilog -I. -formal itch_shifter.sv
+read_verilog -I. -formal itch_top.sv
+read_verilog -I. -formal itch_formal.sv
+prep -top itch_formal
+
+[files]
+rtl/itch_pkg.sv
+rtl/itch_drop_gate.sv
+rtl/itch_parser_core.sv
+rtl/itch_shifter.sv
+rtl/itch_top.sv
+formal/itch_formal.sv

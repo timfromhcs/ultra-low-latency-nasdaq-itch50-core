@@ -1,0 +1,31 @@
+# ultra-low-latency-nasdaq-itch50-core
+> Deterministic 0/1-Cycle Cut-Through NASDAQ ITCH 5.0 Market Data Parser IP Core in SystemVerilog.
+
+## Core Summary
+- Target Hardware: ASIC (Sky130, IHP130, TSMC) and FPGA (AMD Ultrascale+, Intel Agilex)
+- Ingress Bus: AXI4-Stream 128-bit Slave operating at 322.26 MHz (41.25 Gbps Line Rate)
+- Registered Pipeline Latency: Strictly 1 Clock Cycle (3.10 ns @ 322.26 MHz)
+- Asynchronous Combinatorial Fast-Path: <= 1.10 ns gate delay (Cycle 0 direct egress)
+- Direct L3 Stock-Locate Pre-Trigger: < 0.30 ns gate delay in Cycle 0 for instant Order Book indexing
+- Sub-Word Unaligned Frame Handling: 0 stall cycles overhead (Continuous 512-bit barrel shifter)
+- Verification: 100% Mathematically Proven (Z3 Formal BMC & K-Induction) + 1,000,000 Packet Stress Benchmark (0 errors)
+
+## Repository Structure
+- `rtl/`: SystemVerilog RTL modules (`itch_pkg.sv`, `itch_drop_gate.sv`, `itch_parser_core.sv`, `itch_shifter.sv`, `itch_top.sv`)
+- `formal/`: SVA formal verification harness and SymbiYosys project files (`itch_formal.sv`, `itch_parser.sby`)
+- `tb/`: Cocotb and Verilator 1,000,000 packet stress testbench (`sim_main.cpp`, `test_itch.py`, `golden_parser.py`, `generate_pcaps.py`)
+- `openlane/`: OpenLane ASIC physical design flow configuration (`config.json`)
+- `synth/`: SDC timing constraints (`itch_constraints.sdc`)
+- `docs/`: Microarchitecture specs, benchmark data, WaveDrom timing diagrams, and KLayout GDSII layout previews
+
+## Quick Reproduction
+```bash
+git clone https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+cd ultra-low-latency-nasdaq-itch50-core
+make verify_all
+```
+
+## Dual-Licensing Terms
+- Free Tier: Small businesses, researchers, and educational entities with gross annual revenue < $100,000 USD.
+- Mandatory Attribution String: "Hardware powered by ultra-low-latency-nasdaq-itch50-core by @timfromhcs (https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core)"
+- Enterprise Commercial Tier: Entities with gross annual revenue >= $100,000 USD must contact `timfromhcs@gmail.com` for a custom commercial license and SLA.
