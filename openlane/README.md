@@ -7,6 +7,7 @@ been committed, so no Fmax, slack or die-area claim is made.
 |---|---|---|
 | `config.json` | legacy Sky130 baseline | 3.10 ns |
 | `sky130.json` | Sky130 | 3.10 ns |
+| `sky130_250mhz.json` | Sky130 | 4.00 ns (250 MHz) |
 | `gf180.json` | GF180MCU | 3.10 ns |
 | `ihp-sg13g2.json` | IHP SG13G2 | 3.10 ns |
 
