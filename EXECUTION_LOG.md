@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 22:45 - SLSA provenance for release artifacts
+
+- `exe.yml`: build provenance attestation for `dist/chiplab.exe`
+  (`contents: read`, `id-token: write`, `attestations: write`).
+- `release.yml`: attestations for the EXE and for the npm tarball / Python wheel /
+  sdist; container workflow publishes `provenance: mode=max` + SBOM.
+- README documents `gh attestation verify`; roadmap split into SBOM+SLSA (done) and
+  reproducible builds/cosign signatures (open).
+
 ## 2026-11-03 22:20 - Optional ingress skid stage
 
 - `itch_top_book` parameter `INGRESS_SKID` (default 0) inserts `axis_skid_buffer` on

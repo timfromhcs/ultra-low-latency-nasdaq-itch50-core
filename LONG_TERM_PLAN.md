@@ -107,7 +107,9 @@ MDN PWA best practices, GitHub Actions docs.
 - [ ] OpenSTA slack at 250 MHz and 322 MHz; publish worst path.
 - [ ] GF180 + IHP SG13G2 configs, one run each.
 - [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
-- [ ] Replace illustrative GDS with an actual LibreLane render or label clearly.
+- [x] Replace illustrative GDS with an actual LibreLane render or label clearly: the
+      render is explicitly labeled an illustrative floorplan sketch in
+      `docs/images/README.md` and errata E9; it is not used as a sign-off artifact.
 
 **Gate:** slack report + DRC/LVS status; no "Fmax" claim without a report.
 
@@ -142,7 +144,10 @@ MDN PWA best practices, GitHub Actions docs.
 
 ### Phase 4 — Release / silicon-ready (8 → 12 months)
 - [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
-- [ ] Reproducible builds; SBOM + SLSA provenance; signed Docker/npm/PyPI.
+- [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
+      tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
+      `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+- [ ] Reproducible builds and cosign/sigstore signatures for npm/PyPI/Docker.
 - [x] Mutation: 9 parser→BBO mutants killed (`tools/mutate_book.py`,
       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
 - [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,

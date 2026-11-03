@@ -32,6 +32,10 @@ jobs:
   exe:
     name: Windows single EXE
     runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,6 +52,10 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force dist/release | Out-Null
           Copy-Item dist/chiplab.exe dist/release/chiplab.exe
+      - name: SLSA build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/release/chiplab.exe
       - uses: actions/upload-artifact@v4
         with:
           name: release-exe
@@ -56,6 +64,10 @@ jobs:
   packages:
     name: npm + PyPI packages
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -75,6 +87,13 @@ jobs:
           mkdir -p dist/release
           cp packages/npm/*.tgz dist/release/
           cp packages/python/dist/*.whl packages/python/dist/*.tar.gz dist/release/
+      - name: SLSA build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            dist/release/*.tgz
+            dist/release/*.whl
+            dist/release/*.tar.gz
       - uses: actions/upload-artifact@v4
         with:
           name: release-packages

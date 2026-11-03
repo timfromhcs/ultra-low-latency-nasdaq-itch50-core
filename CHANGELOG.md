@@ -74,6 +74,10 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **SLSA provenance** (v0.3.1+): `actions/attest-build-provenance` attests
+  `dist/chiplab.exe` in `exe.yml`/`release.yml`, and the npm tarball + Python
+  wheel/sdist in `release.yml`; verify with `gh attestation verify <file> --repo ...`.
+  The container image now publishes `provenance: mode=max` and an SBOM attestation.
 - **Optional ingress skid** (v0.3.1+): `itch_top_book #(.INGRESS_SKID(1))` puts the
   2-entry `axis_skid_buffer` in front of the parser for timing isolation at higher
   clocks; default 0 keeps the direct path. The parser→BBO test now injects periodic

@@ -6,6 +6,11 @@ on:
     tags: ["v*"]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   exe:
     runs-on: windows-latest
@@ -26,6 +31,10 @@ jobs:
           fi
       - name: Build
         run: npm run build:exe
+      - name: SLSA build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/chiplab.exe
       - name: Smoke test
         shell: pwsh
         run: |

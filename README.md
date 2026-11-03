@@ -135,6 +135,15 @@ Release artifacts:
 | `SHA256SUMS.txt` | `node scripts/checksums.mjs dist/release` |
 
 Verify a download with `sha256sum -c SHA256SUMS.txt` (or `Get-FileHash` on Windows).
+Every release EXE, npm tarball and Python wheel/sdist also carries a **SLSA build
+provenance** attestation from GitHub Actions:
+
+```bash
+gh attestation verify chiplab.exe --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core
+gh attestation verify chiplab-core-0.3.1.tgz --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core
+```
+
+The container image publishes `provenance: mode=max` and an SBOM attestation.
 The first published release is
 [v0.3.1](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.1) (first: [v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0))
 with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
@@ -223,7 +232,7 @@ Reports live in [`reports/`](reports/).
 | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | `tb/run_book_top_skid_cocotb.py` |
 | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | `tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
-| Supply chain | 163-component SBOM | `reports/sbom.json` |
+| Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker provenance `mode=max` + SBOM | `reports/sbom.json`, `release.yml` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
 | Docker image | builds and serves `/api/health` | `Dockerfile` |
