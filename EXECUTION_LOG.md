@@ -233,6 +233,13 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   The 400-event random test still passes with 0 level/table overflows.
 - Remaining timing cost: the 256-way parallel ref lookup (hashed BRAM table next).
 
+## Phase 1d - BBO order lookup
+
+- Replaced the 256-way parallel ref compare with a 4-way set-associative bank
+  (64 sets x 4 ways, index = ref[5:0]); 4 comparators instead of 256.
+- Same test suite still passes: 400 random events + 100 back-to-back, 0 overflows.
+- Remaining: physical timing sign-off of the level table + reduction (Phase 2).
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.
