@@ -1,6 +1,7 @@
 param(
   [switch]$InvokeAgent,
-  [switch]$Tick
+  [switch]$Tick,
+  [switch]$DryRun
 )
 # =============================================================================
 # File: scripts/heartbeat.ps1
@@ -15,30 +16,35 @@ $Log = Join-Path $Root "reports\heartbeat.log"
 New-Item -ItemType Directory -Force (Split-Path $Log) | Out-Null
 $Now = Get-Date
 $Line = "[{0}] hallo, es ist {1}" -f $Now.ToString("o"), $Now.ToString("HH:mm")
-Add-Content -Path $Log -Value $Line
+Add-Content -Path $Log -Value $Line -Encoding utf8
 
 if ($Tick) {
   Push-Location $Root
   try {
     $out = & node scripts/autonomy.mjs 2>&1
-    Add-Content -Path $Log -Value ($out -join "`n")
+    Add-Content -Path $Log -Value ($out -join "`n") -Encoding utf8
   } finally { Pop-Location }
 }
 
 if ($InvokeAgent) {
   Push-Location $Root
   try {
-    $Prompt = "Hallo, es ist $($Now.ToString('HH:mm')). Autonomy tick: run `node scripts/autonomy.mjs`, read the result, fix one failing gate if needed, append to EXECUTION_LOG.md, then stop. Do not start long new work."
+    $Prompt = "Hallo, es ist $($Now.ToString('HH:mm')). Autonomy tick: run node scripts/autonomy.mjs, read the result, fix one failing gate if needed, append to EXECUTION_LOG.md, then stop. Do not start long new work."
     $SessionFile = Join-Path $Root "autonomy\session.txt"
-    $RunArgs = @("run", "--auto", "--prompt", $Prompt)
+    $RunArgs = @("run", "--auto")
     if (Test-Path $SessionFile) {
       $SessionId = (Get-Content $SessionFile -Raw).Trim()
       if ($SessionId) { $RunArgs += @("--session", $SessionId) }
     } else {
       $RunArgs += "--continue"
     }
-    & opencode @RunArgs *>> $Log
+    $RunArgs += $Prompt
+    if ($DryRun) {
+      Add-Content -Path $Log -Value ("[heartbeat] dry-run: opencode " + ($RunArgs -join " ")) -Encoding utf8
+    } else {
+      & opencode @RunArgs 2>&1 | Out-File -FilePath $Log -Append -Encoding utf8
+    }
   } catch {
-    Add-Content -Path $Log -Value "[heartbeat] opencode failed: $_"
+    Add-Content -Path $Log -Value "[heartbeat] opencode failed: $_" -Encoding utf8
   } finally { Pop-Location }
 }

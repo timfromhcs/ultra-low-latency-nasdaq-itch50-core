@@ -10,17 +10,19 @@ on:
 jobs:
   rtl:
     name: RTL + formal + model
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Toolchain
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq verilator yosys iverilog z3 cvc5 python3-pip
+          sudo apt-get install -y -qq verilator yosys iverilog z3 python3-pip
+          # cvc5 is optional for the CI proof (Z3 is the required solver)
+          sudo apt-get install -y -qq cvc5 || true
       - name: Python deps
         run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install cocotb pytest scapy
+          python3 -m pip install --break-system-packages --upgrade pip
+          python3 -m pip install --break-system-packages cocotb pytest scapy
       - name: Lint
         run: make lint
       - name: Vectors (50k for CI time)
@@ -35,6 +37,7 @@ jobs:
         run: |
           python3 tb/run_cocotb.py
           python3 tb/run_pipeline_cocotb.py
+          python3 tb/run_skid_cocotb.py
 
   wasm-web:
     name: WASM + backend + MCP + Vercel
@@ -51,6 +54,8 @@ jobs:
         run: |
           cd wasm-core && cargo build --target wasm32-unknown-unknown --release
           cp target/wasm32-unknown-unknown/release/chiplab_core.wasm ../web/wasm/chiplab_core.wasm
+      - name: Python test deps
+        run: python3 -m pip install --break-system-packages --upgrade pip pytest
       - name: Gate
         run: node scripts/gate.mjs
 

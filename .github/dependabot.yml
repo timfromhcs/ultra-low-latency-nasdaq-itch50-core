@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: npm
+    directory: /packages/npm
+    schedule: { interval: weekly }
+  - package-ecosystem: cargo
+    directory: /wasm-core
+    schedule: { interval: weekly }
+  - package-ecosystem: cargo
+    directory: /native
+    schedule: { interval: weekly }
+  - package-ecosystem: pip
+    directory: /packages/python
+    schedule: { interval: weekly }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }

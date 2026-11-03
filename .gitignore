@@ -42,3 +42,4 @@ packages/python/src/*.egg-info/
 reports/wasm_*.bin
 
 tb/vectors_mut/
+reports/mcp-audit.log

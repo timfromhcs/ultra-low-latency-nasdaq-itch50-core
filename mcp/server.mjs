@@ -8,6 +8,7 @@
 import readline from "node:readline";
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { loadCore, CHIPS, decodeRecord, hostInfo } from "../backend/wasm.mjs";
 
@@ -66,6 +67,55 @@ const TOOLS = [
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
   },
 ];
+
+const ALLOWED = {
+  "chiplab.chips": [],
+  "chiplab.formal_status": [],
+  "chiplab.run": ["chip", "count", "seed", "mode"],
+  "chiplab.compare": ["count", "seed"],
+  "chiplab.book": ["count", "seed"],
+};
+
+function validateArgs(name, args) {
+  if (!args || typeof args !== "object" || Array.isArray(args)) throw new Error("arguments must be an object");
+  const allowed = ALLOWED[name];
+  if (!allowed) throw new Error(`unknown tool: ${name}`);
+  for (const k of Object.keys(args)) if (!allowed.includes(k)) throw new Error(`unexpected argument: ${k}`);
+  const out = {};
+  if (allowed.includes("count")) {
+    const n = Number(args.count ?? 100000);
+    if (!Number.isInteger(n) || n < 1 || n > 2_000_000) throw new Error("count must be an integer in 1..2000000");
+    out.count = n;
+  }
+  if (allowed.includes("seed")) {
+    const n = Number(args.seed ?? 1337);
+    if (!Number.isInteger(n) || n < 0 || n > 2 ** 31 - 1) throw new Error("seed must be an integer in 0..2^31-1");
+    out.seed = n;
+  }
+  if (allowed.includes("chip")) {
+    const n = Number(args.chip ?? 1);
+    if (!Number.isInteger(n) || n < 0 || n > 7) throw new Error("chip must be an integer in 0..7");
+    out.chip = n;
+  }
+  if (allowed.includes("mode")) {
+    const n = Number(args.mode ?? 0);
+    if (![0, 1, 2].includes(n)) throw new Error("mode must be 0, 1 or 2");
+    out.mode = n;
+  }
+  return out;
+}
+
+function audit(name, args, result, error) {
+  try {
+    const h = crypto.createHash("sha256").update(JSON.stringify(args)).digest("hex").slice(0, 16);
+    const line = JSON.stringify({
+      ts: new Date().toISOString(), tool: name, argsHash: h,
+      ok: !error, result: error ? "error" : (result?.rows ? `${result.rows.length} rows` : result?.messages ? `${result.messages} msgs` : "ok"),
+    });
+    fs.mkdirSync(path.resolve(root, "reports"), { recursive: true });
+    fs.appendFileSync(path.resolve(root, "reports/mcp-audit.log"), line + "\n");
+  } catch { /* audit must never break a tool */ }
+}
 
 function summary(header, streamBytes) {
   const cycles = Math.max(1, header.cycles);
@@ -132,8 +182,16 @@ rl.on("line", (line) => {
     if (method === "tools/list") { send({ jsonrpc: "2.0", id, result: { tools: TOOLS } }); return; }
     if (method === "tools/call") {
       const name = params?.name;
-      const args = params?.arguments || {};
-      const result = runTool(name, args);
+      let result, err;
+      try {
+        const args = validateArgs(name, params?.arguments || {});
+        result = runTool(name, args);
+      } catch (e) {
+        err = e;
+        throw e;
+      } finally {
+        audit(name, params?.arguments || {}, result, err);
+      }
       send({ jsonrpc: "2.0", id, result: { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] } });
       return;
     }

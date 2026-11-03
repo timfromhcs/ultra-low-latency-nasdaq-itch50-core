@@ -1,0 +1,999 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-03T06:39:06.563Z",
+    "component": {
+      "type": "application",
+      "name": "chiplab",
+      "version": "0.2.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/android-arm",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/android-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/android-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-arm",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-ia32",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-loong64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-s390x",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/linux-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/sunos-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/win32-arm64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/win32-ia32",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "@esbuild/win32-x64",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "commander",
+      "version": "9.5.0",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "esbuild",
+      "version": "0.25.12",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "postject",
+      "version": "1.0.0-alpha.6",
+      "scope": "build"
+    },
+    {
+      "type": "library",
+      "name": "chiplab_core",
+      "version": "0.1.0",
+      "scope": "wasm"
+    },
+    {
+      "type": "library",
+      "name": "ahash",
+      "version": "0.8.12",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "allocator-api2",
+      "version": "0.2.21",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "android_system_properties",
+      "version": "0.1.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "arrayvec",
+      "version": "0.7.8",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "ash",
+      "version": "0.37.3+1.3.251",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "autocfg",
+      "version": "1.5.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bit-set",
+      "version": "0.5.3",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bit-vec",
+      "version": "0.6.3",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bitflags",
+      "version": "1.3.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bitflags",
+      "version": "2.13.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "block",
+      "version": "0.1.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bumpalo",
+      "version": "3.20.3",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bytemuck",
+      "version": "1.25.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "bytemuck_derive",
+      "version": "1.12.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "cc",
+      "version": "1.11.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "cfg_aliases",
+      "version": "0.1.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "chiplab-native",
+      "version": "0.2.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "codespan-reporting",
+      "version": "0.11.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "com",
+      "version": "0.6.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "com_macros",
+      "version": "0.6.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "com_macros_support",
+      "version": "0.6.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "core-foundation",
+      "version": "0.9.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "core-foundation-sys",
+      "version": "0.8.7",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "core-graphics-types",
+      "version": "0.1.3",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "d3d12",
+      "version": "0.19.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "equivalent",
+      "version": "1.0.3",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "find-msvc-tools",
+      "version": "0.1.15",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "foreign-types",
+      "version": "0.5.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "foreign-types-macros",
+      "version": "0.2.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "foreign-types-shared",
+      "version": "0.3.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "futures-core",
+      "version": "0.3.34",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "futures-task",
+      "version": "0.3.34",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "futures-util",
+      "version": "0.3.34",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "gl_generator",
+      "version": "0.14.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "glow",
+      "version": "0.13.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "glutin_wgl_sys",
+      "version": "0.5.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "gpu-alloc",
+      "version": "0.6.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "gpu-alloc-types",
+      "version": "0.3.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "gpu-allocator",
+      "version": "0.25.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "gpu-descriptor",
+      "version": "0.2.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "gpu-descriptor-types",
+      "version": "0.1.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "hashbrown",
+      "version": "0.14.5",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "hassle-rs",
+      "version": "0.11.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "hexf-parse",
+      "version": "0.2.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "indexmap",
+      "version": "2.14.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "jni-sys",
+      "version": "0.3.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "jni-sys",
+      "version": "0.4.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "jni-sys-macros",
+      "version": "0.4.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "js-sys",
+      "version": "0.3.107",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "khronos-egl",
+      "version": "6.0.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "khronos_api",
+      "version": "3.1.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "libc",
+      "version": "0.2.191",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "libloading",
+      "version": "0.7.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "libloading",
+      "version": "0.8.9",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "lock_api",
+      "version": "0.4.14",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "log",
+      "version": "0.4.35",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "malloc_buf",
+      "version": "0.0.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "metal",
+      "version": "0.27.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "naga",
+      "version": "0.19.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "ndk-sys",
+      "version": "0.5.0+25.2.9519653",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "num-traits",
+      "version": "0.2.19",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "objc",
+      "version": "0.2.7",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "objc_exception",
+      "version": "0.1.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "once_cell",
+      "version": "1.21.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "parking_lot",
+      "version": "0.12.5",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "parking_lot_core",
+      "version": "0.9.12",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "paste",
+      "version": "1.0.15",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "pin-project-lite",
+      "version": "0.2.17",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "pkg-config",
+      "version": "0.3.34",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "pollster",
+      "version": "0.3.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "presser",
+      "version": "0.3.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "profiling",
+      "version": "1.0.18",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "quote",
+      "version": "1.0.47",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "range-alloc",
+      "version": "0.1.5",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "raw-window-handle",
+      "version": "0.6.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "redox_syscall",
+      "version": "0.5.18",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "renderdoc-sys",
+      "version": "1.1.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "rustc-hash",
+      "version": "1.1.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "rustversion",
+      "version": "1.0.23",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "scopeguard",
+      "version": "1.2.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "shlex",
+      "version": "2.0.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "slab",
+      "version": "0.4.12",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "slotmap",
+      "version": "1.1.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "smallvec",
+      "version": "1.16.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "spirv",
+      "version": "0.3.0+sdk-1.3.268.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "static_assertions",
+      "version": "1.1.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "syn",
+      "version": "1.0.109",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "syn",
+      "version": "2.0.119",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "syn",
+      "version": "3.0.9",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "termcolor",
+      "version": "1.4.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "thiserror",
+      "version": "1.0.69",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "thiserror-impl",
+      "version": "1.0.69",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "tokio",
+      "version": "1.54.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "unicode-width",
+      "version": "0.1.14",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "unicode-xid",
+      "version": "0.2.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "version_check",
+      "version": "0.9.5",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wasm-bindgen",
+      "version": "0.2.130",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wasm-bindgen-futures",
+      "version": "0.4.80",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wasm-bindgen-macro",
+      "version": "0.2.130",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wasm-bindgen-macro-support",
+      "version": "0.2.130",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wasm-bindgen-shared",
+      "version": "0.2.130",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "web-sys",
+      "version": "0.3.107",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wgpu",
+      "version": "0.19.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wgpu-core",
+      "version": "0.19.4",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wgpu-hal",
+      "version": "0.19.5",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "wgpu-types",
+      "version": "0.19.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "widestring",
+      "version": "1.2.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "winapi",
+      "version": "0.3.9",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "winapi-util",
+      "version": "0.1.11",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows",
+      "version": "0.52.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows-core",
+      "version": "0.52.0",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows-link",
+      "version": "0.2.1",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows-targets",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_aarch64_gnullvm",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_aarch64_msvc",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_i686_gnu",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_i686_gnullvm",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_i686_msvc",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_x86_64_gnu",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_x86_64_gnullvm",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "windows_x86_64_msvc",
+      "version": "0.52.6",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "xml-rs",
+      "version": "0.8.29",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "zerocopy",
+      "version": "0.8.63",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "zerocopy-derive",
+      "version": "0.8.63",
+      "scope": "native"
+    },
+    {
+      "type": "library",
+      "name": "chiplab-itch",
+      "version": "0.2.0",
+      "scope": "python"
+    },
+    {
+      "type": "file",
+      "name": "chiplab_core.wasm",
+      "version": "0.2.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c95797115ea635bdf76bf7a09780b4fcd51ad338de5262d786af146b3569b5b3"
+        }
+      ],
+      "scope": "runtime"
+    }
+  ]
+}

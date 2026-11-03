@@ -14,13 +14,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const deep = process.argv.includes("--deep");
 fs.mkdirSync(path.join(root, "reports"), { recursive: true });
 
+const PY = process.platform === "win32" ? "python" : "python3";
 const checks = [
-  ["model-tests", "python -m pytest -q tb/test_model.py"],
+  ["model-tests", `${PY} -m pytest -q tb/test_model.py`],
   ["wasm-smoke", "node scripts/wasm_smoke.mjs"],
-  ["wasm-crosscheck", "python scripts/check_wasm_fixture.py"],
+  ["wasm-crosscheck", `${PY} scripts/check_wasm_fixture.py`],
   ["backend-compare", "node backend/run.mjs --compare --count 20000"],
   ["mcp", "node mcp/client_smoke.mjs"],
   ["web-smoke", "node scripts/web_smoke.mjs"],
+  ["sbom", "node scripts/sbom.mjs"],
   ["vercel-api", "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs"],
 ];
 if (deep) {

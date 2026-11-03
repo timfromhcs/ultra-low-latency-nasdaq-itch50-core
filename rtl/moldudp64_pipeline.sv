@@ -35,6 +35,7 @@ module moldudp64_pipeline #(
   output wire [BYTES_PER_WORD-1:0]   m_axis_tkeep,
   output wire                        m_axis_tvalid,
   output wire                        m_axis_tlast,
+  output wire                        frame_ready,
 
   output wire [79:0]                 mold_session,
   output wire [63:0]                 mold_seq,
@@ -53,8 +54,20 @@ module moldudp64_pipeline #(
   wire                      fe_tvalid;
   wire                      fe_tlast;
   wire                      fe_m_axis_tready;
+  wire                      fe_frame_end;
   wire                      dep_busy;
   wire                      frame_busy = dep_busy;
+
+  // Align the depacketizer reset with the first payload beat, not with the
+  // earlier header decision. This avoids dropping the first 1-2 payload bytes
+  // when a previous frame is still draining.
+  reg fe_in_frame;
+  wire fe_frame_start = fe_tvalid && !fe_in_frame;
+  always @(posedge clk) begin
+    if (!rst_n) fe_in_frame <= 1'b0;
+    else if (fe_frame_end || (fe_tvalid && fe_tlast)) fe_in_frame <= 1'b0;
+    else if (fe_tvalid) fe_in_frame <= 1'b1;
+  end
 
   moldudp64_frontend #(
     .DATA_WIDTH(DATA_WIDTH),
@@ -78,6 +91,8 @@ module moldudp64_pipeline #(
     .m_axis_tkeep(fe_tkeep),
     .m_axis_tvalid(fe_tvalid),
     .m_axis_tlast(fe_tlast),
+    .m_axis_frame_end(fe_frame_end),
+    .frame_ready(frame_ready),
     .m_axis_tready(fe_m_axis_tready),
     .mold_session(mold_session),
     .mold_seq(mold_seq),
@@ -99,7 +114,7 @@ module moldudp64_pipeline #(
     .clk(clk),
     .rst_n(rst_n),
     .msg_count(mold_msg_count),
-    .frame_start(mold_frame_ok),
+    .frame_start(fe_frame_start),
     .s_axis_tdata(fe_tdata),
     .s_axis_tkeep(fe_tkeep),
     .s_axis_tvalid(fe_tvalid),

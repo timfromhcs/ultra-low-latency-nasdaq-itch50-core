@@ -44,6 +44,7 @@ vectors:
 lint:
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/moldudp64_pipeline.sv
+	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
 
 sim:
 	$(MAKE) -C tb sim VECTORS=$(abspath $(VECTORS))
@@ -58,6 +59,7 @@ cocotb:
 	$(PYTHON) tb/run_cocotb.py
 	$(PYTHON) tb/run_mold_cocotb.py
 	$(PYTHON) tb/run_pipeline_cocotb.py
+	$(PYTHON) tb/run_skid_cocotb.py
 
 wasm:
 	cd wasm-core && cargo build --target wasm32-unknown-unknown --release

@@ -10,22 +10,30 @@
     {
       "id": "rtl-model-tests",
       "cmd": "python -m pytest -q tb/test_model.py",
-      "status": "pending"
+      "status": "done",
+      "lastRun": "2026-11-03T02:59:18.882Z",
+      "lastResult": "PASS"
     },
     {
       "id": "backend-compare",
       "cmd": "node backend/run.mjs --compare --count 20000",
-      "status": "pending"
+      "status": "done",
+      "lastRun": "2026-11-03T03:59:20.037Z",
+      "lastResult": "PASS"
     },
     {
       "id": "mcp-smoke",
       "cmd": "node mcp/client_smoke.mjs",
-      "status": "pending"
+      "status": "done",
+      "lastRun": "2026-11-03T04:59:19.916Z",
+      "lastResult": "PASS"
     },
     {
       "id": "vercel-api",
       "cmd": "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs",
-      "status": "pending"
+      "status": "done",
+      "lastRun": "2026-11-03T05:59:20.083Z",
+      "lastResult": "PASS"
     },
     {
       "id": "native-bins",

@@ -1,3 +1,5 @@
-[2026-11-03T02:59:11.2812920+01:00] hallo, es ist 02:59
-[tick] wasm-crosscheck
-[tick] ran 1, failed 0
+﻿# ChipLab heartbeat log (UTF-8)
+# 2026-11-03: the first hourly invocations failed because this script used the unsupported flag --prompt.
+# Fixed to a positional message: opencode run --auto --session <id> "<message>".
+[2026-11-03T07:36:07+01:00] hallo, es ist 07:36
+[heartbeat] dry-run: opencode run --auto --session ses_e611ae4efffeVLoN6Yp2etgCrN "Hallo, es ist 07:36. Autonomy tick: run node scripts/autonomy.mjs, read the result, fix one failing gate if needed, append to EXECUTION_LOG.md, then stop."

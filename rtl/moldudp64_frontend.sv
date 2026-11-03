@@ -57,6 +57,8 @@ module moldudp64_frontend #(
   output reg  [BYTES_PER_WORD-1:0]   m_axis_tkeep,
   output reg                         m_axis_tvalid,
   output reg                         m_axis_tlast,
+  output reg                         m_axis_frame_end,
+  output wire                        frame_ready,
   input  wire                        m_axis_tready,
 
   // Mold metadata / observability
@@ -187,6 +189,7 @@ module moldudp64_frontend #(
   // the previous payload. The current frame's remaining beats must flow.
   wire out_ready = m_axis_tready || !m_axis_tvalid;
 
+  assign frame_ready = (state == ST_IDLE) && !frame_busy;
   assign s_axis_tready = (state == ST_IDLE) ? !frame_busy :
                          (state == ST_CAPTURE && ({24'd0, hdr_count} <= (HDR_BYTES - BYTES_PER_WORD))) ||
                          (state == ST_STREAM && out_ready) || (state == ST_DISCARD);
@@ -239,6 +242,7 @@ module moldudp64_frontend #(
       m_axis_tkeep    <= {BYTES_PER_WORD{1'b0}};
       m_axis_tvalid   <= 1'b0;
       m_axis_tlast    <= 1'b0;
+      m_axis_frame_end<= 1'b0;
       mold_session    <= 80'd0;
       mold_seq        <= 64'd0;
       mold_msg_count  <= 16'd0;
@@ -252,6 +256,7 @@ module moldudp64_frontend #(
     end else begin
       // Defaults
       m_axis_tlast    <= 1'b0;
+      m_axis_frame_end<= 1'b0;
       mold_gap        <= 1'b0;
       mold_frame_ok   <= 1'b0;
       mold_frame_drop <= 1'b0;
@@ -338,10 +343,11 @@ module moldudp64_frontend #(
 
         ST_FLUSH: begin
           if (out_count == 8'd0 || (do_emit && rem_count == 8'd0)) begin
-            state     <= ST_IDLE;
-            hdr_count <= 8'd0;
-            hdr_data  <= {HDR_BYTES*8{1'b0}};
-            drain_ptr <= 8'd0;
+            state           <= ST_IDLE;
+            hdr_count       <= 8'd0;
+            hdr_data        <= {HDR_BYTES*8{1'b0}};
+            drain_ptr       <= 8'd0;
+            m_axis_frame_end<= 1'b1;
           end
         end
 
