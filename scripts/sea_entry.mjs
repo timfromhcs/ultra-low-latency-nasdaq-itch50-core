@@ -12,6 +12,7 @@ import { exec } from "node:child_process";
 import { ASSETS } from "../dist/web_assets.generated.mjs";
 import { loadCoreFromBytes, CHIPS, decodeRecord, hostInfo, countRecordErrors } from "../backend/wasm.mjs";
 import { LocalStore, MAX_BYTES, NAMESPACE_RE } from "../backend/store.mjs";
+import { VERSION } from "../backend/version.mjs";
 
 const MIME = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
@@ -118,10 +119,10 @@ if (PROBE) {
         res.writeHead(204, { "access-control-allow-origin": "*", "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS", "access-control-allow-headers": "content-type,authorization" });
         return res.end();
       }
-      if (url.pathname === "/api/health") return json(res, 200, { ok: true, service: "chiplab-sea", version: "0.3.0", wasm: { version: core.version(), bytes: wasm.length }, chips: CHIPS, host, upstream: "local", cloud: { tokenRequired: Boolean(TOKEN), persistence: "local-json" } });
+      if (url.pathname === "/api/health") return json(res, 200, { ok: true, service: "chiplab-sea", version: VERSION, wasm: { version: core.version(), bytes: wasm.length }, chips: CHIPS, host, upstream: "local", cloud: { tokenRequired: Boolean(TOKEN), persistence: "local-json" } });
       if (url.pathname === "/api/cloud/info") {
         return json(res, 200, {
-          ok: true, service: "chiplab-local-cloud", version: "0.3.0", host: HOST, port: PORT,
+          ok: true, service: "chiplab-local-cloud", version: VERSION, host: HOST, port: PORT,
           lanUrls: lanUrls(), tokenRequired: Boolean(TOKEN), persistence: "local-json",
           dataDir: path.basename(DATA_DIR), uptimeSec: Math.round((Date.now() - startedAt) / 1000),
           namespaces: store.list(), hostInfo: host,

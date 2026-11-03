@@ -3,7 +3,7 @@
 > Status: **ACTIVE**
 > Supersedes `AUTONOMOUS_PLAN_V2.md` as the forward-looking roadmap. V1/V2 remain the
 > historical execution records. This plan is updated after every release.
-> Current release: **v0.3.0 "Local Cloud"** (2026-11-03) — see `STABLE_RELEASE_PLAN.md`.
+> Current release: **v0.3.1 "Local Cloud"** (2026-11-03) — see `STABLE_RELEASE_PLAN.md`.
 > Repo: `timfromhcs/ultra-low-latency-nasdaq-itch50-core`
 > Live: <https://chiplab-ten.vercel.app/>
 > Rule: **no claim without a command**; every number links to `reports/`.

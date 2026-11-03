@@ -16,6 +16,8 @@ Patch release: packaging metadata and release-loop fixes. No protocol or API cha
   and the Python `__version__`, so a single command keeps every version in sync.
 - `scripts/sbom.mjs` reads the shipped WASM version from `package.json` instead of a
   hard-coded string.
+- `backend/version.mjs` is the single runtime version used by `/api/health` and
+  `/api/cloud/info` in both the Node server and the EXE; `scripts/version.mjs` updates it.
 - `scripts/release_check.mjs` verifies the Python `__version__` and `package-lock.json`.
 - README was double-encoded (UTF-8 → CP1252 → UTF-8) by a PowerShell rewrite; restored
   to correct UTF-8.

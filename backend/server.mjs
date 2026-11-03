@@ -15,6 +15,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCore, CHIPS, decodeRecord, hostInfo, countRecordErrors } from "./wasm.mjs";
 import { LocalStore, MAX_BYTES } from "./store.mjs";
+import { VERSION } from "./version.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
@@ -58,7 +59,7 @@ function cloudInfo() {
   return {
     ok: true,
     service: "chiplab-local-cloud",
-    version: "0.3.0",
+    version: VERSION,
     host: HOST,
     port: PORT,
     lanUrls: lanUrls(),
@@ -203,7 +204,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, {
         ok: true,
         service: "chiplab",
-        version: "0.3.0",
+        version: VERSION,
         wasm: { version: core.version(), bytes: core.wasmBytes },
         chips: CHIPS,
         host,
