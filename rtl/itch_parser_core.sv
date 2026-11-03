@@ -66,7 +66,8 @@ module itch_parser_core (
   // Direct L3 pre-trigger (bytes 1..2, big-endian) with an explicit valid.
   // --------------------------------------------------------------------------
   assign stock_locate_pre_trigger = {window_data[15:8], window_data[23:16]};
-  assign pre_trigger_valid        = enable_parser && (window_valid_bytes >= 8'd3);
+  // A corrupt/unknown opcode must not trigger a downstream L3 prefetch.
+  assign pre_trigger_valid        = enable_parser && (window_valid_bytes >= 8'd3) && !gate_is_corrupt;
 
   // --------------------------------------------------------------------------
   // Early opcode classifier / length decoder
