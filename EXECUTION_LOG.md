@@ -267,6 +267,10 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - README shows `cosign verify ... --certificate-identity-regexp
   'https://github.com/timfromhcs/.*' --certificate-oidc-issuer
   https://token.actions.githubusercontent.com`.
+- Verified end-to-end (run for `19da17e`, digest `sha256:37b4c143998a…`):
+  `cosign verify` (v2.4.1 container) reports **claims validated, transparency-log
+  entry verified, certificate verified**, subject
+  `docker-publish.yml@refs/heads/main`.
 - Roadmap split: Docker signing done; reproducible builds + npm/PyPI signatures open.
 
 ## 2026-11-04 00:05 - IHP SG13G2 pre-PnR STA
