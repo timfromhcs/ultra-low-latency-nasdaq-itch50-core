@@ -1,0 +1,73 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: "40 2 * * *"   # daily 02:40 UTC
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "Messages for the full-field regression (default 10,000,000)"
+        type: string
+        default: "10000000"
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+jobs:
+  deep-regression:
+    name: Full-field regression (${{ github.event.inputs.count || '10000000' }} messages)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android 2>/dev/null || true
+          df -h /
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq verilator make g++
+
+      - name: Record tool versions
+        run: |
+          verilator --version
+          python3 --version
+
+      - name: Generate vectors
+        env:
+          COUNT: ${{ github.event.inputs.count || '10000000' }}
+        run: |
+          echo "count=$COUNT"
+          time python3 tb/itch_model.py --count "$COUNT" --out tb/vectors_nightly
+          ls -lh tb/vectors_nightly
+
+      - name: Full-field RTL regression
+        run: |
+          time make sim VECTORS=tb/vectors_nightly 2>&1 | tee nightly_sim.log
+          grep -E "mismatch|records|PASS|FAIL" nightly_sim.log | tail -20
+
+      - name: Clean up vectors
+        if: always()
+        run: rm -rf tb/vectors_nightly /tmp/itch_workspace
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nightly-regression
+          path: nightly_sim.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  formal-and-mutation:
+    name: Formal + mutation + equivalence
+    uses: ./.github/workflows/formal.yml
+    # The reusable workflow keeps its weekly schedule; this call runs it daily too.

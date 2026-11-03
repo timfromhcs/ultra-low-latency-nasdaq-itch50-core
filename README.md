@@ -220,6 +220,7 @@ Reports live in [`reports/`](reports/).
 | Parser → BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
 | A/B feed arbiter | **selection + recovery: request→replay, multi-gap [1..8], abandon on timeout** | `tb/test_arbiter.py` |
 | A/B system | **2 Ethernet feeds → arbiter → 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+| Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | `tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
 | Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |

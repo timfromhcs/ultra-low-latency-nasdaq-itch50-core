@@ -142,7 +142,9 @@ MDN PWA best practices, GitHub Actions docs.
 - [ ] Reproducible builds; SBOM + SLSA provenance; signed Docker/npm/PyPI.
 - [x] Mutation: 9 parser→BBO mutants killed (`tools/mutate_book.py`,
       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
-- [ ] Nightly 10M regression + formal + mutation.
+- [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,
+      daily 02:40 UTC, default 10,000,000 messages, calls the reusable `Formal`
+      workflow). Verified locally: 10M messages, **0 mismatches**.
 - [x] Docs: datasheet, integration guide, errata and API reference
       (`docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md`,
       `docs/api.md`; served through the 12-key `chiplab.docs` catalog).

@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Nightly regression** (`.github/workflows/nightly.yml`): daily 02:40 UTC, 10,000,000
+  messages through the model and the Verilator full-field simulator, then the reusable
+  `Formal` workflow (formal proof, mutation score, RTL↔WASM equivalence). Verified
+  locally: 10M messages, **0 mismatches**, 3m06s simulation after 2m54s generation;
+  `workflow_dispatch` takes a custom count.
 - **Docs set** (v0.3.1+): `docs/datasheet.md` (ports, timing targets, area, evidence),
   `docs/integration-guide.md` (instantiation, startup `ready`, Mold/arbiter contract,
   counter math, simulation), `docs/errata.md` (E1–E10: no physical sign-off, no

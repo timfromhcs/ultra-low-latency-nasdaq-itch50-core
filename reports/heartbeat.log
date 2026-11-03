@@ -2528,3 +2528,227 @@ Index: mcp/SECURITY.md
  
  ## Tool poisoning / prompt injection
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "8-key|eight fixed|fixed catalog|catalog" README.md llms-full.txt web/docs.html | 
+Select-Object -First 10
+llms-full.txt:54:  `chiplab.docs` (fixed 8-key catalog).
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit llms-full.txt
+Index: llms-full.txt
+===================================================================
+--- llms-full.txt
++++ llms-full.txt
+@@ -50,9 +50,9 @@
+ - `backend/run.mjs`: CLI.
+ - `mcp/server.mjs` (12 read-only tools): `chiplab.chips`, `chiplab.run`, `chiplab.compare`,
+   `chiplab.book`, `chiplab.formal_status`, `chiplab.health`, `chiplab.cloud_info`,
+   `chiplab.history`, `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`,
+-  `chiplab.docs` (fixed 8-key catalog).
++  `chiplab.docs` (fixed 12-key catalog).
+ - `api/*.mjs`: Vercel serverless wrappers; static-first, user data stays in the browser.
+ 
+ ## 6b. Release (v0.3.1)
+ - One version across npm, Cargo, PyPI, MCP, SBOM and the Vercel health endpoint.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "docs/architecture.md|Documentation|## Docs" README.md | Select-Object -First 10
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "architecture|guides/|benchmarks" README.md | Select-Object -First 10
+415:docs/guides/         zero-to-hero guides (EN / DE / FR)
+427:- [English](docs/guides/en/zero-to-hero.md)
+428:- [Deutsch](docs/guides/de/zero-to-hero.md)
+429:- [Fran├ºais](docs/guides/fr/zero-to-hero.md)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead README.md [90m[limit=25, offset=404][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -413,8 +413,12 @@
+ packages/python/     chiplab-itch
+ scripts/             build/gate/synth/formality/heartbeat/autonomy tools
+ docs/guides/         zero-to-hero guides (EN / DE / FR)
+ docs/design/         Mold back-pressure design note (R1)
++docs/datasheet.md    ports, timing, area estimate, verification evidence
++docs/integration-guide.md  how to instantiate parser/book/Mold and poll counters
++docs/errata.md       known limitations (no physical sign-off, no 100G/PCIe)
++docs/api.md          HTTP, MCP, npm and Python API reference
+ LONG_TERM_PLAN.md    12-month roadmap, KPIs, gates
+ AUTONOMOUS_PLAN_V2.md
+ EXECUTION_LOG.md
+ reports/             measured evidence (logs, JSON, screenshots)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -427,8 +427,12 @@
+ ---
+ 
+ ## Zero-to-hero guides
+ 
++- [Datasheet](docs/datasheet.md) ÔÇö ports, timing targets, area estimate, evidence
++- [Integration guide](docs/integration-guide.md) ÔÇö instantiate, drive, poll counters
++- [API reference](docs/api.md) ÔÇö HTTP, MCP, npm, Python
++- [Errata](docs/errata.md) ÔÇö what is deliberately out of scope
+ - [English](docs/guides/en/zero-to-hero.md)
+ - [Deutsch](docs/guides/de/zero-to-hero.md)
+ - [Fran├ºais](docs/guides/fr/zero-to-hero.md)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -142,9 +142,11 @@
+ - [ ] Reproducible builds; SBOM + SLSA provenance; signed Docker/npm/PyPI.
+ - [x] Mutation: 9 parserÔåÆBBO mutants killed (`tools/mutate_book.py`,
+       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
+ - [ ] Nightly 10M regression + formal + mutation.
+-- [ ] Docs: datasheet, integration guide, errata, API reference.
++- [x] Docs: datasheet, integration guide, errata and API reference
++      (`docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md`,
++      `docs/api.md`; served through the 12-key `chiplab.docs` catalog).
+ - [ ] Optional shuttle submission; otherwise label "tapeout-ready, not fabricated".
+ 
+ **Gate:** independent reproduction from a clean machine; no fabricated silicon claim.
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit STABLE_RELEASE_PLAN.md
+Index: STABLE_RELEASE_PLAN.md
+===================================================================
+--- STABLE_RELEASE_PLAN.md
++++ STABLE_RELEASE_PLAN.md
+@@ -147,9 +147,9 @@
+ 
+ ### P3 ÔÇö MCP expansion
+ - [x] Added `chiplab.health`, `chiplab.cloud_info`, `chiplab.history`,
+       `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`, `chiplab.docs`.
+-- [x] Strict schemas; `chiplab.docs` accepts a fixed 8-key catalog; no arbitrary paths.
++- [x] Strict schemas; `chiplab.docs` accepts a fixed 12-key catalog; no arbitrary paths.
+ - [x] `mcp/SECURITY.md` updated; smoke covers all tools and rejects `.docs` traversal.
+ 
+ ### P4 ÔÇö GitHub release
+ - [x] `release.yml`: tag `v*` ÔåÆ verify, Windows EXE, npm/PyPI packages, SBOM,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit STABLE_RELEASE_PLAN.md
+Index: STABLE_RELEASE_PLAN.md
+===================================================================
+--- STABLE_RELEASE_PLAN.md
++++ STABLE_RELEASE_PLAN.md
+@@ -157,9 +157,10 @@
+ - [x] `scripts/checksums.mjs` and `release_check.mjs`.
+ - [x] Release notes generated from `CHANGELOG.md`.
+ - [x] Docker image builds and serves health + cloud info; writes need `CHIPLAB_TOKEN`.
+ - [ ] npm/PyPI **publishing** (trusted publishing) ÔÇö prepared but requires repo/OIDC setup.
+-- [ ] Tag `v0.3.0` push (local tag created; push with approval).
++- [x] Tag `v0.3.0` pushed; `Release` run 41594730252 published the six assets (see ┬º8).
++      `v0.3.1` followed for the Python version-metadata fix.
+ 
+ ### P5 ÔÇö README / guides / SEO
+ - [x] "Stable v0.3.0 ÔÇö Local Cloud" section, install matrix, local-cloud API,
+       security model, versioning/release artifacts.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,14 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **Docs set** (v0.3.1+): `docs/datasheet.md` (ports, timing targets, area, evidence),
++  `docs/integration-guide.md` (instantiation, startup `ready`, Mold/arbiter contract,
++  counter math, simulation), `docs/errata.md` (E1ÔÇôE10: no physical sign-off, no
++  100G/PCIe, bounded book, gap counter tied low, 32-bit wrapping, registry publish
++  pending) and `docs/api.md` (HTTP, MCP, npm, Python, hardware counters). The
++  `chiplab.docs` MCP catalog grew from 8 to 12 fixed keys.
+ - **Performance counters** (`rtl/itch_metrics.sv`): message/byte totals, gap and drop
+   pulse counts, free-running cycle counter (host derives messages/s), max occupancy and
+   an 8-bin inter-message gap histogram (0, 1, 2, 3, 4-7, 8-15, 16-31, 32+ cycles).
+   Wired into `itch_top_book` as `metrics_*` (gap tied low; corrupt messages count as
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,15 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 21:30 - Documentation set (datasheet, integration, errata, API)
++
++- Wrote `docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md` (E1ÔÇôE10)
++  and `docs/api.md`; linked from the README and served by `chiplab.docs`, whose
++  catalog is now 12 fixed keys (no arbitrary paths).
++- Marked the stale tag checkbox in `STABLE_RELEASE_PLAN.md` (v0.3.0/v0.3.1 published).
++
+ ## 2026-11-03 20:59 - Autonomy tick + performance counters
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0c24d10` (multi-gap) green.
+ - Added `rtl/itch_metrics.sv`: message/byte totals, gap/drop pulses, cycle counter,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 12
+PASS model-tests (2203 ms)
+PASS wasm-smoke (398 ms)
+PASS wasm-crosscheck (200 ms)
+PASS backend-compare (200 ms)
+PASS mcp (228 ms)
+PASS cloud-api (387 ms)
+PASS web-smoke (361 ms)
+PASS sbom (88 ms)
+PASS release-check (173 ms)
+PASS vercel-api (344 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/docs_check.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/docs_check.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\docs_check.mjs" 2>&1 | Select-Object -Last 8
+node : ChipLab MCP ready ┬À 8 chips ┬À AMD Ryzen 7 7735HS with Radeon Graphics
+In Zeile:1 Zeichen:19
++ ...  E:\chips\main; node "$env:TEMP\opencode\docs_check.mjs" 2>&1 | Selec ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ChipLab MCP rea...Radeon Graphics:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+datasheet OK 7941 bytes
+integration-guide OK 7315 bytes
+errata OK 4791 bytes
+api OK 6127 bytes
+traversal REJECTED
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: datasheet, integration guide, errata and API reference 
+(+12-key MCP catalog)" 2>&1 | Select-Object -Last 2; git push origin main 2>&1 | Select-Object -Last 1; git log 
+--oneline -2
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'STABLE_RELEASE_PLAN.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'llms-full.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 docs/errata.md
+ create mode 100644 docs/integration-guide.md
+   5346f9a..5b9cfd1  main -> main
+5b9cfd1 docs: datasheet, integration guide, errata and API reference (+12-key MCP catalog)
+5346f9a feat(rtl): performance counters wired into the parser-to-book pipeline
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead Makefile [90m[limit=40, offset=58][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead .github/workflows/formal.yml 

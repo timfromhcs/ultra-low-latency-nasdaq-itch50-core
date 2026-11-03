@@ -3,6 +3,7 @@ name: Formal
 on:
   schedule:
     - cron: "17 3 * * 1"   # weekly, Monday 03:17 UTC
+  workflow_call:
   workflow_dispatch:
     inputs:
       solver_matrix:

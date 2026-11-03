@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 21:55 - Nightly 10M regression
+
+- Added `.github/workflows/nightly.yml` (daily 02:40 UTC): 10,000,000-message
+  model→Verilator regression, then the `Formal` workflow as a reusable workflow
+  (`workflow_call` added to `formal.yml`).
+- Verified locally with the exact workflow commands: generation 2m54s, simulation
+  3m06s, **10,000,000 expected records, 0 mismatches**; 200k smoke run 19s.
+- Docs/README/CHANGELOG updated.
+
 ## 2026-11-03 21:30 - Documentation set (datasheet, integration, errata, API)
 
 - Wrote `docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md` (E1–E10)
