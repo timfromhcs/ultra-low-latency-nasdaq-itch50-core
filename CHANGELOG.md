@@ -74,6 +74,12 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Docs set** (v0.3.1+): `docs/datasheet.md` (ports, timing targets, area, evidence),
+  `docs/integration-guide.md` (instantiation, startup `ready`, Mold/arbiter contract,
+  counter math, simulation), `docs/errata.md` (E1–E10: no physical sign-off, no
+  100G/PCIe, bounded book, gap counter tied low, 32-bit wrapping, registry publish
+  pending) and `docs/api.md` (HTTP, MCP, npm, Python, hardware counters). The
+  `chiplab.docs` MCP catalog grew from 8 to 12 fixed keys.
 - **Performance counters** (`rtl/itch_metrics.sv`): message/byte totals, gap and drop
   pulse counts, free-running cycle counter (host derives messages/s), max occupancy and
   an 8-bin inter-message gap histogram (0, 1, 2, 3, 4-7, 8-15, 16-31, 32+ cycles).

@@ -414,6 +414,10 @@ packages/python/     chiplab-itch
 scripts/             build/gate/synth/formality/heartbeat/autonomy tools
 docs/guides/         zero-to-hero guides (EN / DE / FR)
 docs/design/         Mold back-pressure design note (R1)
+docs/datasheet.md    ports, timing, area estimate, verification evidence
+docs/integration-guide.md  how to instantiate parser/book/Mold and poll counters
+docs/errata.md       known limitations (no physical sign-off, no 100G/PCIe)
+docs/api.md          HTTP, MCP, npm and Python API reference
 LONG_TERM_PLAN.md    12-month roadmap, KPIs, gates
 AUTONOMOUS_PLAN_V2.md
 EXECUTION_LOG.md
@@ -424,6 +428,10 @@ reports/             measured evidence (logs, JSON, screenshots)
 
 ## Zero-to-hero guides
 
+- [Datasheet](docs/datasheet.md) — ports, timing targets, area estimate, evidence
+- [Integration guide](docs/integration-guide.md) — instantiate, drive, poll counters
+- [API reference](docs/api.md) — HTTP, MCP, npm, Python
+- [Errata](docs/errata.md) — what is deliberately out of scope
 - [English](docs/guides/en/zero-to-hero.md)
 - [Deutsch](docs/guides/de/zero-to-hero.md)
 - [Français](docs/guides/fr/zero-to-hero.md)

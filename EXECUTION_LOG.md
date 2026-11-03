@@ -259,6 +259,13 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 21:30 - Documentation set (datasheet, integration, errata, API)
+
+- Wrote `docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md` (E1–E10)
+  and `docs/api.md`; linked from the README and served by `chiplab.docs`, whose
+  catalog is now 12 fixed keys (no arbitrary paths).
+- Marked the stale tag checkbox in `STABLE_RELEASE_PLAN.md` (v0.3.0/v0.3.1 published).
+
 ## 2026-11-03 20:59 - Autonomy tick + performance counters
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0c24d10` (multi-gap) green.

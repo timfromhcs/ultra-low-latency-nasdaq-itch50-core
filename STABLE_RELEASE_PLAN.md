@@ -148,7 +148,7 @@ for attempt in 1..N:
 ### P3 — MCP expansion
 - [x] Added `chiplab.health`, `chiplab.cloud_info`, `chiplab.history`,
       `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`, `chiplab.docs`.
-- [x] Strict schemas; `chiplab.docs` accepts a fixed 8-key catalog; no arbitrary paths.
+- [x] Strict schemas; `chiplab.docs` accepts a fixed 12-key catalog; no arbitrary paths.
 - [x] `mcp/SECURITY.md` updated; smoke covers all tools and rejects `.docs` traversal.
 
 ### P4 — GitHub release
@@ -158,7 +158,8 @@ for attempt in 1..N:
 - [x] Release notes generated from `CHANGELOG.md`.
 - [x] Docker image builds and serves health + cloud info; writes need `CHIPLAB_TOKEN`.
 - [ ] npm/PyPI **publishing** (trusted publishing) — prepared but requires repo/OIDC setup.
-- [ ] Tag `v0.3.0` push (local tag created; push with approval).
+- [x] Tag `v0.3.0` pushed; `Release` run 41594730252 published the six assets (see §8).
+      `v0.3.1` followed for the Python version-metadata fix.
 
 ### P5 — README / guides / SEO
 - [x] "Stable v0.3.0 — Local Cloud" section, install matrix, local-cloud API,

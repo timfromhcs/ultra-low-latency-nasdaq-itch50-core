@@ -51,7 +51,7 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 - `mcp/server.mjs` (12 read-only tools): `chiplab.chips`, `chiplab.run`, `chiplab.compare`,
   `chiplab.book`, `chiplab.formal_status`, `chiplab.health`, `chiplab.cloud_info`,
   `chiplab.history`, `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`,
-  `chiplab.docs` (fixed 8-key catalog).
+  `chiplab.docs` (fixed 12-key catalog).
 - `api/*.mjs`: Vercel serverless wrappers; static-first, user data stays in the browser.
 
 ## 6b. Release (v0.3.1)
