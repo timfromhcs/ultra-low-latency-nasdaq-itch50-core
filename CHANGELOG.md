@@ -39,6 +39,9 @@ All notable changes to ChipLab are documented here. The format follows
 - `tb/test_book_top.py`: **152 raw ITCH messages -> 0 BBO mismatches**; U (replace)
   inherits the original side, matching the protocol.
 - CI/Makefile run the parser+BBO cocotb test and lint the wrapper.
+- `tools/mutate_book.py`: mutation testing for the parser→BBO path. 9 mutants
+  (replace side/slot, cancel, max/min, volume, last, stored side) → **9/9 killed**,
+  `reports/mutation_book.json`. Weekly `Formal` workflow runs it; `make mutate-book`.
 
 ## 0.3.1 — 2026-11-03
 

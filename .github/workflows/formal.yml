@@ -28,3 +28,22 @@ jobs:
           path: |
             reports/formal.json
             reports/formal_*.log
+
+  mutation:
+    name: Mutation (parser -> BBO)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq iverilog python3-pip
+          python3 -m pip install --break-system-packages cocotb pytest
+      - name: Mutation score
+        run: python3 tools/mutate_book.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-report
+          path: reports/mutation_book.json

@@ -204,6 +204,7 @@ Reports live in [`reports/`](reports/).
 | WASM ↔ Python | 10,000 records, 0 mismatches | `scripts/check_wasm_fixture.py` |
 | Formal | **Z3 PASS, CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported | `reports/formal.json` |
 | Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | `reports/mutation.json` |
+| Mutation (BBO) | **9/9 parser→BBO mutants killed** (side, hash slot, cancel, max/min, volume, last) | `reports/mutation_book.json` |
 | Synthesis 128-bit | 22,629 cells, 2,228 DFFs | `reports/synth_128.log` |
 | Synthesis 256-bit | 25,201 cells | `reports/synth_256.log` |
 | Synthesis 512-bit | 29,628 cells | `reports/synth_512.log` |

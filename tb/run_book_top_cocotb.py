@@ -7,7 +7,7 @@ import shutil
 from cocotb_tools.runner import get_runner
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RTL = os.path.abspath(os.path.join(HERE, "..", "rtl"))
+RTL = os.environ.get("CHIPLAB_RTL", os.path.abspath(os.path.join(HERE, "..", "rtl")))
 
 
 def main():

@@ -259,6 +259,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## Phase 2a - Mutation testing for the BBO path
+
+- Added `tools/mutate_book.py`: patches a copy of `rtl/` and runs the parser->BBO
+  test for each mutant; KILLED = test fails.
+- 9 mutants (replace side, replace slot, cancel bid/ask, bid max, ask min, volume,
+  last price, stored side) -> **9/9 killed (100%)**, `reports/mutation_book.json`.
+- Added `make mutate-book` and a weekly `mutation` job in the `Formal` workflow.
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.

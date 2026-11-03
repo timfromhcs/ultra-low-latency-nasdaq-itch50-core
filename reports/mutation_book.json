@@ -1,0 +1,52 @@
+{
+  "total": 9,
+  "killed": 9,
+  "score": 100.0,
+  "rows": [
+    {
+      "name": "replace_side_lost",
+      "status": "KILLED",
+      "detail": "AssertionError: message 45 BBO"
+    },
+    {
+      "name": "replace_old_slot",
+      "status": "KILLED",
+      "detail": "AssertionError: message 62 BBO"
+    },
+    {
+      "name": "cancel_ignored",
+      "status": "KILLED",
+      "detail": "AssertionError: message 149 BBO"
+    },
+    {
+      "name": "ask_cancel_ignored",
+      "status": "KILLED",
+      "detail": "AssertionError: message 40 BBO"
+    },
+    {
+      "name": "bid_min_instead_of_max",
+      "status": "KILLED",
+      "detail": "AssertionError: message 0 BBO"
+    },
+    {
+      "name": "ask_max_instead_of_min",
+      "status": "KILLED",
+      "detail": "AssertionError: message 2 BBO"
+    },
+    {
+      "name": "trade_volume_ignored",
+      "status": "KILLED",
+      "detail": "AssertionError: message 36 BBO"
+    },
+    {
+      "name": "last_price_zero",
+      "status": "KILLED",
+      "detail": "AssertionError: message 36 BBO"
+    },
+    {
+      "name": "order_side_always_bid",
+      "status": "KILLED",
+      "detail": "AssertionError: message 62 BBO"
+    }
+  ]
+}
