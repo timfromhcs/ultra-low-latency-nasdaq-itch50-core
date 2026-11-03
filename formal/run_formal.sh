@@ -23,6 +23,7 @@ yosys -q -p "read_verilog -sv -formal -I${ROOT}/rtl \
   ${ROOT}/rtl/itch_top.sv \
   ${ROOT}/formal/itch_formal.sv; \
   prep -top itch_formal -nordff; \
+  async2sync; \
   write_smt2 -wires design.smt2"
 
 echo "[FORMAL] BMC"

@@ -267,8 +267,12 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   locally with Yosys 0.52 + Z3 4.13.3 and in the later solver-matrix run.
 - Fix: pin the weekly formal job to **oss-cad-suite 2026-11-03** (Yosys + Z3 bundle)
   instead of Ubuntu's older packages. Mutation job passed (9/9).
-- Root-cause note: toolchain drift, not an RTL regression; the generated proof and RTL
-  are unchanged.
+- With the pinned bundle, Yosys 0.70 requires `async2sync` before `write_smt2`; added.
+  That exposed a genuinely invalid invariant: pre-trigger (combinational) was compared
+  with the registered locate, which only matches when the window is stable.
+- Replaced it with a provable gating invariant (prefetch only for a known, non-corrupt
+  opcode with non-zero length); the other invariants are unchanged. Local proof PASS.
+- Root-cause note: toolchain drift plus a too-strong property, not an RTL regression.
 
 ## Phase 2a - Mutation testing for the BBO path
 

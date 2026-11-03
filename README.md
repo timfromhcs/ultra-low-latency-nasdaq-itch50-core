@@ -378,8 +378,8 @@ Sandbox Drives are a separate, paid option — not used by this repository.
 
 - **RTL**: Verilator lint, full-field 1M regression, cocotb (`tb/test_itch.py`),
   Mold front-end/depacketizer tests (`tb/test_mold*.py`).
-- **Formal**: `formal/itch_formal.sv` checks pre-trigger equivalence, class exclusivity,
-  legal lengths, register equivalence and flow control; `formal/run_formal.sh` runs BMC,
+- **Formal**: `formal/itch_formal.sv` checks pre-trigger gating (known, non-corrupt
+  opcode), class exclusivity, legal lengths, register equivalence and flow control; `formal/run_formal.sh` runs BMC,
   k-induction and covers; `formal/solver_matrix.sh` records each solver. The pull-request
   CI runs lint + 50k full-field + model + cocotb; the **weekly `Formal` workflow** runs the
   deep 20-step proof with a **pinned `oss-cad-suite`** (Yosys + Z3) so results do not drift
