@@ -211,3 +211,242 @@ In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Micro
  
 [2026-11-03T22:59:19.3937686+01:00] hallo, es ist 22:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 6; git status -sb | Select-Object 
+-First 6
+[tick] ran 0, failed 0
+## main...origin/main
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker ps --format "{{.Image}} {{.Status}} {{.Command}}"; Get-Content 
+"$env:TEMP\opencode\librelane_sky130.log" -Tail 12 -ErrorAction SilentlyContinue
+ghcr.io/librelane/librelane:3.0.17 Up 51 minutes "librelane --run-tagÔÇª"
+     1590 |       5 |    1499 |       30 |      1 |     9 |    +0.6% |  -11.243 
+|   -31621.1 |   4466 | _34811_/D                                               
+     1600 |       6 |    1504 |       35 |      1 |     9 |    +0.6% |  -11.243 
+|   -31430.7 |   4466 | _34811_/D                                               
+     1610 |       6 |    1509 |       39 |      2 |     9 |    +0.6% |  -11.230 
+|   -31800.8 |   4466 | _34811_/D                                               
+     1620 |       6 |    1515 |       42 |      2 |    10 |    +0.6% |  -11.230 
+|   -31632.9 |   4466 | _34811_/D                                               
+     1630 |       6 |    1522 |       44 |      2 |    12 |    +0.6% |  -11.230 
+|   -31898.8 |   4466 | _34811_/D                                               
+     1640 |       6 |    1528 |       47 |      2 |    13 |    +0.6% |  -11.230 
+|   -31525.8 |   4466 | _34811_/D
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\chiplab-sky130 -Directory -ErrorAction SilentlyContinue | 
+Select-Object -Last 4 Name; Get-ChildItem openlane\runs\chiplab-sky130 -Filter "*.log" -Recurse -ErrorAction 
+SilentlyContinue | Sort-Object LastWriteTime | Select-Object -Last 2 FullName
+Name                            
+----                            
+35-openroad-cts                 
+36-openroad-stamidpnr-1         
+37-openroad-resizertimingpostcts
+tmp
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead backend/server.mjs [90m[limit=35, offset=170][0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "buildBook" backend/wasm.mjs wasm-core/src/*.rs | Select-Object -First 12
+rg: wasm-core/src/*.rs: Die Syntax f├╝r den Dateinamen, Verzeichnisnamen oder die Datentr├ñgerbezeichnung ist falsch. 
+(os error 123)
+backend/wasm.mjs:139:  buildBook(stream) {
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead backend/wasm.mjs [90m[limit=45, offset=130][0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3
+PASS vercel-api (1102 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const ci = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 4 });\nconst main = 
+ci.workflow_runs?.filter(x => x.head_branch === \"main\").slice(0,2);\nconst out = [];\nfor (const r of main) {\n  
+const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(r.id), perPage: 10 });\n  out.push({ sha: 
+r.head_sha?.slice(0,7), status: r.status, conclusion: r.conclusion, failed: jobs.jobs?.jobs?.filter(j => j.conclusion 
+=== \"failure\").map(j => j.name) });\n}\nreturn out;"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\chiplab-sky130 -File -ErrorAction SilentlyContinue | 
+Select-Object Name,Length; Get-ChildItem openlane\runs\chiplab-sky130 -Directory | Select-Object -First 3 Name
+Name                            Length
+----                            ------
+error.log                            0
+flow.log                         12660
+resolved.json                   159035
+warning.log                       4068
+01-verilator-lint                     
+02-checker-linttimingconstructs       
+03-checker-linterrors
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite scripts/openlane_summary.mjs
+Created file successfully: scripts/openlane_summary.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; New-Item -ItemType Directory -Force "$env:TEMP\opencode\fake_run\final" | Out-Null; '{ 
+"design__die__bbox": "0 0 700 700", "design__core__bbox": "20 20 680 680", "design__instance__count__stdcell": 21000, 
+"design__instance__area__stdcell": 450000, "timing__setup__ws": -0.42, "timing__hold__ws": 0.08, 
+"magic__drc_error__count": 0, "lvs__total__errors": 0, "route__drc_errors": 0 }' | Set-Content 
+"$env:TEMP\opencode\fake_run\final\metrics.json"; node scripts\openlane_summary.mjs "$env:TEMP\opencode\fake_run" 2>&1 
+| Select-Object -Last 16
+die/core:
+  design__die__bbox = 0 0 700 700
+  design__core__bbox = 20 20 680 680
+instances/area:
+  design__instance__count__stdcell = 21000
+  design__instance__area__stdcell = 450000
+setup:
+  timing__setup__ws = -0.42
+hold:
+  timing__hold__ws = 0.08
+drc:
+  magic__drc_error__count = 0
+  route__drc_errors = 0
+lvs:
+  lvs__total__errors = 0
+wrote reports/openlane_fake_run.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\openlane_fake_run.json -ErrorAction SilentlyContinue; Remove-Item 
+-Recurse -Force "$env:TEMP\opencode\fake_run" -ErrorAction SilentlyContinue; git status -sb | Select-Object -First 5
+## main...origin/main
+ M reports/heartbeat.log
+ M reports/sbom.json
+ M reports/scorecard.json
+?? scripts/openlane_summary.mjs
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -84,8 +84,11 @@
+ 
+ librelane-smoke:
+ 	$(PYTHON) -m librelane --dockerized --smoke-test
+ 
++openlane-summary:
++	$(NODE) scripts/openlane_summary.mjs
++
+ mutate-book:
+ 	$(PYTHON) tools/mutate_book.py
+ 
+ equiv:
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -20,8 +20,9 @@
+ 	@echo "  make formal-all   every available SMT solver"
+ 	@echo "  make cocotb       Python/Verilator Cocotb suite"
+ 	@echo "  make synth-book   Yosys area estimate for the BBO (reduced config)"
+ 	@echo "  make librelane-smoke  LibreLane Docker smoke test"
++	@echo "  make openlane-summary  summarize the newest LibreLane run"
+ 	@echo "  make mutate-book  mutation-test the parser -> BBO path"
+ 	@echo "  make equiv        RTL vs WASM equivalence on one stream"
+ 	@echo "  make wasm         rebuild the 50 KB WASM core"
+ 	@echo "  make web          build/test the static web app"
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -6,9 +6,9 @@
+ NODE ?= node
+ WASM := web/wasm/chiplab_core.wasm
+ 
+ .PHONY: help all verify verify-fast verify-deep vectors lint formal formal-all sim cocotb \
+-        synth-book librelane-smoke mutate-book equiv wasm web backend mcp exe docker demo native test clean
++        synth-book librelane-smoke openlane-summary mutate-book equiv wasm web backend mcp exe docker demo native 
+test clean
+ 
+ help:
+ 	@echo "ChipLab targets:"
+ 	@echo "  make verify-fast  lint + Python model + WASM + backend + MCP + Vercel (portable)"
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 22:59 - Autonomy tick + LibreLane summary tool
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate 10/10; CI on `2f8ed55` green.
++- Full Sky130 run still active (passes floorplan/placement/CTS; around step 37/80 after
++  ~51 min). No result yet.
++- Added `scripts/openlane_summary.mjs` + `make openlane-summary`: reads the newest
++  `openlane/runs/*/final/metrics.json`, writes a compact `reports/openlane_<tag>.json`
++  (die/core bbox, instances, area, setup/hold, DRC/LVS) and prints a summary. Verified
++  against a synthetic metrics file; real run output pending.
++
+ ## 2026-11-03 23:20 - LibreLane 3 config hygiene
+ 
+ - Replaced deprecated/unknown keys in all four `openlane/*.json`:
+   `DESIGN_IS_CORE`ÔåÆ`PDN_MULTILAYER`, `PL_TARGET_DENSITY`ÔåÆ`PL_TARGET_DENSITY_PCT`
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -46,6 +46,16 @@
+ The configurations have **not** been run through the full flow yet; only the smoke
+ test is verified. Commit only the small JSON/report summaries, never the run
+ directories (`runs/` and `openlane/runs/` are git-ignored).
+ 
++After a run, extract the small summary:
++
++```bash
++node scripts/openlane_summary.mjs                 # newest run
++node scripts/openlane_summary.mjs openlane/runs/chiplab-sky130
++```
++
++It writes `reports/openlane_<tag>.json` (die/core bbox, instances, area, setup/hold,
++DRC/LVS) and prints the same numbers. That file is the only artifact to commit.
++
+ The synthesis matrix in `reports/synth_*.log` is a Yosys/ABC cell-count proxy, not an
+ OpenLane timing report. Do not compare its numbers to a placed-and-routed design.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make -n openlane-summary && make -n librelane-smoke"; cd 
+E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "feat(scripts): summarize 
+LibreLane runs into reports/openlane_<tag>.json" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+node scripts/openlane_summary.mjs
+python3 -m librelane --dockerized --smoke-test
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 scripts/openlane_summary.mjs
+   2f8ed55..261d792  main -> main
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\chiplab-sky130\37-openroad-resizertimingpostcts -ErrorAction 
+SilentlyContinue | Select-Object Name,Length; docker ps --format "{{.Status}}"
+Up 53 minutes
+Name                              Length
+----                              ------
+COMMANDS                             265
+config.json                         9117
+openroad-resizertimingpostcts.log  16478
+state_in.json                       9110
+_env.tcl                            8187

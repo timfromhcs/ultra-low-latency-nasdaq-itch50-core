@@ -55,7 +55,9 @@ node scripts/openlane_summary.mjs openlane/runs/chiplab-sky130
 ```
 
 It writes `reports/openlane_<tag>.json` (die/core bbox, instances, area, setup/hold,
-DRC/LVS) and prints the same numbers. That file is the only artifact to commit.
+DRC/LVS) and prints the same numbers. When `resolved.json` has `CLOCK_PERIOD` and the
+setup slack is negative, it also derives an Fmax estimate (`1000 / (T - WNS)`) and a
+`timingClosed` flag. That file is the only artifact to commit.
 
 The synthesis matrix in `reports/synth_*.log` is a Yosys/ABC cell-count proxy, not an
 OpenLane timing report. Do not compare its numbers to a placed-and-routed design.

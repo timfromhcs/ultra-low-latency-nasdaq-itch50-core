@@ -39,6 +39,27 @@ if (!metricsPath) {
 const metrics = JSON.parse(fs.readFileSync(metricsPath, "utf8"));
 const tag = path.basename(runDir);
 
+// Derive an Fmax estimate from the worst setup slack (informative only).
+let clockPeriod = null;
+const resolvedPath = path.join(runDir, "resolved.json");
+if (fs.existsSync(resolvedPath)) {
+  try {
+    const resolved = JSON.parse(fs.readFileSync(resolvedPath, "utf8"));
+    const p = resolved?.CLOCK_PERIOD ?? resolved?.config?.CLOCK_PERIOD;
+    if (Number.isFinite(Number(p))) clockPeriod = Number(p);
+  } catch {
+    /* keep null */
+  }
+}
+const ws = Number(metrics.timing__setup__ws);
+const derived = {};
+if (Number.isFinite(ws) && Number.isFinite(clockPeriod)) {
+  const reachable = clockPeriod - ws; // ns per clock at the worst path
+  derived.clockPeriodNs = clockPeriod;
+  derived.fmaxEstimateMHz = reachable > 0 ? Number((1000 / reachable).toFixed(2)) : null;
+  derived.timingClosed = ws >= 0;
+}
+
 // Select the fields that matter for a human summary, with tolerant matching
 // (LibreLane renames metrics between versions).
 const pick = (patterns) => {
@@ -65,6 +86,7 @@ const report = {
   tag,
   generatedAt: new Date().toISOString(),
   metricsPath: metricsPath.replace(/\\/g, "/"),
+  derived,
   summary,
   metrics,
 };
@@ -81,4 +103,5 @@ console.log("setup:\n" + fmt(summary.setup));
 console.log("hold:\n" + fmt(summary.hold));
 console.log("drc:\n" + fmt(summary.drc));
 console.log("lvs:\n" + fmt(summary.lvs));
+console.log("derived:\n" + fmt(derived));
 console.log(`wrote ${out}`);
