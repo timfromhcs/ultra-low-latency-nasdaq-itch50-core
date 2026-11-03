@@ -343,7 +343,13 @@ async function pullCloud() {
 async function probeLocalCloud() {
   if (!/^https?:$/.test(location.protocol)) return;
   try {
-    const r = await fetch(`${location.origin}/api/cloud/info`, { headers: { accept: "application/json" } });
+    // /api/health exists everywhere; the Vercel deployment reports a different
+    // service name, so we can skip the cloud probe without a 404 in the console.
+    const h = await fetch(`${location.origin}/api/health`, { headers: { accept: "application/json" }, cache: "no-store" });
+    if (!h.ok) return;
+    const health = await h.json();
+    if (health?.service === "chiplab-vercel") return;
+    const r = await fetch(`${location.origin}/api/cloud/info`, { headers: { accept: "application/json" }, cache: "no-store" });
     if (!r.ok) return;
     const info = await r.json();
     if (info?.service !== "chiplab-local-cloud") return;
