@@ -163,7 +163,7 @@ other stages running. Any interface change updates `llms-full.txt` and `docs/arc
 |---|---|
 | Mold back-pressure complexity | skid buffer + formal no-loss proof; keep single-frame as fallback |
 | LibreLane heavy/slow | Dockerized smoke first; nightly full run |
-| CI runner package drift | pin Ubuntu 24.04 + apt versions; cache |
+| CI runner package drift | pin oss-cad-suite 2026-11-03 (cached) for formal; pin Ubuntu 24.04 for the rest |
 | MCP tool poisoning | static tool list, strict schemas, no file/shell tools, audit |
 | WebGPU fragmentation | Canvas2D fallback; PWA budgets |
 | Release tokens | build-only until `NPM_TOKEN`/`PYPI_TOKEN`/GHCR permissions are provided |

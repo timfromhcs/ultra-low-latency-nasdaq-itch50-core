@@ -12,13 +12,22 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+      - name: Cache oss-cad-suite
+        id: oss
+        uses: actions/cache@v4
+        with:
+          path: /opt/oss-cad-suite
+          key: oss-cad-suite-2026-11-03
       - name: Toolchain (pinned oss-cad-suite)
+        if: steps.oss.outputs.cache-hit != 'true'
         run: |
           # Pin Yosys + Z3 to one known-good bundle; Ubuntu's older packages
           # produced a spurious counterexample in the deep proof.
           curl -fsSL -o /tmp/oss.tgz \
             https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-11-03/oss-cad-suite-linux-x64-20261103.tgz
           tar -xzf /tmp/oss.tgz -C /opt
+      - name: Add toolchain to PATH
+        run: |
           echo "/opt/oss-cad-suite/bin" >> "$GITHUB_PATH"
           /opt/oss-cad-suite/bin/yosys -V
           /opt/oss-cad-suite/bin/z3 --version || true
