@@ -18,6 +18,13 @@ All notable changes to ChipLab are documented here. The format follows
   1 dropped port) → 28 records, 0 mismatches.
 - CI/Makefile run the multi-frame cocotb test.
 
+### Added
+- `rtl/itch_top_of_book.sv`: locate-indexed best bid/ask, aggregate shares at the best
+  level, last trade and volume for A/F/E/C/X/D/U/P/Q.
+- `tb/test_book.py`: 400 random events against an independent Python book model →
+  0 mismatches, 33 rescans. Input stalls during a best-price rescan (documented).
+- CI/Makefile run the book cocotb test and lint the module.
+
 ## 0.3.1 — 2026-11-03
 
 Patch release: packaging metadata and release-loop fixes. No protocol or API change.

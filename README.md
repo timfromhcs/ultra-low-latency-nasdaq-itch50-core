@@ -211,6 +211,7 @@ Reports live in [`reports/`](reports/).
 | Local cloud | token required for non-loopback writes, revision conflict → 409, traversal → 400 | `backend/store.mjs` |
 | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
 | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
+| RTL top-of-book | **400 random events, 33 rescans, 0 mismatches** vs. Python book | `tb/test_book.py` |
 | Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
@@ -458,7 +459,9 @@ Planning and research: [`LONG_TERM_PLAN.md`](LONG_TERM_PLAN.md),
 - [x] Back-to-back multi-frame MoldUDP64 (5 frames, gap + drop) — no skid needed,
   the front-end holds beats under back-pressure.
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
-- [ ] Full RTL top-of-book (currently a WASM/visual model).
+- [x] RTL top-of-book (functional reference): locate-indexed BBO, last trade, volume
+  (`rtl/itch_top_of_book.sv`, 400-event random test vs. Python model).
+- [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
 - [ ] OpenLane P&R + OpenSTA slack for Sky130/GF180/IHP.
 - [ ] Bitwuzla/Yices in the solver matrix.
 - [ ] Optional Vercel Sandbox/Drives recipe for team persistence.

@@ -36,6 +36,7 @@ jobs:
           python3 tb/run_cocotb.py
           python3 tb/run_pipeline_cocotb.py
           python3 tb/run_multi_cocotb.py
+          python3 tb/run_book_cocotb.py
           python3 tb/run_skid_cocotb.py
 
   wasm-web:

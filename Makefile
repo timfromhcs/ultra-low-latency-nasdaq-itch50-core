@@ -1,5 +1,5 @@
-# =============================================================================
-# ChipLab — one-command targets (Linux/macOS/WSL; Windows via WSL or npm scripts)
+﻿# =============================================================================
+# ChipLab â€” one-command targets (Linux/macOS/WSL; Windows via WSL or npm scripts)
 # =============================================================================
 SHELL := /bin/bash
 PYTHON ?= python3
@@ -44,6 +44,7 @@ vectors:
 lint:
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/moldudp64_pipeline.sv
+	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_of_book.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
 
 sim:
@@ -60,6 +61,7 @@ cocotb:
 	$(PYTHON) tb/run_mold_cocotb.py
 	$(PYTHON) tb/run_pipeline_cocotb.py
 	$(PYTHON) tb/run_multi_cocotb.py
+	$(PYTHON) tb/run_book_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
 
 wasm:
@@ -94,3 +96,4 @@ test:
 clean:
 	rm -rf formal/work_* tb/vectors tb/vectors_1m dist public node_modules native/target wasm-core/target
 	@echo "cleaned build artefacts (reports and sources are kept)"
+

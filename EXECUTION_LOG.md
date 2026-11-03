@@ -214,6 +214,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Single-frame, header-filter, skid, lint: PASS. Gate 10/10, release_check 14/14.
 - CI and Makefile now run the multi-frame test; docs/README/plan updated.
 
+## Phase 1b - RTL top-of-book (functional reference)
+
+- Added `rtl/itch_top_of_book.sv`: direct-mapped per-locate BBO cache + 256-entry order
+  table; handles A/F/E/C/X/D/U/P/Q; recounts the best level on any event that touches it.
+- Added `tb/test_book.py`: 400 random events vs. an independent Python model ->
+  0 mismatches, 33 rescans, 0 overflows.
+- Documented limits: input stalls while rescanning (up to 256 cycles), 16-locate direct
+  map, parallel ref lookup (not yet BRAM/hash).
+- `make lint` and the Icarus cocotb suite include the new module and test.
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.

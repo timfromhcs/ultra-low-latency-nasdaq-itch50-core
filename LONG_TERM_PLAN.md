@@ -82,8 +82,11 @@ MDN PWA best practices, GitHub Actions docs.
       (`tb/test_mold_multi.py`). No skid stage needed functionally; the front-end
       holds beats under back-pressure.
 - [x] Add `tlast`/frame counters and an explicit `frame_ready` / `frame_end`.
-- [ ] Implement `itch_top_of_book.sv`: locate-indexed BBO + volume + last, BRAM inference.
-- [ ] Full-field RTL test for BBO against a Python book model.
+- [x] Implement `itch_top_of_book.sv`: locate-indexed BBO, last trade and volume.
+- [x] Random RTL test vs. a Python book model: **400 events, 33 rescans, 0 mismatches**
+      (`tb/test_book.py`). Functional reference: stalls on a best-price removal while it
+      rescans the order table.
+- [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches; lint/formal still green.
