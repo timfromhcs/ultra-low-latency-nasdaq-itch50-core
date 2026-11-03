@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **LibreLane toolchain verification**: LibreLane **3.0.17** installed and its smoke test
+  passed (Classic flow 80/80, DRC ✅, LVS ✅, RC 0) using
+  `ghcr.io/librelane/librelane:3.0.17` under Docker Desktop with a cached PDK volume.
+  This validates the flow toolchain only; the ChipLab design itself has **no**
+  placed-and-routed or timing result. `make librelane-smoke`, `openlane/README.md`.
 - **SLSA provenance** (v0.3.1+): `actions/attest-build-provenance` attests
   `dist/chiplab.exe` in `exe.yml`/`release.yml`, and the npm tarball + Python
   wheel/sdist in `release.yml`; verify with `gh attestation verify <file> --repo ...`.

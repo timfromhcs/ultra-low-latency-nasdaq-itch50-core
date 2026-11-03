@@ -47,5 +47,9 @@ reports/mcp-audit.log
 packages/python/*.egg-info/
 reports/synth_book_*.log
 
+# LibreLane / OpenLane run directories (only small summaries are committed)
+runs/
+openlane/runs/
+
 reports/rtl_records.bin
 

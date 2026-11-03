@@ -259,6 +259,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 23:10 - LibreLane toolchain smoke test passed
+
+- Installed LibreLane 3.0.17 in WSL (needed `python3-dev` for `lln-libparse`) and
+  pulled `ghcr.io/librelane/librelane:3.0.17` (7.52 GB).
+- WSL `--dockerized` failed with "No compatible container engine found" (Docker
+  integration not enabled for the distro); ran the container directly from Windows
+  Docker with a cached PDK volume instead.
+- `librelane --smoke-test`: Classic flow **80/80**, **DRC ✅**, **LVS ✅**, RC 0.
+  This is a toolchain check, not a sign-off of ChipLab.
+- Added `make librelane-smoke`, documented the verified commands in
+  `openlane/README.md`, ignored `runs/`/`openlane/runs/`.
+- Started the full Sky130 run of `openlane/sky130.json` (`--run-tag chiplab-sky130`);
+  result pending.
+
 ## 2026-11-03 22:45 - SLSA provenance for release artifacts
 
 - `exe.yml`: build provenance attestation for `dist/chiplab.exe`

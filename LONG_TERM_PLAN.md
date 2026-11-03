@@ -103,7 +103,11 @@ MDN PWA best practices, GitHub Actions docs.
 ### Phase 2 — Physical (2 → 4 months)
 - [x] Yosys area estimate for the BBO: 62,017 cells at 32/4/4 (not optimized,
       no timing claim) — `scripts/synth_book.sh`, `reports/synth_book.json`.
-- [ ] LibreLane Sky130 hardening smoke (`--dockerized --smoke-test`), then full run.
+- [x] LibreLane toolchain: **3.0.17 smoke test passed** (Classic flow 80/80, DRC ✅,
+      LVS ✅, RC 0) via Docker Desktop + `ghcr.io/librelane/librelane:3.0.17` with a
+      cached PDK volume; see `openlane/README.md`.
+- [ ] Full LibreLane Sky130 run of `openlane/sky130.json` (wide 484-bit record; long
+      run, pin-count/area fit still open).
 - [ ] OpenSTA slack at 250 MHz and 322 MHz; publish worst path.
 - [ ] GF180 + IHP SG13G2 configs, one run each.
 - [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
