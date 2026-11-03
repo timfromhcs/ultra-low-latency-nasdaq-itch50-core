@@ -268,6 +268,10 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   The committed `web/wasm/chiplab_core.wasm` is `fc55bb6b…` (different toolchain), so
   `matchesCommitted` is false; pinning the Rust toolchain is the follow-up.
 - Roadmap split accordingly.
+- Follow-up in the same tick: pinned `wasm-core/rust-toolchain.toml` to rustc 1.98.1,
+  rebuilt the shipped WASM (`web/wasm`, `public/wasm`, `packages/npm/wasm`) and reran
+  the check: both builds **and** the committed artifact are `d2b5f58f…`,
+  `matchesCommitted: true`. Gate 10/10 with the new binary.
 
 ## 2026-11-04 00:15 - Keyless cosign signature for the container image
 

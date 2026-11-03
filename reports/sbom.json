@@ -3,7 +3,7 @@
   "specVersion": "1.5",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-03T22:20:17.643Z",
+    "timestamp": "2026-11-03T22:21:30.092Z",
     "component": {
       "type": "application",
       "name": "chiplab",
@@ -990,7 +990,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fc55bb6beab4bf6e67d72ae5b70c380e75dc686be01ee916a06ae60cb75eec4f"
+          "content": "d2b5f58f5a8c9131abc8d3de0c7767a835f5bf4779f14f3e31e2aafb740b7288"
         }
       ],
       "scope": "runtime"

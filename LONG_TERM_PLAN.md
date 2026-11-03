@@ -164,12 +164,12 @@ MDN PWA best practices, GitHub Actions docs.
       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
 - [x] Docker supply chain: `provenance: mode=max` + SBOM attestation + **keyless
       cosign signature** (`docker-publish.yml`, `id-token: write`).
-- [x] WASM reproducible-build check (`scripts/repro_wasm.sh`, `make repro-wasm`): two
-      clean builds with rustc 1.98.1 are byte-identical
-      (`d2b5f58f…`, 50,322 bytes). The committed binary differs (`fc55bb6b…`) because
-      the build toolchain is not pinned yet.
-- [ ] Pin the Rust toolchain and rebuild the shipped WASM so the committed artifact
-      matches; cosign/sigstore signatures for npm/PyPI artifacts.
+- [x] WASM reproducible build: `wasm-core/rust-toolchain.toml` pins rustc 1.98.1 and
+      the shipped binary (`web/wasm`, `public/wasm`, `packages/npm/wasm`) is rebuilt
+      from it. `scripts/repro_wasm.sh` (`make repro-wasm`) → two clean builds and the
+      committed artifact are all `d2b5f58f…` (50,322 bytes), **matchesCommitted: true**.
+- [ ] cosign/sigstore signatures for npm/PyPI artifacts; reproducible EXE/Python
+      packaging.
 - [x] Mutation: 9 parser→BBO mutants killed (`tools/mutate_book.py`,
       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
 - [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,
