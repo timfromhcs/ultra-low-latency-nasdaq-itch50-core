@@ -25,6 +25,8 @@ JSON-LD for search engines and AI indexers
 parser, measured on your own hardware, with a WebGPU order-book visualisation and a
 single-file local backend. Pre-silicon, reproducible, and honest about what is not proven.
 
+**[Live demo](https://chiplab-ten.vercel.app/)** · **[Local demo](http://127.0.0.1:4173)** after `node backend/server.mjs`.
+
 ![ChipLab desktop demo](reports/web-1440-depth.png)
 
 ---
@@ -125,6 +127,7 @@ Reports live in [`reports/`](reports/).
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
 | Docker image | builds and serves `/api/health` | `Dockerfile` |
+| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
 | npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
 | PyPI package | wheel builds and `selfcheck` covers all 22 opcodes | `packages/python/` |
 

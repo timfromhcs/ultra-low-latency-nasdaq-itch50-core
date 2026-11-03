@@ -128,6 +128,9 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   `reports/heartbeat.log`; a manual `-Tick` run passed.
 - Browser evidence retaken with WebGPU: `reports/web-1440-depth.png` (1M, 0 errors,
   GPU · WebGPU) and `reports/web-390-run.png` (390 px, no horizontal overflow).
+- Vercel project `chiplab` created and deployed from `main`:
+  **https://chiplab-ten.vercel.app/**; `/api/health` 200, Playwright run 100k = 0 errors,
+  WebGPU compute. Evidence: `reports/web-vercel.png`.
 
 ## Open items
 
