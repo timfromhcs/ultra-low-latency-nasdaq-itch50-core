@@ -35,6 +35,7 @@ module moldudp64_pipeline #(
   output wire [BYTES_PER_WORD-1:0]   m_axis_tkeep,
   output wire                        m_axis_tvalid,
   output wire                        m_axis_tlast,
+  input  wire                        m_axis_tready,
   output wire                        frame_ready,
 
   output wire [79:0]                 mold_session,
@@ -128,6 +129,7 @@ module moldudp64_pipeline #(
     .m_axis_tkeep(m_axis_tkeep),
     .m_axis_tvalid(m_axis_tvalid),
     .m_axis_tlast(m_axis_tlast),
+    .m_axis_tready(m_axis_tready),
     .msgs_left(),
     .frame_done(),
     .busy(dep_busy)

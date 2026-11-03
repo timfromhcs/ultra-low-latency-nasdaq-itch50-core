@@ -50,6 +50,7 @@ async def test_multi_frame_back_to_back(dut):
     dut.s_axis_tkeep.value = 0
     dut.s_axis_tlast.value = 0
     dut.s_axis_tdata.value = 0
+    dut.m_axis_tready.value = 1
     dut.cfg_dst_ip.value = int.from_bytes(bytes([233, 54, 12, 111]), "big")
     dut.cfg_ip_mask.value = 0xFFFFFFFF
     dut.cfg_udp_port.value = 26400

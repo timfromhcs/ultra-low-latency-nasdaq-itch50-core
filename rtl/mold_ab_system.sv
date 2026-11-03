@@ -63,6 +63,7 @@ module mold_ab_system #(
   wire [BYTES_PER_WORD-1:0] a_p_tkeep;
   wire                      a_p_tvalid;
   wire                      a_p_tlast;
+  wire                      a_p_tready;
   wire [63:0]               a_p_seq;
   wire [15:0]               a_p_count;
 
@@ -88,6 +89,7 @@ module mold_ab_system #(
     .m_axis_tkeep(a_p_tkeep),
     .m_axis_tvalid(a_p_tvalid),
     .m_axis_tlast(a_p_tlast),
+    .m_axis_tready(a_p_tready),
     .frame_ready(),
     .mold_session(),
     .mold_seq(),
@@ -108,6 +110,7 @@ module mold_ab_system #(
   wire [BYTES_PER_WORD-1:0] b_p_tkeep;
   wire                      b_p_tvalid;
   wire                      b_p_tlast;
+  wire                      b_p_tready;
   wire [63:0]               b_p_seq;
   wire [15:0]               b_p_count;
 
@@ -132,6 +135,7 @@ module mold_ab_system #(
     .m_axis_tkeep(b_p_tkeep),
     .m_axis_tvalid(b_p_tvalid),
     .m_axis_tlast(b_p_tlast),
+    .m_axis_tready(b_p_tready),
     .frame_ready(),
     .mold_session(),
     .mold_seq(),
@@ -161,14 +165,14 @@ module mold_ab_system #(
     .a_tlast(a_p_tlast),
     .a_seq(a_p_seq),
     .a_count(a_p_count),
-    .a_tready(),
+    .a_tready(a_p_tready),
     .b_tdata(b_p_tdata),
     .b_tkeep(b_p_tkeep),
     .b_tvalid(b_p_tvalid),
     .b_tlast(b_p_tlast),
     .b_seq(b_p_seq),
     .b_count(b_p_count),
-    .b_tready(),
+    .b_tready(b_p_tready),
     .m_tdata(m_tdata),
     .m_tkeep(m_tkeep),
     .m_tvalid(m_tvalid),

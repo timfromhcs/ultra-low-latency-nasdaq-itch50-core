@@ -91,6 +91,8 @@ MDN PWA best practices, GitHub Actions docs.
 - [ ] Physical timing sign-off of the level table + reduction (Phase 2).
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
+- [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and
+      pipeline, beats held until accepted; 329 bytes under random stalls, no loss.
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.

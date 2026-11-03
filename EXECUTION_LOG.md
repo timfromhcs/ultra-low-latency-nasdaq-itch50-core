@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 16:59 - Autonomy tick + Mold pipeline back-pressure
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `258e66a` (A/B system) green.
+- Added `m_axis_tready` to `moldudp64_depacketizer` and `moldudp64_pipeline`; the
+  depacketizer holds `tdata/tkeep/tlast` until accepted and only consumes when
+  `out_ready`. The A/B system now stalls the pipelines instead of relying on the
+  arbiter buffer size.
+- New `test_output_backpressure`: 329 bytes under random `m_axis_tready`, no loss,
+  no reordering. Single-frame, multi-frame and A/B system tests still pass.
+- Updated the earlier limitation note: pipeline back-pressure is resolved; only an
+  optional skid/FIFO for timing isolation remains.
+
 ## 2026-11-03 15:59 - Autonomy tick + A/B system integration
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a4ce459` (risk checks) green.
@@ -267,8 +279,7 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   frame arbiter -> one ITCH stream.
 - New `test_ab_system`: A/B Ethernet frames with a lagging feed, a tie, a gap and a
   single-feed fallback -> 10 records, 1 gap, byte-exact.
-- Note: the Mold pipeline still has no downstream tready; the arbiter buffers one frame
-  per feed (<=2 KB), which is sufficient for the tested frame sizes.
+- At that point the pipeline had no downstream tready; fixed in the 16:59 entry.
 
 ## 2026-11-03 14:59 - Autonomy tick + BBO risk checks
 

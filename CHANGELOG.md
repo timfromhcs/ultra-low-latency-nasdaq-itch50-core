@@ -62,6 +62,10 @@ All notable changes to ChipLab are documented here. The format follows
 - **A/B system integration** (`rtl/mold_ab_system.sv`): two Mold Ethernet pipelines
   (independent AXI inputs) feed the frame arbiter; frame sequence/count sidebands added
   to `moldudp64_pipeline`. Test: 2 feeds, 10 records, 1 gap, byte-exact.
+- **Mold pipeline downstream back-pressure**: `m_axis_tready` added to the depacketizer
+  and pipeline; output beats (data/keep/last) are held until accepted. New test:
+  329 bytes under random `tready`, no loss or reordering. The A/B system now stalls the
+  pipeline instead of relying on the arbiter buffer being large enough.
 
 ## 0.3.1 — 2026-11-03
 

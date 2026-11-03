@@ -39,6 +39,7 @@ module moldudp64_depacketizer #(
   output reg  [BYTES_PER_WORD-1:0]   m_axis_tkeep,
   output reg                         m_axis_tvalid,
   output reg                         m_axis_tlast,
+  input  wire                        m_axis_tready,
 
   output reg  [15:0]                 msgs_left,
   output reg                         frame_done,
@@ -79,6 +80,7 @@ module moldudp64_depacketizer #(
   wire [DATA_WIDTH-1:0] in_masked = s_axis_tdata & keep_to_mask(s_axis_tkeep);
 
   assign s_axis_tready = ({24'd0, count} <= (BUFFER_BYTES - BYTES_PER_WORD));
+  wire   out_ready = m_axis_tready || !m_axis_tvalid;
 
   // Combinational consumption decision (one prefix or one data beat per cycle).
   reg  [7:0]  consume;
@@ -94,7 +96,9 @@ module moldudp64_depacketizer #(
     start_prefix = 1'b0;
     finish_msg   = 1'b0;
 
-    if (msgs_left > 16'd0) begin
+    if (!out_ready) begin
+      // A beat is held; do not consume or overwrite it.
+    end else if (msgs_left > 16'd0) begin
       if (msg_left == 16'd0) begin
         // Need the 2-byte length prefix.
         if (count >= 8'd2) begin
@@ -141,11 +145,10 @@ module moldudp64_depacketizer #(
       busy           <= 1'b0;
       saw_frame_end  <= 1'b0;
     end else begin
-      m_axis_tvalid <= out_valid;
-      m_axis_tlast  <= 1'b0;
       frame_done    <= 1'b0;
 
       if (out_valid) begin
+        m_axis_tvalid <= 1'b1;
         m_axis_tdata <= store[DATA_WIDTH-1:0] & byte_mask(out_n);
         m_axis_tkeep <= ({24'd0, out_n} >= BYTES_PER_WORD) ? {BYTES_PER_WORD{1'b1}} :
                         (({{(BYTES_PER_WORD-1){1'b0}}, 1'b1} << out_n) - 1'b1);
@@ -153,6 +156,9 @@ module moldudp64_depacketizer #(
         // with this beat because this stage buffers.
         m_axis_tlast <= (next_msgs_left == 16'd0) && (next_msg_left == 16'd0);
         if (next_msgs_left == 16'd0 && next_msg_left == 16'd0) frame_done <= 1'b1;
+      end else if (m_axis_tready) begin
+        m_axis_tvalid <= 1'b0;
+        m_axis_tlast  <= 1'b0;
       end
 
       if (frame_start) begin
