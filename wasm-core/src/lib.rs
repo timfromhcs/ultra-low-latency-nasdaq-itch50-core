@@ -516,7 +516,7 @@ pub extern "C" fn dealloc(ptr: *mut u8, size: usize) {
 }
 
 #[no_mangle]
-pub extern "C" fn version() -> u32 { 0x000300 }
+pub extern "C" fn version() -> u32 { 0x000301 }
 
 #[no_mangle]
 pub extern "C" fn generate_stream(seed: u64, count: usize, mode: u32,

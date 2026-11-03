@@ -211,3 +211,18 @@ for attempt in 1..N:
 | EXE unsigned | checksum + Authenticode instructions; no "signed" claim |
 | WebGPU unavailable | Canvas2D fallback; local cloud works without GPU |
 | Scope creep into 1.0.0 | hard gate: R1 + BBO + LibreLane before 1.0.0 |
+
+## 9. Patch release: v0.3.1
+
+The published 0.3.0 Python wheel reported `chiplab_itch.__version__ == "0.2.0"` even
+though the distribution metadata was 0.3.0. SemVer allows a patch release; assets of
+a published version must not be changed in place.
+
+
+- `scripts/version.mjs` now also syncs `package-lock.json` and the Python `__version__`.
+- `scripts/sbom.mjs` reads the WASM version from package.json.
+- `scripts/release_check.mjs` checks both new version fields (13 checks).
+- README encoding restored; Vercel cloud probe uses `/api/health` first (no 404).
+- `docker-compose.yml` uses 0.3.1, supports `CHIPLAB_TOKEN` and a persistent data volume.
+- WASM ABI rebuilt to 0x000301; EXE, npm tarball and Python wheel/sdist rebuilt.
+- Tag `v0.3.1` publishes the same six-asset set through the `Release` workflow.

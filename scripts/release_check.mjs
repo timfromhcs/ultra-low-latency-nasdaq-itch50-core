@@ -37,6 +37,10 @@ const readme = read("README.md");
 check("README mentions version", readme.includes(expected), version);
 const vercelHealth = /version:\s*"([^"]+)"/.exec(read("api/_core.mjs"))?.[1];
 check("vercel health version", vercelHealth === expected, vercelHealth);
+const pyVersion = /__version__\s*=\s*"([^"]+)"/.exec(read("packages/python/src/chiplab_itch/__init__.py"))?.[1];
+check("python __version__", pyVersion === expected, pyVersion);
+const lockVersion = JSON.parse(read("package-lock.json")).version;
+check("package-lock version", lockVersion === expected, lockVersion);
 
 for (const rel of ["web/wasm/chiplab_core.wasm", "reports/sbom.json"]) {
   check(`artifact ${rel}`, fs.existsSync(path.join(root, rel)));

@@ -51,12 +51,17 @@ if (!newVersion) {
 for (const rel of [files.root, files.npm]) {
   replaceOnce(rel, /("version"\s*:\s*")[^"]+(")/, `$1${newVersion}$2`);
 }
+// package-lock.json: root version and the root package entry
+replaceOnce("package-lock.json", /("version"\s*:\s*")[^"]+(")/, `$1${newVersion}$2`);
+replaceOnce("package-lock.json", /("packages"\s*:\s*\{\s*"":\s*\{\s*"name"\s*:\s*"chiplab",\s*"version"\s*:\s*")[^"]+(")/, `$1${newVersion}$2`);
 // Cargo.toml package version (first version occurrence)
 for (const rel of [files.native, files.wasm]) {
   replaceOnce(rel, /(^version\s*=\s*")[^"]+(")/m, `$1${newVersion}$2`);
 }
 // pyproject
 replaceOnce(files.python, /(^version\s*=\s*")[^"]+(")/m, `$1${newVersion}$2`);
+// Python package __version__
+replaceOnce("packages/python/src/chiplab_itch/__init__.py", /(__version__\s*=\s*")[^"]+(")/, `$1${newVersion}$2`);
 
 // WASM ABI version: 0x00030000 for 0.3.0
 const [maj, min, patch] = newVersion.split(".").map(Number);

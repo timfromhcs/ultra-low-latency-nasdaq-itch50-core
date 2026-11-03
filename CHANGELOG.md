@@ -4,6 +4,29 @@ All notable changes to ChipLab are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.1 — 2026-11-03
+
+Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+
+### Fixed
+- Python package now reports `chiplab_itch.__version__ = "0.3.1"`; the 0.3.0 wheel
+  still contained `0.2.0` inside `__init__.py` even though the distribution metadata
+  was 0.3.0.
+- `scripts/version.mjs` now also updates `package-lock.json` (root + `packages[""]`)
+  and the Python `__version__`, so a single command keeps every version in sync.
+- `scripts/sbom.mjs` reads the shipped WASM version from `package.json` instead of a
+  hard-coded string.
+- `scripts/release_check.mjs` verifies the Python `__version__` and `package-lock.json`.
+- README was double-encoded (UTF-8 → CP1252 → UTF-8) by a PowerShell rewrite; restored
+  to correct UTF-8.
+- The web app probes `/api/health` before the local-cloud endpoint, so the Vercel
+  deployment no longer logs a 404 for `/api/cloud/info`.
+
+### Changed
+- `docker-compose.yml` uses `chiplab:0.3.1`, accepts `CHIPLAB_TOKEN`, and mounts a
+  persistent `chiplab-data` volume at `/app/.data`.
+- WASM ABI `version() = 0x000301`.
+
 ## 0.3.0 — 2026-11-03
 
 **First stable release: "Local Cloud".** Installable and usable without a developer:

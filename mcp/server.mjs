@@ -358,7 +358,7 @@ rl.on("line", (line) => {
       send({ jsonrpc: "2.0", id, result: {
         protocolVersion: "2024-11-05",
         capabilities: { tools: {} },
-        serverInfo: { name: "chiplab", version: "0.3.0" },
+        serverInfo: { name: "chiplab", version: "0.3.1" },
       }});
       return;
     }

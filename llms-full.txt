@@ -1,6 +1,6 @@
 # ChipLab — full specification
 # Local-first ITCH-50 silicon lab: RTL + WebAssembly + WebGPU + MCP + EXE + Docker + Vercel
-# Version: 0.3.0 "Local Cloud"
+# Version: 0.3.1 "Local Cloud"
 
 ## 1. What it is
 ChipLab is a pre-silicon lab around a NASDAQ TotalView-ITCH 5.0 parser. The RTL
@@ -54,7 +54,7 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
   `chiplab.docs` (fixed 8-key catalog).
 - `api/*.mjs`: Vercel serverless wrappers; static-first, user data stays in the browser.
 
-## 6b. Release (v0.3.0)
+## 6b. Release (v0.3.1)
 - One version across npm, Cargo, PyPI, MCP, SBOM and the Vercel health endpoint.
 - `Release` workflow on tag `v*`: verify → EXE → npm/PyPI packages → SBOM →
   `SHA256SUMS.txt` → GitHub Release.

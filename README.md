@@ -62,9 +62,9 @@ single-file local backend. Pre-silicon, reproducible, and honest about what is n
 
 ---
 
-## Stable release: v0.3.0 "Local Cloud"
+## Stable release: v0.3.1 "Local Cloud"
 
-v0.3.0 is the first release meant to be installed and used without a developer.
+v0.3.1 (patch of v0.3.0) is the first release meant to be installed and used without a developer.
 It ships **local cloud + web + EXE + GitHub Releases**, with honest limits.
 
 | Piece | What you get |
@@ -129,14 +129,14 @@ Release artifacts:
 | Artifact | Produced by |
 |---|---|
 | `chiplab.exe` | `npm run build:exe` (Node SEA, unsigned) |
-| `chiplab-core-0.3.0.tgz` | `cd packages/npm && npm pack` |
-| `chiplab_itch-0.3.0-py3-none-any.whl` + `.tar.gz` | `cd packages/python && python -m build` |
+| `chiplab-core-0.3.1.tgz` | `cd packages/npm && npm pack` |
+| `chiplab_itch-0.3.1-py3-none-any.whl` + `.tar.gz` | `cd packages/python && python -m build` |
 | `sbom.json` | `node scripts/sbom.mjs` |
 | `SHA256SUMS.txt` | `node scripts/checksums.mjs dist/release` |
 
 Verify a download with `sha256sum -c SHA256SUMS.txt` (or `Get-FileHash` on Windows).
 The first published release is
-[v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0)
+[v0.3.1](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.1) (first: [v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0))
 with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
 `SHA256SUMS.txt`. Builds are **not** bit-for-bit reproducible yet (Node SEA embeds a
 build timestamp), so trust the manifest shipped with the release.
@@ -321,12 +321,12 @@ See [`mcp/SECURITY.md`](mcp/SECURITY.md).
 ```bash
 # npm
 cd packages/npm && npm pack
-npm install ./chiplab-core-0.3.0.tgz
+npm install ./chiplab-core-0.3.1.tgz
 
 # PyPI
 cd packages/python
 python -m build
-pip install dist/chiplab_itch-0.3.0-py3-none-any.whl
+pip install dist/chiplab_itch-0.3.1-py3-none-any.whl
 chiplab-itch selfcheck --count 100000
 ```
 
@@ -341,7 +341,7 @@ web app, Node and the EXE.
 | Target | Build | Run |
 |---|---|---|
 | EXE | `npm run build:exe` | `dist\chiplab.exe --port 4190` or `--host 0.0.0.0 --token …` |
-| Docker | `docker build -t chiplab:0.3.0 .` | `docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=… chiplab:0.3.0` |
+| Docker | `docker build -t chiplab:0.3.1 .` | `docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=… chiplab:0.3.1` |
 | GHCR | CI pushes `ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main` | `docker pull ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main` |
 | Vercel | `node scripts/build_vercel.mjs` | `vercel` / Vercel MCP |
 

@@ -1,10 +1,19 @@
-services:
+﻿services:
   chiplab:
     build: .
-    image: chiplab:0.2.0
+    image: chiplab:0.3.1
     ports:
       - "4173:4173"
     environment:
       PORT: "4173"
       HOST: "0.0.0.0"
+      # Writes arrive from a non-loopback bridge, so set a token to enable them:
+      #   CHIPLAB_TOKEN=long-token docker compose up --build
+      CHIPLAB_TOKEN: "${CHIPLAB_TOKEN:-}"
+      CHIPLAB_DATA_DIR: /app/.data
+    volumes:
+      - chiplab-data:/app/.data
     restart: unless-stopped
+
+volumes:
+  chiplab-data:

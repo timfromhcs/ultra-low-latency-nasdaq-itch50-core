@@ -48,7 +48,8 @@ try {
 // Shipped WASM artifact
 try {
   const wasm = fs.readFileSync(path.join(root, "web/wasm/chiplab_core.wasm"));
-  add("file", "chiplab_core.wasm", "0.2.0", {
+  const pkgVersion = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).version;
+  add("file", "chiplab_core.wasm", pkgVersion, {
     hashes: [{ alg: "SHA-256", content: crypto.createHash("sha256").update(wasm).digest("hex") }],
     scope: "runtime",
   });
@@ -59,7 +60,7 @@ const bom = {
   bomFormat: "CycloneDX",
   specVersion: "1.5",
   version: 1,
-  metadata: { timestamp: new Date().toISOString(), component: { type: "application", name: "chiplab", version: "0.3.0" } },
+  metadata: { timestamp: new Date().toISOString(), component: { type: "application", name: "chiplab", version: "0.3.1" } },
   components: unique,
 };
 fs.mkdirSync(path.join(root, "reports"), { recursive: true });

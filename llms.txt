@@ -2,7 +2,7 @@
 > Local-first WebAssembly + WebGPU lab for a NASDAQ ITCH 5.0 parser, with RTL, formal proofs, Node backend, MCP, npm/PyPI packages, single EXE, Docker and Vercel.
 
 ## Core summary
-- Version: **0.3.0 "Local Cloud"** (stable; 1.0.0 is not claimed).
+- Version: **0.3.1 "Local Cloud"** (stable; 1.0.0 is not claimed).
 - RTL: SystemVerilog, all 22 ITCH 5.0 opcodes, tkeep/tlast, 64-bit shares, 128/256/512-bit datapaths.
 - Honest latency: 2 clocks from s_axis_tdata to registered output at the 322.26 MHz model clock; 1 clock from the window register.
 - Verified: 1,000,000-record full-field regression, 0 mismatches; Z3 + CVC5 formal PASS.
@@ -20,7 +20,7 @@ node backend/server.mjs --host 0.0.0.0 --token "long-token"   # local cloud over
 node backend/run.mjs --compare --count 1000000
 node mcp/server.mjs
 npm run build:exe
-docker build -t chiplab:0.3.0 .
+docker build -t chiplab:0.3.1 .
 ```
 
 ## Honest limits
