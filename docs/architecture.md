@@ -135,3 +135,16 @@ The architecture is partitioned into four decoupled, ultra-fast sub-modules:
 [Cycle 1: Egress]   Clock Edge (3.10 ns @ 322.26 MHz)
                     |--- +0.12 ns --> m_axis_order_valid & m_* registered outputs valid
 ```
+## 5. Downstream Blocks
+
+### MoldUDP64 pipeline (`rtl/moldudp64_*.sv`)
+
+- `moldudp64_frontend.sv` filters Ethernet/IPv4/UDP, validates the Mold header and tracks sequence gaps. It holds `tvalid/tdata/tkeep/tlast` stable under back-pressure and emits handshake-qualified `frame_start`/`frame_end` sidebands.
+- `moldudp64_depacketizer.sv` strips per-message 2-byte prefixes, emits its own message-derived `tlast`, and discards trailing Ethernet padding.
+- Proof: 5 frames back-to-back (4 valid + 1 gap + 1 dropped port) -> 28 records, 0 mismatches (`tb/test_mold_multi.py`).
+
+### Top of book (`rtl/itch_top_of_book.sv`)
+
+- Locate-indexed best bid/ask with aggregate shares at the best level, last trade and volume.
+- Handles A/F/E/C/X/D/U/P/Q. Events that touch the best price trigger a rescan of that locate/side; the input stalls until it completes.
+- Functional reference: 400 random events vs. a Python book model, 0 mismatches (`tb/test_book.py`). A BRAM/hash order store and a non-stalling ladder are the timing-closed follow-up.

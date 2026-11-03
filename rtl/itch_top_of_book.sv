@@ -118,6 +118,8 @@ module itch_top_of_book #(
   localparam [1:0] ST_RESCAN = 2'd2;
 
   reg [1:0]  state;
+  reg [8:0]  init_i;
+  reg        init_done;
   reg [3:0]  pend_idx;
   reg [15:0] pend_locate;
   reg [15:0] rs_locate;
@@ -142,9 +144,8 @@ module itch_top_of_book #(
   wire        touch_bbo = found && (at_bid || at_ask);
   wire        need_rescan = touch_bbo && (is_del || is_exec || is_cxl || is_repl);
 
-  assign s_ready = (state == ST_IDLE);
+  assign s_ready = init_done && (state == ST_IDLE);
 
-  integer k;
   always @(posedge clk) begin
     if (!rst_n) begin
       state          <= ST_IDLE;
@@ -160,6 +161,8 @@ module itch_top_of_book #(
       m_volume       <= 64'd0;
       drops_overflow <= 32'd0;
       rescans        <= 32'd0;
+      init_i         <= 9'd0;
+      init_done      <= 1'b0;
       pend_idx       <= 4'd0;
       pend_locate    <= 16'd0;
       rs_locate      <= 16'd0;
@@ -167,24 +170,32 @@ module itch_top_of_book #(
       rs_i           <= 9'd0;
       rs_best_p      <= 32'd0;
       rs_best_s      <= 64'd0;
-      for (k = 0; k < ORDERS; k = k + 1) begin
-        ord_valid[k]  <= 1'b0;
-        ord_ref[k]    <= 64'd0;
-        ord_locate[k] <= 16'd0;
-        ord_side[k]   <= 8'd0;
-        ord_price[k]  <= 32'd0;
-        ord_shares[k] <= 64'd0;
+    end else if (!init_done) begin
+      // Clear the tables one entry per cycle. A for-loop reset with nonblocking
+      // assignments is not portable across Verilator versions.
+      if (init_i < ORDERS) begin
+        ord_valid[init_i[7:0]]  <= 1'b0;
+        ord_ref[init_i[7:0]]    <= 64'd0;
+        ord_locate[init_i[7:0]] <= 16'd0;
+        ord_side[init_i[7:0]]   <= 8'd0;
+        ord_price[init_i[7:0]]  <= 32'd0;
+        ord_shares[init_i[7:0]] <= 64'd0;
+      end else if (init_i < ORDERS + LOCATES) begin
+        bb_valid[init_i[3:0]]  <= 1'b0;
+        bb_locate[init_i[3:0]] <= 16'd0;
+        bb_bid_p[init_i[3:0]]  <= 32'd0;
+        bb_bid_s[init_i[3:0]]  <= 64'd0;
+        bb_ask_p[init_i[3:0]]  <= 32'hFFFF_FFFF;
+        bb_ask_s[init_i[3:0]]  <= 64'd0;
+        bb_last_p[init_i[3:0]] <= 32'd0;
+        bb_last_s[init_i[3:0]] <= 64'd0;
+        bb_vol[init_i[3:0]]    <= 64'd0;
       end
-      for (k = 0; k < LOCATES; k = k + 1) begin
-        bb_valid[k]  <= 1'b0;
-        bb_locate[k] <= 16'd0;
-        bb_bid_p[k]  <= 32'd0;
-        bb_bid_s[k]  <= 64'd0;
-        bb_ask_p[k]  <= 32'hFFFF_FFFF;
-        bb_ask_s[k]  <= 64'd0;
-        bb_last_p[k] <= 32'd0;
-        bb_last_s[k] <= 64'd0;
-        bb_vol[k]    <= 64'd0;
+      if (init_i == ORDERS + LOCATES - 1) begin
+        init_done <= 1'b1;
+        init_i    <= 9'd0;
+      end else begin
+        init_i <= init_i + 9'd1;
       end
     end else begin
       m_valid <= 1'b0;

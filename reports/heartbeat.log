@@ -1030,3 +1030,556 @@ done
  0.02      47751.69  **
                                                         ** TESTS=1 PASS=0 FAIL=1 SKIP=0                914.50          
  0.03      36361.28  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -177,8 +177,17 @@
+ 
+         got = await drive(dut, ev)
+         exp = book.bbo(locate)
+         exp["locate"] = locate
++        if got != exp:
++            dut._log.info(f"MISMATCH step {step} {ev}")
++            dut._log.info(f"model locate {locate}: {book.orders.get(locate)}")
++            for k in range(256):
++                if int(dut.ord_valid[k].value):
++                    dut._log.info(
++                        f"rtl[{k}] ref={int(dut.ord_ref[k].value)} loc={int(dut.ord_locate[k].value)} "
++                        f"side={int(dut.ord_side[k].value)} px={int(dut.ord_price[k].value)} "
++                        f"sh={int(dut.ord_shares[k].value)}")
+         assert got == exp, f"step {step} {ev}\n got {got}\n exp {exp}"
+         checked += 1
+ 
+     dut._log.info(f"Book: {checked} events, {int(dut.rescans.value)} rescans, "
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/book2.txt 2>&1; echo 
+done"; wsl -d Ubuntu bash -lc "grep -E 'MISMATCH|model locate|rtl\\[' /tmp/book2.txt | head -20"
+done
+   914.50ns INFO     cocotb.itch_top_of_book            MISMATCH step 10 {'type': 68, 'locate': 2, 'side': 0, 'ref': 
+4, 'price': 0, 'shares': 0}
+   914.50ns INFO     cocotb.itch_top_of_book            model locate 2: {2: ['B', 9784, 272], 5: ['S', 10740, 291]}
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[0] ref=1 loc=4 side=83 px=9471 sh=128
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[1] ref=2 loc=2 side=66 px=9784 sh=272
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[2] ref=3 loc=1 side=66 px=9863 sh=369
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[4] ref=5 loc=2 side=83 px=10740 sh=291
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[5] ref=6 loc=3 side=83 px=10387 sh=397
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[6] ref=7 loc=1 side=66 px=9551 sh=286
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[7] ref=8 loc=1 side=66 px=10911 sh=274
+   914.50ns INFO     cocotb.itch_top_of_book            rtl[8] ref=9 loc=4 side=66 px=9442 sh=488
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -298,8 +298,13 @@
+         ST_RESCAN: begin
+           if (rs_i < ORDERS) begin
+             if (ord_valid[rs_i[7:0]] && ord_locate[rs_i[7:0]] == rs_locate &&
+                 (ord_side[rs_i[7:0]] == 8'h42) == rs_bid) begin
++              // synthesis translate_off
++              $display("RS i=%0d loc=%0d side=%0d px=%0d sh=%0d best=%0d/%0d",
++                       rs_i, ord_locate[rs_i[7:0]], ord_side[rs_i[7:0]],
++                       ord_price[rs_i[7:0]], ord_shares[rs_i[7:0]], rs_best_p, rs_best_s);
++              // synthesis translate_on
+               if (rs_bid) begin
+                 if (ord_price[rs_i[7:0]] > rs_best_p) begin
+                   rs_best_p <= ord_price[rs_i[7:0]];
+                   rs_best_s <= ord_shares[rs_i[7:0]];
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/book3.txt 2>&1; echo 
+done"; wsl -d Ubuntu bash -lc "grep -E '^RS|MISMATCH|model locate' /tmp/book3.txt | head -25"
+done
+   914.50ns INFO     cocotb.itch_top_of_book            MISMATCH step 10 {'type': 68, 'locate': 2, 'side': 0, 'ref': 
+4, 'price': 0, 'shares': 0}
+   914.50ns INFO     cocotb.itch_top_of_book            model locate 2: {2: ['B', 9784, 272], 5: ['S', 10740, 291]}
+RS i=4 loc=2 side=83 px=10740 sh=291 best=4294967295/0
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -177,8 +177,9 @@
+ 
+         got = await drive(dut, ev)
+         exp = book.bbo(locate)
+         exp["locate"] = locate
++        dut._log.info(f"step {step} {ev} got={got} exp={exp}")
+         if got != exp:
+             dut._log.info(f"MISMATCH step {step} {ev}")
+             dut._log.info(f"model locate {locate}: {book.orders.get(locate)}")
+             for k in range(256):
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/book4.txt 2>&1; echo 
+done"; wsl -d Ubuntu bash -lc "grep -E 'step 9 |step 10 |step 8 |step 6 |step 7 ' /tmp/book4.txt | head -12"
+done
+    83.70ns INFO     cocotb.itch_top_of_book            step 6 {'type': 65, 'locate': 1, 'side': 66, 'ref': 7, 
+'price': 9551, 'shares': 286} got={'locate': 1, 'bid_p': 9863, 'bid_s': 370, 'ask_p': 4294967295, 'ask_s': 0, 
+'last_p': 0, 'last_s': 0, 'vol': 0} exp={'bid_p': 9863, 'bid_s': 370, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0, 'locate': 1}
+    93.00ns INFO     cocotb.itch_top_of_book            step 7 {'type': 65, 'locate': 1, 'side': 66, 'ref': 8, 
+'price': 10911, 'shares': 274} got={'locate': 1, 'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 
+'last_p': 0, 'last_s': 0, 'vol': 0} exp={'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0, 'locate': 1}
+   102.30ns INFO     cocotb.itch_top_of_book            step 8 {'type': 69, 'locate': 1, 'side': 0, 'ref': 3, 'price': 
+0, 'shares': 1} got={'locate': 1, 'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 'last_s': 0, 
+'vol': 0, 'locate': 1}
+   111.60ns INFO     cocotb.itch_top_of_book            step 9 {'type': 65, 'locate': 4, 'side': 66, 'ref': 9, 
+'price': 9442, 'shares': 488} got={'locate': 4, 'bid_p': 9442, 'bid_s': 488, 'ask_p': 9471, 'ask_s': 128, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 9442, 'bid_s': 488, 'ask_p': 9471, 'ask_s': 128, 'last_p': 0, 'last_s': 0, 'vol': 
+0, 'locate': 4}
+   914.50ns INFO     cocotb.itch_top_of_book            step 10 {'type': 68, 'locate': 2, 'side': 0, 'ref': 4, 
+'price': 0, 'shares': 0} got={'locate': 2, 'bid_p': 9442, 'bid_s': 488, 'ask_p': 10740, 'ask_s': 291, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 9784, 'bid_s': 272, 'ask_p': 10740, 'ask_s': 291, 'last_p': 0, 'last_s': 0, 
+'vol': 0, 'locate': 2}
+   914.50ns INFO     cocotb.itch_top_of_book            MISMATCH step 10 {'type': 68, 'locate': 2, 'side': 0, 'ref': 
+4, 'price': 0, 'shares': 0}
+                                                        AssertionError: step 10 {'type': 68, 'locate': 2, 'side': 0, 
+'ref': 4, 'price': 0, 'shares': 0}
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mwsl -d Ubuntu bash -lc "grep -E \"'ref': 4[,}]\"" /tmp/book4.txt | head -10" failed
+[91m[1mError: [0mPortable shell scanner cannot analyze command: invalid-structure
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "grep \"'ref': 4\" /tmp/book4.txt | head -10"
+/bin/bash: -c: line 1: unexpected EOF while looking for matching `"'
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "grep -n 'step [0-9]' /tmp/book4.txt | head -12"
+10:    27.90ns INFO     cocotb.itch_top_of_book            step 0 {'type': 65, 'locate': 4, 'side': 83, 'ref': 1, 
+'price': 9471, 'shares': 128} got={'locate': 4, 'bid_p': 0, 'bid_s': 0, 'ask_p': 9471, 'ask_s': 128, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 0, 'bid_s': 0, 'ask_p': 9471, 'ask_s': 128, 'last_p': 0, 'last_s': 0, 'vol': 0, 
+'locate': 4}
+11:    37.20ns INFO     cocotb.itch_top_of_book            step 1 {'type': 65, 'locate': 2, 'side': 66, 'ref': 2, 
+'price': 9784, 'shares': 272} got={'locate': 2, 'bid_p': 9784, 'bid_s': 272, 'ask_p': 4294967295, 'ask_s': 0, 
+'last_p': 0, 'last_s': 0, 'vol': 0} exp={'bid_p': 9784, 'bid_s': 272, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0, 'locate': 2}
+12:    46.50ns INFO     cocotb.itch_top_of_book            step 2 {'type': 65, 'locate': 1, 'side': 66, 'ref': 3, 
+'price': 9863, 'shares': 370} got={'locate': 1, 'bid_p': 9863, 'bid_s': 370, 'ask_p': 4294967295, 'ask_s': 0, 
+'last_p': 0, 'last_s': 0, 'vol': 0} exp={'bid_p': 9863, 'bid_s': 370, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0, 'locate': 1}
+13:    55.80ns INFO     cocotb.itch_top_of_book            step 3 {'type': 65, 'locate': 2, 'side': 83, 'ref': 4, 
+'price': 10684, 'shares': 199} got={'locate': 2, 'bid_p': 9784, 'bid_s': 272, 'ask_p': 10684, 'ask_s': 199, 'last_p': 
+0, 'last_s': 0, 'vol': 0} exp={'bid_p': 9784, 'bid_s': 272, 'ask_p': 10684, 'ask_s': 199, 'last_p': 0, 'last_s': 0, 
+'vol': 0, 'locate': 2}
+14:    65.10ns INFO     cocotb.itch_top_of_book            step 4 {'type': 65, 'locate': 2, 'side': 83, 'ref': 5, 
+'price': 10740, 'shares': 291} got={'locate': 2, 'bid_p': 9784, 'bid_s': 272, 'ask_p': 10684, 'ask_s': 199, 'last_p': 
+0, 'last_s': 0, 'vol': 0} exp={'bid_p': 9784, 'bid_s': 272, 'ask_p': 10684, 'ask_s': 199, 'last_p': 0, 'last_s': 0, 
+'vol': 0, 'locate': 2}
+15:    74.40ns INFO     cocotb.itch_top_of_book            step 5 {'type': 65, 'locate': 3, 'side': 83, 'ref': 6, 
+'price': 10387, 'shares': 397} got={'locate': 3, 'bid_p': 0, 'bid_s': 0, 'ask_p': 10387, 'ask_s': 397, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 0, 'bid_s': 0, 'ask_p': 10387, 'ask_s': 397, 'last_p': 0, 'last_s': 0, 'vol': 0, 
+'locate': 3}
+16:    83.70ns INFO     cocotb.itch_top_of_book            step 6 {'type': 65, 'locate': 1, 'side': 66, 'ref': 7, 
+'price': 9551, 'shares': 286} got={'locate': 1, 'bid_p': 9863, 'bid_s': 370, 'ask_p': 4294967295, 'ask_s': 0, 
+'last_p': 0, 'last_s': 0, 'vol': 0} exp={'bid_p': 9863, 'bid_s': 370, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0, 'locate': 1}
+17:    93.00ns INFO     cocotb.itch_top_of_book            step 7 {'type': 65, 'locate': 1, 'side': 66, 'ref': 8, 
+'price': 10911, 'shares': 274} got={'locate': 1, 'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 
+'last_p': 0, 'last_s': 0, 'vol': 0} exp={'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0, 'locate': 1}
+18:   102.30ns INFO     cocotb.itch_top_of_book            step 8 {'type': 69, 'locate': 1, 'side': 0, 'ref': 3, 
+'price': 0, 'shares': 1} got={'locate': 1, 'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 10911, 'bid_s': 274, 'ask_p': 4294967295, 'ask_s': 0, 'last_p': 0, 'last_s': 0, 
+'vol': 0, 'locate': 1}
+19:   111.60ns INFO     cocotb.itch_top_of_book            step 9 {'type': 65, 'locate': 4, 'side': 66, 'ref': 9, 
+'price': 9442, 'shares': 488} got={'locate': 4, 'bid_p': 9442, 'bid_s': 488, 'ask_p': 9471, 'ask_s': 128, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 9442, 'bid_s': 488, 'ask_p': 9471, 'ask_s': 128, 'last_p': 0, 'last_s': 0, 'vol': 
+0, 'locate': 4}
+20:   914.50ns INFO     cocotb.itch_top_of_book            step 10 {'type': 68, 'locate': 2, 'side': 0, 'ref': 4, 
+'price': 0, 'shares': 0} got={'locate': 2, 'bid_p': 9442, 'bid_s': 488, 'ask_p': 10740, 'ask_s': 291, 'last_p': 0, 
+'last_s': 0, 'vol': 0} exp={'bid_p': 9784, 'bid_s': 272, 'ask_p': 10740, 'ask_s': 291, 'last_p': 0, 'last_s': 0, 
+'vol': 0, 'locate': 2}
+21:   914.50ns INFO     cocotb.itch_top_of_book            MISMATCH step 10 {'type': 68, 'locate': 2, 'side': 0, 
+'ref': 4, 'price': 0, 'shares': 0}
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -327,13 +327,17 @@
+               bb_bid_p[rs_locate[3:0]] <= rs_best_p;
+               bb_bid_s[rs_locate[3:0]] <= rs_best_s;
+               m_bid_price  <= rs_best_p;
+               m_bid_shares <= rs_best_s;
++              m_ask_price  <= bb_ask_p[rs_locate[3:0]];
++              m_ask_shares <= bb_ask_s[rs_locate[3:0]];
+             end else begin
+               bb_ask_p[rs_locate[3:0]] <= rs_best_p;
+               bb_ask_s[rs_locate[3:0]] <= rs_best_s;
+               m_ask_price  <= rs_best_p;
+               m_ask_shares <= rs_best_s;
++              m_bid_price  <= bb_bid_p[rs_locate[3:0]];
++              m_bid_shares <= bb_bid_s[rs_locate[3:0]];
+             end
+             m_valid      <= 1'b1;
+             m_locate     <= rs_locate;
+             m_last_price <= bb_last_p[rs_locate[3:0]];
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -298,13 +298,8 @@
+         ST_RESCAN: begin
+           if (rs_i < ORDERS) begin
+             if (ord_valid[rs_i[7:0]] && ord_locate[rs_i[7:0]] == rs_locate &&
+                 (ord_side[rs_i[7:0]] == 8'h42) == rs_bid) begin
+-              // synthesis translate_off
+-              $display("RS i=%0d loc=%0d side=%0d px=%0d sh=%0d best=%0d/%0d",
+-                       rs_i, ord_locate[rs_i[7:0]], ord_side[rs_i[7:0]],
+-                       ord_price[rs_i[7:0]], ord_shares[rs_i[7:0]], rs_best_p, rs_best_s);
+-              // synthesis translate_on
+               if (rs_bid) begin
+                 if (ord_price[rs_i[7:0]] > rs_best_p) begin
+                   rs_best_p <= ord_price[rs_i[7:0]];
+                   rs_best_s <= ord_shares[rs_i[7:0]];
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/book5.txt 2>&1; echo 
+done"; wsl -d Ubuntu bash -lc "grep -E 'MISMATCH|Book:|PASS|FAIL|TESTS=|Assertion' /tmp/book5.txt | tail -12"
+done
+  3434.80ns INFO     cocotb.itch_top_of_book            MISMATCH step 25 {'type': 85, 'locate': 4, 'side': 66, 'ref': 
+16, 'new_ref': 16, 'price': 10801, 'shares': 20}
+                                                        AssertionError: step 25 {'type': 85, 'locate': 4, 'side': 66, 
+'ref': 16, 'new_ref': 16, 'price': 10801, 'shares': 20}
+                                                        ** test_book.test_random_book     FAIL        3434.80          
+ 0.05      64816.02  **
+                                                        ** TESTS=1 PASS=0 FAIL=1 SKIP=0               3434.80          
+ 0.06      58954.16  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "grep -A6 'step 25 ' /tmp/book5.txt | head -20"
+3434.80ns INFO     cocotb.itch_top_of_book            step 25 {'type': 85, 'locate': 4, 'side': 66, 'ref': 16, 
+'new_ref': 16, 'price': 10801, 'shares': 20} got={'locate': 4, 'bid_p': 10684, 'bid_s': 186, 'ask_p': 9411, 'ask_s': 
+461, 'last_p': 9268, 'last_s': 379, 'vol': 379} exp={'bid_p': 10801, 'bid_s': 20, 'ask_p': 9411, 'ask_s': 461, 
+'last_p': 9268, 'last_s': 379, 'vol': 379, 'locate': 4}
+  3434.80ns INFO     cocotb.itch_top_of_book            MISMATCH step 25 {'type': 85, 'locate': 4, 'side': 66, 'ref': 
+16, 'new_ref': 16, 'price': 10801, 'shares': 20}
+  3434.80ns INFO     cocotb.itch_top_of_book            model locate 4: {1: ['S', 9471, 128], 9: ['B', 9442, 488], 12: 
+['B', 10684, 186], 13: ['S', 9411, 461], 16: ['B', 10801, 20], 18: ['S', 9817, 198]}
+  3434.80ns INFO     cocotb.itch_top_of_book            rtl[0] ref=1 loc=4 side=83 px=9471 sh=128
+  3434.80ns INFO     cocotb.itch_top_of_book            rtl[1] ref=2 loc=2 side=66 px=9784 sh=272
+  3434.80ns INFO     cocotb.itch_top_of_book            rtl[2] ref=3 loc=1 side=66 px=9863 sh=369
+  3434.80ns INFO     cocotb.itch_top_of_book            rtl[3] ref=17 loc=3 side=83 px=9691 sh=111
+  3434.80ns INFO     cocotb.itch_top_of_book            rtl[4] ref=5 loc=2 side=83 px=10740 sh=146
+--
+                                                        AssertionError: step 25 {'type': 85, 'locate': 4, 'side': 66, 
+'ref': 16, 'new_ref': 16, 'price': 10801, 'shares': 20}
+                                                           got {'locate': 4, 'bid_p': 10684, 'bid_s': 186, 'ask_p': 
+9411, 'ask_s': 461, 'last_p': 9268, 'last_s': 379, 'vol': 379}
+                                                           exp {'bid_p': 10801, 'bid_s': 20, 'ask_p': 9411, 'ask_s': 
+461, 'last_p': 9268, 'last_s': 379, 'vol': 379, 'locate': 4}
+                                                        assert {'locate': 4, 'bid_p': 10684, 'bid_s': 186, 'ask_p': 
+9411, ...} == {'bid_p': 10801, 'bid_s': 20, 'ask_p': 9411, 'ask_s': 461, ...}
+  3434.80ns INFO     cocotb.regression                  
+**************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL 
+TIME (s)  RATIO (ns/s) **
+                                                        
+**************************************************************************************
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -252,8 +252,26 @@
+                 ord_shares[free_idx] <= s_shares;
+               end else begin
+                 drops_overflow <= drops_overflow + 32'd1;
+               end
++              // The new price may become the best (or join the best level).
++              // If the old order touched the BBO, the rescan below recomputes
++              // the exact level and overwrites this provisional update.
++              if (s_side == 8'h42) begin
++                if (s_price > bb_bid_p[idx]) begin
++                  bb_bid_p[idx] <= s_price;
++                  bb_bid_s[idx] <= s_shares;
++                end else if (s_price == bb_bid_p[idx]) begin
++                  bb_bid_s[idx] <= bb_bid_s[idx] + s_shares;
++                end
++              end else begin
++                if (s_price < bb_ask_p[idx]) begin
++                  bb_ask_p[idx] <= s_price;
++                  bb_ask_s[idx] <= s_shares;
++                end else if (s_price == bb_ask_p[idx]) begin
++                  bb_ask_s[idx] <= bb_ask_s[idx] + s_shares;
++                end
++              end
+             end else if (is_del || is_exec || is_cxl) begin
+               if (found) begin
+                 if (is_del || ord_shares[found_idx] <= s_shares) begin
+                   ord_valid[found_idx] <= 1'b0;
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/book6.txt 2>&1; echo 
+done"; wsl -d Ubuntu bash -lc "grep -E 'MISMATCH|Book:|PASS|FAIL|TESTS=|Assertion' /tmp/book6.txt | tail -10"
+done
+ 29927.40ns INFO     cocotb.itch_top_of_book            Book: 400 events, 33 rescans, 0 overflows PASS
+                                                        ** test_book.test_random_book     PASS       29927.40          
+ 0.47      63471.39  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0              29927.40          
+ 0.47      63410.08  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -177,9 +177,8 @@
+ 
+         got = await drive(dut, ev)
+         exp = book.bbo(locate)
+         exp["locate"] = locate
+-        dut._log.info(f"step {step} {ev} got={got} exp={exp}")
+         if got != exp:
+             dut._log.info(f"MISMATCH step {step} {ev}")
+             dut._log.info(f"model locate {locate}: {book.orders.get(locate)}")
+             for k in range(256):
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; @'
+--- Makefile ---
+'@ | Out-Null; (Get-Content Makefile -Raw).Replace("`t`$(PYTHON) tb/run_multi_cocotb.py`n`t`$(PYTHON) 
+tb/run_skid_cocotb.py", "`t`$(PYTHON) tb/run_multi_cocotb.py`n`t`$(PYTHON) tb/run_book_cocotb.py`n`t`$(PYTHON) 
+tb/run_skid_cocotb.py") | Set-Content Makefile -Encoding utf8; Select-String -Path Makefile -Pattern 
+'run_book|run_multi|run_skid' | Select-Object LineNumber,Line
+LineNumber Line                             
+---------- ----                             
+        62 	$(PYTHON) tb/run_multi_cocotb.py
+        63 	$(PYTHON) tb/run_book_cocotb.py 
+        64 	$(PYTHON) tb/run_skid_cocotb.py
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit Makefile failed
+[91m[1mError: [0mNo changes to apply: the edit leaves E:\chips\main\Makefile unchanged. Line endings follow the 
+file; to change them, write \r explicitly in oldString or newString.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -43,8 +43,9 @@
+ 
+ lint:
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/moldudp64_pipeline.sv
++	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_of_book.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
+ 
+ sim:
+ 	$(MAKE) -C tb sim VECTORS=$(abspath $(VECTORS))
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -35,8 +35,9 @@
+         run: |
+           python3 tb/run_cocotb.py
+           python3 tb/run_pipeline_cocotb.py
+           python3 tb/run_multi_cocotb.py
++          python3 tb/run_book_cocotb.py
+           python3 tb/run_skid_cocotb.py
+ 
+   wasm-web:
+     name: WASM + backend + MCP + Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | tail -6"; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/book7.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 
+'Book:|TESTS=' /tmp/book7.txt | tail -3"
+- Verilator: Built from 0.033 MB sources in 2 modules, into 0.086 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.025 s (elab=0.001, cvt=0.007, bld=0.000); cpu 0.014 s on 1 threads; alloced 8.910 MB
+verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)
+- Verilator: Built from 0.023 MB sources in 2 modules, into 0.023 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.013 s (elab=0.000, cvt=0.002, bld=0.000); cpu 0.006 s on 1 threads; alloced 7.945 MB
+RC=True
+ 29927.40ns INFO     cocotb.itch_top_of_book            Book: 400 events, 33 rescans, 0 overflows PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0              29927.40          
+ 0.45      66979.20  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -457,9 +457,11 @@
+ 
+ - [x] Back-to-back multi-frame MoldUDP64 (5 frames, gap + drop) ÔÇö no skid needed,
+   the front-end holds beats under back-pressure.
+ - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
+-- [ ] Full RTL top-of-book (currently a WASM/visual model).
++- [x] RTL top-of-book (functional reference): locate-indexed BBO, last trade, volume
++  (`rtl/itch_top_of_book.sv`, 400-event random test vs. Python model).
++- [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
+ - [ ] OpenLane P&R + OpenSTA slack for Sky130/GF180/IHP.
+ - [ ] Bitwuzla/Yices in the solver matrix.
+ - [ ] Optional Vercel Sandbox/Drives recipe for team persistence.
+ - [ ] Published npm/PyPI artifacts and GHCR image (tokens required).
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -210,8 +210,9 @@
+ | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+ | Local cloud | token required for non-loopback writes, revision conflict ÔåÆ 409, traversal ÔåÆ 400 | 
+`backend/store.mjs` |
+ | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
+ | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
++| RTL top-of-book | **400 random events, 33 rescans, 0 mismatches** vs. Python book | `tb/test_book.py` |
+ | Supply chain | 163-component SBOM | `reports/sbom.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+ | Docker image | builds and serves `/api/health` | `Dockerfile` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -81,11 +81,13 @@
+ - [x] Back-to-back frames with gap + drop: **5 frames, 28 records, 0 mismatches**
+       (`tb/test_mold_multi.py`). No skid stage needed functionally; the front-end
+       holds beats under back-pressure.
+ - [x] Add `tlast`/frame counters and an explicit `frame_ready` / `frame_end`.
+-- [ ] Implement `itch_top_of_book.sv`: locate-indexed BBO + volume + last, BRAM inference.
+-- [ ] Full-field RTL test for BBO against a Python book model.
+-- [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
++- [x] Implement `itch_top_of_book.sv`: locate-indexed BBO, last trade and volume.
++- [x] Random RTL test vs. a Python book model: **400 events, 33 rescans, 0 mismatches**
++      (`tb/test_book.py`). Functional reference: stalls on a best-price removal while it
++      rescans the order table.
++- [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
+ 
+ **Gate:** multi-frame 0 mismatches Ô£à; BBO 0 mismatches; lint/formal still green.
+ 
+ ### Phase 2 ÔÇö Physical (2 ÔåÆ 4 months)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead LONG_TERM_PLAN.md [90m[limit=14, offset=79][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -86,8 +86,9 @@
+ - [x] Random RTL test vs. a Python book model: **400 events, 33 rescans, 0 mismatches**
+       (`tb/test_book.py`). Functional reference: stalls on a best-price removal while it
+       rescans the order table.
+ - [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
++- [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
+ 
+ **Gate:** multi-frame 0 mismatches Ô£à; BBO 0 mismatches; lint/formal still green.
+ 
+ ### Phase 2 ÔÇö Physical (2 ÔåÆ 4 months)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -17,8 +17,15 @@
+ - New proof: `tb/test_mold_multi.py` ÔÇö 5 frames back-to-back (4 valid, 1 gap,
+   1 dropped port) ÔåÆ 28 records, 0 mismatches.
+ - CI/Makefile run the multi-frame cocotb test.
+ 
++### Added
++- `rtl/itch_top_of_book.sv`: locate-indexed best bid/ask, aggregate shares at the best
++  level, last trade and volume for A/F/E/C/X/D/U/P/Q.
++- `tb/test_book.py`: 400 random events against an independent Python book model ÔåÆ
++  0 mismatches, 33 rescans. Input stalls during a best-price rescan (documented).
++- CI/Makefile run the book cocotb test and lint the module.
++
+ ## 0.3.1 ÔÇö 2026-11-03
+ 
+ Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -213,8 +213,18 @@
+   port) -> 28 records, 1 gap pulse, 1 drop pulse, 0 mismatches.
+ - Single-frame, header-filter, skid, lint: PASS. Gate 10/10, release_check 14/14.
+ - CI and Makefile now run the multi-frame test; docs/README/plan updated.
+ 
++## Phase 1b - RTL top-of-book (functional reference)
++
++- Added `rtl/itch_top_of_book.sv`: direct-mapped per-locate BBO cache + 256-entry order
++  table; handles A/F/E/C/X/D/U/P/Q; recounts the best level on any event that touches it.
++- Added `tb/test_book.py`: 400 random events vs. an independent Python model ->
++  0 mismatches, 33 rescans, 0 overflows.
++- Documented limits: input stalls while rescanning (up to 256 cycles), 16-locate direct
++  map, parallel ref lookup (not yet BRAM/hash).
++- `make lint` and the Icarus cocotb suite include the new module and test.
++
+ ## v0.3.1 - patch release
+ 
+ - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.
+ - `scripts/version.mjs` now syncs `package-lock.json`, Python `__version__`, the Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "feat(rtl): locate-indexed top-of-book with random model test" 
+2>&1 | Select-Object -Last 4; git push origin main 2>&1 | Select-Object -Last 2
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/heartbeat.log', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/run_book_cocotb.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_book.py', LF will be replaced by CRLF the next time Git touches it
+ 10 files changed, 1323 insertions(+), 5 deletions(-)
+ create mode 100644 rtl/itch_top_of_book.sv
+ create mode 100644 tb/run_book_cocotb.py
+ create mode 100644 tb/test_book.py
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:138
++ ... test" 2>&1 | Select-Object -Last 4; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   fe08a81..707180f  main -> main
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const runs = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", perPage: 8 });\n  return runs.workflow_runs?.fil
+ter(x=>[\"fe08a81\",\"707180f\"].some(s=>x.head_sha?.startsWith(s))).map(x=>({name:x.name,status:x.status,conclusion:x.
+conclusion,sha:x.head_sha?.slice(0,7)}));\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 10 });\n  
+return r.workflow_runs?.map(x=>({id:x.id,status:x.status,conclusion:x.conclusion,sha:x.head_sha?.slice(0,7),created:x.c
+reated_at}));\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git log --oneline -8; git status -sb
+707180f feat(rtl): locate-indexed top-of-book with random model test
+fe08a81 feat(rtl): resolve multi-frame MoldUDP64 back-pressure (R1)
+92e6f33 docs: add cloud-api and release-check to the verification block
+a1694a5 docs: log the v0.3.1 patch release
+d67fc87 fix: single runtime version for server and EXE health endpoints
+00baec9 release: v0.3.1 - fix Python __version__, sync all version sources, restore README
+f869621 docs: log the post-release verification and encoding fix
+8ec8780 fix(web): probe /api/health before the cloud panel to avoid a Vercel 404
+## main...origin/main
+ M reports/heartbeat.log
