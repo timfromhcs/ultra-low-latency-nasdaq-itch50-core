@@ -65,6 +65,8 @@ replaceOnce("wasm-core/src/lib.rs", /(pub extern "C" fn version\(\) -> u32 \{ )0
 
 // MCP serverInfo
 replaceOnce("mcp/server.mjs", /(serverInfo:\s*\{\s*name:\s*"chiplab",\s*version:\s*")[^"]+(")/, `$1${newVersion}$2`);
+// Vercel health
+replaceOnce("api/_core.mjs", /(service:\s*"chiplab-vercel",\s*version:\s*")[^"]+(")/, `$1${newVersion}$2`);
 // SBOM metadata
 replaceOnce("scripts/sbom.mjs", /(name:\s*"chiplab",\s*version:\s*")[^"]+(")/, `$1${newVersion}$2`);
 

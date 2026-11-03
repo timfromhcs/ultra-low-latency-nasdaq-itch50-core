@@ -53,5 +53,5 @@ export async function book(body = {}) {
 }
 
 export function health() {
-  return { ok: true, service: "chiplab-vercel", chips: CHIPS, host: hostInfo(), persistence: "browser-local (OPFS/IndexedDB)" };
+  return { ok: true, service: "chiplab-vercel", version: "0.3.0", chips: CHIPS, host: hostInfo(), persistence: "browser-local (OPFS/IndexedDB)" };
 }

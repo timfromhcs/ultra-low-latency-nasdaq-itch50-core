@@ -35,6 +35,8 @@ const changelog = read("CHANGELOG.md");
 check("changelog has version", changelog.includes(`## ${expected}`), `## ${expected}`);
 const readme = read("README.md");
 check("README mentions version", readme.includes(expected), version);
+const vercelHealth = /version:\s*"([^"]+)"/.exec(read("api/_core.mjs"))?.[1];
+check("vercel health version", vercelHealth === expected, vercelHealth);
 
 for (const rel of ["web/wasm/chiplab_core.wasm", "reports/sbom.json"]) {
   check(`artifact ${rel}`, fs.existsSync(path.join(root, rel)));
