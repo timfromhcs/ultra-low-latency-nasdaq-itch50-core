@@ -108,7 +108,9 @@ MDN PWA best practices, GitHub Actions docs.
 
 ### Phase 3 — System (4 → 8 months)
 - [ ] Full MoldUDP64 packet parser with sequence recovery + A/B feed arbitration.
-- [ ] Multi-symbol order book (hash table + price ladder), risk checks, top-N.
+- [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
+      output, 400-event + 100 back-to-back tests.
+- [ ] Risk checks (price collar, max order size) and a hashed order store.
 - [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
 - [ ] Performance counters: messages/s, gaps, drops, queue occupancy, latency histogram.
 - [x] RTL ↔ WASM equivalence on the same vectors: **100,000 records, every canonical

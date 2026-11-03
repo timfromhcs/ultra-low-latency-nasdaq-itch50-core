@@ -6,6 +6,7 @@
 import os
 import random
 import sys
+from collections import defaultdict
 
 import cocotb
 from cocotb.clock import Clock
@@ -85,8 +86,20 @@ class Book:
         ap = min((p for p, _ in asks), default=0xFFFFFFFF)
         as_ = sum(s for p, s in asks if p == ap) if asks else 0
         lp, ls = self.last.get(loc, (0, 0))
+        bagg = defaultdict(int)
+        aagg = defaultdict(int)
+        for side, p, s in book.values():
+            if side == "B":
+                bagg[p] += s
+            else:
+                aagg[p] += s
+        bd = sorted(bagg.items(), reverse=True)[:4]
+        ad = sorted(aagg.items())[:4]
+        bd += [(0, 0)] * (4 - len(bd))
+        ad += [(0xFFFFFFFF, 0)] * (4 - len(ad))
         return dict(locate=loc, bid_p=bp, bid_s=bs, ask_p=ap, ask_s=as_,
-                    last_p=lp, last_s=ls, vol=self.vol.get(loc, 0))
+                    last_p=lp, last_s=ls, vol=self.vol.get(loc, 0),
+                    bid_levels=bd, ask_levels=ad)
 
 
 async def send_bytes(dut, data: bytes):
@@ -217,6 +230,14 @@ async def test_bytes_to_bbo(dut):
                     last_p=int(dut.bbo_last_price.value),
                     last_s=int(dut.bbo_last_shares.value),
                     vol=int(dut.bbo_volume.value),
+                    bid_levels=[(int(dut.bbo_bid_p0.value), int(dut.bbo_bid_s0.value)),
+                                (int(dut.bbo_bid_p1.value), int(dut.bbo_bid_s1.value)),
+                                (int(dut.bbo_bid_p2.value), int(dut.bbo_bid_s2.value)),
+                                (int(dut.bbo_bid_p3.value), int(dut.bbo_bid_s3.value))],
+                    ask_levels=[(int(dut.bbo_ask_p0.value), int(dut.bbo_ask_s0.value)),
+                                (int(dut.bbo_ask_p1.value), int(dut.bbo_ask_s1.value)),
+                                (int(dut.bbo_ask_p2.value), int(dut.bbo_ask_s2.value)),
+                                (int(dut.bbo_ask_p3.value), int(dut.bbo_ask_s3.value))],
                 ))
 
     cocotb.start_soon(monitor())

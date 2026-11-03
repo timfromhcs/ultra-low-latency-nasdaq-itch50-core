@@ -52,6 +52,12 @@ module itch_top_of_book #(
   output reg  [63:0]                 m_last_shares,
   output reg  [63:0]                 m_volume,
 
+  // Top-4 depth for the event's locate
+  output reg  [31:0]                 m_bid_p0, m_bid_p1, m_bid_p2, m_bid_p3,
+  output reg  [63:0]                 m_bid_s0, m_bid_s1, m_bid_s2, m_bid_s3,
+  output reg  [31:0]                 m_ask_p0, m_ask_p1, m_ask_p2, m_ask_p3,
+  output reg  [63:0]                 m_ask_s0, m_ask_s1, m_ask_s2, m_ask_s3,
+
   // Observability
   output reg  [31:0]                 drops_overflow,
   output reg  [31:0]                 level_overflow,
@@ -223,13 +229,35 @@ module itch_top_of_book #(
   reg [31:0]  r_bid_p; reg [63:0] r_bid_s;
   reg [31:0]  r_ask_p; reg [63:0] r_ask_s;
 
+  reg [31:0]  b_p0, b_p1, b_p2, b_p3;
+  reg [63:0]  b_s0, b_s1, b_s2, b_s3;
+  reg [31:0]  a_p0, a_p1, a_p2, a_p3;
+  reg [63:0]  a_s0, a_s1, a_s2, a_s3;
+
   always @(*) begin
     r_bid_p = 32'd0;
     r_bid_s = 64'd0;
     r_ask_p = 32'hFFFF_FFFF;
     r_ask_s = 64'd0;
+    b_p0 = 32'd0; b_p1 = 32'd0; b_p2 = 32'd0; b_p3 = 32'd0;
+    b_s0 = 64'd0; b_s1 = 64'd0; b_s2 = 64'd0; b_s3 = 64'd0;
+    a_p0 = 32'hFFFF_FFFF; a_p1 = 32'hFFFF_FFFF; a_p2 = 32'hFFFF_FFFF; a_p3 = 32'hFFFF_FFFF;
+    a_s0 = 64'd0; a_s1 = 64'd0; a_s2 = 64'd0; a_s3 = 64'd0;
     for (j = 0; j < LEVELS; j = j + 1) begin
       if (lb_valid[p_idx*LEVELS+j]) begin
+        // top-4 insertion (descending price)
+        if (lb_price[p_idx*LEVELS+j] > b_p0) begin
+          b_p3 = b_p2; b_s3 = b_s2; b_p2 = b_p1; b_s2 = b_s1;
+          b_p1 = b_p0; b_s1 = b_s0; b_p0 = lb_price[p_idx*LEVELS+j]; b_s0 = lb_shares[p_idx*LEVELS+j];
+        end else if (lb_price[p_idx*LEVELS+j] > b_p1) begin
+          b_p3 = b_p2; b_s3 = b_s2; b_p2 = b_p1; b_s2 = b_s1;
+          b_p1 = lb_price[p_idx*LEVELS+j]; b_s1 = lb_shares[p_idx*LEVELS+j];
+        end else if (lb_price[p_idx*LEVELS+j] > b_p2) begin
+          b_p3 = b_p2; b_s3 = b_s2;
+          b_p2 = lb_price[p_idx*LEVELS+j]; b_s2 = lb_shares[p_idx*LEVELS+j];
+        end else if (lb_price[p_idx*LEVELS+j] > b_p3) begin
+          b_p3 = lb_price[p_idx*LEVELS+j]; b_s3 = lb_shares[p_idx*LEVELS+j];
+        end
         if (lb_price[p_idx*LEVELS+j] > r_bid_p) begin
           r_bid_p = lb_price[p_idx*LEVELS+j];
           r_bid_s = lb_shares[p_idx*LEVELS+j];
@@ -238,6 +266,19 @@ module itch_top_of_book #(
         end
       end
       if (la_valid[p_idx*LEVELS+j]) begin
+        // top-4 insertion (ascending price)
+        if (la_price[p_idx*LEVELS+j] < a_p0) begin
+          a_p3 = a_p2; a_s3 = a_s2; a_p2 = a_p1; a_s2 = a_s1;
+          a_p1 = a_p0; a_s1 = a_s0; a_p0 = la_price[p_idx*LEVELS+j]; a_s0 = la_shares[p_idx*LEVELS+j];
+        end else if (la_price[p_idx*LEVELS+j] < a_p1) begin
+          a_p3 = a_p2; a_s3 = a_s2; a_p2 = a_p1; a_s2 = a_s1;
+          a_p1 = la_price[p_idx*LEVELS+j]; a_s1 = la_shares[p_idx*LEVELS+j];
+        end else if (la_price[p_idx*LEVELS+j] < a_p2) begin
+          a_p3 = a_p2; a_s3 = a_s2;
+          a_p2 = la_price[p_idx*LEVELS+j]; a_s2 = la_shares[p_idx*LEVELS+j];
+        end else if (la_price[p_idx*LEVELS+j] < a_p3) begin
+          a_p3 = la_price[p_idx*LEVELS+j]; a_s3 = la_shares[p_idx*LEVELS+j];
+        end
         if (la_price[p_idx*LEVELS+j] < r_ask_p) begin
           r_ask_p = la_price[p_idx*LEVELS+j];
           r_ask_s = la_shares[p_idx*LEVELS+j];
@@ -355,6 +396,10 @@ module itch_top_of_book #(
         m_last_price <= last_p[p_idx];
         m_last_shares<= last_s[p_idx];
         m_volume     <= vol[p_idx];
+        m_bid_p0 <= b_p0; m_bid_p1 <= b_p1; m_bid_p2 <= b_p2; m_bid_p3 <= b_p3;
+        m_bid_s0 <= b_s0; m_bid_s1 <= b_s1; m_bid_s2 <= b_s2; m_bid_s3 <= b_s3;
+        m_ask_p0 <= a_p0; m_ask_p1 <= a_p1; m_ask_p2 <= a_p2; m_ask_p3 <= a_p3;
+        m_ask_s0 <= a_s0; m_ask_s1 <= a_s1; m_ask_s2 <= a_s2; m_ask_s3 <= a_s3;
       end
 
       if (s_valid) begin

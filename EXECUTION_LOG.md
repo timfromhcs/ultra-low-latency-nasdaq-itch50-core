@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 12:59 - Autonomy tick + BBO depth
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Weekly `Formal` run on `d9506ba` **all green**: deep proof, RTL↔WASM equivalence
+  (100k), and mutation (9/9).
+- Added **top-4 depth** to `itch_top_of_book` (four price levels per side, aggregated
+  shares) and wired it through `itch_top_book`.
+- Tests updated: 400 random events + 100 back-to-back + 152-message parser→BBO all
+  compare the depth; mutation harness still 9/9.
+
 ## 2026-11-03 11:59 - Autonomy tick + RTL/WASM equivalence
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

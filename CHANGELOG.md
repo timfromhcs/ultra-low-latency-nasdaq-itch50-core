@@ -48,6 +48,11 @@ All notable changes to ChipLab are documented here. The format follows
   `scripts/rtl_wasm_equiv.mjs` runs the WASM twin on the same `stream.bin` and compares
   every field. **100,000 records, 0 mismatches.** `make equiv` + weekly `equivalence` job.
 
+### Added
+- BBO **top-4 depth**: four price levels per side (aggregated shares), published with
+  each event; the standalone and parser→BBO tests compare them against the Python model.
+  Mutation score stays 9/9.
+
 ## 0.3.1 — 2026-11-03
 
 Patch release: packaging metadata and release-loop fixes. No protocol or API change.

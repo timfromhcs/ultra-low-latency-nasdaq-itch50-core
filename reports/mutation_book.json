@@ -16,12 +16,12 @@
     {
       "name": "cancel_ignored",
       "status": "KILLED",
-      "detail": "AssertionError: message 149 BBO"
+      "detail": "AssertionError: message 45 BBO"
     },
     {
       "name": "ask_cancel_ignored",
       "status": "KILLED",
-      "detail": "AssertionError: message 40 BBO"
+      "detail": "AssertionError: message 35 BBO"
     },
     {
       "name": "bid_min_instead_of_max",

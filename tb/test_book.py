@@ -6,6 +6,7 @@
 import os
 import sys
 import random
+from collections import defaultdict
 
 import cocotb
 from cocotb.clock import Clock
@@ -38,8 +39,20 @@ class Book:
         else:
             ap, as_ = EMPTY_ASK, 0
         lo, ls = self.last.get(locate, (0, 0))
+        # Aggregate per price and take the top four levels on each side.
+        bagg = defaultdict(int)
+        aagg = defaultdict(int)
+        for side, p, s in book.values():
+            if side == "B":
+                bagg[p] += s
+            else:
+                aagg[p] += s
+        bd = sorted(bagg.items(), reverse=True)[:4]
+        ad = sorted(aagg.items())[:4]
+        bd += [(0, 0)] * (4 - len(bd))
+        ad += [(EMPTY_ASK, 0)] * (4 - len(ad))
         return dict(bid_p=bp, bid_s=bs, ask_p=ap, ask_s=as_, last_p=lo, last_s=ls,
-                    vol=self.vol.get(locate, 0))
+                    vol=self.vol.get(locate, 0), bid_levels=bd, ask_levels=ad)
 
     def add(self, locate, side, price, shares):
         ref = self.next_ref
@@ -106,6 +119,14 @@ async def drive(dut, event):
                     last_p=int(dut.m_last_price.value),
                     last_s=int(dut.m_last_shares.value),
                     vol=int(dut.m_volume.value),
+                    bid_levels=[(int(dut.m_bid_p0.value), int(dut.m_bid_s0.value)),
+                                (int(dut.m_bid_p1.value), int(dut.m_bid_s1.value)),
+                                (int(dut.m_bid_p2.value), int(dut.m_bid_s2.value)),
+                                (int(dut.m_bid_p3.value), int(dut.m_bid_s3.value))],
+                    ask_levels=[(int(dut.m_ask_p0.value), int(dut.m_ask_s0.value)),
+                                (int(dut.m_ask_p1.value), int(dut.m_ask_s1.value)),
+                                (int(dut.m_ask_p2.value), int(dut.m_ask_s2.value)),
+                                (int(dut.m_ask_p3.value), int(dut.m_ask_s3.value))],
                 )
             except ValueError:
                 dut._log.info(
@@ -272,6 +293,14 @@ async def test_no_stall_back_to_back(dut):
                 last_p=int(dut.m_last_price.value),
                 last_s=int(dut.m_last_shares.value),
                 vol=int(dut.m_volume.value),
+                bid_levels=[(int(dut.m_bid_p0.value), int(dut.m_bid_s0.value)),
+                            (int(dut.m_bid_p1.value), int(dut.m_bid_s1.value)),
+                            (int(dut.m_bid_p2.value), int(dut.m_bid_s2.value)),
+                            (int(dut.m_bid_p3.value), int(dut.m_bid_s3.value))],
+                ask_levels=[(int(dut.m_ask_p0.value), int(dut.m_ask_s0.value)),
+                            (int(dut.m_ask_p1.value), int(dut.m_ask_s1.value)),
+                            (int(dut.m_ask_p2.value), int(dut.m_ask_s2.value)),
+                            (int(dut.m_ask_p3.value), int(dut.m_ask_s3.value))],
             )
     assert got == last_expected, f"back-to-back BBO\n got {got}\n exp {last_expected}"
     dut._log.info("No-stall: 100 events back-to-back, 1 event/cycle PASS")

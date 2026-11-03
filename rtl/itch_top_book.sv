@@ -38,6 +38,11 @@ module itch_top_book #(
   output wire [63:0]                 bbo_last_shares,
   output wire [63:0]                 bbo_volume,
 
+  output wire [31:0]                 bbo_bid_p0, bbo_bid_p1, bbo_bid_p2, bbo_bid_p3,
+  output wire [63:0]                 bbo_bid_s0, bbo_bid_s1, bbo_bid_s2, bbo_bid_s3,
+  output wire [31:0]                 bbo_ask_p0, bbo_ask_p1, bbo_ask_p2, bbo_ask_p3,
+  output wire [63:0]                 bbo_ask_s0, bbo_ask_s1, bbo_ask_s2, bbo_ask_s3,
+
   output wire [31:0]                 status_msg_count,
   output wire [31:0]                 status_corrupt_count,
   output wire                        ready
@@ -131,6 +136,10 @@ module itch_top_book #(
     .m_last_price(bbo_last_price),
     .m_last_shares(bbo_last_shares),
     .m_volume(bbo_volume),
+    .m_bid_p0(bbo_bid_p0), .m_bid_p1(bbo_bid_p1), .m_bid_p2(bbo_bid_p2), .m_bid_p3(bbo_bid_p3),
+    .m_bid_s0(bbo_bid_s0), .m_bid_s1(bbo_bid_s1), .m_bid_s2(bbo_bid_s2), .m_bid_s3(bbo_bid_s3),
+    .m_ask_p0(bbo_ask_p0), .m_ask_p1(bbo_ask_p1), .m_ask_p2(bbo_ask_p2), .m_ask_p3(bbo_ask_p3),
+    .m_ask_s0(bbo_ask_s0), .m_ask_s1(bbo_ask_s1), .m_ask_s2(bbo_ask_s2), .m_ask_s3(bbo_ask_s3),
     .drops_overflow(),
     .level_overflow(),
     .rescans(),
