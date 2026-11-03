@@ -184,6 +184,8 @@ python -m pytest -q tb/test_model.py
 node scripts/wasm_smoke.mjs && python scripts/check_wasm_fixture.py
 node backend/run.mjs --compare --count 1000000
 node mcp/client_smoke.mjs
+node scripts/test_cloud_api.mjs
+node scripts/release_check.mjs
 node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs
 ```
 
