@@ -47,5 +47,15 @@ The configurations have **not** been run through the full flow yet; only the smo
 test is verified. Commit only the small JSON/report summaries, never the run
 directories (`runs/` and `openlane/runs/` are git-ignored).
 
+After a run, extract the small summary:
+
+```bash
+node scripts/openlane_summary.mjs                 # newest run
+node scripts/openlane_summary.mjs openlane/runs/chiplab-sky130
+```
+
+It writes `reports/openlane_<tag>.json` (die/core bbox, instances, area, setup/hold,
+DRC/LVS) and prints the same numbers. That file is the only artifact to commit.
+
 The synthesis matrix in `reports/synth_*.log` is a Yosys/ABC cell-count proxy, not an
 OpenLane timing report. Do not compare its numbers to a placed-and-routed design.

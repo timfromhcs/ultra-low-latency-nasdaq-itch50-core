@@ -7,7 +7,7 @@ NODE ?= node
 WASM := web/wasm/chiplab_core.wasm
 
 .PHONY: help all verify verify-fast verify-deep vectors lint formal formal-all sim cocotb \
-        synth-book librelane-smoke mutate-book equiv wasm web backend mcp exe docker demo native test clean
+        synth-book librelane-smoke openlane-summary mutate-book equiv wasm web backend mcp exe docker demo native test clean
 
 help:
 	@echo "ChipLab targets:"
@@ -21,6 +21,7 @@ help:
 	@echo "  make cocotb       Python/Verilator Cocotb suite"
 	@echo "  make synth-book   Yosys area estimate for the BBO (reduced config)"
 	@echo "  make librelane-smoke  LibreLane Docker smoke test"
+	@echo "  make openlane-summary  summarize the newest LibreLane run"
 	@echo "  make mutate-book  mutation-test the parser -> BBO path"
 	@echo "  make equiv        RTL vs WASM equivalence on one stream"
 	@echo "  make wasm         rebuild the 50 KB WASM core"
@@ -84,6 +85,9 @@ synth-book:
 
 librelane-smoke:
 	$(PYTHON) -m librelane --dockerized --smoke-test
+
+openlane-summary:
+	$(NODE) scripts/openlane_summary.mjs
 
 mutate-book:
 	$(PYTHON) tools/mutate_book.py

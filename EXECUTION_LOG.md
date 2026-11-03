@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 22:59 - Autonomy tick + LibreLane summary tool
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate 10/10; CI on `2f8ed55` green.
+- Full Sky130 run still active (passes floorplan/placement/CTS; around step 37/80 after
+  ~51 min). No result yet.
+- Added `scripts/openlane_summary.mjs` + `make openlane-summary`: reads the newest
+  `openlane/runs/*/final/metrics.json`, writes a compact `reports/openlane_<tag>.json`
+  (die/core bbox, instances, area, setup/hold, DRC/LVS) and prints a summary. Verified
+  against a synthetic metrics file; real run output pending.
+
 ## 2026-11-03 23:20 - LibreLane 3 config hygiene
 
 - Replaced deprecated/unknown keys in all four `openlane/*.json`:
