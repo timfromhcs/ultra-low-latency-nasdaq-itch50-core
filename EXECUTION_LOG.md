@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 00:15 - Keyless cosign signature for the container image
+
+- `docker-publish.yml`: added `id-token: write`, an `id: build` on the build step,
+  `sigstore/cosign-installer@v3` and `cosign sign --yes` on the pushed digest.
+  Existing `provenance: mode=max` + SBOM attestation unchanged.
+- README shows `cosign verify ... --certificate-identity-regexp
+  'https://github.com/timfromhcs/.*' --certificate-oidc-issuer
+  https://token.actions.githubusercontent.com`.
+- Roadmap split: Docker signing done; reproducible builds + npm/PyPI signatures open.
+
 ## 2026-11-04 00:05 - IHP SG13G2 pre-PnR STA
 
 - Ran `openlane/ihp-sg13g2.json` with `-p ihp-sg13g2` to `OpenROAD.STAPrePNR`:

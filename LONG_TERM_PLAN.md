@@ -162,7 +162,9 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
-- [ ] Reproducible builds and cosign/sigstore signatures for npm/PyPI/Docker.
+- [x] Docker supply chain: `provenance: mode=max` + SBOM attestation + **keyless
+      cosign signature** (`docker-publish.yml`, `id-token: write`).
+- [ ] Reproducible builds; cosign/sigstore signatures for npm/PyPI artifacts.
 - [x] Mutation: 9 parser→BBO mutants killed (`tools/mutate_book.py`,
       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
 - [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,

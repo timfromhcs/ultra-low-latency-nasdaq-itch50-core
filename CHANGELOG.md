@@ -85,6 +85,10 @@ All notable changes to ChipLab are documented here. The format follows
   **−9.14 ns at 3.10 ns**, i.e. Fmax **≈81.5 MHz**; the worst path runs from a shifter
   counter FF to `raw_payload[0]` (the asynchronous bypass). Pre-PnR only, **not** a
   timing sign-off. `reports/openlane_sky130-250mhz-sta.json`.
+- **Docker keyless signing**: `docker-publish.yml` now signs the pushed image with
+  `cosign sign` (Sigstore keyless, `id-token: write`) in addition to
+  `provenance: mode=max` and the SBOM attestation; README documents `cosign verify`
+  with the certificate identity regexp.
 - **Host book snapshot** (`rtl/itch_book_snapshot.sv`): per-locate (16) snapshot of
   top-of-book, last trade, volume and top-4 bid/ask depth, updated from the book's
   event stream; one-cycle registered read port with `snap_valid`, `snap_hit` and an
