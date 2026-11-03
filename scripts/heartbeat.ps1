@@ -29,7 +29,15 @@ if ($InvokeAgent) {
   Push-Location $Root
   try {
     $Prompt = "Hallo, es ist $($Now.ToString('HH:mm')). Autonomy tick: run `node scripts/autonomy.mjs`, read the result, fix one failing gate if needed, append to EXECUTION_LOG.md, then stop. Do not start long new work."
-    & opencode run --continue --auto --prompt $Prompt *>> $Log
+    $SessionFile = Join-Path $Root "autonomy\session.txt"
+    $RunArgs = @("run", "--auto", "--prompt", $Prompt)
+    if (Test-Path $SessionFile) {
+      $SessionId = (Get-Content $SessionFile -Raw).Trim()
+      if ($SessionId) { $RunArgs += @("--session", $SessionId) }
+    } else {
+      $RunArgs += "--continue"
+    }
+    & opencode @RunArgs *>> $Log
   } catch {
     Add-Content -Path $Log -Value "[heartbeat] opencode failed: $_"
   } finally { Pop-Location }
