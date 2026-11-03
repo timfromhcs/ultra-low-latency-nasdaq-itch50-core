@@ -3,6 +3,7 @@
 > Status: **ACTIVE**
 > Supersedes `AUTONOMOUS_PLAN_V2.md` as the forward-looking roadmap. V1/V2 remain the
 > historical execution records. This plan is updated after every release.
+> Current release: **v0.3.0 "Local Cloud"** (2026-11-03) — see `STABLE_RELEASE_PLAN.md`.
 > Repo: `timfromhcs/ultra-low-latency-nasdaq-itch50-core`
 > Live: <https://chiplab-ten.vercel.app/>
 > Rule: **no claim without a command**; every number links to `reports/`.
@@ -20,8 +21,8 @@
 | Synthesis | 22,629 / 25,201 / 29,628 cells; 2,228 DFFs | `reports/synth_*.log` |
 | MoldUDP64 | single-frame end-to-end PASS; **multi-frame back-pressure open** | `tb/test_mold_pipeline.py` |
 | WASM/web | WebGPU compute/render, Canvas2D fallback, OPFS, PWA, 390/1440 | `reports/web-*.png` |
-| Backend/MCP | REST + stdio MCP, 5 tools, smoke tests | `mcp/`, `backend/` |
-| Distribution | Vercel live, Docker, 83.7 MB EXE, npm/PyPI artifacts | `README.md` |
+| Backend/MCP | REST + stdio MCP, **12 tools**, local cloud JSON store | `mcp/`, `backend/` |
+| Distribution | **v0.3.0 GitHub Release** (EXE, npm tgz, wheel/sdist, SBOM, SHA-256), Docker, Vercel | `releases/tag/v0.3.0` |
 | CI | **green** (Ubuntu 24.04, Icarus cocotb, weekly deep formal) | GitHub Actions run #24 |
 | Automation | hourly scheduled task; agent invocation flag bug found | `reports/heartbeat.log` |
 

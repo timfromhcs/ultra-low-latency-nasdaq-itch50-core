@@ -167,6 +167,8 @@ for attempt in 1..N:
 - EN/DE/FR guides updated with local cloud, Docker token and 12 MCP tools (EN fully;
   DE/FR carry the same structure and will be re-synced in the next docs pass).
 - [x] Honest limits retained; no 1.0.0 claim.
+- [x] Three project skills added under `.opencode/skills/`: `chiplab-verify`,
+      `chiplab-local-cloud`, `chiplab-release`.
 
 ---
 
