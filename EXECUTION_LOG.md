@@ -240,6 +240,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Same test suite still passes: 400 random events + 100 back-to-back, 0 overflows.
 - Remaining: physical timing sign-off of the level table + reduction (Phase 2).
 
+## 2026-11-03 09:59 - Autonomy tick + Phase 2 start
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI green on `c92b1af` and `6ceb711`.
+- Ported the BBO init to phase counters (parameterizable table sizes).
+- Yosys area estimate: `scripts/synth_book.sh` -> `reports/synth_book.json`.
+  Reduced 32/4/4 config: **62,017 cells**, 0 memories. Explicitly **not** a timing
+  sign-off; the table sizes and 64-bit shares dominate area.
+- Full Yosys logs are git-ignored; only the compact JSON is committed.
+- Added `make synth-book`.
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.

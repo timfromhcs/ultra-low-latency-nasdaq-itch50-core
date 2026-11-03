@@ -26,6 +26,11 @@ All notable changes to ChipLab are documented here. The format follows
 - The BBO now keeps a per-locate price-level table (16 bid + 16 ask) and computes the
   best with a 16-way reduction, so a best-price removal no longer triggers a rescan.
 - The order lookup is a 4-way set-associative bank (4 compares instead of 256).
+
+### Added
+- `scripts/synth_book.sh` + `reports/synth_book.json`: Yosys area estimate for the BBO.
+  Reduced 32/4/4 config → **62,017 cells**, 0 memories. Area is not optimized and no
+  timing/DRC/LVS sign-off is claimed.
 - CI/Makefile run the book cocotb test and lint the module.
 
 ## 0.3.1 — 2026-11-03

@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-11-03T09:20:20Z",
+  "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+  "config": { "ORDERS": 32, "LOCATES": 4, "LEVELS": 4 },
+  "cells": 62017,
+  "wires": 98322,
+  "wireBits": 108461,
+  "memories": 0,
+  "note": "Area estimate only; no timing/DRC/LVS sign-off. Full log: reports/synth_book_32_4_4.log"
+}

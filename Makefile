@@ -7,7 +7,7 @@ NODE ?= node
 WASM := web/wasm/chiplab_core.wasm
 
 .PHONY: help all verify verify-fast verify-deep vectors lint formal formal-all sim cocotb \
-        wasm web backend mcp exe docker demo native test clean
+        synth-book wasm web backend mcp exe docker demo native test clean
 
 help:
 	@echo "ChipLab targets:"
@@ -19,6 +19,7 @@ help:
 	@echo "  make formal       Z3 BMC + k-induction + covers"
 	@echo "  make formal-all   every available SMT solver"
 	@echo "  make cocotb       Python/Verilator Cocotb suite"
+	@echo "  make synth-book   Yosys area estimate for the BBO (reduced config)"
 	@echo "  make wasm         rebuild the 50 KB WASM core"
 	@echo "  make web          build/test the static web app"
 	@echo "  make backend      run the local Node server (PORT=4173)"
@@ -63,6 +64,9 @@ cocotb:
 	$(PYTHON) tb/run_multi_cocotb.py
 	$(PYTHON) tb/run_book_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
+
+synth-book:
+	./scripts/synth_book.sh
 
 wasm:
 	cd wasm-core && cargo build --target wasm32-unknown-unknown --release

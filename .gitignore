@@ -45,3 +45,5 @@ tb/vectors_mut/
 reports/mcp-audit.log
 .data/
 packages/python/*.egg-info/
+reports/synth_book_*.log
+

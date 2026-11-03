@@ -69,12 +69,13 @@ module itch_top_of_book #(
   localparam [7:0] T_TRADE    = 8'h50; // P
   localparam [7:0] T_CROSS    = 8'h51; // Q
 
-  localparam [9:0] ORDER_COUNT = ORDERS;
-  localparam [9:0] BID_END     = ORDERS + LOCATES * LEVELS;
-  localparam [9:0] ASK_END     = ORDERS + 2 * LOCATES * LEVELS;
-  localparam [9:0] TRADE_END   = ASK_END + LOCATES;
-  localparam [9:0] INIT_LAST   = TRADE_END - 1;
-
+  localparam ORD_AW = (ORDERS <= 1) ? 1 : $clog2(ORDERS);
+  localparam LVL_N  = LOCATES * LEVELS;
+  localparam LVL_AW = (LVL_N <= 1) ? 1 : $clog2(LVL_N);
+  localparam LOC_AW = (LOCATES <= 1) ? 1 : $clog2(LOCATES);
+  localparam [ORD_AW-1:0] ORD_LAST = {ORD_AW{1'b1}};
+  localparam [LVL_AW-1:0] LVL_LAST = {LVL_AW{1'b1}};
+  localparam [LOC_AW-1:0] LOC_LAST = {LOC_AW{1'b1}};
   // --------------------------------------------------------------------------
   // Order store
   // --------------------------------------------------------------------------
@@ -231,16 +232,23 @@ module itch_top_of_book #(
   // --------------------------------------------------------------------------
   // Init + event processing
   // --------------------------------------------------------------------------
-  reg [9:0]  init_i;
-  // ORDER_COUNT and BID_END are multiples of 256 for the supported sizes, so
-  // the low 8 bits address each phase.
-  wire [7:0] init_bid = init_i[7:0];
-  wire [7:0] init_ask = init_i[7:0];
-  reg        init_done;
+  localparam [1:0] PH_ORD = 2'd0;
+  localparam [1:0] PH_BID = 2'd1;
+  localparam [1:0] PH_ASK = 2'd2;
+  localparam [1:0] PH_TRD = 2'd3;
+
+  reg [1:0]       init_phase;
+  reg [ORD_AW-1:0] ord_i;
+  reg [LVL_AW-1:0] lvl_i;
+  reg [LOC_AW-1:0] trd_i;
+  reg             init_done;
 
   always @(posedge clk) begin
     if (!rst_n) begin
-      init_i         <= 10'd0;
+      init_phase     <= PH_ORD;
+      ord_i          <= {ORD_AW{1'b0}};
+      lvl_i          <= {LVL_AW{1'b0}};
+      trd_i          <= {LOC_AW{1'b0}};
       init_done      <= 1'b0;
       p_valid        <= 1'b0;
       p_idx          <= 4'd0;
@@ -259,31 +267,55 @@ module itch_top_of_book #(
       rescans        <= 32'd0;
     end else if (!init_done) begin
       // Clear one table element per cycle (portable across Verilator versions).
-      if (init_i < ORDER_COUNT) begin
-        ord_valid[init_i[7:0]]  <= 1'b0;
-        ord_ref[init_i[7:0]]    <= 64'd0;
-        ord_side[init_i[7:0]]   <= 8'd0;
-        ord_price[init_i[7:0]]  <= 32'd0;
-        ord_shares[init_i[7:0]] <= 64'd0;
-      end else if (init_i < BID_END) begin
-        lb_valid[init_bid]  <= 1'b0;
-        lb_price[init_bid]  <= 32'd0;
-        lb_shares[init_bid] <= 64'd0;
-      end else if (init_i < ASK_END) begin
-        la_valid[init_ask]  <= 1'b0;
-        la_price[init_ask]  <= 32'hFFFF_FFFF;
-        la_shares[init_ask] <= 64'd0;
-      end else begin
-        last_p[init_i[3:0]] <= 32'd0;
-        last_s[init_i[3:0]] <= 64'd0;
-        vol[init_i[3:0]]    <= 64'd0;
-      end
-      if (init_i == INIT_LAST) begin
-        init_done <= 1'b1;
-        init_i    <= 10'd0;
-      end else begin
-        init_i <= init_i + 10'd1;
-      end
+      case (init_phase)
+        PH_ORD: begin
+          ord_valid[ord_i]  <= 1'b0;
+          ord_ref[ord_i]    <= 64'd0;
+          ord_side[ord_i]   <= 8'd0;
+          ord_price[ord_i]  <= 32'd0;
+          ord_shares[ord_i] <= 64'd0;
+          if (ord_i == ORD_LAST) begin
+            init_phase <= PH_BID;
+            ord_i      <= {ORD_AW{1'b0}};
+          end else begin
+            ord_i <= ord_i + 1'b1;
+          end
+        end
+        PH_BID: begin
+          lb_valid[lvl_i]  <= 1'b0;
+          lb_price[lvl_i]  <= 32'd0;
+          lb_shares[lvl_i] <= 64'd0;
+          if (lvl_i == LVL_LAST) begin
+            init_phase <= PH_ASK;
+            lvl_i      <= {LVL_AW{1'b0}};
+          end else begin
+            lvl_i <= lvl_i + 1'b1;
+          end
+        end
+        PH_ASK: begin
+          la_valid[lvl_i]  <= 1'b0;
+          la_price[lvl_i]  <= 32'hFFFF_FFFF;
+          la_shares[lvl_i] <= 64'd0;
+          if (lvl_i == LVL_LAST) begin
+            init_phase <= PH_TRD;
+            lvl_i      <= {LVL_AW{1'b0}};
+          end else begin
+            lvl_i <= lvl_i + 1'b1;
+          end
+        end
+        default: begin
+          last_p[trd_i] <= 32'd0;
+          last_s[trd_i] <= 64'd0;
+          vol[trd_i]    <= 64'd0;
+          if (trd_i == LOC_LAST) begin
+            init_done  <= 1'b1;
+            init_phase <= PH_ORD;
+            trd_i      <= {LOC_AW{1'b0}};
+          end else begin
+            trd_i <= trd_i + 1'b1;
+          end
+        end
+      endcase
     end else begin
       // Pipeline the event locate for the BBO reduction.
       p_valid  <= s_valid;

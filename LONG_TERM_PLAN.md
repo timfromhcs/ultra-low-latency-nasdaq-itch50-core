@@ -94,6 +94,8 @@ MDN PWA best practices, GitHub Actions docs.
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.
 
 ### Phase 2 — Physical (2 → 4 months)
+- [x] Yosys area estimate for the BBO: 62,017 cells at 32/4/4 (not optimized,
+      no timing claim) — `scripts/synth_book.sh`, `reports/synth_book.json`.
 - [ ] LibreLane Sky130 hardening smoke (`--dockerized --smoke-test`), then full run.
 - [ ] OpenSTA slack at 250 MHz and 322 MHz; publish worst path.
 - [ ] GF180 + IHP SG13G2 configs, one run each.
