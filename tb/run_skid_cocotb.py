@@ -14,13 +14,13 @@ def main():
     build_dir = "/tmp/cocotb_skid"
     shutil.rmtree(build_dir, ignore_errors=True)
     os.makedirs(build_dir, exist_ok=True)
-    runner = get_runner("verilator")
+    runner = get_runner("icarus")
     runner.build(
         sources=[os.path.join(RTL, "axis_skid_buffer.sv")],
         hdl_toplevel="axis_skid_buffer",
         includes=[RTL],
         build_dir=build_dir,
-        build_args=["-Wno-fatal", "--timing"],
+        build_args=["-g2012"],
     )
     runner.test(hdl_toplevel="axis_skid_buffer", test_module="test_skid", test_dir=HERE, build_dir=build_dir)
 

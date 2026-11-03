@@ -20,13 +20,13 @@ def main():
         os.path.join(RTL, "moldudp64_depacketizer.sv"),
         os.path.join(RTL, "moldudp64_pipeline.sv"),
     ]
-    runner = get_runner("verilator")
+    runner = get_runner("icarus")
     runner.build(
         sources=sources,
         hdl_toplevel="moldudp64_pipeline",
         includes=[RTL],
         build_dir=build_dir,
-        build_args=["-Wno-fatal", "--timing"],
+        build_args=["-g2012"],
     )
     runner.test(
         hdl_toplevel="moldudp64_pipeline",

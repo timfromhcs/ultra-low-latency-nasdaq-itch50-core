@@ -6,6 +6,8 @@
 //              This is the building block for the open MoldUDP64 multi-frame
 //              back-pressure item (R1).
 // ============================================================================
+`timescale 1ns/1ps
+
 `ifndef AXIS_SKID_BUFFER_SV
 `define AXIS_SKID_BUFFER_SV
 
