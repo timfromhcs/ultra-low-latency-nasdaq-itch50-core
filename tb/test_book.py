@@ -95,16 +95,24 @@ async def drive(dut, event):
     for _ in range(ORDERS_WAIT):
         await RisingEdge(dut.clk)
         if int(dut.m_valid.value):
-            return dict(
-                locate=int(dut.m_locate.value),
-                bid_p=int(dut.m_bid_price.value),
-                bid_s=int(dut.m_bid_shares.value),
-                ask_p=int(dut.m_ask_price.value),
-                ask_s=int(dut.m_ask_shares.value),
-                last_p=int(dut.m_last_price.value),
-                last_s=int(dut.m_last_shares.value),
-                vol=int(dut.m_volume.value),
-            )
+            try:
+                return dict(
+                    locate=int(dut.m_locate.value),
+                    bid_p=int(dut.m_bid_price.value),
+                    bid_s=int(dut.m_bid_shares.value),
+                    ask_p=int(dut.m_ask_price.value),
+                    ask_s=int(dut.m_ask_shares.value),
+                    last_p=int(dut.m_last_price.value),
+                    last_s=int(dut.m_last_shares.value),
+                    vol=int(dut.m_volume.value),
+                )
+            except ValueError:
+                dut._log.info(
+                    f"X value: loc={dut.m_locate.value} bid={dut.m_bid_price.value} "
+                    f"ask={dut.m_ask_price.value} last={dut.m_last_price.value} "
+                    f"vol={dut.m_volume.value} p_idx={dut.p_idx.value} "
+                    f"init_done={dut.init_done.value}")
+                raise
     raise TimeoutError("no m_valid after event")
 
 
@@ -133,8 +141,10 @@ async def test_random_book(dut):
     refs = {loc: [] for loc in range(1, 5)}
     checked = 0
 
-    def price():
-        return rng.randrange(9000, 11000)
+    def price(side):
+        # Four levels per side keeps the RTL level table (16 per side) honest.
+        base = 9900 if side == "B" else 10100
+        return base + 50 * rng.randrange(0, 4)
 
     for step in range(400):
         locate = rng.randrange(1, 5)
@@ -144,7 +154,7 @@ async def test_random_book(dut):
 
         if roll < 0.45 or len(live) < 3:
             side = "B" if rng.random() < 0.5 else "S"
-            px = price()
+            px = price(side)
             sh = rng.randrange(1, 500)
             ref = book.add(locate, side, px, sh)
             refs[locate].append(ref)
@@ -167,11 +177,12 @@ async def test_random_book(dut):
         elif roll < 0.85 and live:
             ref = rng.choice(live)
             side = "B" if rng.random() < 0.5 else "S"
-            px, sh = price(), rng.randrange(1, 500)
+            px, sh = price(side), rng.randrange(1, 500)
             book.replace(locate, ref, side, px, sh)
             ev = dict(type=ord("U"), locate=locate, side=ord(side), ref=ref, new_ref=ref, price=px, shares=sh)
         else:
-            px, sh = price(), rng.randrange(1, 500)
+            side = "B" if rng.random() < 0.5 else "S"
+            px, sh = price(side), rng.randrange(1, 500)
             book.trade(locate, px, sh)
             ev = dict(type=ord("P"), locate=locate, side=ord("B"), ref=0, price=px, shares=sh)
 
@@ -190,5 +201,76 @@ async def test_random_book(dut):
         assert got == exp, f"step {step} {ev}\n got {got}\n exp {exp}"
         checked += 1
 
-    dut._log.info(f"Book: {checked} events, {int(dut.rescans.value)} rescans, "
-                  f"{int(dut.drops_overflow.value)} overflows PASS")
+    dut._log.info(f"Book: {checked} events, {int(dut.level_overflow.value)} level overflows, "
+                  f"{int(dut.drops_overflow.value)} table overflows PASS")
+    assert int(dut.level_overflow.value) == 0
+    assert int(dut.drops_overflow.value) == 0
+
+
+@cocotb.test()
+async def test_no_stall_back_to_back(dut):
+    """One event per cycle with s_ready high; the final BBO must match."""
+    cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
+    dut.rst_n.value = 0
+    dut.s_valid.value = 0
+    dut.s_msg_type.value = 0
+    dut.s_locate.value = 0
+    dut.s_side.value = 0
+    dut.s_order_ref.value = 0
+    dut.s_new_ref.value = 0
+    dut.s_price.value = 0
+    dut.s_shares.value = 0
+    for _ in range(6):
+        await RisingEdge(dut.clk)
+    dut.rst_n.value = 1
+
+    # Wait for the table init.
+    guard = 0
+    while int(dut.s_ready.value) == 0:
+        await RisingEdge(dut.clk)
+        guard += 1
+        if guard > 5000:
+            raise TimeoutError("init stuck")
+
+    book = Book()
+    events = []
+    # 100 back-to-back adds across two locates and four levels per side.
+    for n in range(100):
+        locate = 1 + (n % 2)
+        side = "B" if (n // 2) % 2 == 0 else "S"
+        px = (9900 if side == "B" else 10100) + 50 * ((n // 4) % 4)
+        sh = 10 + (n % 7)
+        ref = book.add(locate, side, px, sh)
+        events.append(dict(type=ord("A"), locate=locate, side=ord(side), ref=ref, price=px, shares=sh))
+
+    last_expected = None
+    for ev in events:
+        assert int(dut.s_ready.value) == 1, "s_ready dropped: BBO stalled"
+        dut.s_valid.value = 1
+        dut.s_msg_type.value = ev["type"]
+        dut.s_locate.value = ev["locate"]
+        dut.s_side.value = ev["side"]
+        dut.s_order_ref.value = ev["ref"]
+        dut.s_price.value = ev["price"]
+        dut.s_shares.value = ev["shares"]
+        await RisingEdge(dut.clk)
+        last_expected = book.bbo(ev["locate"])
+        last_expected["locate"] = ev["locate"]
+
+    dut.s_valid.value = 0
+    got = None
+    for _ in range(6):
+        await RisingEdge(dut.clk)
+        if int(dut.m_valid.value):
+            got = dict(
+                locate=int(dut.m_locate.value),
+                bid_p=int(dut.m_bid_price.value),
+                bid_s=int(dut.m_bid_shares.value),
+                ask_p=int(dut.m_ask_price.value),
+                ask_s=int(dut.m_ask_shares.value),
+                last_p=int(dut.m_last_price.value),
+                last_s=int(dut.m_last_shares.value),
+                vol=int(dut.m_volume.value),
+            )
+    assert got == last_expected, f"back-to-back BBO\n got {got}\n exp {last_expected}"
+    dut._log.info("No-stall: 100 events back-to-back, 1 event/cycle PASS")

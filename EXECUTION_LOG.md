@@ -224,6 +224,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   map, parallel ref lookup (not yet BRAM/hash).
 - `make lint` and the Icarus cocotb suite include the new module and test.
 
+## Phase 1c - BBO without rescan stall
+
+- Replaced the rescan FSM with a per-locate price-level table (16 bid + 16 ask) updated
+  directly on add/execute/cancel/delete/replace.
+- BBO is a 16-way max/min reduction, 2 cycles after the event; `s_ready` stays high.
+- New proof: 100 events back-to-back at 1 event/cycle, no stall (`tb/test_book.py`).
+  The 400-event random test still passes with 0 level/table overflows.
+- Remaining timing cost: the 256-way parallel ref lookup (hashed BRAM table next).
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.

@@ -6,11 +6,18 @@
 //   Handles: A/F add, E/C execute, X cancel, D delete, U replace, P/Q trade.
 //   Maintains per-locate best bid/ask price + shares, last trade and volume.
 //
-//   Implementation status: functional reference. The order table is a small
-//   register array with a parallel ref lookup, and any event that touches the
-//   best price triggers a multi-cycle rescan of that locate/side. The input is
-//   stalled (`ready=0`) during a rescan, so no event is lost. A BRAM/hash order
-//   store and a pipelined ladder are the timing-closed follow-up.
+//   Design: a 256-entry order table with a parallel ref lookup, plus a small
+//   per-locate price-level table (16 bid + 16 ask levels). Adding or removing an
+//   order updates the level directly, so there is no rescan and the input never
+//   stalls. The BBO is a 16-way max/min reduction over the level table, two
+//   cycles behind the event.
+//
+//   Limits (documented, counted):
+//     * max 16 distinct price levels per locate per side (level_overflow);
+//     * 256 live orders (drops_overflow);
+//     * 16 locates (direct-mapped; aliasing reinitialises that slot).
+//   The order lookup is a parallel compare bank; a hashed BRAM table is the
+//   physical-timing follow-up (it does not affect the no-stall BBO path).
 // ============================================================================
 `ifndef ITCH_TOP_OF_BOOK_SV
 `define ITCH_TOP_OF_BOOK_SV
@@ -19,7 +26,8 @@
 
 module itch_top_of_book #(
   parameter ORDERS  = 256,
-  parameter LOCATES = 16
+  parameter LOCATES = 16,
+  parameter LEVELS  = 16
 )(
   input  wire                        clk,
   input  wire                        rst_n,
@@ -35,7 +43,7 @@ module itch_top_of_book #(
   input  wire [63:0]                 s_shares,
   output wire                        s_ready,
 
-  // Registered top of book for the event's locate
+  // Registered top of book for the event's locate (2 cycles after the event)
   output reg                         m_valid,
   output reg  [15:0]                 m_locate,
   output reg  [31:0]                 m_bid_price,
@@ -48,8 +56,9 @@ module itch_top_of_book #(
 
   // Observability
   output reg  [31:0]                 drops_overflow,
-  output reg  [31:0]                 rescans,
-  output reg                         busy
+  output reg  [31:0]                 level_overflow,
+  output reg  [31:0]                 rescans,        // kept for ABI compat; always 0
+  output wire                        busy            // always 0 (no stall)
 );
 
   localparam [7:0] T_ADD      = 8'h41; // A
@@ -62,34 +71,37 @@ module itch_top_of_book #(
   localparam [7:0] T_TRADE    = 8'h50; // P
   localparam [7:0] T_CROSS    = 8'h51; // Q
 
-  localparam [8:0] ORDER_COUNT = ORDERS;
-  localparam [8:0] BB_END      = ORDERS + LOCATES;
-  localparam [8:0] INIT_LAST   = ORDERS + LOCATES - 1;
+  localparam [9:0] ORDER_COUNT = ORDERS;
+  localparam [9:0] BID_END     = ORDERS + LOCATES * LEVELS;
+  localparam [9:0] ASK_END     = ORDERS + 2 * LOCATES * LEVELS;
+  localparam [9:0] TRADE_END   = ASK_END + LOCATES;
+  localparam [9:0] INIT_LAST   = TRADE_END - 1;
 
   // --------------------------------------------------------------------------
   // Order store
   // --------------------------------------------------------------------------
   reg [63:0] ord_ref    [0:ORDERS-1];
-  reg [15:0] ord_locate [0:ORDERS-1];
   reg [7:0]  ord_side   [0:ORDERS-1];
   reg [31:0] ord_price  [0:ORDERS-1];
   reg [63:0] ord_shares [0:ORDERS-1];
   reg        ord_valid  [0:ORDERS-1];
 
   // --------------------------------------------------------------------------
-  // BBO cache (direct-mapped by locate)
+  // Price-level tables: per locate, LEVELS bid and LEVELS ask levels
   // --------------------------------------------------------------------------
-  reg        bb_valid  [0:LOCATES-1];
-  reg [15:0] bb_locate [0:LOCATES-1];
-  reg [31:0] bb_bid_p  [0:LOCATES-1];
-  reg [63:0] bb_bid_s  [0:LOCATES-1];
-  reg [31:0] bb_ask_p  [0:LOCATES-1];
-  reg [63:0] bb_ask_s  [0:LOCATES-1];
-  reg [31:0] bb_last_p [0:LOCATES-1];
-  reg [63:0] bb_last_s [0:LOCATES-1];
-  reg [63:0] bb_vol    [0:LOCATES-1];
+  reg        lb_valid  [0:LOCATES*LEVELS-1];
+  reg [31:0] lb_price  [0:LOCATES*LEVELS-1];
+  reg [63:0] lb_shares [0:LOCATES*LEVELS-1];
+  reg        la_valid  [0:LOCATES*LEVELS-1];
+  reg [31:0] la_price  [0:LOCATES*LEVELS-1];
+  reg [63:0] la_shares [0:LOCATES*LEVELS-1];
 
-  wire [3:0] idx = s_locate[3:0];
+  // Last trade / volume per locate
+  reg [31:0] last_p [0:LOCATES-1];
+  reg [63:0] last_s [0:LOCATES-1];
+  reg [63:0] vol    [0:LOCATES-1];
+
+  wire [3:0] loc_idx = s_locate[3:0];
 
   // Parallel lookup of the referenced order.
   integer i;
@@ -115,45 +127,110 @@ module itch_top_of_book #(
   end
 
   // --------------------------------------------------------------------------
-  // Event processing
+  // Level search helpers (combinational)
   // --------------------------------------------------------------------------
-  localparam [1:0] ST_IDLE   = 2'd0;
-  localparam [1:0] ST_DONE   = 2'd1;
-  localparam [1:0] ST_RESCAN = 2'd2;
+  integer j;
+  reg        add_found;   reg [4:0] add_slot;
+  reg        add_free;    reg [4:0] add_free_slot;
+  reg        rem_found;   reg [4:0] rem_slot;
 
-  reg [1:0]  state;
-  reg [8:0]  init_i;
+  wire ev_bid  = (s_side == 8'h42);
+  wire old_bid = (ord_side[found_idx] == 8'h42);
+
+  always @(*) begin
+    add_found     = 1'b0;
+    add_slot      = 5'd0;
+    add_free      = 1'b0;
+    add_free_slot = 5'd0;
+    for (j = 0; j < LEVELS; j = j + 1) begin
+      if (ev_bid ? (lb_valid[loc_idx*LEVELS+j] && lb_price[loc_idx*LEVELS+j] == s_price)
+                 : (la_valid[loc_idx*LEVELS+j] && la_price[loc_idx*LEVELS+j] == s_price)) begin
+        add_found = 1'b1;
+        add_slot  = j[4:0];
+      end
+      if (ev_bid ? !lb_valid[loc_idx*LEVELS+j] : !la_valid[loc_idx*LEVELS+j]) begin
+        add_free      = 1'b1;
+        add_free_slot = j[4:0];
+      end
+    end
+  end
+
+  always @(*) begin
+    rem_found = 1'b0;
+    rem_slot  = 5'd0;
+    for (j = 0; j < LEVELS; j = j + 1) begin
+      if (old_bid ? (lb_valid[loc_idx*LEVELS+j] && lb_price[loc_idx*LEVELS+j] == ord_price[found_idx])
+                  : (la_valid[loc_idx*LEVELS+j] && la_price[loc_idx*LEVELS+j] == ord_price[found_idx])) begin
+        rem_found = 1'b1;
+        rem_slot  = j[4:0];
+      end
+    end
+  end
+
+  // Amount removed from the level: the whole order for D/U, clamped for E/C/X.
+  wire [63:0] rm_amt = (s_msg_type == T_DELETE || s_msg_type == T_REPLACE) ?
+                       ord_shares[found_idx] :
+                       (s_shares > ord_shares[found_idx] ? ord_shares[found_idx] : s_shares);
+
+  wire same_level = found && rem_found && add_found &&
+                    (old_bid == ev_bid) &&
+                    (ord_price[found_idx] == s_price) &&
+                    (rem_slot == add_slot);
+
+  // --------------------------------------------------------------------------
+  // BBO reduction over the previous event's locate
+  // --------------------------------------------------------------------------
+  reg         p_valid;
+  reg [3:0]   p_idx;
+  reg [15:0]  p_locate;
+  reg [31:0]  r_bid_p; reg [63:0] r_bid_s;
+  reg [31:0]  r_ask_p; reg [63:0] r_ask_s;
+
+  always @(*) begin
+    r_bid_p = 32'd0;
+    r_bid_s = 64'd0;
+    r_ask_p = 32'hFFFF_FFFF;
+    r_ask_s = 64'd0;
+    for (j = 0; j < LEVELS; j = j + 1) begin
+      if (lb_valid[p_idx*LEVELS+j]) begin
+        if (lb_price[p_idx*LEVELS+j] > r_bid_p) begin
+          r_bid_p = lb_price[p_idx*LEVELS+j];
+          r_bid_s = lb_shares[p_idx*LEVELS+j];
+        end else if (lb_price[p_idx*LEVELS+j] == r_bid_p) begin
+          r_bid_s = r_bid_s + lb_shares[p_idx*LEVELS+j];
+        end
+      end
+      if (la_valid[p_idx*LEVELS+j]) begin
+        if (la_price[p_idx*LEVELS+j] < r_ask_p) begin
+          r_ask_p = la_price[p_idx*LEVELS+j];
+          r_ask_s = la_shares[p_idx*LEVELS+j];
+        end else if (la_price[p_idx*LEVELS+j] == r_ask_p) begin
+          r_ask_s = r_ask_s + la_shares[p_idx*LEVELS+j];
+        end
+      end
+    end
+  end
+
+  assign s_ready = init_done;
+  assign busy    = 1'b0;
+
+  // --------------------------------------------------------------------------
+  // Init + event processing
+  // --------------------------------------------------------------------------
+  reg [9:0]  init_i;
+  // ORDER_COUNT and BID_END are multiples of 256 for the supported sizes, so
+  // the low 8 bits address each phase.
+  wire [7:0] init_bid = init_i[7:0];
+  wire [7:0] init_ask = init_i[7:0];
   reg        init_done;
-  reg [3:0]  pend_idx;
-  reg [15:0] pend_locate;
-  reg [15:0] rs_locate;
-  reg        rs_bid;
-  reg [8:0]  rs_i;
-  reg [31:0] rs_best_p;
-  reg [63:0] rs_best_s;
-
-  wire is_add   = (s_msg_type == T_ADD) || (s_msg_type == T_ADD_MPID);
-  wire is_exec  = (s_msg_type == T_EXEC) || (s_msg_type == T_EXEC_PX);
-  wire is_del   = (s_msg_type == T_DELETE);
-  wire is_cxl   = (s_msg_type == T_CANCEL);
-  wire is_repl  = (s_msg_type == T_REPLACE);
-  wire is_trade = (s_msg_type == T_TRADE) || (s_msg_type == T_CROSS);
-
-  // The stored side is authoritative: E/C/X/D carry no side field.
-  wire        ord_is_bid = (ord_side[found_idx] == 8'h42);
-  wire        at_bid = found && bb_valid[idx] && bb_locate[idx] == s_locate &&
-                       ord_is_bid && ord_price[found_idx] == bb_bid_p[idx];
-  wire        at_ask = found && bb_valid[idx] && bb_locate[idx] == s_locate &&
-                       !ord_is_bid && ord_price[found_idx] == bb_ask_p[idx];
-  wire        touch_bbo = found && (at_bid || at_ask);
-  wire        need_rescan = touch_bbo && (is_del || is_exec || is_cxl || is_repl);
-
-  assign s_ready = init_done && (state == ST_IDLE);
 
   always @(posedge clk) begin
     if (!rst_n) begin
-      state          <= ST_IDLE;
-      busy           <= 1'b0;
+      init_i         <= 10'd0;
+      init_done      <= 1'b0;
+      p_valid        <= 1'b0;
+      p_idx          <= 4'd0;
+      p_locate       <= 16'd0;
       m_valid        <= 1'b0;
       m_locate       <= 16'd0;
       m_bid_price    <= 32'd0;
@@ -164,221 +241,163 @@ module itch_top_of_book #(
       m_last_shares  <= 64'd0;
       m_volume       <= 64'd0;
       drops_overflow <= 32'd0;
+      level_overflow <= 32'd0;
       rescans        <= 32'd0;
-      init_i         <= 9'd0;
-      init_done      <= 1'b0;
-      pend_idx       <= 4'd0;
-      pend_locate    <= 16'd0;
-      rs_locate      <= 16'd0;
-      rs_bid         <= 1'b1;
-      rs_i           <= 9'd0;
-      rs_best_p      <= 32'd0;
-      rs_best_s      <= 64'd0;
     end else if (!init_done) begin
-      // Clear the tables one entry per cycle. A for-loop reset with nonblocking
-      // assignments is not portable across Verilator versions.
+      // Clear one table element per cycle (portable across Verilator versions).
       if (init_i < ORDER_COUNT) begin
         ord_valid[init_i[7:0]]  <= 1'b0;
         ord_ref[init_i[7:0]]    <= 64'd0;
-        ord_locate[init_i[7:0]] <= 16'd0;
         ord_side[init_i[7:0]]   <= 8'd0;
         ord_price[init_i[7:0]]  <= 32'd0;
         ord_shares[init_i[7:0]] <= 64'd0;
-      end else if (init_i < BB_END) begin
-        bb_valid[init_i[3:0]]  <= 1'b0;
-        bb_locate[init_i[3:0]] <= 16'd0;
-        bb_bid_p[init_i[3:0]]  <= 32'd0;
-        bb_bid_s[init_i[3:0]]  <= 64'd0;
-        bb_ask_p[init_i[3:0]]  <= 32'hFFFF_FFFF;
-        bb_ask_s[init_i[3:0]]  <= 64'd0;
-        bb_last_p[init_i[3:0]] <= 32'd0;
-        bb_last_s[init_i[3:0]] <= 64'd0;
-        bb_vol[init_i[3:0]]    <= 64'd0;
+      end else if (init_i < BID_END) begin
+        lb_valid[init_bid]  <= 1'b0;
+        lb_price[init_bid]  <= 32'd0;
+        lb_shares[init_bid] <= 64'd0;
+      end else if (init_i < ASK_END) begin
+        la_valid[init_ask]  <= 1'b0;
+        la_price[init_ask]  <= 32'hFFFF_FFFF;
+        la_shares[init_ask] <= 64'd0;
+      end else begin
+        last_p[init_i[3:0]] <= 32'd0;
+        last_s[init_i[3:0]] <= 64'd0;
+        vol[init_i[3:0]]    <= 64'd0;
       end
       if (init_i == INIT_LAST) begin
         init_done <= 1'b1;
-        init_i    <= 9'd0;
+        init_i    <= 10'd0;
       end else begin
-        init_i <= init_i + 9'd1;
+        init_i <= init_i + 10'd1;
       end
     end else begin
+      // Pipeline the event locate for the BBO reduction.
+      p_valid  <= s_valid;
+      p_idx    <= loc_idx;
+      p_locate <= s_locate;
+
       m_valid <= 1'b0;
+      if (p_valid) begin
+        m_valid      <= 1'b1;
+        m_locate     <= p_locate;
+        m_bid_price  <= r_bid_p;
+        m_bid_shares <= r_bid_s;
+        m_ask_price  <= r_ask_p;
+        m_ask_shares <= r_ask_s;
+        m_last_price <= last_p[p_idx];
+        m_last_shares<= last_s[p_idx];
+        m_volume     <= vol[p_idx];
+      end
 
-      case (state)
-        ST_IDLE: begin
-          if (s_valid) begin
-            pend_idx    <= idx;
-            pend_locate <= s_locate;
-
-            // Lazily initialise the locate cache.
-            if (!bb_valid[idx] || bb_locate[idx] != s_locate) begin
-              bb_valid[idx]  <= 1'b1;
-              bb_locate[idx] <= s_locate;
-              bb_bid_p[idx]  <= 32'd0;
-              bb_bid_s[idx]  <= 64'd0;
-              bb_ask_p[idx]  <= 32'hFFFF_FFFF;
-              bb_ask_s[idx]  <= 64'd0;
-              bb_last_p[idx] <= 32'd0;
-              bb_last_s[idx] <= 64'd0;
-              bb_vol[idx]    <= 64'd0;
-            end
-
-            if (is_add) begin
-              if (!free_found) begin
-                drops_overflow <= drops_overflow + 32'd1;
-              end else begin
-                ord_valid[free_idx]  <= 1'b1;
-                ord_ref[free_idx]    <= s_order_ref;
-                ord_locate[free_idx] <= s_locate;
-                ord_side[free_idx]   <= s_side;
-                ord_price[free_idx]  <= s_price;
-                ord_shares[free_idx] <= s_shares;
-                if (s_side == 8'h42) begin
-                  if (s_price > bb_bid_p[idx]) begin
-                    bb_bid_p[idx] <= s_price;
-                    bb_bid_s[idx] <= s_shares;
-                  end else if (s_price == bb_bid_p[idx]) begin
-                    bb_bid_s[idx] <= bb_bid_s[idx] + s_shares;
-                  end
+      if (s_valid) begin
+        if (s_msg_type == T_ADD || s_msg_type == T_ADD_MPID || s_msg_type == T_REPLACE) begin
+          if (s_msg_type == T_REPLACE) begin
+            // Remove the old order.
+            if (found) begin
+              ord_valid[found_idx] <= 1'b0;
+              if (same_level) begin
+                // Same price level: net update, no invalidate/add pair.
+                if (ev_bid) begin
+                  if ((lb_shares[loc_idx*LEVELS+add_slot] - rm_amt + s_shares) == 64'd0)
+                    lb_valid[loc_idx*LEVELS+add_slot] <= 1'b0;
+                  else
+                    lb_valid[loc_idx*LEVELS+add_slot] <= 1'b1;
+                  lb_shares[loc_idx*LEVELS+add_slot] <=
+                      lb_shares[loc_idx*LEVELS+add_slot] - rm_amt + s_shares;
                 end else begin
-                  if (s_price < bb_ask_p[idx]) begin
-                    bb_ask_p[idx] <= s_price;
-                    bb_ask_s[idx] <= s_shares;
-                  end else if (s_price == bb_ask_p[idx]) begin
-                    bb_ask_s[idx] <= bb_ask_s[idx] + s_shares;
-                  end
+                  if ((la_shares[loc_idx*LEVELS+add_slot] - rm_amt + s_shares) == 64'd0)
+                    la_valid[loc_idx*LEVELS+add_slot] <= 1'b0;
+                  else
+                    la_valid[loc_idx*LEVELS+add_slot] <= 1'b1;
+                  la_shares[loc_idx*LEVELS+add_slot] <=
+                      la_shares[loc_idx*LEVELS+add_slot] - rm_amt + s_shares;
                 end
-              end
-            end else if (is_repl) begin
-              if (found) begin
-                // Reuse the slot for the new order.
-                ord_ref[found_idx]    <= s_new_ref;
-                ord_locate[found_idx] <= s_locate;
-                ord_side[found_idx]   <= s_side;
-                ord_price[found_idx]  <= s_price;
-                ord_shares[found_idx] <= s_shares;
-                ord_valid[found_idx]  <= 1'b1;
-              end else if (free_found) begin
-                ord_valid[free_idx]  <= 1'b1;
-                ord_ref[free_idx]    <= s_new_ref;
-                ord_locate[free_idx] <= s_locate;
-                ord_side[free_idx]   <= s_side;
-                ord_price[free_idx]  <= s_price;
-                ord_shares[free_idx] <= s_shares;
-              end else begin
-                drops_overflow <= drops_overflow + 32'd1;
-              end
-              // The new price may become the best (or join the best level).
-              // If the old order touched the BBO, the rescan below recomputes
-              // the exact level and overwrites this provisional update.
-              if (s_side == 8'h42) begin
-                if (s_price > bb_bid_p[idx]) begin
-                  bb_bid_p[idx] <= s_price;
-                  bb_bid_s[idx] <= s_shares;
-                end else if (s_price == bb_bid_p[idx]) begin
-                  bb_bid_s[idx] <= bb_bid_s[idx] + s_shares;
-                end
-              end else begin
-                if (s_price < bb_ask_p[idx]) begin
-                  bb_ask_p[idx] <= s_price;
-                  bb_ask_s[idx] <= s_shares;
-                end else if (s_price == bb_ask_p[idx]) begin
-                  bb_ask_s[idx] <= bb_ask_s[idx] + s_shares;
-                end
-              end
-            end else if (is_del || is_exec || is_cxl) begin
-              if (found) begin
-                if (is_del || ord_shares[found_idx] <= s_shares) begin
-                  ord_valid[found_idx] <= 1'b0;
+              end else if (rem_found) begin
+                if (rm_amt >= (old_bid ? lb_shares[loc_idx*LEVELS+rem_slot]
+                                       : la_shares[loc_idx*LEVELS+rem_slot])) begin
+                  if (old_bid) lb_valid[loc_idx*LEVELS+rem_slot] <= 1'b0;
+                  else         la_valid[loc_idx*LEVELS+rem_slot] <= 1'b0;
                 end else begin
-                  ord_shares[found_idx] <= ord_shares[found_idx] - s_shares;
+                  if (old_bid) lb_shares[loc_idx*LEVELS+rem_slot] <=
+                      lb_shares[loc_idx*LEVELS+rem_slot] - rm_amt;
+                  else         la_shares[loc_idx*LEVELS+rem_slot] <=
+                      la_shares[loc_idx*LEVELS+rem_slot] - rm_amt;
                 end
               end
-            end else if (is_trade) begin
-              bb_last_p[idx] <= s_price;
-              bb_last_s[idx] <= s_shares;
-              bb_vol[idx]    <= bb_vol[idx] + s_shares;
-            end
-
-            if (need_rescan) begin
-              rs_locate <= s_locate;
-              rs_bid    <= ord_is_bid;
-              rs_i      <= 9'd0;
-              rs_best_p <= ord_is_bid ? 32'd0 : 32'hFFFF_FFFF;
-              rs_best_s <= 64'd0;
-              state     <= ST_RESCAN;
-              busy      <= 1'b1;
-            end else begin
-              state <= ST_DONE;
             end
           end
-        end
 
-        ST_DONE: begin
-          // Publish the now-updated cache (+1 cycle, after all writes land).
-          m_valid      <= 1'b1;
-          m_locate     <= pend_locate;
-          m_bid_price  <= bb_bid_p[pend_idx];
-          m_bid_shares <= bb_bid_s[pend_idx];
-          m_ask_price  <= bb_ask_p[pend_idx];
-          m_ask_shares <= bb_ask_s[pend_idx];
-          m_last_price <= bb_last_p[pend_idx];
-          m_last_shares<= bb_last_s[pend_idx];
-          m_volume     <= bb_vol[pend_idx];
-          state        <= ST_IDLE;
-        end
-
-        ST_RESCAN: begin
-          if (rs_i < ORDER_COUNT) begin
-            if (ord_valid[rs_i[7:0]] && ord_locate[rs_i[7:0]] == rs_locate &&
-                (ord_side[rs_i[7:0]] == 8'h42) == rs_bid) begin
-              if (rs_bid) begin
-                if (ord_price[rs_i[7:0]] > rs_best_p) begin
-                  rs_best_p <= ord_price[rs_i[7:0]];
-                  rs_best_s <= ord_shares[rs_i[7:0]];
-                end else if (ord_price[rs_i[7:0]] == rs_best_p) begin
-                  rs_best_s <= rs_best_s + ord_shares[rs_i[7:0]];
-                end
-              end else begin
-                if (ord_price[rs_i[7:0]] < rs_best_p) begin
-                  rs_best_p <= ord_price[rs_i[7:0]];
-                  rs_best_s <= ord_shares[rs_i[7:0]];
-                end else if (ord_price[rs_i[7:0]] == rs_best_p) begin
-                  rs_best_s <= rs_best_s + ord_shares[rs_i[7:0]];
-                end
-              end
+          if (s_msg_type == T_REPLACE) begin
+            if (found) begin
+              ord_ref[found_idx]    <= s_new_ref;
+              ord_side[found_idx]   <= s_side;
+              ord_price[found_idx]  <= s_price;
+              ord_shares[found_idx] <= s_shares;
+              ord_valid[found_idx]  <= 1'b1;
+            end else if (free_found) begin
+              ord_valid[free_idx]  <= 1'b1;
+              ord_ref[free_idx]    <= s_new_ref;
+              ord_side[free_idx]   <= s_side;
+              ord_price[free_idx]  <= s_price;
+              ord_shares[free_idx] <= s_shares;
             end
-            rs_i <= rs_i + 9'd1;
+          end else if (free_found) begin
+            ord_valid[free_idx]  <= 1'b1;
+            ord_ref[free_idx]    <= s_order_ref;
+            ord_side[free_idx]   <= s_side;
+            ord_price[free_idx]  <= s_price;
+            ord_shares[free_idx] <= s_shares;
           end else begin
-            // rs_best now includes every entry in the table.
-            if (rs_bid) begin
-              bb_bid_p[rs_locate[3:0]] <= rs_best_p;
-              bb_bid_s[rs_locate[3:0]] <= rs_best_s;
-              m_bid_price  <= rs_best_p;
-              m_bid_shares <= rs_best_s;
-              m_ask_price  <= bb_ask_p[rs_locate[3:0]];
-              m_ask_shares <= bb_ask_s[rs_locate[3:0]];
-            end else begin
-              bb_ask_p[rs_locate[3:0]] <= rs_best_p;
-              bb_ask_s[rs_locate[3:0]] <= rs_best_s;
-              m_ask_price  <= rs_best_p;
-              m_ask_shares <= rs_best_s;
-              m_bid_price  <= bb_bid_p[rs_locate[3:0]];
-              m_bid_shares <= bb_bid_s[rs_locate[3:0]];
-            end
-            m_valid      <= 1'b1;
-            m_locate     <= rs_locate;
-            m_last_price <= bb_last_p[rs_locate[3:0]];
-            m_last_shares<= bb_last_s[rs_locate[3:0]];
-            m_volume     <= bb_vol[rs_locate[3:0]];
-            rescans      <= rescans + 32'd1;
-            busy         <= 1'b0;
-            state        <= ST_IDLE;
+            drops_overflow <= drops_overflow + 32'd1;
           end
-        end
 
-        default: state <= ST_IDLE;
-      endcase
+          if (!same_level) begin
+            if (add_found) begin
+              if (ev_bid) lb_shares[loc_idx*LEVELS+add_slot] <=
+                  lb_shares[loc_idx*LEVELS+add_slot] + s_shares;
+              else        la_shares[loc_idx*LEVELS+add_slot] <=
+                  la_shares[loc_idx*LEVELS+add_slot] + s_shares;
+            end else if (add_free) begin
+              if (ev_bid) begin
+                lb_valid[loc_idx*LEVELS+add_free_slot]  <= 1'b1;
+                lb_price[loc_idx*LEVELS+add_free_slot]  <= s_price;
+                lb_shares[loc_idx*LEVELS+add_free_slot] <= s_shares;
+              end else begin
+                la_valid[loc_idx*LEVELS+add_free_slot]  <= 1'b1;
+                la_price[loc_idx*LEVELS+add_free_slot]  <= s_price;
+                la_shares[loc_idx*LEVELS+add_free_slot] <= s_shares;
+              end
+            end else begin
+              level_overflow <= level_overflow + 32'd1;
+            end
+          end
+        end else if (s_msg_type == T_DELETE || s_msg_type == T_EXEC ||
+                     s_msg_type == T_EXEC_PX || s_msg_type == T_CANCEL) begin
+          if (found) begin
+            if (s_msg_type == T_DELETE || ord_shares[found_idx] <= s_shares) begin
+              ord_valid[found_idx] <= 1'b0;
+            end else begin
+              ord_shares[found_idx] <= ord_shares[found_idx] - s_shares;
+            end
+            if (rem_found) begin
+              if (rm_amt >= (old_bid ? lb_shares[loc_idx*LEVELS+rem_slot]
+                                     : la_shares[loc_idx*LEVELS+rem_slot])) begin
+                if (old_bid) lb_valid[loc_idx*LEVELS+rem_slot] <= 1'b0;
+                else         la_valid[loc_idx*LEVELS+rem_slot] <= 1'b0;
+              end else begin
+                if (old_bid) lb_shares[loc_idx*LEVELS+rem_slot] <=
+                    lb_shares[loc_idx*LEVELS+rem_slot] - rm_amt;
+                else         la_shares[loc_idx*LEVELS+rem_slot] <=
+                    la_shares[loc_idx*LEVELS+rem_slot] - rm_amt;
+              end
+            end
+          end
+        end else if (s_msg_type == T_TRADE || s_msg_type == T_CROSS) begin
+          last_p[loc_idx] <= s_price;
+          last_s[loc_idx] <= s_shares;
+          vol[loc_idx]    <= vol[loc_idx] + s_shares;
+        end
+      end
     end
   end
 

@@ -83,10 +83,11 @@ MDN PWA best practices, GitHub Actions docs.
       holds beats under back-pressure.
 - [x] Add `tlast`/frame counters and an explicit `frame_ready` / `frame_end`.
 - [x] Implement `itch_top_of_book.sv`: locate-indexed BBO, last trade and volume.
-- [x] Random RTL test vs. a Python book model: **400 events, 33 rescans, 0 mismatches**
-      (`tb/test_book.py`). Functional reference: stalls on a best-price removal while it
-      rescans the order table.
-- [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
+- [x] Random RTL test vs. a Python book model: **400 events, 0 mismatches**, plus
+      **100 events back-to-back at 1 event/cycle with no stall** (`tb/test_book.py`).
+- [x] No rescan stall: per-locate price-level table (16 bid + 16 ask) with a 16-way
+      max/min reduction; 2-cycle latency.
+- [ ] Hashed BRAM order lookup (the 256-way compare bank is the remaining timing cost).
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.

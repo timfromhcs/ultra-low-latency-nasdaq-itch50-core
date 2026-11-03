@@ -146,5 +146,10 @@ The architecture is partitioned into four decoupled, ultra-fast sub-modules:
 ### Top of book (`rtl/itch_top_of_book.sv`)
 
 - Locate-indexed best bid/ask with aggregate shares at the best level, last trade and volume.
-- Handles A/F/E/C/X/D/U/P/Q. Events that touch the best price trigger a rescan of that locate/side; the input stalls until it completes.
-- Functional reference: 400 random events vs. a Python book model, 0 mismatches (`tb/test_book.py`). A BRAM/hash order store and a non-stalling ladder are the timing-closed follow-up.
+- Handles A/F/E/C/X/D/U/P/Q. A per-locate price-level table (16 bid + 16 ask) is updated
+  directly, so best-price removals do not trigger a rescan and the input never stalls.
+- The BBO is a 16-way max/min reduction, 2 cycles after the event; throughput is
+  1 event/cycle.
+- Proof: 400 random events vs. a Python book model, 0 mismatches; 100 events
+  back-to-back at 1 event/cycle (`tb/test_book.py`).
+- Remaining timing cost: the 256-way parallel ref lookup (hashed BRAM table is next).

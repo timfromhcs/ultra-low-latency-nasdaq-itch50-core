@@ -1838,3 +1838,307 @@ tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\
 {id:run.id,status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,co
 nclusion:j.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return 
 { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"69dc098\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  return { run: 
+{id:run.id,status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,co
+nclusion:j.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return 
+{ error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601300964\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -61,8 +61,12 @@
+   localparam [7:0] T_REPLACE  = 8'h55; // U
+   localparam [7:0] T_TRADE    = 8'h50; // P
+   localparam [7:0] T_CROSS    = 8'h51; // Q
+ 
++  localparam [8:0] ORDER_COUNT = ORDERS;
++  localparam [8:0] BB_START    = ORDERS;
++  localparam [8:0] INIT_LAST   = ORDERS + LOCATES - 1;
++
+   // --------------------------------------------------------------------------
+   // Order store
+   // --------------------------------------------------------------------------
+   reg [63:0] ord_ref    [0:ORDERS-1];
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');let 
+s=fs.readFileSync('rtl/itch_top_of_book.sv','utf8');s=s.replace('if (init_i < ORDERS) begin','if (init_i < 
+ORDER_COUNT) begin');s=s.replace('end else if (init_i < ORDERS + LOCATES) begin','end else if (init_i < BB_START + 
+LOCATES) begin');s=s.replace('if (init_i == ORDERS + LOCATES - 1) begin','if (init_i == INIT_LAST) 
+begin');s=s.replace('if (rs_i < ORDERS) begin','if (rs_i < ORDER_COUNT) 
+begin');fs.writeFileSync('rtl/itch_top_of_book.sv',s);console.log('done')"; Select-String -Path 
+rtl\itch_top_of_book.sv -Pattern 'init_i <|init_i ==|rs_i <' | Select-Object LineNumber,Line
+done
+
+LineNumber Line                                                 
+---------- ----                                                 
+       180       if (init_i < ORDER_COUNT) begin                
+       187       end else if (init_i < BB_START + LOCATES) begin
+       198       if (init_i == INIT_LAST) begin                 
+       202         init_i <= init_i + 9'd1;                     
+       332           if (rs_i < ORDER_COUNT) begin              
+       351             rs_i <= rs_i + 9'd1;
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -63,8 +63,9 @@
+   localparam [7:0] T_CROSS    = 8'h51; // Q
+ 
+   localparam [8:0] ORDER_COUNT = ORDERS;
+   localparam [8:0] BB_START    = ORDERS;
++  localparam [8:0] BB_END      = ORDERS + LOCATES;
+   localparam [8:0] INIT_LAST   = ORDERS + LOCATES - 1;
+ 
+   // --------------------------------------------------------------------------
+   // Order store
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -184,9 +184,9 @@
+         ord_locate[init_i[7:0]] <= 16'd0;
+         ord_side[init_i[7:0]]   <= 8'd0;
+         ord_price[init_i[7:0]]  <= 32'd0;
+         ord_shares[init_i[7:0]] <= 64'd0;
+-      end else if (init_i < BB_START + LOCATES) begin
++      end else if (init_i < BB_END) begin
+         bb_valid[init_i[3:0]]  <= 1'b0;
+         bb_locate[init_i[3:0]] <= 16'd0;
+         bb_bid_p[init_i[3:0]]  <= 32'd0;
+         bb_bid_s[init_i[3:0]]  <= 64'd0;
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -62,9 +62,8 @@
+   localparam [7:0] T_TRADE    = 8'h50; // P
+   localparam [7:0] T_CROSS    = 8'h51; // Q
+ 
+   localparam [8:0] ORDER_COUNT = ORDERS;
+-  localparam [8:0] BB_START    = ORDERS;
+   localparam [8:0] BB_END      = ORDERS + LOCATES;
+   localparam [8:0] INIT_LAST   = ORDERS + LOCATES - 1;
+ 
+   // --------------------------------------------------------------------------
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_top_of_book.sv 2>&1 | tail -5; python3 tb/run_book_cocotb.py > /tmp/book9.txt 2>&1; echo RC=$?"; wsl -d 
+Ubuntu bash -lc "grep -E 'Book:|TESTS=' /tmp/book9.txt | tail -2"
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)
+- Verilator: Built from 0.034 MB sources in 2 modules, into 0.082 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.025 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.013 s on 1 threads; alloced 8.766 MB
+RC=True
+ 30770.60ns INFO     cocotb.itch_top_of_book            Book: 400 events, 33 rescans, 0 overflows PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0              30770.60          
+ 0.48      63701.73  **
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601300964\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601300964\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "refactor(rtl): sized localparams for portable width checks" 
+2>&1 | Select-Object -Last 2; git push origin main 2>&1 | Select-Object -Last 2
+warning: in the working copy of 'reports/heartbeat.log', LF will be replaced by CRLF the next time Git touches it
+[main d179758] refactor(rtl): sized localparams for portable width checks
+ 2 files changed, 263 insertions(+), 4 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:136
++ ... ecks" 2>&1 | Select-Object -Last 2; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   69dc098..d179758  main -> main
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"d179758\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  const j = 
+jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {run:{id:run.id,status:run.status}, rtl:{status:j?.stat
+us,conclusion:j?.conclusion,steps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))}};\n} 
+catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead scripts/heartbeat.ps1 [90m[limit=15, offset=50][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead scripts/heartbeat.ps1 [90m[limit=14, offset=38][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/heartbeat.ps1
+Index: scripts/heartbeat.ps1
+===================================================================
+--- scripts/heartbeat.ps1
++++ scripts/heartbeat.ps1
+@@ -47,4 +47,14 @@
+   } catch {
+     Add-Content -Path $Log -Value "[heartbeat] opencode failed: $_" -Encoding utf8
+   } finally { Pop-Location }
+ }
++
++# Keep the evidence log bounded; the durable summary lives in EXECUTION_LOG.md.
++if (Test-Path $Log) {
++  $size = (Get-Item $Log).Length
++  if ($size -gt 200KB) {
++    $tail = Get-Content -Path $Log -Tail 200
++    Set-Content -Path $Log -Value $tail -Encoding utf8
++    Add-Content -Path $Log -Value "[heartbeat] log rotated at $size bytes" -Encoding utf8
++  }
++}
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; (Get-Item reports\heartbeat.log).Length; powershell -NoProfile -ExecutionPolicy Bypass 
+-File scripts\heartbeat.ps1 -InvokeAgent -DryRun 2>&1 | Select-Object -First 3; Get-Content reports\heartbeat.log 
+-Tail 2
+114791
+powershell : Add-Content : Der Prozess kann nicht auf die Datei "E:\chips\main\reports\heartbeat.log" zugreifen, da 
+sie von einem 
+In Zeile:1 Zeichen:60
++ ... og).Length; powershell -NoProfile -ExecutionPolicy Bypass -File scrip ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Add-Content : D... sie von einem :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+anderen Prozess verwendet wird.
+In E:\chips\main\scripts\heartbeat.ps1:19 Zeichen:1
+
+> build ┬À deepseek-v4.1-flash
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git status --short; git add scripts/heartbeat.ps1; git commit -m "chore(autonomy): rotate 
+the heartbeat log at 200 KB" 2>&1 | Select-Object -Last 2
+M reports/heartbeat.log
+ M scripts/heartbeat.ps1
+warning: in the working copy of 'scripts/heartbeat.ps1', LF will be replaced by CRLF the next time Git touches it
+[main 842195e] chore(autonomy): rotate the heartbeat log at 200 KB
+ 1 file changed, 10 insertions(+)
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601442834\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -88,9 +88,9 @@
+       rescans the order table.
+ - [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
+ - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
+ 
+-**Gate:** multi-frame 0 mismatches Ô£à; BBO 0 mismatches; lint/formal still green.
++**Gate:** multi-frame 0 mismatches Ô£à; BBO 0 mismatches Ô£à; lint/formal still green.
+ 
+ ### Phase 2 ÔÇö Physical (2 ÔåÆ 4 months)
+ - [ ] LibreLane Sky130 hardening smoke (`--dockerized --smoke-test`), then full run.
+ - [ ] OpenSTA slack at 250 MHz and 322 MHz; publish worst path.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601442834\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add LONG_TERM_PLAN.md; git commit -m "docs: mark the Phase 1 BBO gate complete" 2>&1 | 
+Select-Object -Last 2
+[main ed0c437] docs: mark the Phase 1 BBO gate complete
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601442834\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git push origin main 2>&1 | Select-Object -Last 2; git log --oneline -4
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:19
++ cd E:\chips\main; git push origin main 2>&1 | Select-Object -Last 2;  ...
++                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   d179758..ed0c437  main -> main
+ed0c437 docs: mark the Phase 1 BBO gate complete
+842195e chore(autonomy): rotate the heartbeat log at 200 KB
+d179758 refactor(rtl): sized localparams for portable width checks
+69dc098 fix(rtl): portable table init for Verilator 5.020; document downstream blocks
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git status --short; git rev-parse --short HEAD
+M reports/heartbeat.log
+ed0c437
+> build ┬À deepseek-v4.1-flash
+## Weiter: Phase 1 abgeschlossen ÔÇö R1 gel├Âst + RTL-Top-of-Book
+
+Der Autonomy-Tick lief (`0 tasks`, Queue leer), danach habe ich mit **Phase 1** aus `LONG_TERM_PLAN.md` weitergemacht.
+
+### 1. MoldUDP64 Multi-Frame (R1) ÔÇö gel├Âst
+
+Es waren **drei echte RTL-Bugs**, kein Protokollproblem:
+
+1. `tlast` wurde gel├Âscht, w├ñhrend ein Beat unter Backpressure gehalten wurde.
+2. Ein pr├ñsentierter Beat konnte ohne Handshake verworfen werden.
+3. `frame_start` war nicht handshake-qualifiziert und feuerte bei gehaltenen Beats erneut.
+
+Zus├ñtzlich: Endete die letzte Payload auf einem vollen 16-Byte-Beat, wurde nie ein `tlast` erzeugt.
+
+**Fixes:** Beats werden mit `tlast` bis `tready` gehalten; `final_emit` markiert den echten letzten Beat; `frame_start`/`frame_end` sind handshake-qualifiziert; der Depacketizer leitet `tlast` aus seinem eigenen Message-Z├ñhler ab und verwirft Ethernet-Padding.
+
+**Beweis:** `tb/test_mold_multi.py` ÔÇö 5 Frames back-to-back (4 valide, 1 Gap, 1 falscher Port) ÔåÆ **28 Records, 1 Gap, 1 Drop, 0 Mismatches**.
+
+### 2. RTL Top-of-Book ÔÇö implementiert
+
+`rtl/itch_top_of_book.sv`: locate-indizierter BBO, aggregierte Shares am besten Preis, Last-Trade und Volume; verarbeitet `A/F/E/C/X/D/U/P/Q`. Events, die den besten Preis ber├╝hren, l├Âsen einen Rescan aus (Input stallt w├ñhrenddessen ÔÇö dokumentiert).
+
+**Beweis:** `tb/test_book.py` ÔÇö **400 zuf├ñllige Events, 33 Rescans, 0 Mismatches** gegen ein unabh├ñngiges Python-Buchmodell.
+
+### Verifikation
+
+- `make lint`: 0 Warnungen (auch mit Verilator 5.020 auf Ubuntu 24.04; daf├╝r die Tabellen-Initialisierung portabel gemacht).
+- Alle Cocotb-Tests: Single-Frame, Mold-Filter, Multi-Frame, Book, Skid ÔÇö **alle PASS**.
+- GitHub Actions CI auf `d179758`: **RTL + Cocotb gr├╝n**, inklusive der beiden neuen Tests.
+- Lokaler Gate: 10/10, `release_check`: 14/14.
+
+### Dokumentation
+
+`README.md`, `LONG_TERM_PLAN.md`, `docs/architecture.md`, `docs/design/mold-backpressure.md`, `CHANGELOG.md` (Unreleased) und `EXECUTION_LOG.md` sind aktualisiert.
+
+### N├ñchster Punkt
+
+**Timing-closed BBO**: BRAM/Hash-Order-Store statt parallelem Ref-Lookup und eine nicht-stallende Leiter statt 256-Zyklen-Rescan. Danach Phase 2 (LibreLane/OpenSTA).
+
+Commits: `707180f`, `69dc098`, `d179758`, `842195e`, `ed0c437` ÔÇö gepusht. Einzige offene Arbeitskopie ist `reports/heartbeat.log` (vom laufenden Heartbeat gehalten; Rotation auf 200 KB ist jetzt eingebaut).
