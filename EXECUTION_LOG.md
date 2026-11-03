@@ -259,6 +259,13 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 23:55 - GF180 pre-PnR STA
+
+- Ran `openlane/gf180.json` with `-p gf180mcuD` to `OpenROAD.STAPrePNR`: setup
+  **WNS −19.87 ns**, Fmax estimate **43.54 MHz** (ss/125 °C/4.50 V), worst path
+  FF → `raw_order_data[260]`. Published as `reports/openlane_gf180-sta.json`.
+- README/openlane tables updated. IHP SG13G2 run started next.
+
 ## 2026-11-03 23:45 - Sky130 pre-PnR STA at 250 MHz and 322 MHz
 
 - Ran `openlane/sky130_250mhz.json` to `OpenROAD.STAPrePNR` (57 s after PDK cache):

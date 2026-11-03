@@ -74,6 +74,9 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **GF180 pre-PnR STA**: `openlane/gf180.json` with `-p gf180mcuD` gives ss-corner
+  setup WNS **−19.87 ns** at 3.10 ns (Fmax **≈43.5 MHz**), worst path to
+  `raw_order_data[260]`. Pre-PnR only. `reports/openlane_gf180-sta.json`.
 - **Sky130 pre-PnR STA**: LibreLane/OpenROAD run to `OpenROAD.STAPrePNR` (19,936
   instances, 199,739 µm²) gives ss-corner setup WNS **−8.27 ns at 4.00 ns** and
   **−9.14 ns at 3.10 ns**, i.e. Fmax **≈81.5 MHz**; the worst path runs from a shifter

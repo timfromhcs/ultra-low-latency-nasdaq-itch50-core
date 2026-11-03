@@ -113,7 +113,9 @@ MDN PWA best practices, GitHub Actions docs.
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
       Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
 - [ ] Post-route STA with the full flow (the 322 MHz run is still in progress).
-- [ ] GF180 + IHP SG13G2 configs, one run each.
+- [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
+      worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+- [ ] IHP SG13G2 pre-PnR STA run (in progress).
 - [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
 - [x] Replace illustrative GDS with an actual LibreLane render or label clearly: the
       render is explicitly labeled an illustrative floorplan sketch in

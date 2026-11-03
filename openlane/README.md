@@ -42,6 +42,7 @@ python3 -m librelane --dockerized --smoke-test     # or: make librelane-smoke
 |---|---|---|---|
 | 4.00 ns (250 MHz) | **−8.27 ns** | −22,463 ns | **81.47 MHz** |
 | 3.10 ns (322 MHz) | **−9.14 ns** | −25,193 ns | ≈81.6 MHz |
+| 3.10 ns, GF180 (ss/125 °C) | **−19.87 ns** | — | **43.54 MHz** |
 
 Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynchronous
 bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
