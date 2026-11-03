@@ -124,6 +124,8 @@ Reports live in [`reports/`](reports/).
 | Synthesis 256-bit | 25,201 cells | `reports/synth_256.log` |
 | Synthesis 512-bit | 29,628 cells | `reports/synth_512.log` |
 | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+| AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
+| Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
 | Docker image | builds and serves `/api/health` | `Dockerfile` |
@@ -252,6 +254,7 @@ web app, Node and the EXE.
 |---|---|---|
 | EXE | `npm run build:exe` | `dist\chiplab.exe --port 4190` |
 | Docker | `docker build -t chiplab:0.2.0 .` | `docker run --rm -p 4173:4173 chiplab:0.2.0` |
+| GHCR | CI pushes `ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main` | `docker pull ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main` |
 | Vercel | `node scripts/build_vercel.mjs` | `vercel` / Vercel MCP |
 
 Native Vulkan/DX12 runner (optional):

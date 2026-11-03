@@ -29,8 +29,8 @@ jobs:
         run: python3 tb/itch_model.py --count 50000 --out tb/vectors
       - name: Full-field regression
         run: make sim VECTORS=tb/vectors
-      - name: Formal
-        run: ./formal/run_formal.sh z3
+      - name: Formal (CI smoke depth; nightly uses 20)
+        run: FORMAL_DEPTH=8 ./formal/run_formal.sh z3
       - name: Model tests
         run: python3 -m pytest -q tb/test_model.py
       - name: Cocotb

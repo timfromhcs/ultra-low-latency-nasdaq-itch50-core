@@ -8,6 +8,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOLVER="${1:-z3}"
+DEPTH="${FORMAL_DEPTH:-20}"
 WORK="${ROOT}/formal/work_${SOLVER}"
 rm -rf "${WORK}"
 mkdir -p "${WORK}"
@@ -25,12 +26,12 @@ yosys -q -p "read_verilog -sv -formal -I${ROOT}/rtl \
   write_smt2 -wires design.smt2"
 
 echo "[FORMAL] BMC"
-yosys-smtbmc -t 20 -s "${SOLVER}" design.smt2
+yosys-smtbmc -t "${DEPTH}" -s "${SOLVER}" design.smt2
 
 echo "[FORMAL] K-induction"
-yosys-smtbmc -t 20 -i -s "${SOLVER}" design.smt2
+yosys-smtbmc -t "${DEPTH}" -i -s "${SOLVER}" design.smt2
 
 echo "[FORMAL] Covers"
-yosys-smtbmc -t 20 -c -s "${SOLVER}" design.smt2
+yosys-smtbmc -t "${DEPTH}" -c -s "${SOLVER}" design.smt2
 
 echo "[FORMAL] PASS (${SOLVER})"
