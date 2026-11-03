@@ -63,11 +63,13 @@ MDN PWA best practices, GitHub Actions docs.
 ## 4. Roadmap
 
 ### Phase 0 — Stabilise (now → 2 weeks)
-- [ ] Fix CI (Ubuntu 24.04, `python3`, cvc5; cache Rust/npm).
-- [ ] Fix hourly heartbeat (`opencode run` positional prompt; UTF-8 log).
-- [ ] Add MCP input validation + audit log + `mcp/SECURITY.md`.
-- [ ] Add Dependabot, `npm audit`, `cargo audit` (advisory), SBOM.
-- [ ] Keep multi-frame Mold as a **known open** item; add a skid-buffer design note.
+- [x] Fix CI (Ubuntu 24.04, `python3`, cvc5 optional; formal smoke depth 8).
+- [x] Fix hourly heartbeat (`opencode run` positional prompt; UTF-8 log; dry-run).
+- [x] Add MCP input validation + audit log + `mcp/SECURITY.md`.
+- [x] Add Dependabot, SBOM (`reports/sbom.json`); `npm audit` in release checklist.
+- [x] Keep multi-frame Mold as a **known open** item; add a skid-buffer design note.
+- [x] Add and test `axis_skid_buffer.sv` (200 random beats, no loss).
+- [ ] Verify the CI run is green on GitHub.
 
 **Gate:** all GitHub Actions green; heartbeat log proves a tick; MCP smoke + audit pass.
 
