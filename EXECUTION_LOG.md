@@ -153,6 +153,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   message with `--session`, UTF-8 logging, and a `-DryRun` switch. Dry-run output:
   `opencode run --auto --session ses_e611... "Hallo, es ist ..."`.
 - `node scripts/gate.mjs` → **8/8 PASS**.
+- CI iterations: fixed missing `cvc5` on 22.04, `python3`/venv for pytest, and the
+  Ubuntu Verilator/cocotb ABI mismatch by running pipeline/skid cocotb on Icarus.
+  Moved the deep 20-step formal proof to a weekly `Formal` workflow so PR CI stays fast.
+  Final GitHub Actions CI run #24: **SUCCESS** (lint, 50k full-field, model, cocotb,
+  packages, Docker).
 
 ## Open items
 

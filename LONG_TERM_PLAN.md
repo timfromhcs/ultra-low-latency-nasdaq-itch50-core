@@ -22,7 +22,7 @@
 | WASM/web | WebGPU compute/render, Canvas2D fallback, OPFS, PWA, 390/1440 | `reports/web-*.png` |
 | Backend/MCP | REST + stdio MCP, 5 tools, smoke tests | `mcp/`, `backend/` |
 | Distribution | Vercel live, Docker, 83.7 MB EXE, npm/PyPI artifacts | `README.md` |
-| CI | **failing** (ubuntu-22.04 `cvc5` missing; gate uses `python`) | GitHub Actions run #6 |
+| CI | **green** (Ubuntu 24.04, Icarus cocotb, weekly deep formal) | GitHub Actions run #24 |
 | Automation | hourly scheduled task; agent invocation flag bug found | `reports/heartbeat.log` |
 
 ---
@@ -69,7 +69,9 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] Add Dependabot, SBOM (`reports/sbom.json`); `npm audit` in release checklist.
 - [x] Keep multi-frame Mold as a **known open** item; add a skid-buffer design note.
 - [x] Add and test `axis_skid_buffer.sv` (200 random beats, no loss).
-- [ ] Verify the CI run is green on GitHub.
+- [x] Verify the CI run is green on GitHub (run #24).
+- [x] Move the expensive 20-step formal proof to a weekly workflow; PR CI runs
+      lint + 50k full-field + model + cocotb on Icarus.
 
 **Gate:** all GitHub Actions green; heartbeat log proves a tick; MCP smoke + audit pass.
 
