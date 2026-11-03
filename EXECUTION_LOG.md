@@ -195,3 +195,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Post-release: restored README UTF-8 (double-encoding from a PowerShell rewrite),
   added 3 project skills, and made the cloud probe use `/api/health` first so the
   Vercel deployment no longer logs a 404.
+
+## v0.3.1 - patch release
+
+- The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.
+- `scripts/version.mjs` now syncs `package-lock.json`, Python `__version__`, the Vercel
+  health endpoint and `backend/version.mjs` (runtime version for server + EXE).
+- `scripts/sbom.mjs` reads the WASM version from package.json.
+- `release_check` now checks 14 invariants.
+- `docker-compose.yml`: 0.3.1, `CHIPLAB_TOKEN`, persistent `chiplab-data` volume.
+- The first v0.3.1 tag was cancelled mid-release and re-tagged at `d67fc87` after the
+  runtime version fix; no partial release was published.
