@@ -189,3 +189,9 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - npm tgz + Python wheel/sdist built and installed in clean dirs; both self-check OK.
 - Docker image built; writes require `CHIPLAB_TOKEN` (bridge is non-loopback) and that works.
 - UI verified at 390 and 1440 px: run -> sync -> clear -> pull round-trip (revision 4).
+- Accessibility audit on the live site: all inputs labelled, buttons named, images alt,
+  contrast 5.85 (muted) / 10.59 (accent).
+- Published GitHub Release v0.3.0 with 6 assets; Vercel production READY.
+- Post-release: restored README UTF-8 (double-encoding from a PowerShell rewrite),
+  added 3 project skills, and made the cloud probe use `/api/health` first so the
+  Vercel deployment no longer logs a 404.
