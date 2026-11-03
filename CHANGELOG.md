@@ -74,6 +74,9 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **IHP SG13G2 pre-PnR STA**: slow-corner setup WNS **−3.08 ns** at 3.10 ns (Fmax
+  **≈161.9 MHz**) and a small hold violation (WNS −0.052 ns); worst path FF → FF.
+  Pre-PnR only. `reports/openlane_ihp-sta.json`.
 - **GF180 pre-PnR STA**: `openlane/gf180.json` with `-p gf180mcuD` gives ss-corner
   setup WNS **−19.87 ns** at 3.10 ns (Fmax **≈43.5 MHz**), worst path to
   `raw_order_data[260]`. Pre-PnR only. `reports/openlane_gf180-sta.json`.

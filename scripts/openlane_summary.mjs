@@ -108,22 +108,35 @@ function findFiles(root, name) {
 }
 
 let worstPath = null;
-const reports = findFiles(runDir, "max.rpt")
-  .map((p) => ({ p, corner: p.includes("ss_") ? 0 : 1 }))
-  .sort((a, b) => a.corner - b.corner);
-if (reports.length) {
-  const lines = fs.readFileSync(reports[0].p, "utf8").split(/\r?\n/).slice(0, 40);
+// Pick the corner with the most negative WNS from its wns.max.rpt, then read the
+// sibling max.rpt for the path. Falls back to the first max.rpt (ss preferred).
+const wnsFiles = findFiles(runDir, "wns.max.rpt");
+let cornerDir = null;
+let cornerSlack = null;
+for (const f of wnsFiles) {
+  const m = fs.readFileSync(f, "utf8").match(/:\s*(-?\d+(?:\.\d+)?)/);
+  const v = m ? Number(m[1]) : NaN;
+  if (Number.isFinite(v) && (cornerSlack === null || v < cornerSlack)) {
+    cornerSlack = v;
+    cornerDir = path.dirname(f);
+  }
+}
+const maxFiles = cornerDir
+  ? [path.join(cornerDir, "max.rpt")].filter((p) => fs.existsSync(p))
+  : findFiles(runDir, "max.rpt").sort((a, b) => (a.includes("ss_") ? -1 : 1) - (b.includes("ss_") ? -1 : 1));
+if (maxFiles.length) {
+  const lines = fs.readFileSync(maxFiles[0], "utf8").split(/\r?\n/).slice(0, 40);
   const grab = (re) => lines.map((l) => l.match(re)).find(Boolean)?.[1]?.trim();
   const startpoint = grab(/^Startpoint:\s+(.+)$/);
   const endpoint = grab(/^Endpoint:\s+(.+)$/);
   const pathGroup = grab(/^Path Group:\s+(.+)$/);
   if (startpoint || endpoint) {
     worstPath = {
-      file: reports[0].p.replace(/\\/g, "/"),
+      file: maxFiles[0].replace(/\\/g, "/"),
       startpoint,
       endpoint,
       pathGroup,
-      slackNs: Number.isFinite(ws) ? ws : null,
+      slackNs: cornerSlack ?? (Number.isFinite(ws) ? ws : null),
     };
   }
 }

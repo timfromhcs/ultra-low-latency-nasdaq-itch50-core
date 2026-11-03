@@ -115,7 +115,9 @@ MDN PWA best practices, GitHub Actions docs.
 - [ ] Post-route STA with the full flow (the 322 MHz run is still in progress).
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
-- [ ] IHP SG13G2 pre-PnR STA run (in progress).
+- [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax
+      **161.9 MHz**, hold WNS −0.052 ns, worst path FF → FF
+      (`reports/openlane_ihp-sta.json`).
 - [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
 - [x] Replace illustrative GDS with an actual LibreLane render or label clearly: the
       render is explicitly labeled an illustrative floorplan sketch in

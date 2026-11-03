@@ -1,6 +1,6 @@
 {
   "tag": "sky130-250mhz-sta",
-  "generatedAt": "2026-11-03T22:08:23.296Z",
+  "generatedAt": "2026-11-03T22:14:48.033Z",
   "metricsPath": "openlane/runs/sky130-250mhz-sta/final/metrics.json",
   "derived": {
     "clockPeriodNs": 4,

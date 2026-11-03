@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 00:05 - IHP SG13G2 pre-PnR STA
+
+- Ran `openlane/ihp-sg13g2.json` with `-p ihp-sg13g2` to `OpenROAD.STAPrePNR`:
+  setup **WNS −3.08 ns** at 3.10 ns (Fmax **161.9 MHz**), hold WNS −0.052 ns,
+  worst path FF → FF (slow/125 °C). Published `reports/openlane_ihp-sta.json`.
+- The summary script now selects the corner with the most negative `wns.max.rpt`
+  instead of assuming `ss_`; all three reports were regenerated with it.
+- PDK matrix (Sky130, GF180, IHP) now has one pre-PnR STA run each. Full P&R still
+  open; the Sky130 3.10 ns run is still in the post-CTS resizer.
+
 ## 2026-11-03 23:55 - GF180 pre-PnR STA
 
 - Ran `openlane/gf180.json` with `-p gf180mcuD` to `OpenROAD.STAPrePNR`: setup

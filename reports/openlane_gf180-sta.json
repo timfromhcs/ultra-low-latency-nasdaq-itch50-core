@@ -1,6 +1,6 @@
 {
   "tag": "gf180-sta",
-  "generatedAt": "2026-11-03T22:12:18.879Z",
+  "generatedAt": "2026-11-03T22:15:03.125Z",
   "metricsPath": "openlane/runs/gf180-sta/final/metrics.json",
   "derived": {
     "clockPeriodNs": 3.1,
