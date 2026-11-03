@@ -9,18 +9,16 @@
   ],
   "CLOCK_PORT": "clk",
   "CLOCK_PERIOD": 3.10,
-  "DESIGN_IS_CORE": 1,
+  "PDN_MULTILAYER": 1,
   "FP_SIZING": "absolute",
   "DIE_AREA": "0 0 700 700",
   "CORE_AREA": "20 20 680 680",
-  "PL_TARGET_DENSITY": 0.60,
-  "CELL_PAD": 4,
+  "PL_TARGET_DENSITY_PCT": 60,
   "SYNTH_STRATEGY": "DELAY 0",
-  "SYNTH_MAX_FANOUT": 12,
-  "SYNTH_BUFFERING": 1,
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
   "SYNTH_SIZING": 1,
   "RUN_KLAYOUT_DRC": true,
   "RUN_MAGIC_DRC": true,
-  "RUN_LVS": true,
-  "META": { "note": "Sky130 flow-ready config. Not a P&R/Fmax sign-off." }
+  "RUN_LVS": true
 }

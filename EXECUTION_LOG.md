@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 23:20 - LibreLane 3 config hygiene
+
+- Replaced deprecated/unknown keys in all four `openlane/*.json`:
+  `DESIGN_IS_CORE`→`PDN_MULTILAYER`, `PL_TARGET_DENSITY`→`PL_TARGET_DENSITY_PCT`
+  (60), `SYNTH_MAX_FANOUT`→`MAX_FANOUT_CONSTRAINT`, `SYNTH_BUFFERING`→
+  `SYNTH_ABC_BUFFERING`; dropped unknown `CELL_PAD` and `META`.
+- The full Sky130 run (`--run-tag chiplab-sky130`) started with the previous file and
+  is still running; result pending.
+
 ## 2026-11-03 23:10 - LibreLane toolchain smoke test passed
 
 - Installed LibreLane 3.0.17 in WSL (needed `python3-dev` for `lln-libparse`) and
