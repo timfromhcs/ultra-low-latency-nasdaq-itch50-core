@@ -16,7 +16,10 @@ def main():
     os.makedirs(build_dir, exist_ok=True)
     runner = get_runner("icarus")
     runner.build(
-        sources=[os.path.join(RTL, "itch_top_book.sv")],
+        sources=[
+            os.path.join(RTL, "itch_top_book.sv"),
+            os.path.join(RTL, "itch_metrics.sv"),
+        ],
         hdl_toplevel="itch_top_book",
         includes=[RTL],
         build_dir=build_dir,

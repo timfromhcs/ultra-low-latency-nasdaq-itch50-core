@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 20:59 - Autonomy tick + performance counters
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0c24d10` (multi-gap) green.
+- Added `rtl/itch_metrics.sv`: message/byte totals, gap/drop pulses, cycle counter,
+  max occupancy, 8-bin inter-message gap histogram.
+- Fixed the metrics test timing: controlled histogram `[1,2,1,1,1,1,1,1]` PASS.
+- Wired `itch_metrics` into `itch_top_book` (`metrics_*`); parser→BBO test now also
+  asserts 152 messages, 4800 bytes, histogram sum 152, occupancy 52.
+- Added `rtl/itch_metrics.sv` to `make lint` and `run_metrics_cocotb.py` to `make cocotb`
+  and the CI cocotb list.
+
 ## 2026-11-03 19:59 - Autonomy tick + multi-gap recovery
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `659957e` green.

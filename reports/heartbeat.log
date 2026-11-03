@@ -583,3 +583,188 @@ Commit `659957e` ist gepusht; CI l├ñuft.
 **Replay-Quelle** (Upstream sendet den angeforderten Bereich erneut) und **Multi-Gap-Stresstest**; danach Performance-Counter/PCIe-Integration.
 [2026-11-03T19:59:18.5874383+01:00] hallo, es ist 19:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 6
+[tick] ran 0, failed 0
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 2 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"659957e\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  return { run: 
+{status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,conclusion:j
+.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_multigap.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_multigap.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_multigap.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main 
+&& python3 tb/run_arbiter_cocotb.py > /tmp/mg1.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 'Recovery 
+multi-gap|Recovery mode|Arbiter:|TESTS=|Assertion|req_' /tmp/mg1.txt | tail -8"
+multi-gap test added
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ RC=True
+   613.80ns INFO     cocotb.mold_feed_arbiter           Arbiter: 6 frames selected [1, 2, 3, 4, 7, 8], gaps=1, 
+drop_a=3 drop_b=3 PASS
+  2086.30ns INFO     cocotb.mold_feed_arbiter           Recovery mode: markers [1, 2, 3, 6], requests=2, abandon=1 PASS
+  2492.40ns INFO     cocotb.mold_feed_arbiter           Recovery multi-gap: markers [1, 2, 3, 4, 5, 6, 7, 8], 
+requests=2 PASS
+                                                        ** TESTS=3 PASS=3 FAIL=0 SKIP=0                       2492.40  
+         0.03      77847.36  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -217,9 +217,9 @@
+ | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
+ | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; 
+risk limits | `tb/test_book.py` |
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+-| A/B feed arbiter | **6 frames, sequence selection, 1 gap, byte-exact; recovery mode: requestÔåÆreplayÔåÆabandon** | 
+`tb/test_arbiter.py` |
++| A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+ | Supply chain | 163-component SBOM | `reports/sbom.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -117,9 +117,12 @@
+       timeout resync and duplicate rejection (`rtl/mold_recovery.sv`, 4-accept test).
+ - [x] Arbiter recovery mode: a gap requests the missing range and drops the
+       out-of-order frames; the replay is accepted in order; timeout abandons and
+       force-accepts (`recovery_en`, test markers [1,2,3,6]).
+-- [ ] A replay source (upstream retransmit) and multi-gap stress.
++- [x] Replay loop validated with two loss events: multi-gap repair markers [1..8],
++      2 requests, no abandon (the test acts as the replay source).
++- [ ] Hardware/upstream retransmit requester (network protocol) ÔÇö out of scope for the
++      local core; the request interface is the contract.
+ - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
+       output, 400-event + 100 back-to-back tests.
+ - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
+       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,11 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **Multi-gap recovery test**: two loss events (3; 6+7) repaired by replayed ranges ÔåÆ
++  markers [1..8], 2 requests, no abandon (`tb/test_arbiter.py`). The test acts as the
++  replay source; the hardware request interface is the contract.
+ 
+ ## 0.3.1 ÔÇö 2026-11-03
+ 
+ Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,16 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 19:59 - Autonomy tick + multi-gap recovery
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `659957e` green.
++- New `test_recovery_multi_gap`: lose frame 3, then frames 6+7; each loss is repaired by
++  replaying the requested range. Output markers [1..8], 2 requests, 0 abandons.
++- The test acts as the replay source; the arbiter's request interface
++  (`req_valid/req_seq/req_count`) is the hardware contract for an upstream retransmitter.
++
+ ## 2026-11-03 19:18 - Autonomy tick + arbiter recovery mode
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b652e2f` (sequence
+   recovery module) green.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_arbiter_cocotb.py > /tmp/mg2.txt 2>&1; grep 
+-E 'TESTS=' /tmp/mg2.txt | tail -1"; cd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; git add -A; 
+git commit -m "test(rtl): multi-gap replay recovery for the A/B arbiter" 2>&1 | Select-Object -Last 3; git push origin 
+main 2>&1 | Select-Object -Last 2
+** TESTS=3 PASS=3 FAIL=0 SKIP=0                       2492.40           0.03      79494.51  **
+PASS vercel-api (482 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_arbiter.py', LF will be replaced by CRLF the next time Git touches it
+[main 0c24d10] test(rtl): multi-gap replay recovery for the A/B arbiter
+ 8 files changed, 699 insertions(+), 218 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:330
++ ... iter" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   659957e..0c24d10  main -> main
+> build ┬À deepseek-v4.1-flash
+## Weiter: Multi-Gap-Recovery verifiziert
+
+### Autonomy-Tick
+- `node scripts/autonomy.mjs` ÔåÆ Queue leer, 0 Tasks.
+- CI auf `659957e` (Arbiter-Recovery) **gr├╝n**.
+
+### Neuer Stresstest
+
+`test_recovery_multi_gap` simuliert **zwei Verlustereignisse** und repariert sie ├╝ber den Request-Mechanismus:
+
+1. Frames 1, 2 laufen normal.
+2. **Frame 3 geht verloren** ÔåÆ Arbiter fordert `req_seq=3`, `req_count=1`, verwirft den Out-of-Order-Frame 4.
+3. Replay 3 ÔåÆ akzeptiert; 4 und 5 folgen in Ordnung.
+4. **Frames 6 und 7 gehen verloren** ÔåÆ `req_seq=6`, `req_count=2`.
+5. Replay 6, 7 ÔåÆ akzeptiert; 8 folgt.
+
+Ergebnis: Marker **[1,2,3,4,5,6,7,8]**, **2 Requests**, **0 Abandons**, alle Frames byte-exakt.
+
+### Verifikation
+| Test | Ergebnis |
+|---|---|
+| Arbiter (Auswahl) | PASS |
+| Recovery (Gap/Replay/Timeout) | PASS |
+| Multi-Gap (2 Verluste) | PASS |
+| Gate | 10/10 |
+
+### Dokumentation
+`README.md`, `LONG_TERM_PLAN.md` (Replay-Loop abgehakt; Hardware-Retransmitter als Vertrag dokumentiert), `CHANGELOG.md`, `EXECUTION_LOG.md`.
+
+Commit `0c24d10` ist gepusht; CI l├ñuft.
+
+### N├ñchster Punkt
+Der Request-/Replay-Vertrag steht. Als N├ñchstes: **Performance-Counter** (Messages/s, Gap-/Drop-Raten, Puffer-Occupancy, Latenz-Histogramm) f├╝r das System oder **Phase 2 Physical** (LibreLane/OpenSTA, lokal weiterhin nicht installiert).
+[2026-11-03T20:59:18.7018703+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0

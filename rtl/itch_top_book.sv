@@ -49,6 +49,20 @@ module itch_top_book #(
 
   output wire [31:0]                 status_msg_count,
   output wire [31:0]                 status_corrupt_count,
+  output wire [31:0]                 metrics_msg_count,
+  output wire [31:0]                 metrics_byte_count,
+  output wire [31:0]                 metrics_gap_count,
+  output wire [31:0]                 metrics_drop_count,
+  output wire [31:0]                 metrics_cycle_count,
+  output wire [7:0]                  metrics_occupancy_max,
+  output wire [31:0]                 metrics_hist0,
+  output wire [31:0]                 metrics_hist1,
+  output wire [31:0]                 metrics_hist2,
+  output wire [31:0]                 metrics_hist3,
+  output wire [31:0]                 metrics_hist4,
+  output wire [31:0]                 metrics_hist5,
+  output wire [31:0]                 metrics_hist6,
+  output wire [31:0]                 metrics_hist7,
   output wire                        ready
 );
 
@@ -62,6 +76,8 @@ module itch_top_book #(
   wire [31:0] m_price;
   wire        m_error_corrupt;
   wire        book_ready;
+  wire [7:0]  m_msg_len;
+  wire [7:0]  status_buf_count;
 
   // Hold the parser in reset until the book has cleared its tables, otherwise
   // messages parsed during the ~800-cycle init would be lost.
@@ -88,7 +104,7 @@ module itch_top_book #(
     .raw_is_drop(),
     .raw_is_corrupt(),
     .raw_payload(),
-    .status_buf_count(),
+    .status_buf_count(status_buf_count),
     .m_axis_order_valid(m_axis_order_valid),
     .m_order_type(m_order_type),
     .m_stock_locate(m_stock_locate),
@@ -108,7 +124,7 @@ module itch_top_book #(
     .m_is_drop(),
     .m_error_corrupt(m_error_corrupt),
     .m_payload(),
-    .m_msg_len(),
+    .m_msg_len(m_msg_len),
     .m_event_code(),
     .m_ref_value(),
     .status_msg_count(status_msg_count),
@@ -151,6 +167,33 @@ module itch_top_book #(
     .risk_rejects(risk_rejects),
     .rescans(),
     .busy()
+  );
+
+  // Performance counters for the parsed stream. Gaps are a link-layer concept
+  // (see the Mold arbiter), so gap_pulse is tied low here; corrupt messages are
+  // counted as drops.
+  itch_metrics u_metrics (
+    .clk(clk),
+    .rst_n(rst_n),
+    .msg_valid(m_axis_order_valid),
+    .msg_len(m_msg_len),
+    .gap_pulse(1'b0),
+    .drop_pulse(m_error_corrupt),
+    .occupancy(status_buf_count),
+    .msg_count(metrics_msg_count),
+    .byte_count(metrics_byte_count),
+    .gap_count(metrics_gap_count),
+    .drop_count(metrics_drop_count),
+    .cycle_count(metrics_cycle_count),
+    .occupancy_max(metrics_occupancy_max),
+    .hist0(metrics_hist0),
+    .hist1(metrics_hist1),
+    .hist2(metrics_hist2),
+    .hist3(metrics_hist3),
+    .hist4(metrics_hist4),
+    .hist5(metrics_hist5),
+    .hist6(metrics_hist6),
+    .hist7(metrics_hist7)
   );
   /* verilator lint_on PINCONNECTEMPTY */
 

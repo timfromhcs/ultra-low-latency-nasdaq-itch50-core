@@ -269,3 +269,18 @@ async def test_bytes_to_bbo(dut):
             dut._log.info(f"model 2: {snapshots[i].get(2, {})}")
         assert a == b, f"message {i} BBO\n got {a}\n exp {b}"
     dut._log.info(f"Top+book: {len(got)} messages, 0 mismatches PASS")
+
+    # Performance counters observe the same parsed stream.
+    for _ in range(8):
+        await RisingEdge(dut.clk)
+    mc = int(dut.metrics_msg_count.value)
+    smc = int(dut.status_msg_count.value)
+    hist = [int(getattr(dut, f"metrics_hist{i}").value) for i in range(8)]
+    assert mc == smc == len(events), f"metrics {mc} status {smc} events {len(events)}"
+    assert sum(hist) == mc, f"histogram sum {sum(hist)} != {mc}"
+    assert int(dut.metrics_byte_count.value) > mc * 16, "byte counter too small"
+    assert int(dut.metrics_cycle_count.value) > 0, "cycle counter"
+    assert int(dut.metrics_occupancy_max.value) > 0, "occupancy_max not tracking"
+    dut._log.info(
+        f"Metrics: {mc} messages, {int(dut.metrics_byte_count.value)} bytes, "
+        f"hist={hist}, occ_max={int(dut.metrics_occupancy_max.value)} PASS")

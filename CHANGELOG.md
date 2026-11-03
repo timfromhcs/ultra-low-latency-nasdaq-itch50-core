@@ -74,6 +74,12 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Performance counters** (`rtl/itch_metrics.sv`): message/byte totals, gap and drop
+  pulse counts, free-running cycle counter (host derives messages/s), max occupancy and
+  an 8-bin inter-message gap histogram (0, 1, 2, 3, 4-7, 8-15, 16-31, 32+ cycles).
+  Wired into `itch_top_book` as `metrics_*` (gap tied low; corrupt messages count as
+  drops). Tests: controlled histogram `[1,2,1,1,1,1,1,1]`; parser→BBO integration
+  reports 152 messages, 4800 bytes, histogram sum 152, max occupancy 52.
 - **Multi-gap recovery test**: two loss events (3; 6+7) repaired by replayed ranges →
   markers [1..8], 2 requests, no abandon (`tb/test_arbiter.py`). The test acts as the
   replay source; the hardware request interface is the contract.

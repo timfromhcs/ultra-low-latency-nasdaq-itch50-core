@@ -52,6 +52,7 @@ lint:
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_feed_arbiter.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_ab_system.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_recovery.sv
+	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_metrics.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
 
 sim:
@@ -73,6 +74,7 @@ cocotb:
 	$(PYTHON) tb/run_arbiter_cocotb.py
 	$(PYTHON) tb/run_ab_system_cocotb.py
 	$(PYTHON) tb/run_recovery_cocotb.py
+	$(PYTHON) tb/run_metrics_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
 
 synth-book:

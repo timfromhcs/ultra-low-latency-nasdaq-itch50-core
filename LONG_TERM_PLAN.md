@@ -127,7 +127,11 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
 - [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
-- [ ] Performance counters: messages/s, gaps, drops, queue occupancy, latency histogram.
+- [x] Performance counters (`rtl/itch_metrics.sv`): message/byte totals, gap/drop
+      pulses, free-running cycle counter, max queue occupancy and an 8-bin
+      inter-message gap histogram. Wired into `itch_top_book` (`metrics_*`);
+      test: 9-message histogram and 152-message integration (`tb/test_metrics.py`,
+      `tb/test_book_top.py`).
 - [x] RTL ↔ WASM equivalence on the same vectors: **100,000 records, every canonical
       field equal** (`scripts/rtl_wasm_equiv.mjs`, weekly `equivalence` job).
 
