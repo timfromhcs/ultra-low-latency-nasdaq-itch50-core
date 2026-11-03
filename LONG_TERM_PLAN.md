@@ -111,7 +111,8 @@ MDN PWA best practices, GitHub Actions docs.
 - [ ] Multi-symbol order book (hash table + price ladder), risk checks, top-N.
 - [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
 - [ ] Performance counters: messages/s, gaps, drops, queue occupancy, latency histogram.
-- [ ] RTL ↔ WASM equivalence (co-simulation on the same vectors).
+- [x] RTL ↔ WASM equivalence on the same vectors: **100,000 records, every canonical
+      field equal** (`scripts/rtl_wasm_equiv.mjs`, weekly `equivalence` job).
 
 **Gate:** end-to-end 100G pcap replay; book matches software at every event.
 

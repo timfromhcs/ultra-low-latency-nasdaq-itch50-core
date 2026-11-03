@@ -43,6 +43,11 @@ All notable changes to ChipLab are documented here. The format follows
   (replace side/slot, cancel, max/min, volume, last, stored side) → **9/9 killed**,
   `reports/mutation_book.json`. Weekly `Formal` workflow runs it; `make mutate-book`.
 
+### Added
+- RTL ↔ WASM equivalence: `tb/sim_main.cpp --dump` writes the RTL's canonical records;
+  `scripts/rtl_wasm_equiv.mjs` runs the WASM twin on the same `stream.bin` and compares
+  every field. **100,000 records, 0 mismatches.** `make equiv` + weekly `equivalence` job.
+
 ## 0.3.1 — 2026-11-03
 
 Patch release: packaging metadata and release-loop fixes. No protocol or API change.

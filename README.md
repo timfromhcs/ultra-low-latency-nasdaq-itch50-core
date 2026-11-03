@@ -202,6 +202,7 @@ Reports live in [`reports/`](reports/).
 | Fields checked | type, flags, length, locate, tracking, timestamp, ref, new-ref, shares (64b), stock, price, match, MPID, printable, event, payload checksum | `tb/sim_main.cpp` |
 | Reference model | independent Python, all 22 opcodes | `tb/itch_model.py` |
 | WASM ↔ Python | 10,000 records, 0 mismatches | `scripts/check_wasm_fixture.py` |
+| RTL ↔ WASM | **100,000 records on one stream, every canonical field equal** | `scripts/rtl_wasm_equiv.mjs` |
 | Formal | **Z3 PASS, CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported | `reports/formal.json` |
 | Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | `reports/mutation.json` |
 | Mutation (BBO) | **9/9 parser→BBO mutants killed** (side, hash slot, cancel, max/min, volume, last) | `reports/mutation_book.json` |

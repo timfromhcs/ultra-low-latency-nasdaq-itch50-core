@@ -7,7 +7,7 @@ NODE ?= node
 WASM := web/wasm/chiplab_core.wasm
 
 .PHONY: help all verify verify-fast verify-deep vectors lint formal formal-all sim cocotb \
-        synth-book mutate-book wasm web backend mcp exe docker demo native test clean
+        synth-book mutate-book equiv wasm web backend mcp exe docker demo native test clean
 
 help:
 	@echo "ChipLab targets:"
@@ -21,6 +21,7 @@ help:
 	@echo "  make cocotb       Python/Verilator Cocotb suite"
 	@echo "  make synth-book   Yosys area estimate for the BBO (reduced config)"
 	@echo "  make mutate-book  mutation-test the parser -> BBO path"
+	@echo "  make equiv        RTL vs WASM equivalence on one stream"
 	@echo "  make wasm         rebuild the 50 KB WASM core"
 	@echo "  make web          build/test the static web app"
 	@echo "  make backend      run the local Node server (PORT=4173)"
@@ -73,6 +74,10 @@ synth-book:
 
 mutate-book:
 	$(PYTHON) tools/mutate_book.py
+
+equiv:
+	$(PYTHON) tb/itch_model.py --count 100000 --out tb/vectors
+	$(NODE) scripts/rtl_wasm_equiv.mjs --run
 
 wasm:
 	cd wasm-core && cargo build --target wasm32-unknown-unknown --release

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T10:02:18.003Z",
+  "generatedAt": "2026-11-03T11:02:57.411Z",
   "deep": false,
   "score": 100,
   "rows": [
@@ -7,70 +7,70 @@
       "name": "model-tests",
       "cmd": "python -m pytest -q tb/test_model.py",
       "status": "PASS",
-      "ms": 2771,
-      "tail": "........                                                                 [100%]\r\n8 passed in 0.33s"
+      "ms": 6324,
+      "tail": "........                                                                 [100%]\r\n8 passed in 0.61s"
     },
     {
       "name": "wasm-smoke",
       "cmd": "node scripts/wasm_smoke.mjs",
       "status": "PASS",
-      "ms": 331,
+      "ms": 355,
       "tail": "  },\n  \"rtl1c\": {\n    \"magic\": \"42414c43\",\n    \"chip\": 1,\n    \"count\": 10000,\n    \"cycles\": 18210,\n    \"bytes_in\": 291340,\n    \"corrupt\": 101,\n    \"frames\": 0\n  },\n  \"lossy\": {\n    \"magic\": \"42414c43\",\n    \"chip\": 5,\n    \"count\": 4212,\n    \"cycles\": 18210,\n    \"bytes_in\": 291340,\n    \"corrupt\": 101,\n    \"frames\": 0\n  },\n  \"golden_vs_rtl1c_records_equal\": true,\n  \"mold\": {\n    \"stream_bytes\": 339684,\n    \"magic\": \"42414c43\",\n    \"chip\": 6,\n    \"count\": 10000,\n    \"cycles\": 23421,\n    \"bytes_in\": 294684,\n    \"corrupt\": 0,\n    \"frames\": 1250\n  },\n  \"ethernet\": {\n    \"stream_bytes\": 392184,\n    \"magic\": \"42414c43\",\n    \"chip\": 6,\n    \"count\": 10000,\n    \"cycles\": 23421,\n    \"bytes_in\": 294684,\n    \"corrupt\": 0,\n    \"frames\": 1250\n  }\n}\nwrote reports/wasm_stream.bin and reports/wasm_records.bin"
     },
     {
       "name": "wasm-crosscheck",
       "cmd": "python scripts/check_wasm_fixture.py",
       "status": "PASS",
-      "ms": 173,
+      "ms": 457,
       "tail": "wasm_vs_python: 10000 records, 0 mismatches"
     },
     {
       "name": "backend-compare",
       "cmd": "node backend/run.mjs --compare --count 20000",
       "status": "PASS",
-      "ms": 171,
+      "ms": 193,
       "tail": "es     Gbps    Msg/s   lat(ns)   errors  status\n--------------------------------------------------------------------------------------\nScalar reference        20000      36513    41.29   176.69      0.0        0  PASS\nITCH-50 v2 (RTL twin)    20000      36514    41.29   176.69      3.1        0  PASS\nITCH-50 safe (2c)       20000      36515    41.29   176.68      6.2        0  PASS\nEnyx-class (3c)         20000      36516    41.29   176.68      9.3        0  PASS\nNovaSparks-class (2c)    20000      36515    41.29   176.68      6.2        0  PASS\nLossy admin-drop         8368      36514    41.29    73.93      3.1    11632  FAIL\nMoldUDP64 front-end     20000      36516    41.29   176.68      9.3        0  PASS\nParser + top-of-book    20000      36515    41.29   176.68      6.2        0  PASS"
     },
     {
       "name": "mcp",
       "cmd": "node mcp/client_smoke.mjs",
       "status": "PASS",
-      "ms": 187,
+      "ms": 383,
       "tail": "initialize: { name: 'chiplab', version: '0.3.1' }\ntools: chiplab.chips, chiplab.run, chiplab.compare, chiplab.book, chiplab.formal_status, chiplab.health, chiplab.cloud_info, chiplab.history, chiplab.release_status, chiplab.sbom, chiplab.synth_status, chiplab.docs\nchips: 8\ncompare: scalar:PASS rtl-1c:PASS rtl-2c-safe:PASS rival-3c:PASS rival-2c:PASS lossy:FAIL mold-128:PASS book-128:PASS\nrun: 5000 41.29 Gbps 24 sample records\nchiplab.health: ok\nchiplab.cloud_info: ok\nchiplab.history: ok\nchiplab.release_status: ok\nchiplab.sbom: ok\nchiplab.synth_status: ok\nchiplab.docs: ok\nMCP SMOKE PASS"
     },
     {
       "name": "cloud-api",
       "cmd": "node scripts/test_cloud_api.mjs",
       "status": "PASS",
-      "ms": 353,
-      "tail": "CLOUD API PASS (port 4524, auth, revisions, 409, 400, 413, list, delete)"
+      "ms": 366,
+      "tail": "CLOUD API PASS (port 4556, auth, revisions, 409, 400, 413, list, delete)"
     },
     {
       "name": "web-smoke",
       "cmd": "node scripts/web_smoke.mjs",
       "status": "PASS",
-      "ms": 310,
+      "ms": 394,
       "tail": "web smoke: 13758 B html, 50180 B wasm, 1000 messages, 41.26 Gbps PASS"
     },
     {
       "name": "sbom",
       "cmd": "node scripts/sbom.mjs",
       "status": "PASS",
-      "ms": 77,
+      "ms": 102,
       "tail": "SBOM: 163 components → reports/sbom.json"
     },
     {
       "name": "release-check",
       "cmd": "node scripts/release_check.mjs",
       "status": "PASS",
-      "ms": 158,
+      "ms": 1252,
       "tail": "rsion — 000301 vs 000301\nPASS changelog has version — ## 0.3.1\nPASS README mentions version — 0.3.1\nPASS vercel health version — 0.3.1\nPASS python __version__ — 0.3.1\nPASS runtime VERSION — 0.3.1\nPASS package-lock version — 0.3.1\nPASS artifact web/wasm/chiplab_core.wasm\nPASS artifact reports/sbom.json\nPASS sbom metadata version — 0.3.1\nHASH dist/chiplab.exe 525ab45211f22cf803e7d591eaac2e2bbf3e59bdd3dc8501e631f5c44cdc9706\nHASH packages/npm/chiplab-core-0.3.1.tgz b04dd5f4ffe04fa648e063d63975c0e28619cda3c21f9bd7e3eaa52d44609299\nHASH packages/python/dist/chiplab_itch-0.3.1-py3-none-any.whl e9c43d826516414baa4307dbf6e382b36f6b97c9debde0aa88dbb2cb9f840f7b\nHASH packages/python/dist/chiplab_itch-0.3.1.tar.gz 9f13dd9cdcde8f2a090f564a319ad459a66b2a44f1f718c0b2563c2ec40ea9c3\nrelease_check: 14/14 PASS"
     },
     {
       "name": "vercel-api",
       "cmd": "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs",
       "status": "PASS",
-      "ms": 225,
+      "ms": 434,
       "tail": "[vercel] wrote E:\\chips\\main\\public (15 top-level entries)\nhealth: chiplab-vercel 8 chips\nrun: 5000 41.29 Gbps\ncompare: scalar:PASS rtl-1c:PASS rtl-2c-safe:PASS rival-3c:PASS rival-2c:PASS lossy:FAIL mold-128:PASS book-128:PASS\nVERCEL API SMOKE PASS"
     }
   ]

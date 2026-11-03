@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 11:59 - Autonomy tick + RTL/WASM equivalence
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- **Formal gate verified green on the runner** (`65d4e47`): deep proof + mutation both
+  success; solver matrix now opt-in so the weekly job stays bounded.
+- Added `--dump` to `tb/sim_main.cpp` and `scripts/rtl_wasm_equiv.mjs`:
+  the RTL and the WASM twin run on the **same** `tb/vectors/stream.bin`;
+  **100,000 records, every canonical field equal**.
+- `make equiv` and a weekly `equivalence` job in `Formal`; `reports/rtl_records.bin` is
+  git-ignored.
+
 ## 2026-11-03 10:59 - Autonomy tick + formal toolchain fix
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3f80017` green.

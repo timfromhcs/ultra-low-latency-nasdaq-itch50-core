@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdio>
 
 #include "Vultra_low_latency_nasdaq_itch50_cutthrough.h"
 #include "verilated.h"
@@ -42,6 +43,14 @@ static uint64_t rd64(const uint8_t* p) {
     uint64_t v = 0;
     for (int i = 7; i >= 0; --i) v = (v << 8) | p[i];
     return v;
+}
+
+static void wr16(uint8_t* p, uint16_t v) { p[0] = (uint8_t)v; p[1] = (uint8_t)(v >> 8); }
+static void wr32(uint8_t* p, uint32_t v) {
+    for (int i = 0; i < 4; ++i) p[i] = (uint8_t)(v >> (8 * i));
+}
+static void wr64(uint8_t* p, uint64_t v) {
+    for (int i = 0; i < 8; ++i) p[i] = (uint8_t)(v >> (8 * i));
 }
 
 static Expected decode_record(const uint8_t* p) {
@@ -82,14 +91,17 @@ int main(int argc, char** argv) {
     Verilated::traceEverOn(false);
 
     std::string vec_dir = "vectors";
+    std::string dump_path;
     size_t limit = 0;
     for (int i = 1; i < argc; ++i) {
         std::string a = argv[i];
         if (a == "--vectors" && i + 1 < argc) vec_dir = argv[++i];
         else if (a == "--limit" && i + 1 < argc) limit = std::stoull(argv[++i]);
+        else if (a == "--dump" && i + 1 < argc) dump_path = argv[++i];
     }
 
     std::vector<uint8_t> stream, expected_blob;
+    std::vector<uint8_t> dump;
     if (!read_file(vec_dir + "/stream.bin", stream)) {
         std::cerr << "[FAIL] cannot read " << vec_dir << "/stream.bin\n"
                   << "       run: python tb/itch_model.py --count 100000 --out " << vec_dir << "\n";
@@ -197,6 +209,29 @@ int main(int argc, char** argv) {
             }
             if (got_sum != e.checksum) return fail("payload_checksum", got_sum, e.checksum);
 
+            if (!dump_path.empty()) {
+                uint8_t rec[RECORD_SIZE] = {0};
+                rec[0] = dut->m_order_type;
+                rec[1] = got_flags;
+                rec[2] = dut->m_msg_len;
+                wr16(rec + 4, dut->m_stock_locate);
+                wr16(rec + 6, dut->m_tracking_number);
+                wr64(rec + 8, dut->m_timestamp);
+                wr64(rec + 16, dut->m_order_ref_num);
+                wr64(rec + 24, dut->m_new_order_ref_num);
+                wr64(rec + 32, dut->m_shares);
+                wr32(rec + 40, dut->m_price);
+                rec[44] = dut->m_side;
+                rec[45] = dut->m_printable;
+                rec[46] = dut->m_event_code;
+                wr64(rec + 48, dut->m_match_number);
+                wr64(rec + 56, dut->m_stock);
+                wr32(rec + 64, dut->m_mpid);
+                wr32(rec + 68, dut->m_ref_value);
+                wr32(rec + 72, got_sum);
+                dump.insert(dump.end(), rec, rec + RECORD_SIZE);
+            }
+
             ++received;
             if (received % 100000 == 0)
                 std::cout << "[PROGRESS] " << received << " / " << limit << "\n";
@@ -247,6 +282,19 @@ int main(int argc, char** argv) {
     }
 
     VerilatedCov::write("sim_coverage.dat");
+
+    if (!dump_path.empty()) {
+        FILE* f = std::fopen(dump_path.c_str(), "wb");
+        if (!f) {
+            std::cerr << "[FAIL] cannot open dump path " << dump_path << "\n";
+            return 1;
+        }
+        if (!dump.empty()) std::fwrite(dump.data(), 1, dump.size(), f);
+        std::fclose(f);
+        std::cout << " RTL record dump         : " << dump_path
+                  << " (" << dump.size() / RECORD_SIZE << " records)\n";
+    }
+
     delete dut;
     return 0;
 }

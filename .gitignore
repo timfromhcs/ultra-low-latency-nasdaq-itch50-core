@@ -47,3 +47,5 @@ reports/mcp-audit.log
 packages/python/*.egg-info/
 reports/synth_book_*.log
 
+reports/rtl_records.bin
+

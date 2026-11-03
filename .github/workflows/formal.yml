@@ -69,3 +69,21 @@ jobs:
         with:
           name: mutation-report
           path: reports/mutation_book.json
+
+  equivalence:
+    name: RTL vs WASM equivalence
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq verilator python3-pip make g++
+      - name: Generate vectors
+        run: python3 tb/itch_model.py --count 100000 --out tb/vectors
+      - name: RTL vs WASM
+        run: node scripts/rtl_wasm_equiv.mjs --run
