@@ -450,3 +450,142 @@ config.json                         9117
 openroad-resizertimingpostcts.log  16478
 state_in.json                       9110
 _env.tcl                            8187
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content 
+openlane\runs\chiplab-sky130\37-openroad-resizertimingpostcts\openroad-resizertimingpostcts.log -Tail 12
+1490 |       4 |    1472 |        5 |      0 |     8 |    +0.4% |  -11.354 |   -33465.7 |   4466 | raw_payload[306]
+     1493 |       4 |    1427 |        4 |      0 |     7 |    +0.4% |  -11.284 |   -33303.7 |   4466 | 
+raw_order_data[436]
+     1500 |       4 |    1433 |        4 |      0 |     7 |    +0.4% |  -11.284 |   -33302.8 |   4466 | 
+raw_order_data[436]
+     1510 |       4 |    1441 |        5 |      0 |     8 |    +0.4% |  -11.270 |   -32725.0 |   4466 | _35174_/D
+     1520 |       5 |    1449 |        7 |      0 |     8 |    +0.4% |  -11.257 |   -32278.0 |   4466 | _35174_/D
+     1530 |       5 |    1456 |        9 |      0 |     9 |    +0.5% |  -11.243 |   -32228.5 |   4466 | _34811_/D
+     1540 |       5 |    1461 |       16 |      0 |     9 |    +0.5% |  -11.243 |   -32383.4 |   4466 | _34811_/D
+     1550 |       5 |    1468 |       20 |      0 |     9 |    +0.5% |  -11.243 |   -32332.2 |   4466 | _34811_/D
+     1560 |       5 |    1477 |       21 |      0 |     9 |    +0.5% |  -11.243 |   -32091.2 |   4466 | _34811_/D
+     1570 |       5 |    1485 |       23 |      0 |     9 |    +0.5% |  -11.243 |   -31656.0 |   4466 | _34811_/D
+     1580 |       5 |    1494 |       23 |      1 |     9 |    +0.5% |  -11.243 |   -31555.7 |   4466 | _34811_/D
+     1590 |       5 |    1499 |       30 |      1 |     9 |    +0.6% |  -11.243 |   -31621.1 |   4466 | _34811_/D
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/openlane_summary.mjs
+Index: scripts/openlane_summary.mjs
+===================================================================
+--- scripts/openlane_summary.mjs
++++ scripts/openlane_summary.mjs
+@@ -38,8 +38,29 @@
+ 
+ const metrics = JSON.parse(fs.readFileSync(metricsPath, "utf8"));
+ const tag = path.basename(runDir);
+ 
++// Derive an Fmax estimate from the worst setup slack (informative only).
++let clockPeriod = null;
++const resolvedPath = path.join(runDir, "resolved.json");
++if (fs.existsSync(resolvedPath)) {
++  try {
++    const resolved = JSON.parse(fs.readFileSync(resolvedPath, "utf8"));
++    const p = resolved?.CLOCK_PERIOD ?? resolved?.config?.CLOCK_PERIOD;
++    if (Number.isFinite(Number(p))) clockPeriod = Number(p);
++  } catch {
++    /* keep null */
++  }
++}
++const ws = Number(metrics.timing__setup__ws);
++const derived = {};
++if (Number.isFinite(ws) && Number.isFinite(clockPeriod)) {
++  const reachable = clockPeriod - ws; // ns per clock at the worst path
++  derived.clockPeriodNs = clockPeriod;
++  derived.fmaxEstimateMHz = reachable > 0 ? Number((1000 / reachable).toFixed(2)) : null;
++  derived.timingClosed = ws >= 0;
++}
++
+ // Select the fields that matter for a human summary, with tolerant matching
+ // (LibreLane renames metrics between versions).
+ const pick = (patterns) => {
+   const out = {};
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/openlane_summary.mjs
+Index: scripts/openlane_summary.mjs
+===================================================================
+--- scripts/openlane_summary.mjs
++++ scripts/openlane_summary.mjs
+@@ -85,8 +85,9 @@
+ const report = {
+   tag,
+   generatedAt: new Date().toISOString(),
+   metricsPath: metricsPath.replace(/\\/g, "/"),
++  derived,
+   summary,
+   metrics,
+ };
+ fs.mkdirSync("reports", { recursive: true });
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/openlane_summary.mjs
+Index: scripts/openlane_summary.mjs
+===================================================================
+--- scripts/openlane_summary.mjs
++++ scripts/openlane_summary.mjs
+@@ -102,5 +102,6 @@
+ console.log("setup:\n" + fmt(summary.setup));
+ console.log("hold:\n" + fmt(summary.hold));
+ console.log("drc:\n" + fmt(summary.drc));
+ console.log("lvs:\n" + fmt(summary.lvs));
++console.log("derived:\n" + fmt(derived));
+ console.log(`wrote ${out}`);
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; New-Item -ItemType Directory -Force "$env:TEMP\opencode\fake_run\final" | Out-Null; '{ 
+"design__die__bbox": "0 0 700 700", "design__instance__count__stdcell": 21000, "timing__setup__ws": -11.243, 
+"timing__hold__ws": 0.08, "magic__drc_error__count": 0, "lvs__total__errors": 0 }' | Set-Content 
+"$env:TEMP\opencode\fake_run\final\metrics.json"; '{ "CLOCK_PERIOD": 3.1 }' | Set-Content 
+"$env:TEMP\opencode\fake_run\resolved.json"; node scripts\openlane_summary.mjs "$env:TEMP\opencode\fake_run" 2>&1 | 
+Select-Object -Last 6; Get-Content reports\openlane_fake_run.json -TotalCount 12; Remove-Item 
+reports\openlane_fake_run.json, "$env:TEMP\opencode\fake_run" -Recurse -Force
+lvs__total__errors = 0
+derived:
+  clockPeriodNs = 3.1
+  fmaxEstimateMHz = 69.72
+  timingClosed = false
+wrote reports/openlane_fake_run.json
+{
+  "tag": "fake_run",
+  "generatedAt": "2026-11-03T22:01:56.737Z",
+  "metricsPath": "C:/Users/hcsme/AppData/Local/Temp/opencode/fake_run/final/metrics.json",
+  "derived": {
+    "clockPeriodNs": 3.1,
+    "fmaxEstimateMHz": 69.72,
+    "timingClosed": false
+  },
+  "summary": {
+    "dieBbox": {
+      "design__die__bbox": "0 0 700 700"
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -54,8 +54,10 @@
+ node scripts/openlane_summary.mjs openlane/runs/chiplab-sky130
+ ```
+ 
+ It writes `reports/openlane_<tag>.json` (die/core bbox, instances, area, setup/hold,
+-DRC/LVS) and prints the same numbers. That file is the only artifact to commit.
++DRC/LVS) and prints the same numbers. When `resolved.json` has `CLOCK_PERIOD` and the
++setup slack is negative, it also derives an Fmax estimate (`1000 / (T - WNS)`) and a
++`timingClosed` flag. That file is the only artifact to commit.
+ 
+ The synthesis matrix in `reports/synth_*.log` is a Yosys/ABC cell-count proxy, not an
+ OpenLane timing report. Do not compare its numbers to a placed-and-routed design.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "feat(scripts): derive Fmax estimate in the LibreLane summary" 
+2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1; docker ps --format "{{.Status}}"
+3 files changed, 265 insertions(+), 1 deletion(-)
+   261d792..fc86fa8  main -> main
+Up 54 minutes
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite rtl/itch_book_snapshot.sv
+Created file successfully: rtl/itch_book_snapshot.sv

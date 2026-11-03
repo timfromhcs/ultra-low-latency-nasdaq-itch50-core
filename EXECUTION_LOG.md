@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 23:35 - Host book snapshot block
+
+- Added `rtl/itch_book_snapshot.sv`: per-locate (16) top-of-book, last trade, volume
+  and top-4 depth, updated from the book output; registered read port with
+  `snap_valid`, `snap_hit`, full 16-bit locate and an `updates` counter.
+- New test `tb/test_snapshot.py` (+ runner): locate 1/2 read back, miss on an
+  un-updated locate, snapshot stable across unrelated updates, re-read after update
+  → PASS, updates=4. Lint clean.
+- Wired into `make lint`, `make cocotb` and CI; docs/README/roadmap updated.
+
 ## 2026-11-03 22:59 - Autonomy tick + LibreLane summary tool
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate 10/10; CI on `2f8ed55` green.

@@ -135,7 +135,10 @@ MDN PWA best practices, GitHub Actions docs.
       output, 400-event + 100 back-to-back tests.
 - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
-- [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
+- [x] Host book-snapshot block (`rtl/itch_book_snapshot.sv`): per-locate top-of-book,
+      last trade, volume and top-4 depth, one-cycle registered read port with a hit flag
+      and an update counter; test reads two locates, a miss, stability and a re-read.
+- [ ] PCIe/DMA or 100G MAC integration.
 - [x] Performance counters (`rtl/itch_metrics.sv`): message/byte totals, gap/drop
       pulses, free-running cycle counter, max queue occupancy and an 8-bin
       inter-message gap histogram. Wired into `itch_top_book` (`metrics_*`);

@@ -233,6 +233,7 @@ Reports live in [`reports/`](reports/).
 | A/B feed arbiter | **selection + recovery: request→replay, multi-gap [1..8], abandon on timeout** | `tb/test_arbiter.py` |
 | A/B system | **2 Ethernet feeds → arbiter → 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
 | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | `tb/run_book_top_skid_cocotb.py` |
+| Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
 | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | `tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
 | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker provenance `mode=max` + SBOM | `reports/sbom.json`, `release.yml` |

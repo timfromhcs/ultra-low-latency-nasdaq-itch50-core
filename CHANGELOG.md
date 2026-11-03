@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Host book snapshot** (`rtl/itch_book_snapshot.sv`): per-locate (16) snapshot of
+  top-of-book, last trade, volume and top-4 bid/ask depth, updated from the book's
+  event stream; one-cycle registered read port with `snap_valid`, `snap_hit` and an
+  `updates` counter. Test: two locates, a never-updated miss, snapshot stability
+  across unrelated updates, re-read after an update (updates=4).
 - **LibreLane toolchain verification**: LibreLane **3.0.17** installed and its smoke test
   passed (Classic flow 80/80, DRC ✅, LVS ✅, RC 0) using
   `ghcr.io/librelane/librelane:3.0.17` under Docker Desktop with a cached PDK volume.

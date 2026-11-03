@@ -37,6 +37,8 @@ Two egress paths exist:
   collar versus the last trade (`cfg_collar`), with a reject counter.
 - Performance counters: message/byte totals, gap/drop pulses, free-running cycle
   counter, maximum queue occupancy, 8-bin inter-message gap histogram.
+- Host snapshot table: per-locate top-of-book, last trade, volume and top-4 depth with
+  a one-cycle registered read port.
 - MoldUDP64 front-end (Ethernet/IP/UDP → sequence tracking) and a two-feed A/B
   arbiter with retransmit request, replay recovery and timeout resync.
 
