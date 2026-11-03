@@ -201,3 +201,499 @@ Commit `d9506ba` ist gepusht; der Formal-Lauf mit dem neuen Equivalence-Job ist 
 [heartbeat] log rotated at 210426 bytes
 [2026-11-03T12:59:19.9805691+01:00] hallo, es ist 12:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 10
+[tick] ran 0, failed 0
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"formal.yml\", perPage: 2 });\n  
+const out = [];\n  for (const run of r.workflow_runs || []) {\n    const jobs = await tools.github.actions_list({ 
+method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 10 });\n    out.push({ id: run.id, sha: run.head_sha?.slice(0,7), status: run.status, 
+conclusion: run.conclusion, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,conclusion:j.conclusion,failed:
+j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) });\n  }\n  return out;\n} catch (e) { return { 
+error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_depth.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_depth.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_depth.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_of_book.sv 2>&1 | grep -E 'Warning-|Error' | head -6; 
+echo LINT_END"
+top-4 depth added
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/wire_wrapper_depth.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/wire_wrapper_depth.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\wire_wrapper_depth.mjs"; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_book.sv 2>&1 | grep -E 
+'Warning-|Error' | head -4; echo LINT_END"
+wrapper depth wired
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -5,8 +5,9 @@
+ # =============================================================================
+ import os
+ import sys
+ import random
++from collections import defaultdict
+ 
+ import cocotb
+ from cocotb.clock import Clock
+ from cocotb.triggers import RisingEdge
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -38,10 +38,22 @@
+             as_ = sum(s for p, s in asks if p == ap)
+         else:
+             ap, as_ = EMPTY_ASK, 0
+         lo, ls = self.last.get(locate, (0, 0))
++        # Aggregate per price and take the top four levels on each side.
++        bagg = defaultdict(int)
++        aagg = defaultdict(int)
++        for side, p, s in book.values():
++            if side == "B":
++                bagg[p] += s
++            else:
++                aagg[p] += s
++        bd = sorted(bagg.items(), reverse=True)[:4]
++        ad = sorted(aagg.items())[:4]
++        bd += [(0, 0)] * (4 - len(bd))
++        ad += [(EMPTY_ASK, 0)] * (4 - len(ad))
+         return dict(bid_p=bp, bid_s=bs, ask_p=ap, ask_s=as_, last_p=lo, last_s=ls,
+-                    vol=self.vol.get(locate, 0))
++                    vol=self.vol.get(locate, 0), bid_levels=bd, ask_levels=ad)
+ 
+     def add(self, locate, side, price, shares):
+         ref = self.next_ref
+         self.next_ref += 1
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -118,8 +118,16 @@
+                     ask_s=int(dut.m_ask_shares.value),
+                     last_p=int(dut.m_last_price.value),
+                     last_s=int(dut.m_last_shares.value),
+                     vol=int(dut.m_volume.value),
++                    bid_levels=[(int(dut.m_bid_p0.value), int(dut.m_bid_s0.value)),
++                                (int(dut.m_bid_p1.value), int(dut.m_bid_s1.value)),
++                                (int(dut.m_bid_p2.value), int(dut.m_bid_s2.value)),
++                                (int(dut.m_bid_p3.value), int(dut.m_bid_s3.value))],
++                    ask_levels=[(int(dut.m_ask_p0.value), int(dut.m_ask_s0.value)),
++                                (int(dut.m_ask_p1.value), int(dut.m_ask_s1.value)),
++                                (int(dut.m_ask_p2.value), int(dut.m_ask_s2.value)),
++                                (int(dut.m_ask_p3.value), int(dut.m_ask_s3.value))],
+                 )
+             except ValueError:
+                 dut._log.info(
+                     f"X value: loc={dut.m_locate.value} bid={dut.m_bid_price.value} "
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path tb\test_book.py -Pattern 'def test_no_stall|got = dict|vol=int' 
+-Context 0,12 | Select-Object -Last 20
+> tb\test_book.py:121:                    vol=int(dut.m_volume.value),
+  tb\test_book.py:122:                    bid_levels=[(int(dut.m_bid_p0.value), int(dut.m_bid_s0.value)),
+  tb\test_book.py:123:                                (int(dut.m_bid_p1.value), int(dut.m_bid_s1.value)),
+  tb\test_book.py:124:                                (int(dut.m_bid_p2.value), int(dut.m_bid_s2.value)),
+  tb\test_book.py:125:                                (int(dut.m_bid_p3.value), int(dut.m_bid_s3.value))],
+  tb\test_book.py:126:                    ask_levels=[(int(dut.m_ask_p0.value), int(dut.m_ask_s0.value)),
+  tb\test_book.py:127:                                (int(dut.m_ask_p1.value), int(dut.m_ask_s1.value)),
+  tb\test_book.py:128:                                (int(dut.m_ask_p2.value), int(dut.m_ask_s2.value)),
+  tb\test_book.py:129:                                (int(dut.m_ask_p3.value), int(dut.m_ask_s3.value))],
+  tb\test_book.py:130:                )
+  tb\test_book.py:131:            except ValueError:
+  tb\test_book.py:132:                dut._log.info(
+  tb\test_book.py:133:                    f"X value: loc={dut.m_locate.value} bid={dut.m_bid_price.value} "
+> tb\test_book.py:233:async def test_no_stall_back_to_back(dut):
+  tb\test_book.py:234:    """One event per cycle with s_ready high; the final BBO must match."""
+  tb\test_book.py:235:    cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
+  tb\test_book.py:236:    dut.rst_n.value = 0
+  tb\test_book.py:237:    dut.s_valid.value = 0
+  tb\test_book.py:238:    dut.s_msg_type.value = 0
+  tb\test_book.py:239:    dut.s_locate.value = 0
+  tb\test_book.py:240:    dut.s_side.value = 0
+  tb\test_book.py:241:    dut.s_order_ref.value = 0
+  tb\test_book.py:242:    dut.s_new_ref.value = 0
+  tb\test_book.py:243:    dut.s_price.value = 0
+  tb\test_book.py:244:    dut.s_shares.value = 0
+  tb\test_book.py:245:    for _ in range(6):
+> tb\test_book.py:287:            got = dict(
+  tb\test_book.py:288:                locate=int(dut.m_locate.value),
+  tb\test_book.py:289:                bid_p=int(dut.m_bid_price.value),
+  tb\test_book.py:290:                bid_s=int(dut.m_bid_shares.value),
+  tb\test_book.py:291:                ask_p=int(dut.m_ask_price.value),
+  tb\test_book.py:292:                ask_s=int(dut.m_ask_shares.value),
+  tb\test_book.py:293:                last_p=int(dut.m_last_price.value),
+  tb\test_book.py:294:                last_s=int(dut.m_last_shares.value),
+> tb\test_book.py:295:                vol=int(dut.m_volume.value),
+  tb\test_book.py:296:            )
+  tb\test_book.py:297:    assert got == last_expected, f"back-to-back BBO\n got {got}\n exp {last_expected}"
+  tb\test_book.py:298:    dut._log.info("No-stall: 100 events back-to-back, 1 event/cycle PASS")
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book.py
+Index: tb/test_book.py
+===================================================================
+--- tb/test_book.py
++++ tb/test_book.py
+@@ -292,7 +292,15 @@
+                 ask_s=int(dut.m_ask_shares.value),
+                 last_p=int(dut.m_last_price.value),
+                 last_s=int(dut.m_last_shares.value),
+                 vol=int(dut.m_volume.value),
++                bid_levels=[(int(dut.m_bid_p0.value), int(dut.m_bid_s0.value)),
++                            (int(dut.m_bid_p1.value), int(dut.m_bid_s1.value)),
++                            (int(dut.m_bid_p2.value), int(dut.m_bid_s2.value)),
++                            (int(dut.m_bid_p3.value), int(dut.m_bid_s3.value))],
++                ask_levels=[(int(dut.m_ask_p0.value), int(dut.m_ask_s0.value)),
++                            (int(dut.m_ask_p1.value), int(dut.m_ask_s1.value)),
++                            (int(dut.m_ask_p2.value), int(dut.m_ask_s2.value)),
++                            (int(dut.m_ask_p3.value), int(dut.m_ask_s3.value))],
+             )
+     assert got == last_expected, f"back-to-back BBO\n got {got}\n exp {last_expected}"
+     dut._log.info("No-stall: 100 events back-to-back, 1 event/cycle PASS")
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book_top.py
+Index: tb/test_book_top.py
+===================================================================
+--- tb/test_book_top.py
++++ tb/test_book_top.py
+@@ -5,8 +5,9 @@
+ # =============================================================================
+ import os
+ import random
+ import sys
++from collections import defaultdict
+ 
+ import cocotb
+ from cocotb.clock import Clock
+ from cocotb.triggers import RisingEdge
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book_top.py
+Index: tb/test_book_top.py
+===================================================================
+--- tb/test_book_top.py
++++ tb/test_book_top.py
+@@ -85,10 +85,22 @@
+         bs = sum(s for p, s in bids if p == bp) if bids else 0
+         ap = min((p for p, _ in asks), default=0xFFFFFFFF)
+         as_ = sum(s for p, s in asks if p == ap) if asks else 0
+         lp, ls = self.last.get(loc, (0, 0))
++        bagg = defaultdict(int)
++        aagg = defaultdict(int)
++        for side, p, s in book.values():
++            if side == "B":
++                bagg[p] += s
++            else:
++                aagg[p] += s
++        bd = sorted(bagg.items(), reverse=True)[:4]
++        ad = sorted(aagg.items())[:4]
++        bd += [(0, 0)] * (4 - len(bd))
++        ad += [(0xFFFFFFFF, 0)] * (4 - len(ad))
+         return dict(locate=loc, bid_p=bp, bid_s=bs, ask_p=ap, ask_s=as_,
+-                    last_p=lp, last_s=ls, vol=self.vol.get(loc, 0))
++                    last_p=lp, last_s=ls, vol=self.vol.get(loc, 0),
++                    bid_levels=bd, ask_levels=ad)
+ 
+ 
+ async def send_bytes(dut, data: bytes):
+     off = 0
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path tb\test_book_top.py -Pattern 'got.append|bid_p=int|vol=int' -Context 
+0,10 | Select-Object -First 16
+> tb\test_book_top.py:224:                got.append(dict(
+  tb\test_book_top.py:225:                    locate=int(dut.bbo_locate.value),
+> tb\test_book_top.py:226:                    bid_p=int(dut.bbo_bid_price.value),
+  tb\test_book_top.py:227:                    bid_s=int(dut.bbo_bid_shares.value),
+  tb\test_book_top.py:228:                    ask_p=int(dut.bbo_ask_price.value),
+  tb\test_book_top.py:229:                    ask_s=int(dut.bbo_ask_shares.value),
+  tb\test_book_top.py:230:                    last_p=int(dut.bbo_last_price.value),
+  tb\test_book_top.py:231:                    last_s=int(dut.bbo_last_shares.value),
+> tb\test_book_top.py:232:                    vol=int(dut.bbo_volume.value),
+  tb\test_book_top.py:233:                ))
+  tb\test_book_top.py:234:
+  tb\test_book_top.py:235:    cocotb.start_soon(monitor())
+  tb\test_book_top.py:236:    await send_bytes(dut, data)
+  tb\test_book_top.py:237:
+  tb\test_book_top.py:238:    for _ in range(20000):
+  tb\test_book_top.py:239:        if len(got) >= len(expected):
+  tb\test_book_top.py:240:            break
+  tb\test_book_top.py:241:        await RisingEdge(dut.clk)
+  tb\test_book_top.py:242:
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book_top.py
+Index: tb/test_book_top.py
+===================================================================
+--- tb/test_book_top.py
++++ tb/test_book_top.py
+@@ -229,8 +229,16 @@
+                     ask_s=int(dut.bbo_ask_shares.value),
+                     last_p=int(dut.bbo_last_price.value),
+                     last_s=int(dut.bbo_last_shares.value),
+                     vol=int(dut.bbo_volume.value),
++                    bid_levels=[(int(dut.bbo_bid_p0.value), int(dut.bbo_bid_s0.value)),
++                                (int(dut.bbo_bid_p1.value), int(dut.bbo_bid_s1.value)),
++                                (int(dut.bbo_bid_p2.value), int(dut.bbo_bid_s2.value)),
++                                (int(dut.bbo_bid_p3.value), int(dut.bbo_bid_s3.value))],
++                    ask_levels=[(int(dut.bbo_ask_p0.value), int(dut.bbo_ask_s0.value)),
++                                (int(dut.bbo_ask_p1.value), int(dut.bbo_ask_s1.value)),
++                                (int(dut.bbo_ask_p2.value), int(dut.bbo_ask_s2.value)),
++                                (int(dut.bbo_ask_p3.value), int(dut.bbo_ask_s3.value))],
+                 ))
+ 
+     cocotb.start_soon(monitor())
+     await send_bytes(dut, data)
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py > /tmp/depth1.txt 2>&1; echo 
+RC=$?"; wsl -d Ubuntu bash -lc "grep -E 'Book:|No-stall|MISMATCH|TESTS=|Assertion' /tmp/depth1.txt | tail -6"
+RC=True
+  6169.00ns INFO     cocotb.itch_top_of_book            Book: 400 events, 0 level overflows, 0 table overflows PASS
+  8949.70ns INFO     cocotb.itch_top_of_book            No-stall: 100 events back-to-back, 1 event/cycle PASS
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0                       8949.70  
+         0.23      39583.60  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_top_cocotb.py > /tmp/depth2.txt 2>&1; 
+echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 'Top\+book|message [0-9]+ BBO|got |exp |TESTS=' /tmp/depth2.txt | tail -6"
+RC=True
+  3394.50ns INFO     cocotb.itch_top_book               Top+book: 152 messages, 0 mismatches PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                  3394.50       
+    0.14      24928.80  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tools/mutate_book.py 2>&1 | tail -11"
+KILLED   replace_side_lost AssertionError: message 45 BBO
+KILLED   replace_old_slot AssertionError: message 62 BBO
+KILLED   cancel_ignored AssertionError: message 45 BBO
+KILLED   ask_cancel_ignored AssertionError: message 35 BBO
+KILLED   bid_min_instead_of_max AssertionError: message 0 BBO
+KILLED   ask_max_instead_of_min AssertionError: message 2 BBO
+KILLED   trade_volume_ignored AssertionError: message 36 BBO
+KILLED   last_price_zero AssertionError: message 36 BBO
+KILLED   order_side_always_bid AssertionError: message 62 BBO
+mutation_book: 9/9 killed (100.0%)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -212,9 +212,9 @@
+ | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+ | Local cloud | token required for non-loopback writes, revision conflict ÔåÆ 409, traversal ÔåÆ 400 | 
+`backend/store.mjs` |
+ | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
+ | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
+-| RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches | 
+`tb/test_book.py` |
++| RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth | 
+`tb/test_book.py` |
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | Supply chain | 163-component SBOM | `reports/sbom.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path LONG_TERM_PLAN.md -Pattern 'Multi-symbol|multi-symbol|top-N|order 
+book' | Select-Object LineNumber,Line
+LineNumber Line                                                                          
+---------- ----                                                                          
+        57 | Order book | WASM top-of-book | RTL BBO | multi-symbol depth + risk checks |
+       111 - [ ] Multi-symbol order book (hash table + price ladder), risk checks, top-N.
+       181 - RTL order book with multi-symbol and risk checks.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -107,9 +107,11 @@
+ **Gate:** slack report + DRC/LVS status; no "Fmax" claim without a report.
+ 
+ ### Phase 3 ÔÇö System (4 ÔåÆ 8 months)
+ - [ ] Full MoldUDP64 packet parser with sequence recovery + A/B feed arbitration.
+-- [ ] Multi-symbol order book (hash table + price ladder), risk checks, top-N.
++- [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
++      output, 400-event + 100 back-to-back tests.
++- [ ] Risk checks (price collar, max order size) and a hashed order store.
+ - [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
+ - [ ] Performance counters: messages/s, gaps, drops, queue occupancy, latency histogram.
+ - [x] RTL Ôåö WASM equivalence on the same vectors: **100,000 records, every canonical
+       field equal** (`scripts/rtl_wasm_equiv.mjs`, weekly `equivalence` job).
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -47,8 +47,13 @@
+ - RTL Ôåö WASM equivalence: `tb/sim_main.cpp --dump` writes the RTL's canonical records;
+   `scripts/rtl_wasm_equiv.mjs` runs the WASM twin on the same `stream.bin` and compares
+   every field. **100,000 records, 0 mismatches.** `make equiv` + weekly `equivalence` job.
+ 
++### Added
++- BBO **top-4 depth**: four price levels per side (aggregated shares), published with
++  each event; the standalone and parserÔåÆBBO tests compare them against the Python model.
++  Mutation score stays 9/9.
++
+ ## 0.3.1 ÔÇö 2026-11-03
+ 
+ Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,11 +258,19 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
+-## 2026-11-03 11:59 - Autonomy tick + RTL/WASM equivalence
++## 2026-11-03 12:59 - Autonomy tick + BBO depth
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Weekly `Formal` run on `d9506ba` **all green**: deep proof, RTLÔåöWASM equivalence
++  (100k), and mutation (9/9).
++- Added **top-4 depth** to `itch_top_of_book` (four price levels per side, aggregated
++  shares) and wired it through `itch_top_book`.
++- Tests updated: 400 random events + 100 back-to-back + 152-message parserÔåÆBBO all
++  compare the depth; mutation harness still 9/9.
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - **Formal gate verified green on the runner** (`65d4e47`): deep proof + mutation both
+   success; solver matrix now opt-in so the weekly job stays bounded.
+ - Added `--dump` to `tb/sim_main.cpp` and `scripts/rtl_wasm_equiv.mjs`:
+   the RTL and the WASM twin run on the **same** `tb/vectors/stream.bin`;
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead EXECUTION_LOG.md [90m[limit=22, offset=270][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -268,8 +268,10 @@
+   shares) and wired it through `itch_top_book`.
+ - Tests updated: 400 random events + 100 back-to-back + 152-message parserÔåÆBBO all
+   compare the depth; mutation harness still 9/9.
+ 
++## 2026-11-03 11:59 - Autonomy tick + RTL/WASM equivalence
++
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - **Formal gate verified green on the runner** (`65d4e47`): deep proof + mutation both
+   success; solver matrix now opt-in so the weekly job stays bounded.
+ - Added `--dump` to `tb/sim_main.cpp` and `scripts/rtl_wasm_equiv.mjs`:
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -E 'Warning-|Error' | head -4; echo 
+LINT_OK"; cd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; git add -A; git commit -m "feat(bbo): 
+top-4 price depth per side with model tests" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Select-Object 
+-Last 2
+LINT_OK
+PASS vercel-api (449 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/mutation_book.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_book.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_book_top.py', LF will be replaced by CRLF the next time Git touches it
+[main b60446b] feat(bbo): top-4 price depth per side with model tests
+ 12 files changed, 272 insertions(+), 3149 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:300
++ ... ests" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   d9506ba..b60446b  main -> main
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git show --stat --oneline b60446b | Select-Object -First 16
+b60446b feat(bbo): top-4 price depth per side with model tests
+ CHANGELOG.md               |    5 +
+ EXECUTION_LOG.md           |   10 +
+ LONG_TERM_PLAN.md          |    4 +-
+ README.md                  |    2 +-
+ reports/heartbeat.log      | 3260 ++------------------------------------------
+ reports/mutation_book.json |    4 +-
+ reports/sbom.json          |    2 +-
+ reports/scorecard.json     |   26 +-
+ rtl/itch_top_book.sv       |    9 +
+ rtl/itch_top_of_book.sv    |   45 +
+ tb/test_book.py            |   31 +-
+ tb/test_book_top.py        |   23 +-
+ 12 files changed, 272 insertions(+), 3149 deletions(-)
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\n  
+return r.workflow_runs?.map(x=>({sha:x.head_sha?.slice(0,7),status:x.status,conclusion:x.conclusion}));\n} catch (e) { 
+return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+## Weiter: BBO-Tiefe (Top-4) + Weekly-Gates gr├╝n
+
+### Autonomy-Tick
+- `node scripts/autonomy.mjs` ÔåÆ Queue leer, 0 Tasks.
+- **Weekly `Formal`-Lauf auf `d9506ba` komplett gr├╝n**:
+  - SymbiYosys/Z3 Deep Proof: **success**
+  - RTL Ôåö WASM Equivalence (100.000 Records): **success**
+  - Mutation ParserÔåÆBBO: **success (9/9)**
+
+### Neue Funktion: Top-4-Tiefe
+
+`itch_top_of_book` liefert jetzt zus├ñtzlich zu Best Bid/Ask **vier Preislevel pro Seite** mit aggregierten Shares:
+
+- Insertion-Sort ├╝ber die 16 Level-Tabellen, max. 4 Slots, Best├ñtigung im selben 2-Zyklen-Pfad.
+- Durchgereicht ├╝ber `itch_top_book` (`bbo_bid_p0..3`, `bbo_ask_p0..3`, jeweilige Shares).
+- Leere Level: Bid `(0,0)`, Ask `(0xFFFFFFFF,0)` ÔÇö dieselbe Konvention wie der BBO.
+
+### Verifikation
+| Test | Ergebnis |
+|---|---|
+| 400 zuf├ñllige Events vs. Python-Modell (inkl. Top-4) | **PASS**, 0 Level-/Tabellen-Overflows |
+| 100 Events back-to-back, 1 Event/Zyklus | **PASS** |
+| 152 rohe ITCH-Messages ÔåÆ Parser ÔåÆ BBO (inkl. Top-4) | **0 Mismatches** |
+| Mutation ParserÔåÆBBO | **9/9 killed** |
+| Lint / Gate | 0 Warnungen / 10/10 |
+
+### Dokumentation
+`README.md` (Evidenz), `LONG_TERM_PLAN.md` (Multi-Symbol-Book abgehakt, Risk-Checks offen), `CHANGELOG.md`, `EXECUTION_LOG.md`.
+
+Commit `b60446b` ist gepusht; CI l├ñuft. Der Heartbeat-Log wurde bei >200 KB automatisch auf die letzten 200 Zeilen rotiert.
+
+### N├ñchster Punkt
+**A/B-Feed-Arbitration** (Phase 3): zwei redundante Mold-Feeds, Auswahl nach erwarteter Sequenz, verlustfreies Verwerfen des Verlierers. Danach Risk-Checks und ein Hash-Order-Store.
+[2026-11-03T13:59:18.4516091+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0

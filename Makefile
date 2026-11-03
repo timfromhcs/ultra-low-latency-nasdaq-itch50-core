@@ -49,6 +49,7 @@ lint:
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/moldudp64_pipeline.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_of_book.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_book.sv
+	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_feed_arbiter.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
 
 sim:
@@ -67,6 +68,7 @@ cocotb:
 	$(PYTHON) tb/run_multi_cocotb.py
 	$(PYTHON) tb/run_book_cocotb.py
 	$(PYTHON) tb/run_book_top_cocotb.py
+	$(PYTHON) tb/run_arbiter_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
 
 synth-book:

@@ -107,7 +107,9 @@ MDN PWA best practices, GitHub Actions docs.
 **Gate:** slack report + DRC/LVS status; no "Fmax" claim without a report.
 
 ### Phase 3 — System (4 → 8 months)
-- [ ] Full MoldUDP64 packet parser with sequence recovery + A/B feed arbitration.
+- [x] A/B frame arbitration: sequence-based selection, redundancy window, loser discard,
+      gap pulse (`rtl/mold_feed_arbiter.sv`, 6-frame test).
+- [ ] Full MoldUDP64 packet parser with retransmission/sequence recovery.
 - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
       output, 400-event + 100 back-to-back tests.
 - [ ] Risk checks (price collar, max order size) and a hashed order store.

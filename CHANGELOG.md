@@ -52,6 +52,10 @@ All notable changes to ChipLab are documented here. The format follows
 - BBO **top-4 depth**: four price levels per side (aggregated shares), published with
   each event; the standalone and parser→BBO tests compare them against the Python model.
   Mutation score stays 9/9.
+- **A/B feed arbiter** (`rtl/mold_feed_arbiter.sv`): one 2 KB frame buffer per feed,
+  sequence-based selection (prefer A on ties), a 64-cycle redundancy window for the
+  single-feed case, loser discard and a gap pulse. Test: 6 frames, selection
+  [1,2,3,4,7,8], byte-exact, 1 gap (`tb/test_arbiter.py`).
 
 ## 0.3.1 — 2026-11-03
 

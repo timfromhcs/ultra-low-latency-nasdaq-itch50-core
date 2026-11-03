@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 13:59 - Autonomy tick + A/B feed arbiter
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b60446b` green.
+- Added `rtl/mold_feed_arbiter.sv`: two 2 KB store-and-forward frame buffers, sequence-
+  based selection (prefer A on ties), 64-cycle redundancy window, loser discard, gap
+  pulse, and byte-exact forwarding.
+- Test `tb/test_arbiter.py`: selection [1,2,3,4,7,8], one gap, byte-exact, drops counted;
+  the cocotb handshake was corrected to present each beat at the falling edge (a
+  double-accept at the buffer-full edge had corrupted the last beat).
+- `make lint`/`make cocotb`/CI now include the module and test.
+
 ## 2026-11-03 12:59 - Autonomy tick + BBO depth
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
