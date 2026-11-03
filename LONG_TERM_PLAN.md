@@ -115,7 +115,10 @@ MDN PWA best practices, GitHub Actions docs.
       (`rtl/mold_ab_system.sv`; 2 feeds, 10 records, 1 gap).
 - [x] Sequence recovery request generator: missing-range request, replay recovery,
       timeout resync and duplicate rejection (`rtl/mold_recovery.sv`, 4-accept test).
-- [ ] Wire the recovery block to the A/B arbiter and a replay source.
+- [x] Arbiter recovery mode: a gap requests the missing range and drops the
+      out-of-order frames; the replay is accepted in order; timeout abandons and
+      force-accepts (`recovery_en`, test markers [1,2,3,6]).
+- [ ] A replay source (upstream retransmit) and multi-gap stress.
 - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
       output, 400-event + 100 back-to-back tests.
 - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a

@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 19:18 - Autonomy tick + arbiter recovery mode
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b652e2f` (sequence
+  recovery module) green.
+- Added `recovery_en` to `mold_feed_arbiter`: on a forward gap it requests the missing
+  range (`req_seq`/`req_count`), drops both out-of-order frames, accepts the replay in
+  order, and falls back to `abandon` + force-accept after a 256-cycle timeout.
+- Exposed the recovery signals through `mold_ab_system` (`cfg_recovery_en`,
+  `req_*`, `abandon`, `requests`, `abandoned`).
+- New arbiter test: markers [1,2,3,6], 2 requests, 1 abandon; existing selection test
+  still passes.
+
 ## 2026-11-03 17:59 - Autonomy tick + sequence recovery
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9a079ef` (pipeline

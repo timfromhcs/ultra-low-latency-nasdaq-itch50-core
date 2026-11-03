@@ -70,6 +70,7 @@ async def test_ab_selection(dut):
     cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
     dut.rst_n.value = 0
     dut.initial_seq.value = 1
+    dut.recovery_en.value = 0
     dut.a_tvalid.value = 0
     dut.a_tlast.value = 0
     dut.a_tdata.value = 0
@@ -142,3 +143,90 @@ async def test_ab_selection(dut):
     dut._log.info(
         f"Arbiter: {len(got)} frames selected {markers}, gaps=1, "
         f"drop_a={int(dut.dropped_a.value)} drop_b={int(dut.dropped_b.value)} PASS")
+
+@cocotb.test()
+async def test_recovery_mode(dut):
+    """Gap -> retransmit request -> replay -> timeout abandon."""
+    cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
+    dut.rst_n.value = 0
+    dut.initial_seq.value = 1
+    dut.recovery_en.value = 1
+    dut.a_tvalid.value = 0
+    dut.a_tlast.value = 0
+    dut.a_tdata.value = 0
+    dut.a_tkeep.value = 0
+    dut.a_seq.value = 0
+    dut.a_count.value = 0
+    dut.b_tvalid.value = 0
+    dut.b_tlast.value = 0
+    dut.b_tdata.value = 0
+    dut.b_tkeep.value = 0
+    dut.b_seq.value = 0
+    dut.b_count.value = 0
+    dut.m_tready.value = 1
+    for _ in range(6):
+        await RisingEdge(dut.clk)
+    dut.rst_n.value = 1
+    await RisingEdge(dut.clk)
+
+    got = []
+    cur = bytearray()
+    abandons = 0
+
+    async def monitor():
+        nonlocal abandons
+        while True:
+            await FallingEdge(dut.clk)
+            if int(dut.abandon.value):
+                abandons += 1
+            if int(dut.m_tvalid.value) and int(dut.m_tready.value):
+                keep = int(dut.m_tkeep.value)
+                data = int(dut.m_tdata.value)
+                for i in range(DATA_BYTES):
+                    if (keep >> i) & 1:
+                        cur.append((data >> (8 * i)) & 0xFF)
+                if int(dut.m_tlast.value):
+                    got.append(bytes(cur))
+                    cur.clear()
+
+    cocotb.start_soon(monitor())
+
+    await send_frame(dut, "a", 1, 1, frame(1))
+    await send_frame(dut, "b", 1, 1, frame(1))
+    await wait_frames(dut, got, 1)
+
+    # Gap: expected 2, both feeds at 3 -> request 2, no output.
+    await send_frame(dut, "a", 3, 1, frame(3))
+    await send_frame(dut, "b", 3, 1, frame(3))
+    for _ in range(4):
+        await RisingEdge(dut.clk)
+    assert int(dut.req_valid.value) == 1, "no retransmit request"
+    assert int(dut.req_seq.value) == 2, f"req_seq {int(dut.req_seq.value)}"
+    assert int(dut.req_count.value) == 1, f"req_count {int(dut.req_count.value)}"
+    assert len(got) == 1, f"gap frame leaked: {len(got)}"
+
+    # Replay closes the gap, then the replayed frame 3 is accepted.
+    await send_frame(dut, "a", 2, 1, frame(2))
+    await send_frame(dut, "b", 2, 1, frame(2))
+    await wait_frames(dut, got, 2)
+    assert int(dut.req_valid.value) == 0, "request not cleared"
+    await send_frame(dut, "a", 3, 1, frame(3))
+    await send_frame(dut, "b", 3, 1, frame(3))
+    await wait_frames(dut, got, 3)
+
+    # Timeout: expected 4, both at 6 -> request, then abandon and force-accept.
+    await send_frame(dut, "a", 6, 1, frame(6))
+    await send_frame(dut, "b", 6, 1, frame(6))
+    for _ in range(400):
+        await RisingEdge(dut.clk)
+    assert abandons == 1, f"abandons {abandons}"
+    assert int(dut.abandoned.value) == 1, "abandoned counter"
+    assert int(dut.requests.value) == 2, f"requests {int(dut.requests.value)}"
+
+    await send_frame(dut, "a", 6, 1, frame(6))
+    await send_frame(dut, "b", 6, 1, frame(6))
+    await wait_frames(dut, got, 4)
+    markers = [f[0] for f in got]
+    assert markers == [1, 2, 3, 6], f"markers {markers}"
+    dut._log.info(f"Recovery mode: markers {markers}, requests=2, abandon=1 PASS")
+

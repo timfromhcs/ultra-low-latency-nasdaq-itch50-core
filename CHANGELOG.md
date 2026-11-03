@@ -70,6 +70,10 @@ All notable changes to ChipLab are documented here. The format follows
   (`req_seq`/`req_count`), replay recovery, timeout resync (`abandon`) and duplicate
   rejection, with counters. Test: 4 accepts, 2 gaps, 1 recovered, 1 abandoned,
   1 duplicate. Wiring it to the arbiter and a replay source is the next step.
+- **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+  range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+  force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+  Test: markers [1,2,3,6], 2 requests, 1 abandon.
 
 ## 0.3.1 — 2026-11-03
 

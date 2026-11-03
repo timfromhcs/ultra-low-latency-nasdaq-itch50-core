@@ -27,6 +27,7 @@ module mold_feed_arbiter #(
   input  wire                        clk,
   input  wire                        rst_n,
   input  wire [63:0]                 initial_seq,
+  input  wire                        recovery_en,
 
   // Feed A
   input  wire [DATA_WIDTH-1:0]       a_tdata,
@@ -61,7 +62,13 @@ module mold_feed_arbiter #(
   output reg  [31:0]                 dropped_b,
   output reg  [31:0]                 gaps,
   output reg  [31:0]                 overflows,
-  output reg  [63:0]                 expected_seq
+  output reg  [63:0]                 expected_seq,
+  output reg                         req_valid,
+  output reg  [63:0]                 req_seq,
+  output reg  [15:0]                 req_count,
+  output reg                         abandon,
+  output reg  [31:0]                 requests,
+  output reg  [31:0]                 abandoned
 );
 
   reg [DATA_WIDTH-1:0]     mem_a [0:MAX_WORDS-1];
@@ -82,9 +89,13 @@ module mold_feed_arbiter #(
 
   localparam [1:0] ST_IDLE   = 2'd0;
   localparam [1:0] ST_STREAM = 2'd1;
+  localparam [9:0] REC_TIMEOUT = 10'd256;
 
   reg [1:0] state;
   reg       win_a;
+  reg       req_pending;
+  reg [9:0] req_timer;
+  reg       force_accept;
 
   assign a_tready = !full_a;
   assign b_tready = !full_b;
@@ -120,6 +131,7 @@ module mold_feed_arbiter #(
   wire [7:0] nra = (m_tvalid && m_tready && !m_tlast) ? ra + 8'd1 : ra;
 
   wire win_gap = pick_a ? (sa != expected_seq) : (sb != expected_seq);
+  wire [63:0] miss = pick_a ? (sa - expected_seq) : (sb - expected_seq);
   wire [63:0] win_seq = pick_a ? sa : sb;
   wire [15:0] win_cnt = pick_a ? ca : cb;
 
@@ -145,8 +157,18 @@ module mold_feed_arbiter #(
       gap <= 1'b0;
       gaps <= 32'd0;
       expected_seq <= initial_seq;
+      req_valid <= 1'b0;
+      req_seq <= 64'd0;
+      req_count <= 16'd0;
+      abandon <= 1'b0;
+      requests <= 32'd0;
+      abandoned <= 32'd0;
+      req_pending <= 1'b0;
+      req_timer <= 10'd0;
+      force_accept <= 1'b0;
     end else begin
       gap <= 1'b0;
+      abandon <= 1'b0;
 
       // ---------------- input capture ----------------
       if (a_first) begin
@@ -231,21 +253,58 @@ module mold_feed_arbiter #(
         ST_IDLE: begin
           m_tvalid <= 1'b0;
           if (decide) begin
-            win_a <= pick_a;
-            ra    <= 8'd0;
-            state <= ST_STREAM;
-            if (pick_a) begin
-              full_b <= 1'b0;
-              dropped_b <= dropped_b + 32'd1;
+            if (recovery_en && win_gap && !force_accept) begin
+              // Request the missing range and drop the out-of-order frames so
+              // the replay can use the buffers.
+              req_valid   <= 1'b1;
+              req_seq     <= expected_seq;
+              req_count   <= (miss > 64'd65535) ? 16'hFFFF : miss[15:0];
+              requests    <= requests + 32'd1;
+              req_pending <= 1'b1;
+              req_timer   <= 10'd0;
+              full_a      <= 1'b0;
+              full_b      <= 1'b0;
+              dropped_a   <= dropped_a + 32'd1;
+              dropped_b   <= dropped_b + 32'd1;
+              gaps        <= gaps + 32'd1;
+              gap         <= 1'b1;
             end else begin
-              full_a <= 1'b0;
-              dropped_a <= dropped_a + 32'd1;
+              win_a <= pick_a;
+              ra    <= 8'd0;
+              state <= ST_STREAM;
+              if (pick_a) begin
+                full_b <= 1'b0;
+                dropped_b <= dropped_b + 32'd1;
+              end else begin
+                full_a <= 1'b0;
+                dropped_a <= dropped_a + 32'd1;
+              end
+              if (win_gap) begin
+                gap <= 1'b1;
+                gaps <= gaps + 32'd1;
+              end
+              if (force_accept) begin
+                abandon      <= 1'b1;
+                abandoned    <= abandoned + 32'd1;
+                force_accept <= 1'b0;
+              end
+              if (req_pending) begin
+                req_pending <= 1'b0;
+                req_valid   <= 1'b0;
+              end
+              expected_seq <= win_seq + {48'd0, win_cnt};
             end
-            if (win_gap) begin
-              gap <= 1'b1;
-              gaps <= gaps + 32'd1;
+          end
+          if (req_pending && !decide) begin
+            if (req_timer >= REC_TIMEOUT) begin
+              req_pending  <= 1'b0;
+              req_valid    <= 1'b0;
+              force_accept <= 1'b1;
+              abandon      <= 1'b1;
+              abandoned    <= abandoned + 32'd1;
+            end else begin
+              req_timer <= req_timer + 10'd1;
             end
-            expected_seq <= win_seq + {48'd0, win_cnt};
           end
         end
 

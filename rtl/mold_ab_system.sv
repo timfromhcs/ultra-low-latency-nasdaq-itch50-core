@@ -26,6 +26,7 @@ module mold_ab_system #(
   input  wire                        cfg_check_ip,
   input  wire                        cfg_check_port,
   input  wire [63:0]                 cfg_initial_seq,
+  input  wire                        cfg_recovery_en,
 
   // Feed A (Ethernet frames)
   input  wire [DATA_WIDTH-1:0]       a_tdata,
@@ -55,7 +56,13 @@ module mold_ab_system #(
   output wire [31:0]                 dropped_b,
   output wire [31:0]                 frames_a,
   output wire [31:0]                 frames_b,
-  output wire [63:0]                 expected_seq
+  output wire [63:0]                 expected_seq,
+  output wire                        req_valid,
+  output wire [63:0]                 req_seq,
+  output wire [15:0]                 req_count,
+  output wire                        abandon,
+  output wire [31:0]                 requests,
+  output wire [31:0]                 abandoned
 );
 
   // --- Feed A pipeline ---
@@ -159,6 +166,7 @@ module mold_ab_system #(
     .clk(clk),
     .rst_n(rst_n),
     .initial_seq(cfg_initial_seq),
+    .recovery_en(cfg_recovery_en),
     .a_tdata(a_p_tdata),
     .a_tkeep(a_p_tkeep),
     .a_tvalid(a_p_tvalid),
@@ -185,7 +193,13 @@ module mold_ab_system #(
     .dropped_b(dropped_b),
     .gaps(gaps),
     .overflows(),
-    .expected_seq(expected_seq)
+    .expected_seq(expected_seq),
+    .req_valid(req_valid),
+    .req_seq(req_seq),
+    .req_count(req_count),
+    .abandon(abandon),
+    .requests(requests),
+    .abandoned(abandoned)
   );
   /* verilator lint_on PINCONNECTEMPTY */
 

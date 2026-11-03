@@ -218,7 +218,7 @@ Reports live in [`reports/`](reports/).
 | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; risk limits | `tb/test_book.py` |
 | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
 | Parser → BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
-| A/B feed arbiter | **6 frames, sequence-based selection, 1 gap, byte-exact** | `tb/test_arbiter.py` |
+| A/B feed arbiter | **6 frames, sequence selection, 1 gap, byte-exact; recovery mode: request→replay→abandon** | `tb/test_arbiter.py` |
 | A/B system | **2 Ethernet feeds → arbiter → 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
 | Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |

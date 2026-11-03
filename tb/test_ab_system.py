@@ -66,6 +66,7 @@ async def test_ab_system(dut):
     dut.cfg_check_ip.value = 1
     dut.cfg_check_port.value = 1
     dut.cfg_initial_seq.value = 1
+    dut.cfg_recovery_en.value = 0
     for p in ("a_", "b_"):
         getattr(dut, p + "tvalid").value = 0
         getattr(dut, p + "tlast").value = 0
