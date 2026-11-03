@@ -113,7 +113,9 @@ MDN PWA best practices, GitHub Actions docs.
       gap pulse (`rtl/mold_feed_arbiter.sv`, 6-frame test).
 - [x] A/B system integration: two Mold Ethernet pipelines → arbiter → one ITCH stream
       (`rtl/mold_ab_system.sv`; 2 feeds, 10 records, 1 gap).
-- [ ] Full MoldUDP64 packet parser with retransmission/sequence recovery.
+- [x] Sequence recovery request generator: missing-range request, replay recovery,
+      timeout resync and duplicate rejection (`rtl/mold_recovery.sv`, 4-accept test).
+- [ ] Wire the recovery block to the A/B arbiter and a replay source.
 - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
       output, 400-event + 100 back-to-back tests.
 - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a

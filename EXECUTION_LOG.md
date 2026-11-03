@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 17:59 - Autonomy tick + sequence recovery
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9a079ef` (pipeline
+  back-pressure) green.
+- Added `rtl/mold_recovery.sv`: in-order accept, missing-range request
+  (`req_seq`/`req_count`), replay recovery, timeout resync (`abandon`), duplicate
+  rejection, gap/recovered/abandoned/duplicate counters.
+- Test `test_recovery`: 4 accepts, 2 gaps, 1 recovered, 1 abandoned, 1 duplicate.
+- Not yet wired to the A/B arbiter; documented as the next integration step.
+
 ## 2026-11-03 16:59 - Autonomy tick + Mold pipeline back-pressure
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `258e66a` (A/B system) green.

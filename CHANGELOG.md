@@ -66,6 +66,10 @@ All notable changes to ChipLab are documented here. The format follows
   and pipeline; output beats (data/keep/last) are held until accepted. New test:
   329 bytes under random `tready`, no loss or reordering. The A/B system now stalls the
   pipeline instead of relying on the arbiter buffer being large enough.
+- **Sequence recovery** (`rtl/mold_recovery.sv`): in-order accept, missing-range request
+  (`req_seq`/`req_count`), replay recovery, timeout resync (`abandon`) and duplicate
+  rejection, with counters. Test: 4 accepts, 2 gaps, 1 recovered, 1 abandoned,
+  1 duplicate. Wiring it to the arbiter and a replay source is the next step.
 
 ## 0.3.1 — 2026-11-03
 

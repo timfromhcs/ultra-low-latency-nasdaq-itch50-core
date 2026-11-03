@@ -3148,3 +3148,385 @@ Commit `258e66a` ist gepusht; CI l├ñuft.
 **Pipeline-Backpressure + vollst├ñndiger Mold-Parser mit Retransmission/Sequence-Recovery** oder **Performance-Counter/PCIe-Integration**.
 [2026-11-03T16:59:19.5410535+01:00] hallo, es ist 16:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 6
+[tick] ran 0, failed 0
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 2 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"258e66a\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  return { run: 
+{status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,conclusion:j
+.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_bp_dep.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_bp_dep.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_bp_dep.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/moldudp64_pipeline.sv 2>&1 | grep -E 'Warning-|Error' | head 
+-5; echo LINT_END"
+depacketizer backpressure added
+%Warning-PINMISSING: rtl/moldudp64_pipeline.sv:117:5: Cell has missing pin: 'm_axis_tready'
+%Error: Exiting due to 1 warning(s)
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/wire_bp.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/wire_bp.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\wire_bp.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/moldudp64_pipeline.sv 2>&1 | grep -E 'Warning-|Error' | head 
+-4; verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_ab_system.sv 2>&1 | grep -E 'Warning-|Error' | head 
+-4; echo LINT_END"
+pipeline + system wired
+%Warning-PINMISSING: rtl/moldudp64_pipeline.sv:117:5: Cell has missing pin: 'm_axis_tready'
+%Error: Exiting due to 1 warning(s)
+%Warning-PINMISSING: rtl/moldudp64_pipeline.sv:117:5: Cell has missing pin: 'm_axis_tready'
+%Error-PINNOTFOUND: rtl/mold_ab_system.sv:92:6: Pin not found: 'm_axis_tready'
+%Error-PINNOTFOUND: rtl/mold_ab_system.sv:138:6: Pin not found: 'm_axis_tready'
+%Error: Exiting due to 2 error(s), 1 warning(s)
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\moldudp64_pipeline.sv -Pattern 
+'m_axis_tlast|frame_ready|m_axis_tready' | Select-Object LineNumber,Line
+LineNumber Line                                              
+---------- ----                                              
+        37   output wire                        m_axis_tlast,
+        38   output wire                        frame_ready, 
+        58   wire                      fe_m_axis_tready;     
+        67   wire fe_accept = fe_tvalid && fe_m_axis_tready; 
+        97     .m_axis_tlast(fe_tlast),                      
+        99     .frame_ready(frame_ready),                    
+       100     .m_axis_tready(fe_m_axis_tready),             
+       126     .s_axis_tready(fe_m_axis_tready),             
+       130     .m_axis_tlast(m_axis_tlast),
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/moldudp64_pipeline.sv [90m[limit=8, offset=34][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/moldudp64_pipeline.sv
+Index: rtl/moldudp64_pipeline.sv
+===================================================================
+--- rtl/moldudp64_pipeline.sv
++++ rtl/moldudp64_pipeline.sv
+@@ -34,8 +34,9 @@
+   output wire [DATA_WIDTH-1:0]       m_axis_tdata,
+   output wire [BYTES_PER_WORD-1:0]   m_axis_tkeep,
+   output wire                        m_axis_tvalid,
+   output wire                        m_axis_tlast,
++  input  wire                        m_axis_tready,
+   output wire                        frame_ready,
+ 
+   output wire [79:0]                 mold_session,
+   output wire [63:0]                 mold_seq,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/moldudp64_pipeline.sv [90m[limit=10, offset=127][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/moldudp64_pipeline.sv
+Index: rtl/moldudp64_pipeline.sv
+===================================================================
+--- rtl/moldudp64_pipeline.sv
++++ rtl/moldudp64_pipeline.sv
+@@ -128,8 +128,9 @@
+     .m_axis_tdata(m_axis_tdata),
+     .m_axis_tkeep(m_axis_tkeep),
+     .m_axis_tvalid(m_axis_tvalid),
+     .m_axis_tlast(m_axis_tlast),
++    .m_axis_tready(m_axis_tready),
+     .msgs_left(),
+     .frame_done(),
+     .busy(dep_busy)
+   );
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/moldudp64_pipeline.sv 2>&1 | grep -E 'Warning-|Error' | head -4; verilator --lint-only -Wall -Wno-DECLFILENAME 
+-Irtl rtl/mold_ab_system.sv 2>&1 | grep -E 'Warning-|Error' | head -4; echo LINT_END"
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_tready_tests.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_tready_tests.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_tready_tests.mjs"; Select-String -Path 
+tb\test_mold_pipeline.py,tb\test_mold_multi.py -Pattern 'm_axis_tready' | Select-Object Path,LineNumber,Line
+patched tb/test_mold_pipeline.py
+patched tb/test_mold_multi.py
+
+Path                                LineNumber Line                           
+----                                ---------- ----                           
+E:\chips\main\tb\test_mold_multi.py         53     dut.m_axis_tready.value = 1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path tb\test_mold_pipeline.py -Pattern 's_axis_tdata.value = 
+0|m_axis_tready' | Select-Object LineNumber,Line; Get-Content tb\test_mold_pipeline.py | Select-Object -Skip 44 -First 
+12
+LineNumber Line                          
+---------- ----                          
+        50     dut.s_axis_tdata.value = 0
+    cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
+    dut.rst_n.value = 0
+    dut.s_axis_tvalid.value = 0
+    dut.s_axis_tkeep.value = 0
+    dut.s_axis_tlast.value = 0
+    dut.s_axis_tdata.value = 0
+    dut.cfg_dst_ip.value = int.from_bytes(bytes([233, 54, 12, 111]), "big")
+    dut.cfg_ip_mask.value = 0xFFFFFFFF
+    dut.cfg_udp_port.value = 26400
+    dut.cfg_check_ip.value = 1
+    dut.cfg_check_port.value = 1
+    dut.cfg_initial_seq.value = 1
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_mold_pipeline.py
+Index: tb/test_mold_pipeline.py
+===================================================================
+--- tb/test_mold_pipeline.py
++++ tb/test_mold_pipeline.py
+@@ -47,8 +47,9 @@
+     dut.s_axis_tvalid.value = 0
+     dut.s_axis_tkeep.value = 0
+     dut.s_axis_tlast.value = 0
+     dut.s_axis_tdata.value = 0
++    dut.m_axis_tready.value = 1
+     dut.cfg_dst_ip.value = int.from_bytes(bytes([233, 54, 12, 111]), "big")
+     dut.cfg_ip_mask.value = 0xFFFFFFFF
+     dut.cfg_udp_port.value = 26400
+     dut.cfg_check_ip.value = 1
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main; python3 tb/run_pipeline_cocotb.py > /tmp/bp1.txt 2>&1; python3 
+tb/run_multi_cocotb.py > /tmp/bp2.txt 2>&1; python3 tb/run_ab_system_cocotb.py > /tmp/bp3.txt 2>&1; grep -h 'TESTS=' 
+/tmp/bp1.txt /tmp/bp2.txt /tmp/bp3.txt"
+** TESTS=1 PASS=1 FAIL=0 SKIP=0                                   1329.90           0.02      70485.16  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                                
+2935.70           0.05      63069.00  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                 502.20         
+  0.02      20288.83  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_bp_test.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_bp_test.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_bp_test.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+python3 tb/run_pipeline_cocotb.py > /tmp/bp4.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 
+'Backpressure|TESTS=|Assertion|Timeout' /tmp/bp4.txt | tail -5"
+backpressure test added
+RC=True
+                                                        AssertionError: len 233 != 329
+                                                        ** TESTS=2 PASS=1 FAIL=1 SKIP=0                                
+  63503.50           0.75      84464.51  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/fix_bp_test.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/fix_bp_test.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\fix_bp_test.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+python3 tb/run_pipeline_cocotb.py > /tmp/bp5.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 
+'Backpressure|TESTS=|Assertion|Timeout|len ' /tmp/bp5.txt | tail -5"
+sampling fixed
+RC=True
+  1605.80ns INFO     cocotb.moldudp64_pipeline          Backpressure: 329 bytes under random tready PASS
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0                                
+   1605.80           0.03      54173.45  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -212,8 +212,9 @@
+ | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+ | Local cloud | token required for non-loopback writes, revision conflict ÔåÆ 409, traversal ÔåÆ 400 | 
+`backend/store.mjs` |
+ | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
+ | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
++| Mold back-pressure | **329 bytes under random `m_axis_tready`, no loss or reordering** | `tb/test_mold_pipeline.py` 
+|
+ | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; 
+risk limits | `tb/test_book.py` |
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **6 frames, sequence-based selection, 1 gap, byte-exact** | `tb/test_arbiter.py` |
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path LONG_TERM_PLAN.md -Pattern 
+'Pipeline|tready|back-pressure|Back-pressure|skid' | Select-Object LineNumber,Line
+LineNumber Line                                                                                                        
+---------- ----                                                                                                        
+        35 | AXI4-Stream back-pressure | ZipCPU skid buffer; fpgacpu pipeline skid buffer; AMBA valid/ready rules | ...
+        43 Sources: LibreLane docs, SymbiYosys docs, ZipCPU skid buffer, MCP security guide,                           
+        56 | Mold back-pressure | single-frame | **4+ frames back-to-back PASS** | 64-frame + loss/gap recovery |      
+        71 - [x] Keep multi-frame Mold as a **known open** item; add a skid-buffer design note.                        
+        72 - [x] Add and test `axis_skid_buffer.sv` (200 random beats, no loss).                                       
+        79 ### Phase 1 - Back-pressure + book (2  8 weeks)                                                            
+        80 - [x] Implement `axis_skid_buffer.sv` (valid/ready, no data loss, 1-deep).                                  
+        82       (`tb/test_mold_multi.py`). No skid stage needed functionally; the front-end                           
+        83       holds beats under back-pressure.                                                                      
+        94 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.                                  
+       112 - [x] A/B system integration: two Mold Ethernet pipelines  arbiter  one ITCH stream                       
+       147 | 5 | Mold R1 note | document skid-buffer design + keep single-frame proof |                                
+       172 | Mold back-pressure complexity | skid buffer + formal no-loss proof; keep single-frame as fallback |
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -90,8 +90,10 @@
+ - [x] 4-way set-associative order lookup (4 compares, was 256).
+ - [ ] Physical timing sign-off of the level table + reduction (Phase 2).
+ - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
+       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
++- [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and
++      pipeline, beats held until accepted; 329 bytes under random stalls, no loss.
+ - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
+ 
+ **Gate:** multi-frame 0 mismatches Ô£à; BBO 0 mismatches Ô£à; lint/formal still green.
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -61,8 +61,12 @@
+   Rejected adds/replaces never touch the book or the level table.
+ - **A/B system integration** (`rtl/mold_ab_system.sv`): two Mold Ethernet pipelines
+   (independent AXI inputs) feed the frame arbiter; frame sequence/count sidebands added
+   to `moldudp64_pipeline`. Test: 2 feeds, 10 records, 1 gap, byte-exact.
++- **Mold pipeline downstream back-pressure**: `m_axis_tready` added to the depacketizer
++  and pipeline; output beats (data/keep/last) are held until accepted. New test:
++  329 bytes under random `tready`, no loss or reordering. The A/B system now stalls the
++  pipeline instead of relying on the arbiter buffer being large enough.
+ 
+ ## 0.3.1 ÔÇö 2026-11-03
+ 
+ Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,20 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 16:59 - Autonomy tick + Mold pipeline back-pressure
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `258e66a` (A/B system) green.
++- Added `m_axis_tready` to `moldudp64_depacketizer` and `moldudp64_pipeline`; the
++  depacketizer holds `tdata/tkeep/tlast` until accepted and only consumes when
++  `out_ready`. The A/B system now stalls the pipelines instead of relying on the
++  arbiter buffer size.
++- New `test_output_backpressure`: 329 bytes under random `m_axis_tready`, no loss,
++  no reordering. Single-frame, multi-frame and A/B system tests still pass.
++- Updated the earlier limitation note: pipeline back-pressure is resolved; only an
++  optional skid/FIFO for timing isolation remains.
++
+ ## 2026-11-03 15:59 - Autonomy tick + A/B system integration
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a4ce459` (risk checks) green.
+ - Added frame sequence/count sidebands to `moldudp64_pipeline`.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -278,10 +278,9 @@
+ - Added `rtl/mold_ab_system.sv`: two Mold Ethernet pipelines (independent AXI feeds) ->
+   frame arbiter -> one ITCH stream.
+ - New `test_ab_system`: A/B Ethernet frames with a lagging feed, a tie, a gap and a
+   single-feed fallback -> 10 records, 1 gap, byte-exact.
+-- Note: the Mold pipeline still has no downstream tready; the arbiter buffers one frame
+-  per feed (<=2 KB), which is sufficient for the tested frame sizes.
++- At that point the pipeline had no downstream tready; fixed in the 16:59 entry.
+ 
+ ## 2026-11-03 14:59 - Autonomy tick + BBO risk checks
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f952c56` (A/B arbiter) green.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -E 'Warning-|Error' | head -4; echo 
+LINT_OK"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main; python3 tb/run_pipeline_cocotb.py > /tmp/x1.txt 2>&1; python3 
+tb/run_multi_cocotb.py > /tmp/x2.txt 2>&1; python3 tb/run_ab_system_cocotb.py > /tmp/x3.txt 2>&1; grep -h 'TESTS=' 
+/tmp/x1.txt /tmp/x2.txt /tmp/x3.txt"
+LINT_OK
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0                                
+   1605.80           0.03      54550.53  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                                
+2935.70           0.05      63375.19  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                 502.20         
+  0.02      20512.89  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; git add -A; git commit -m "feat(rtl): 
+downstream back-pressure through the Mold pipeline" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | 
+Select-Object -Last 2
+PASS vercel-api (422 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'rtl/moldudp64_pipeline.sv', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'tb/test_mold_multi.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_mold_pipeline.py', LF will be replaced by CRLF the next time Git touches it
+[main 9a079ef] feat(rtl): downstream back-pressure through the Mold pipeline
+ 12 files changed, 1404 insertions(+), 22 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:191
++ ... line" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   258e66a..9a079ef  main -> main
+> build ┬À deepseek-v4.1-flash
+## Weiter: Downstream-Backpressure in der Mold-Pipeline
+
+### Autonomy-Tick
+- `node scripts/autonomy.mjs` ÔåÆ Queue leer, 0 Tasks.
+- CI auf `258e66a` (A/B-System) **gr├╝n**.
+
+### Pipeline-Backpressure
+
+Die im letzten Schritt dokumentierte L├╝cke ist geschlossen:
+
+- `moldudp64_depacketizer` hat jetzt `m_axis_tready`; `tdata/tkeep/tlast` werden **gehalten**, bis der Downstream akzeptiert (`out_ready`).
+- Konsum (Prefix/Message-Bytes) ist an `out_ready` gekoppelt ÔÇö kein Datenverlust bei Stau.
+- `moldudp64_pipeline` reicht `m_axis_tready` durch; das A/B-System verbindet den Arbiter-Ready-Ausgang mit beiden Pipelines. Damit stauen die Pipelines korrekt, statt sich auf die 2-KB-Arbiter-Puffer zu verlassen.
+
+### Verifikation
+
+Neuer `test_output_backpressure`:
+- 12 Messages, **329 Bytes**, `m_axis_tready` zuf├ñllig ~45 % high.
+- Ergebnis: **keine Verluste, keine Umsortierung**, byte-exakt.
+
+| Test | Ergebnis |
+|---|---|
+| Single-Frame + Backpressure | **2/2 PASS** |
+| Multi-Frame (5 Frames, Gap, Drop) | **PASS** |
+| A/B-System (2 Feeds) | **PASS** |
+| Lint / Gate | 0 Warnungen / 10/10 |
+
+### Dokumentation
+`README.md` (Backpressure-Evidenz), `LONG_TERM_PLAN.md` (Pipeline-Backpressure abgehakt), `CHANGELOG.md`, `EXECUTION_LOG.md` (inkl. Korrektur der fr├╝heren Limit-Notiz).
+
+Commit `9a079ef` ist gepusht; CI l├ñuft.
+
+### N├ñchster Punkt
+**Vollst├ñndiger Mold-Parser mit Retransmission/Sequence-Recovery** (Gap ÔåÆ Request/Timeout) oder **Performance-Counter/PCIe-Integration**. Der optionale Skid/FIFO f├╝r Timing-Isolation bleibt als Phase-2-Detail offen.
+[2026-11-03T17:59:19.5734873+01:00] hallo, es ist 17:59
+[tick] ran 0, failed 0

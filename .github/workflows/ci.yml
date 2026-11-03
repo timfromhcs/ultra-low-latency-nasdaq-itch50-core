@@ -40,6 +40,7 @@ jobs:
           python3 tb/run_book_top_cocotb.py
           python3 tb/run_arbiter_cocotb.py
           python3 tb/run_ab_system_cocotb.py
+          python3 tb/run_recovery_cocotb.py
           python3 tb/run_skid_cocotb.py
 
   wasm-web:
