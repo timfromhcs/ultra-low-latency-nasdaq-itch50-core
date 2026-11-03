@@ -25,6 +25,7 @@ All notable changes to ChipLab are documented here. The format follows
   0 mismatches; plus a **100-event back-to-back test at 1 event/cycle with no stall**.
 - The BBO now keeps a per-locate price-level table (16 bid + 16 ask) and computes the
   best with a 16-way reduction, so a best-price removal no longer triggers a rescan.
+- The order lookup is a 4-way set-associative bank (4 compares instead of 256).
 - CI/Makefile run the book cocotb test and lint the module.
 
 ## 0.3.1 — 2026-11-03

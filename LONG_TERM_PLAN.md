@@ -87,7 +87,8 @@ MDN PWA best practices, GitHub Actions docs.
       **100 events back-to-back at 1 event/cycle with no stall** (`tb/test_book.py`).
 - [x] No rescan stall: per-locate price-level table (16 bid + 16 ask) with a 16-way
       max/min reduction; 2-cycle latency.
-- [ ] Hashed BRAM order lookup (the 256-way compare bank is the remaining timing cost).
+- [x] 4-way set-associative order lookup (4 compares, was 256).
+- [ ] Physical timing sign-off of the level table + reduction (Phase 2).
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.

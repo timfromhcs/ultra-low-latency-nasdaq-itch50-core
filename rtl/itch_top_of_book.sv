@@ -6,18 +6,16 @@
 //   Handles: A/F add, E/C execute, X cancel, D delete, U replace, P/Q trade.
 //   Maintains per-locate best bid/ask price + shares, last trade and volume.
 //
-//   Design: a 256-entry order table with a parallel ref lookup, plus a small
-//   per-locate price-level table (16 bid + 16 ask levels). Adding or removing an
-//   order updates the level directly, so there is no rescan and the input never
-//   stalls. The BBO is a 16-way max/min reduction over the level table, two
-//   cycles behind the event.
+//   Design: a 4-way set-associative order table (64 sets x 4 ways, index =
+//   ref[5:0]) plus a small per-locate price-level table (16 bid + 16 ask
+//   levels). Adding or removing an order updates the level directly, so there
+//   is no rescan and the input never stalls. The BBO is a 16-way max/min
+//   reduction over the level table, two cycles behind the event.
 //
 //   Limits (documented, counted):
 //     * max 16 distinct price levels per locate per side (level_overflow);
-//     * 256 live orders (drops_overflow);
+//     * max 4 live orders per 64-ref window / 256 orders total (drops_overflow);
 //     * 16 locates (direct-mapped; aliasing reinitialises that slot).
-//   The order lookup is a parallel compare bank; a hashed BRAM table is the
-//   physical-timing follow-up (it does not affect the no-stall BBO path).
 // ============================================================================
 `ifndef ITCH_TOP_OF_BOOK_SV
 `define ITCH_TOP_OF_BOOK_SV
@@ -103,26 +101,42 @@ module itch_top_of_book #(
 
   wire [3:0] loc_idx = s_locate[3:0];
 
-  // Parallel lookup of the referenced order.
-  integer i;
+  // 4-way set-associative lookup: set = ref[5:0], 64 sets x 4 ways.
+  // Four parallel compares replace the previous 256-way compare bank.
+  wire [5:0] ord_set  = s_order_ref[5:0];
+  wire [7:0] ord_base = {ord_set, 2'b00};
+
   reg        found;
   reg [7:0]  found_idx;
   reg        free_found;
   reg [7:0]  free_idx;
   always @(*) begin
     found      = 1'b0;
-    found_idx  = 8'd0;
+    found_idx  = ord_base;
     free_found = 1'b0;
-    free_idx   = 8'd0;
-    for (i = ORDERS - 1; i >= 0; i = i - 1) begin
-      if (ord_valid[i] && ord_ref[i] == s_order_ref) begin
-        found     = 1'b1;
-        found_idx = i[7:0];
-      end
-      if (!ord_valid[i]) begin
-        free_found = 1'b1;
-        free_idx   = i[7:0];
-      end
+    free_idx   = ord_base;
+
+    if (ord_valid[ord_base] && ord_ref[ord_base] == s_order_ref) begin
+      found = 1'b1; found_idx = ord_base;
+    end
+    if (ord_valid[ord_base+1] && ord_ref[ord_base+1] == s_order_ref) begin
+      found = 1'b1; found_idx = ord_base + 8'd1;
+    end
+    if (ord_valid[ord_base+2] && ord_ref[ord_base+2] == s_order_ref) begin
+      found = 1'b1; found_idx = ord_base + 8'd2;
+    end
+    if (ord_valid[ord_base+3] && ord_ref[ord_base+3] == s_order_ref) begin
+      found = 1'b1; found_idx = ord_base + 8'd3;
+    end
+
+    if (!ord_valid[ord_base]) begin
+      free_found = 1'b1; free_idx = ord_base;
+    end else if (!ord_valid[ord_base+1]) begin
+      free_found = 1'b1; free_idx = ord_base + 8'd1;
+    end else if (!ord_valid[ord_base+2]) begin
+      free_found = 1'b1; free_idx = ord_base + 8'd2;
+    end else if (!ord_valid[ord_base+3]) begin
+      free_found = 1'b1; free_idx = ord_base + 8'd3;
     end
   end
 

@@ -152,4 +152,5 @@ The architecture is partitioned into four decoupled, ultra-fast sub-modules:
   1 event/cycle.
 - Proof: 400 random events vs. a Python book model, 0 mismatches; 100 events
   back-to-back at 1 event/cycle (`tb/test_book.py`).
-- Remaining timing cost: the 256-way parallel ref lookup (hashed BRAM table is next).
+- Order lookup: 4-way set-associative bank (4 parallel compares), 64 sets x 4 ways.
+  Physical timing of the level table + reduction is a Phase 2 sign-off item.
