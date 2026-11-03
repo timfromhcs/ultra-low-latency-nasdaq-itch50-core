@@ -55,7 +55,11 @@ jobs:
           cd wasm-core && cargo build --target wasm32-unknown-unknown --release
           cp target/wasm32-unknown-unknown/release/chiplab_core.wasm ../web/wasm/chiplab_core.wasm
       - name: Python test deps
-        run: python3 -m pip install --break-system-packages --upgrade pip pytest
+        run: |
+          python3 -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip pytest
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
       - name: Gate
         run: node scripts/gate.mjs
 

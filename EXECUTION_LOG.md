@@ -132,6 +132,28 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   **https://chiplab-ten.vercel.app/**; `/api/health` 200, Playwright run 100k = 0 errors,
   WebGPU compute. Evidence: `reports/web-vercel.png`.
 
+## 2026-11-03 — Long-term plan + Phase 0 hardening
+
+- Wrote `LONG_TERM_PLAN.md` (12-month roadmap, north-star metrics, phases 0–4,
+  self-healing loop, risks). Research sources: LibreLane/OpenLane 2, SymbiYosys,
+  ZipCPU/fpgacpu skid buffers, MCP security 2026, MDN PWA/WebGPU.
+- CI failure root causes found from GitHub logs:
+  - `ubuntu-22.04` has no `cvc5` package → switched RTL job to `ubuntu-24.04` and made
+    cvc5 optional (Z3 is the required proof).
+  - Gate used `python` (no pytest) → `gate.mjs` now uses `python3` on non-Windows and
+    the WASM job installs pytest with `--break-system-packages`.
+- Added `rtl/axis_skid_buffer.sv` + `tb/test_skid.py`: 200 random beats under random
+  `tready`, **no loss, stable output, PASS**. Not yet integrated (R1).
+- Added `docs/design/mold-backpressure.md` with the exact integration plan.
+- MCP hardening: strict argument allowlist/ranges, unknown args rejected, hashed audit
+  log, `mcp/SECURITY.md`; valid/invalid call smoke passes.
+- Added `scripts/sbom.mjs` → `reports/sbom.json` (163 components) and gate integration.
+- Added `.github/dependabot.yml` for npm, cargo, pip and Actions.
+- Heartbeat bug found: `opencode run` has no `--prompt` flag; fixed to a positional
+  message with `--session`, UTF-8 logging, and a `-DryRun` switch. Dry-run output:
+  `opencode run --auto --session ses_e611... "Hallo, es ist ..."`.
+- `node scripts/gate.mjs` → **8/8 PASS**.
+
 ## Open items
 
 | # | Item | Status |

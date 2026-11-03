@@ -304,6 +304,8 @@ packages/npm/        @chiplab/core
 packages/python/     chiplab-itch
 scripts/             build/gate/synth/formality/heartbeat/autonomy tools
 docs/guides/         zero-to-hero guides (EN / DE / FR)
+docs/design/         Mold back-pressure design note (R1)
+LONG_TERM_PLAN.md    12-month roadmap, KPIs, gates
 AUTONOMOUS_PLAN_V2.md
 EXECUTION_LOG.md
 reports/             measured evidence (logs, JSON, screenshots)
@@ -320,8 +322,9 @@ reports/             measured evidence (logs, JSON, screenshots)
 Each guide covers: run the demo, read the tape/book, verify a record, run the formal
 proof, build the EXE/Docker image, and understand the honest limits.
 
-Planning and research: [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md),
-[`docs/research-v2.md`](docs/research-v2.md), [`EXECUTION_LOG.md`](EXECUTION_LOG.md).
+Planning and research: [`LONG_TERM_PLAN.md`](LONG_TERM_PLAN.md),
+[`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md), [`docs/research-v2.md`](docs/research-v2.md),
+[`EXECUTION_LOG.md`](EXECUTION_LOG.md), [`mcp/SECURITY.md`](mcp/SECURITY.md).
 
 ---
 
@@ -331,7 +334,9 @@ Planning and research: [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md),
 2. **No Fmax sign-off.** 322.26 MHz is the target/model clock. OpenLane configs are
    flow-ready; full P&R and slack reports are not claimed.
 3. **Multi-frame MoldUDP64 backpressure is experimental.** Single-frame end-to-end
-   passes; back-to-back frames are tracked in `AUTONOMOUS_PLAN_V2.md` (R1).
+   passes; back-to-back frames are tracked in `LONG_TERM_PLAN.md` (Phase 1) and
+   `docs/design/mold-backpressure.md`. A tested `axis_skid_buffer.sv` is in the repo but
+   not yet wired between the front-end and depacketizer.
 4. **WebGPU numbers are visualisation samples.** Totals come from the exact parser;
    GPU bins use the same integer prices. `f32` is only used for bar heights.
 5. **The feed is synthetic.** Seeded generation is reproducible; it is not a captured

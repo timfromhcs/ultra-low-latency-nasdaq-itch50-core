@@ -262,7 +262,7 @@ async function init() {
       $("run").disabled = false;
       $("compare-btn").disabled = false;
       setBadge("wasm-badge", `WASM · v${(m.version >>> 16)}.${(m.version >>> 8) & 0xff} · ${(m.wasmBytes / 1024).toFixed(0)} KB`, "safe");
-      setStatus("Ready. Everything runs locally.", "ok");
+      setStatus("Ready. Local only.", "ok");
       state.worker.postMessage({ type: "history" });
       return;
     }
