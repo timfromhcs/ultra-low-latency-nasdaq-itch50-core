@@ -1,0 +1,23 @@
+{
+  "DESIGN_NAME": "ultra_low_latency_nasdaq_itch50_cutthrough",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_drop_gate.sv",
+    "dir::../rtl/itch_parser_core.sv",
+    "dir::../rtl/itch_shifter.sv",
+    "dir::../rtl/itch_top.sv"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 3.10,
+  "DESIGN_IS_CORE": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 650 650",
+  "CORE_AREA": "20 20 630 630",
+  "PL_TARGET_DENSITY": 0.60,
+  "CELL_PAD": 4,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "SYNTH_MAX_FANOUT": 12,
+  "SYNTH_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "META": { "note": "GF180 flow-ready config. Not a P&R/Fmax sign-off." }
+}

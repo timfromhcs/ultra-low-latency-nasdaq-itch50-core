@@ -4,7 +4,6 @@ __pycache__/
 obj_dir/
 /tmp/
 *.smt2
-*.log
 *.jou
 *.vcd
 *.fst
@@ -18,3 +17,28 @@ synth/test_*.py
 synth/run_*.py
 synth/check_sc.py
 .system_generated/
+
+# Evidence logs are intentionally checked in.
+*.log
+!reports/*.log
+
+# Build / generated artefacts
+node_modules/
+dist/
+public/
+.vercel/
+.playwright-mcp/
+native/target/
+wasm-core/target/
+tb/vectors/
+tb/vectors_1m/
+tb/vectors_small/
+reports/native_records.bin
+packages/npm/*.tgz
+packages/python/build/
+packages/python/dist/
+packages/python/src/*.egg-info/
+.pytest_cache/
+reports/wasm_*.bin
+
+tb/vectors_mut/

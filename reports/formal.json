@@ -1,0 +1,4 @@
+[
+  {"solver":"z3","status":"PASS","seconds":2,"log":"reports/formal_z3.log"},
+  {"solver":"cvc5","status":"PASS","seconds":1,"log":"reports/formal_cvc5.log"},
+  {"solver":"boolector","status":"FAIL","seconds":0,"log":"reports/formal_boolector.log"}]

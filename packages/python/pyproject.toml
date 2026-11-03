@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chiplab-itch"
+version = "0.2.0"
+description = "Independent NASDAQ ITCH 5.0 reference model, vector generator and CLI from the ChipLab silicon lab."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "PolyForm Small Business 1.0.0" }
+authors = [{ name = "timfromhcs", email = "timfromhcs@gmail.com" }]
+keywords = ["itch", "nasdaq", "market-data", "hft", "orderbook", "verification"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+  "Topic :: Office/Business :: Financial :: Investment",
+]
+
+[project.scripts]
+chiplab-itch = "chiplab_itch.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

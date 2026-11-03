@@ -1,0 +1,44 @@
+[FORMAL] solver=boolector
+Warning: Encountered `translate_off' comment! Such legacy hot comments are supported by Yosys, but are not part of any formal language specification. Using a portable and standards-compliant construct such as `ifdef is recommended!
+[FORMAL] BMC
+##   0:00:00  Solver: boolector
+Traceback (most recent call last):
+  File "/usr/bin/yosys-smtbmc", line 1958, in <module>
+    smt_assert_design_assumes(step)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/bin/yosys-smtbmc", line 1602, in smt_assert_design_assumes
+    smt_assert_consequent("(|%s_u| s%d)" % (topmod, step))
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/bin/yosys-smtbmc", line 1650, in smt_assert_consequent
+    smt.write("(assert %s)" % expr)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/share/yosys/smtio.py", line 498, in write
+    stmt = self.unparse(self.unroll_stmt(s))
+                        ~~~~~~~~~~~~~~~~^^^
+  File "/usr/share/yosys/smtio.py", line 319, in unroll_stmt
+    recursion_helper(self._unroll_stmt_into, stmt, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/share/yosys/smtio.py", line 88, in recursion_helper
+    request = next(top)
+  File "/usr/share/yosys/smtio.py", line 330, in _unroll_stmt_into
+    yield from self._unroll_stmt_into(s, new_stmt, depth - 1)
+  File "/usr/share/yosys/smtio.py", line 364, in _unroll_stmt_into
+    yield from self._unroll_stmt_into(decl, tmp, depth - 1)
+  File "/usr/share/yosys/smtio.py", line 330, in _unroll_stmt_into
+    yield from self._unroll_stmt_into(s, new_stmt, depth - 1)
+  File "/usr/share/yosys/smtio.py", line 364, in _unroll_stmt_into
+    yield from self._unroll_stmt_into(decl, tmp, depth - 1)
+  File "/usr/share/yosys/smtio.py", line 330, in _unroll_stmt_into
+    yield from self._unroll_stmt_into(s, new_stmt, depth - 1)
+  File "/usr/share/yosys/smtio.py", line 330, in _unroll_stmt_into
+    yield from self._unroll_stmt_into(s, new_stmt, depth - 1)
+  File "/usr/share/yosys/smtio.py", line 369, in _unroll_stmt_into
+    self.write(self.unparse(decl), unroll=False)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/share/yosys/smtio.py", line 532, in write
+    self.p_write(stmt + "\n", True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/usr/share/yosys/smtio.py", line 401, in p_write
+    if flush: self.p.stdin.flush()
+              ~~~~~~~~~~~~~~~~~~^^
+BrokenPipeError: [Errno 32] Broken pipe

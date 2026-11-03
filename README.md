@@ -1,206 +1,354 @@
 <!--
-JSON-LD Structured Metadata for Search Engine & AI Indexers
+JSON-LD for search engines and AI indexers
 {
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
-  "name": "ultra-low-latency-nasdaq-itch50-core",
-  "description": "Deterministic 0/1-Cycle Cut-Through NASDAQ ITCH 5.0 Parser in SystemVerilog. SOTA HFT FPGA/ASIC IP Core with Formal Verification and Zero-Stall AXI4-Stream Pipeline.",
-  "programmingLanguage": "SystemVerilog",
-  "author": {
-    "@type": "Person",
-    "name": "timfromhcs",
-    "email": "timfromhcs@gmail.com",
-    "url": "https://github.com/timfromhcs"
-  },
+  "name": "ChipLab — ITCH-50 silicon lab",
+  "description": "Local-first WebAssembly + WebGPU lab for a NASDAQ ITCH 5.0 parser, with RTL, formal proofs, a Node backend, MCP, npm/PyPI packages, a single EXE, Docker and Vercel.",
+  "programmingLanguage": ["SystemVerilog", "Rust", "JavaScript", "Python"],
+  "author": { "@type": "Person", "name": "timfromhcs", "email": "timfromhcs@gmail.com", "url": "https://github.com/timfromhcs" },
   "license": "https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/blob/main/LICENSE.md",
-  "keywords": [
-    "systemverilog", "verilog", "hft", "high-frequency-trading", "nasdaq-itch", "itch50",
-    "market-data-parser", "low-latency", "fpga", "asic", "axi4-stream", "cocotb",
-    "formal-verification", "openlane", "sky130", "ihp130", "ultrafast-trading",
-    "trading-engine", "cut-through"
-  ]
+  "keywords": ["systemverilog","verilog","hft","high-frequency-trading","nasdaq-itch","itch50","market-data","low-latency","fpga","asic","webassembly","webgpu","rust","mcp","formal-verification","openlane","sky130","orderbook"]
 }
 -->
 
-# Ultra-Low-Latency NASDAQ ITCH 5.0 Cut-Through Core
+# ChipLab — ITCH-50 silicon lab
 
-[![CI Verification](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml/badge.svg)](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml)
-[![Formal Proof](https://img.shields.io/badge/Formal%20Proof-100%25%20PASS%20(Z3)-success.svg)](formal/)
-[![Latency](https://img.shields.io/badge/Latency-0%2F1%20Cycle%20Deterministic-brightgreen.svg)]()
-[![Target Clock](https://img.shields.io/badge/Target%20Clock-322.26%20MHz%20(3.10%20ns)-blue.svg)]()
-[![Throughput](https://img.shields.io/badge/Throughput-41.25%20Gbps%20Line--Rate-orange.svg)]()
-[![License: PolyForm Small Business](https://img.shields.io/badge/License-PolyForm%20Small%20Business-blueviolet.svg)](LICENSE.md)
+[![CI](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml/badge.svg)](.github/workflows/ci.yml)
+[![RTL](https://img.shields.io/badge/RTL-SystemVerilog-1f6feb)](rtl/)
+[![WASM](https://img.shields.io/badge/WASM-50%20KB-3ef07a)](web/wasm/chiplab_core.wasm)
+[![WebGPU](https://img.shields.io/badge/WebGPU-compute%20%2B%20render-3ef07a)](web/gpu.js)
+[![Formal](https://img.shields.io/badge/Formal-Z3%20%2B%20CVC5%20PASS-success)](reports/formal.json)
+[![Maturity](https://img.shields.io/badge/Maturity-pre--silicon-orange)](#honest-limits)
 
-> **Sub-Nanosecond Deterministic Cut-Through Market Data Parser for High-Frequency Trading (HFT) on FPGA and ASIC.**
+**Run the feed. See the silicon.** A WebAssembly twin of a NASDAQ TotalView-ITCH 5.0
+parser, measured on your own hardware, with a WebGPU order-book visualisation and a
+single-file local backend. Pre-silicon, reproducible, and honest about what is not proven.
 
-`ultra-low-latency-nasdaq-itch50-core` (`ultra_low_latency_nasdaq_itch50_cutthrough`) is an industry-leading, formally verified, silicon-proven Hardware IP Core delivering **sub-nanosecond cut-through parsing** of the **NASDAQ TotalView-ITCH 5.0** protocol at line rates up to **41.25 Gbps**.
-
----
-
-## 1. Key Performance Metrics
-
-| Metric | Industry Standard (Commercial IP) | `ultra-low-latency-itch50` (This Core) |
-| :--- | :--- | :--- |
-| **Parsing Latency (Async Bypass)** | N/A | **0 Clock Cycles (~1.10 ns Combinatorial Gate Delay)** |
-| **Parsing Latency (Registered)** | 2–3 Clocks (6.2–9.3 ns) | **1 Clock Cycle (3.10 ns @ 322.26 MHz)** |
-| **Throughput (128-bit Bus)** | 25 Gbps | **41.25 Gbps Peak Line-Rate Saturation** |
-| **Stock-Locate Pre-Trigger** | 2–3 Cycles | **Cycle 0 (< 0.30 ns Combinatorial Pre-Fetch)** |
-| **Unaligned Boundary Penalty** | 1–2 Clock Stalls | **0 Stalls (Continuous 512-bit Barrel Lookahead)** |
-| **Formal Safety Guarantee** | Simulation Only | **Mathematically Proven (SymbiYosys BMC + K-Induction)** |
-| **Resource Footprint** | > 1,000 LUTs, 2 BRAMs | **< 480 LUTs / 21,811 Standard Cells (0 BRAM, 0 DSP)** |
+![ChipLab desktop demo](reports/web-1440-depth.png)
 
 ---
 
-## 2. Microarchitecture & Hardware Innovation
+## What this is
 
-```
-                      +-----------------------------------------------------------+
-                      |       AXI4-Stream 128-bit Slave @ 322.26 MHz (41.25 Gbps) |
-                      +-----------------------------------------------------------+
-                                                   |
-                                                   v
-                      +-----------------------------------------------------------+
-                      |         Continuous Sub-Word Barrel Shifter Matrix        |
-                      |  - 512-bit sliding lookahead buffer (0 stall cycles)      |
-                      +-----------------------------------------------------------+
-                                                   |
-                        +--------------------------+--------------------------+
-                        |                                                     |
-                        v                                                     v
-       +------------------------------------+               +------------------------------------+
-       | Direct L3 Stock Locate Pre-Trigger |               |    Early Non-Trade Drop Gate       |
-       |  - Slices locate ID in Cycle 0     |               |  - Combinatorial trade/admin filter|
-       |  - Latency: < 0.30 ns gate delay   |               |  - Instant drop mask for 'S','R'   |
-       +------------------------------------+               +------------------------------------+
-                        |                                                     |
-                        +--------------------------+--------------------------+
-                                                   |
-                                                   v
-                      +-----------------------------------------------------------+
-                      |      Speculative Parallel ITCH 5.0 Decoding Matrix        |
-                      |  - Concurrent decoders for 'A','F','E','C','X','D','U','P'|
-                      +-----------------------------------------------------------+
-                                                   |
-                        +--------------------------+--------------------------+
-                        |                                                     |
-                        v                                                     v
-       +------------------------------------+               +------------------------------------+
-       |  Asynchronous Combinatorial Bypass |               |   Registered Pipeline Stage (1-Clk)|
-       |  - raw_order_data [451:0]          |               |  - m_axis_order_valid (1 cycle)    |
-       |  - Propagation Delay: <= 1.10 ns   |               |  - Clock: 3.10 ns (322.26 MHz)     |
-       +------------------------------------+               +------------------------------------+
-```
+- An **RTL ITCH 5.0 parser** (`rtl/`) that decodes all 22 official opcodes, preserves
+  reference data, handles `tkeep`/`tlast`, and ships 128/256/512-bit variants.
+- A **MoldUDP64 front-end** (`moldudp64_frontend.sv` + `depacketizer.sv`) with IP/UDP
+  filtering and sequence-gap detection (single-frame end-to-end proof; multi-frame
+  backpressure is tracked as an open limitation).
+- A **field-accurate reference model** in Python (`tb/itch_model.py`) and Rust
+  (`wasm-core/`), cross-checked record-by-record.
+- A **local-first web app**: WASM in a Worker, WebGPU compute for price bins and
+  latency histograms, Canvas2D fallback, OPFS persistence, PWA/offline.
+- A **Node backend / MCP server / REST API / npm package / PyPI package / single EXE /
+  Docker image / Vercel build** around the same WASM core.
+- A **native Vulkan/DX12 compute runner** (`native/`) using `wgpu`, with an opt-in
+  Windows process boost.
+- **Verification evidence**: 1,000,000-message full-field regression, Z3 + CVC5 formal
+  proofs, synthesis matrix, mutation tests, browser gates.
 
-### Core Architecture Highlights:
-- **Direct Cycle-0 Stock-Locate Pre-Trigger**: Extracts the 16-bit Stock Locate identifier combinationally in `< 0.30 ns`, enabling downstream Order Book controllers to pre-fetch memory pointers before packet parsing finishes.
-- **Continuous Sliding Lookahead Barrel Shifter**: Unpacks 128-bit AXI-Stream words into a 512-bit sliding window, resolving unaligned message boundaries with **0 clock cycles overhead**.
-- **Speculative Parallel Decoding Engine**: Simultaneously decodes all message formats (`'A'`, `'F'`, `'E'`, `'C'`, `'X'`, `'D'`, `'U'`, `'P'`, `'Q'`) in a single clock cycle.
-- **Early Non-Trade Drop Gate**: Instantly filters administrative messages (`'S'`, `'R'`, `'H'`, `'Y'`, `'L'`, `'V'`, `'W'`, `'K'`, `'J'`, `'h'`), protecting critical trading pipelines.
+## What this is not
+
+- **Not silicon-proven.** There is no tapeout. Fmax is not signed off.
+- **Not a trading system.** No order routing, no live feed, no investment advice.
+- **Not a zero-cycle wire-to-output parser.** The honest latency is:
+  one clock from `s_axis_tdata` into the window register + one clock to the registered
+  output = **2 clocks (6.20 ns at 322.26 MHz)**. The async bypass is valid in the same
+  cycle as the window, one clock after ingress.
+- **Not a full multi-frame MoldUDP64 MAC integration yet.** The blocks are verified
+  separately and the single-frame pipeline passes; back-to-back flow control is open.
 
 ---
 
-## 3. Protocol Timing & Latency Diagram
-
-![Protocol Timing Diagram](docs/images/timing_cutthrough.svg)
-
----
-
-## 4. Verification & Physical Sign-Off Results
-
-### Formal Mathematical Proof (Z3 SMT Solver)
-- **Bounded Model Checking (BMC)**: 25 steps, **PASSED** (0 counterexamples).
-- **K-Induction**: Temporal induction proven, **PASSED**.
-- **Cover Properties**: All 6 trading path cover properties reached and proven.
-
-### 1,000,000-Packet Stress Regression (Verilator + Cocotb)
-- **Total Messages Processed**: **1,000,000 / 1,000,000 (100% Pass)**.
-- **Functional Mismatches**: **0 Errors** (Bit-exact match against golden reference parser).
-- **Line-Rate Throughput**: **41.249 Gbps** sustained line rate.
-- **Protocol Coverage**: All 22 NASDAQ ITCH 5.0 opcodes + corrupted fuzz bytes.
-
-### Gate-Level Physical Synthesis
-- **Total Standard Cells**: 21,811 cells
-- **Sequential Elements (DFFs)**: 1,485 registers
-- **Combinatorial Logic Gates**: 20,326 gates
-- **Physical Layout Preview**: `docs/images/layout_preview.gds` ($450\,\mu\text{m} \times 450\,\mu\text{m}$ die).
-
-![Layout Preview](docs/images/layout_preview.png)
-
----
-
-## 5. Quick Start & One-Line Local Reproduction
+## Quickstart
 
 ```bash
 git clone https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
 cd ultra-low-latency-nasdaq-itch50-core
-make verify_all
+
+# 1) Web demo + local API (Node 22, no npm dependencies)
+node backend/server.mjs
+# open http://127.0.0.1:4173
 ```
 
-### Individual Build Targets:
+The web app also works as a static PWA. The browser keeps its own run history in OPFS;
+nothing is uploaded.
+
+### Choose your runtime
+
+| Runtime | Command | What you get |
+|---|---|---|
+| Web + API | `node backend/server.mjs` | WebGPU/WASM demo, `/api/*` |
+| CLI | `node backend/run.mjs --compare --count 1000000` | 8-chip comparison |
+| Single EXE | `npm run build:exe && dist\chiplab.exe` | one file, embedded web + WASM |
+| Docker | `docker compose up --build` | same demo at `localhost:4173` |
+| Vercel | `npx vercel` (or MCP) | static app + stateless `/api/*` |
+| MCP | `node mcp/server.mjs` | tools for agents |
+| npm | `npm i @chiplab/core` | WASM core + CLI |
+| PyPI | `pip install chiplab-itch` | Python reference model + CLI |
+
+### Verification
+
 ```bash
-make lint       # Run Verilator RTL lint checks
-make formal     # Run Z3 formal verification (BMC + K-Induction)
-make sim        # Run 1,000,000-packet Verilator stress benchmark
-make cocotb     # Run Cocotb Python regression suite
-make synth      # Run gate-level physical synthesis
-make docs       # Generate WaveDrom waveforms and KLayout GDSII preview
+# Linux/WSL toolchain: verilator, yosys, iverilog, z3, cvc5, python cocotb/pytest
+make lint                # Verilator, 0 warnings
+python tb/itch_model.py --count 100000 --out tb/vectors
+make sim                 # full-field Verilator regression
+make formal              # Z3 BMC + k-induction + covers
+./formal/solver_matrix.sh
+python -m pytest -q tb/test_model.py
+node scripts/wasm_smoke.mjs && python scripts/check_wasm_fixture.py
+node backend/run.mjs --compare --count 1000000
+node mcp/client_smoke.mjs
+node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs
 ```
 
 ---
 
-## 6. Directory Structure
+## Measured evidence
+
+All numbers below are **model/simulation results at 322.26 MHz**, not silicon.
+Reports live in [`reports/`](reports/).
+
+| Check | Result | Evidence |
+|---|---|---|
+| Full-field RTL regression | **1,000,000 / 1,000,000 records, 0 mismatches**, 31,383,973 bytes, 1,961,516 cycles, 41.290 Gbps | `reports/sim_1m.txt` |
+| Fields checked | type, flags, length, locate, tracking, timestamp, ref, new-ref, shares (64b), stock, price, match, MPID, printable, event, payload checksum | `tb/sim_main.cpp` |
+| Reference model | independent Python, all 22 opcodes | `tb/itch_model.py` |
+| WASM ↔ Python | 10,000 records, 0 mismatches | `scripts/check_wasm_fixture.py` |
+| Formal | **Z3 PASS, CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported | `reports/formal.json` |
+| Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | `reports/mutation.json` |
+| Synthesis 128-bit | 22,629 cells, 2,228 DFFs | `reports/synth_128.log` |
+| Synthesis 256-bit | 25,201 cells | `reports/synth_256.log` |
+| Synthesis 512-bit | 29,628 cells | `reports/synth_512.log` |
+| Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+| Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+| Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+| Docker image | builds and serves `/api/health` | `Dockerfile` |
+| npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
+| PyPI package | wheel builds and `selfcheck` covers all 22 opcodes | `packages/python/` |
+
+**Throughput model.** 128-bit @ 322.26 MHz = 41.25 Gbps line rate. The parser consumes
+at most one message per cycle; ITCH average message size (~30 B) means the useful
+message rate is ~177 M msg/s in the model, not a blanket 165 Gbps at 512-bit. The
+512-bit variant removes input-side byte starvation but does not multiply parser slots.
+
+**Latency model.** 1 clock from window to registered output; 2 clocks from
+`s_axis_tdata`. The 452/484-bit output mux and 1024-bit shifter are the critical path;
+a 322 MHz sign-off requires OpenSTA/OpenLane, which is **not** claimed here.
+
+---
+
+## Architecture
 
 ```
-.
-├── .github/
-│   └── workflows/
-│       └── ci.yml               # Automated regression & formal proof CI
-├── rtl/
-│   ├── itch_pkg.sv             # Data structures, enums, protocol constants
-│   ├── itch_shifter.sv         # Single-cycle unaligned boundary shifter
-│   ├── itch_drop_gate.sv       # Early non-trade message filter
-│   ├── itch_parser_core.sv     # Speculative decoding matrix
-│   └── itch_top.sv             # Top-level AXI4-Stream wrapper + Async Egress
-├── formal/
-│   ├── itch_parser.sby         # SymbiYosys formal verification config
-│   └── itch_formal.sv          # SystemVerilog Assertions (SVA) harness
-├── tb/
-│   ├── test_itch.py            # Cocotb Python testbench harness
-│   ├── generate_pcaps.py       # Scapy PCAP injector with corrupt/burst frames
-│   ├── golden_parser.py        # Independent golden reference model
-│   ├── sim_main.cpp            # 1,000,000-packet stress test harness
-│   ├── run_cocotb.py           # Cocotb runner
-│   └── Makefile                # Testbench Makefile
-├── openlane/
-│   └── config.json             # Headless ASIC physical design flow config
-├── docs/
-│   ├── architecture.md         # In-depth microarchitecture breakdown
-│   ├── benchmarks.md           # Extended latency & throughput benchmarks
-│   └── images/                 # Layout renderings and WaveDrom diagrams
-├── scripts/
-│   ├── render_gds.py           # Headless KLayout GDSII PNG renderer
-│   └── generate_waveforms.py   # WaveDrom timing diagram exporter
-├── llms.txt                    # Machine-readable architectural summary
-├── llms-full.txt               # Full machine-readable specification
-├── Makefile                    # One-command execution (sim, formal, synth, all)
-├── LICENSE.md                  # PolyForm Dual-License with $100k revenue trigger
-└── README.md                   # SOTA SEO-optimized presentation
+AXI4-Stream 128/256/512
+        │
+        ▼
+┌─────────────────────────────┐     ┌──────────────────────────────┐
+│ moldudp64_frontend.sv       │     │ itch_shifter.sv              │
+│ L2/L3/L4 filter, Mold hdr,  │────▶│ tkeep, cleared append,       │
+│ sequence gap                │     │ 512-bit sliding window       │
+└─────────────────────────────┘     └──────────────┬───────────────┘
+                                                   │
+                                    ┌──────────────▼───────────────┐
+                                    │ itch_parser_core.sv          │
+                                    │ all 22 opcodes, full payload │
+                                    │ 64-bit shares, pre-trigger   │
+                                    └───────┬──────────────┬───────┘
+                                            │              │
+                              ┌─────────────▼───┐   ┌──────▼─────────────┐
+                              │ registered egress│   │ async bypass       │
+                              │ 1 cycle          │   │ same-cycle window  │
+                              └──────────────────┘   └────────────────────┘
+
+Offline twin: Rust → wasm32 → Worker / Node / MCP / npm / EXE / Docker / Vercel
+Visualisation: WebGPU compute (bins + histogram) + WebGPU render / Canvas2D fallback
+```
+
+### Chip models
+
+| ID | Model | Latency model | Purpose |
+|---|---|---|---|
+| 0 | Scalar reference | 0 | golden |
+| 1 | ITCH-50 v2 | 1 cycle after window | this RTL |
+| 2 | ITCH-50 safe | 2 cycles | timing-closed variant |
+| 3 | Enyx-class | 3 cycles | commercial-class comparison |
+| 4 | NovaSparks-class | 2 cycles | comparison |
+| 5 | Lossy admin-drop | 1 cycle | negative control, must fail |
+| 6 | MoldUDP64 front-end | 3 cycles | L2–L4 + Mold |
+| 7 | Parser + top-of-book | 2 cycles | parse-to-book |
+
+---
+
+## Web demo
+
+![Mobile demo](reports/web-390-run.png)
+
+- **WebGPU compute** bins prices and latency on the GPU; **WebGPU render** draws the
+  density. On devices without WebGPU, Canvas2D draws the same data.
+- **Worker-isolated WASM**: the UI stays responsive while 1M records are generated,
+  parsed and packed.
+- **OPFS persistence**: the last runs and settings stay in this browser. No account,
+  no upload. `navigator.storage.persist()` is requested.
+- **PWA/offline**: service worker caches the app shell and WASM.
+- **Responsive**: 390 px bottom navigation, 768 px stack, 1440 px three-column lab.
+
+The demo is a dense tool, not a marketing page: tape, depth density, latency histogram,
+chip comparison and containers share one scan path.
+
+---
+
+## Local API
+
+```bash
+curl -s http://127.0.0.1:4173/api/health
+curl -s -X POST -H 'content-type: application/json' \
+  -d '{"chip":1,"count":100000,"seed":1337}' http://127.0.0.1:4173/api/run
+curl -s -X POST -H 'content-type: application/json' \
+  -d '{"count":100000,"seed":1337}' http://127.0.0.1:4173/api/compare
+```
+
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/api/health` | GET | wasm version, chips, host |
+| `/api/chips` | GET | chip registry |
+| `/api/run` | POST | one chip + sample records + book |
+| `/api/compare` | POST | all chips vs golden |
+| `/api/book` | POST | top-of-book |
+
+**MCP** (`node mcp/server.mjs`) exposes the same five operations:
+`chiplab.chips`, `chiplab.run`, `chiplab.compare`, `chiplab.book`,
+`chiplab.formal_status`.
+
+---
+
+## Packages
+
+```bash
+# npm
+cd packages/npm && npm pack
+npm install ./chiplab-core-0.2.0.tgz
+
+# PyPI
+cd packages/python
+python -m build
+pip install dist/chiplab_itch-0.2.0-py3-none-any.whl
+chiplab-itch selfcheck --count 100000
+```
+
+Publishing requires `NPM_TOKEN` / `PYPI_TOKEN`; the repository only builds and tests
+locally. The `@chiplab/core` package bundles the same 50 KB WASM artifact used by the
+web app, Node and the EXE.
+
+---
+
+## Single EXE, Docker, Vercel
+
+| Target | Build | Run |
+|---|---|---|
+| EXE | `npm run build:exe` | `dist\chiplab.exe --port 4190` |
+| Docker | `docker build -t chiplab:0.2.0 .` | `docker run --rm -p 4173:4173 chiplab:0.2.0` |
+| Vercel | `node scripts/build_vercel.mjs` | `vercel` / Vercel MCP |
+
+The EXE embeds the web assets and the WASM; it serves the same API and opens the browser.
+The Docker image is a non-root Node 22 alpine runtime with a healthcheck.
+The Vercel build is static-first (`public/`) plus stateless `api/*` functions; per-user
+data stays in the browser (OPFS/IndexedDB). For server-side persistence, Vercel
+Sandbox Drives are a separate, paid option — not used by this repository.
+
+---
+
+## Verification stack
+
+- **RTL**: Verilator lint, full-field 1M regression, cocotb (`tb/test_itch.py`),
+  Mold front-end/depacketizer tests (`tb/test_mold*.py`).
+- **Formal**: `formal/itch_formal.sv` checks pre-trigger equivalence, class exclusivity,
+  legal lengths, register equivalence and flow control; `formal/run_formal.sh` runs BMC,
+  k-induction and covers; `formal/solver_matrix.sh` records each solver.
+- **Mutation**: `tools/mutate.py` injects RTL mutants and requires the suite to kill them.
+- **Reference model**: Python and Rust independently, compared field-by-field.
+- **Browser**: Playwright at 390/1440, console-error gate, WebGPU/Canvas2D paths.
+- **Packages**: clean npm/PyPI installs, MCP handshake, Vercel handler smoke, Docker health.
+
+---
+
+## Repository map
+
+```
+rtl/                 SystemVerilog parser, shifter, Mold front-end/depacketizer
+formal/              SVA harness, SymbiYosys runner, solver matrix
+tb/                  Python model, vector generator, Verilator/Cocotb tests
+wasm-core/           Rust → wasm32 core (parser, generator, chips, book)
+web/                 PWA: UI, Worker, WebGPU, Canvas2D, OPFS
+backend/             Node server, CLI, WASM wrapper
+mcp/                 stdio MCP server + smoke client
+api/                 Vercel serverless handlers
+native/              Rust wgpu Vulkan/DX12 compute runner + optional boost
+packages/npm/        @chiplab/core
+packages/python/     chiplab-itch
+scripts/             build/gate/synth/formality/heartbeat/autonomy tools
+docs/guides/         zero-to-hero guides (EN / DE / FR)
+AUTONOMOUS_PLAN_V2.md
+EXECUTION_LOG.md
+reports/             measured evidence (logs, JSON, screenshots)
 ```
 
 ---
 
-## 7. Licensing & Attribution Terms
+## Zero-to-hero guides
 
-This project is released under the **PolyForm Small Business Dual-License (1.0.0)**.
+- [English](docs/guides/en/zero-to-hero.md)
+- [Deutsch](docs/guides/de/zero-to-hero.md)
+- [Français](docs/guides/fr/zero-to-hero.md)
 
-### Small Business & Community Tier (Free)
-- Free of charge for non-commercial, research, educational, and commercial entities generating **LESS than $100,000 USD** in annual gross revenue.
-- **Mandatory Attribution Condition**: Any software, hardware, FPGA bitstream, ASIC design, PCB, documentation, or product utilizing this core MUST display:
-  ```text
-  Hardware powered by ultra-low-latency-nasdaq-itch50-core by @timfromhcs (https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core)
-  ```
+Each guide covers: run the demo, read the tape/book, verify a record, run the formal
+proof, build the EXE/Docker image, and understand the honest limits.
 
-### Enterprise Custom Commercial Tier (Paid SLA)
-- Applicable to any entity generating **$100,000 USD or more in gross annual revenue**.
-- **Enterprise Benefits**: Attribution waiver / white-labeling rights, proprietary closed-source integration, dedicated integration support, and custom microarchitectural tuning.
-- To purchase an Enterprise License, contact: **`timfromhcs@gmail.com`**.
+Planning and research: [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md),
+[`docs/research-v2.md`](docs/research-v2.md), [`EXECUTION_LOG.md`](EXECUTION_LOG.md).
+
+---
+
+## Honest limits (read this)
+
+1. **No tapeout, no silicon.** "Silicon lab" means executable RTL + digital twin.
+2. **No Fmax sign-off.** 322.26 MHz is the target/model clock. OpenLane configs are
+   flow-ready; full P&R and slack reports are not claimed.
+3. **Multi-frame MoldUDP64 backpressure is experimental.** Single-frame end-to-end
+   passes; back-to-back frames are tracked in `AUTONOMOUS_PLAN_V2.md` (R1).
+4. **WebGPU numbers are visualisation samples.** Totals come from the exact parser;
+   GPU bins use the same integer prices. `f32` is only used for bar heights.
+5. **The feed is synthetic.** Seeded generation is reproducible; it is not a captured
+   NASDAQ day.
+6. **The native boost is opt-in.** `--boost` sets Windows priority/affinity; it is not
+   applied silently and is restored when the process exits.
+
+---
+
+## Roadmap
+
+- [ ] AXI-Stream skid/FIFO for multi-frame MoldUDP64 back-to-back.
+- [ ] Full RTL top-of-book (currently a WASM/visual model).
+- [ ] OpenLane P&R + OpenSTA slack for Sky130/GF180/IHP.
+- [ ] Bitwuzla/Yices in the solver matrix.
+- [ ] Optional Vercel Sandbox/Drives recipe for team persistence.
+- [ ] Published npm/PyPI artifacts and GHCR image (tokens required).
+
+---
+
+## Licence & attribution
+
+PolyForm Small Business Dual-License 1.0.0. Free for entities under **$100,000 USD**
+annual gross revenue with the mandatory attribution string:
+
+```text
+Hardware powered by ultra-low-latency-nasdaq-itch50-core by @timfromhcs
+(https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core)
+```
+
+Enterprise/white-label: `timfromhcs@gmail.com`. See [LICENSE.md](LICENSE.md).
+
+**Keywords:** NASDAQ ITCH 5.0 parser, ITCH50, market data, HFT, FPGA, ASIC, SystemVerilog,
+WebAssembly, WebGPU, Rust, MCP, formal verification, Z3, CVC5, SymbiYosys, OpenLane,
+Sky130, order book, MoldUDP64, low latency, silicon lab.

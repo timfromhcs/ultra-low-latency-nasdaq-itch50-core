@@ -1,5 +1,18 @@
 # Latency & Throughput Benchmark Suite
-## Core: `ultra_low_latency_nasdaq_itch50_cutthrough`
+## Core: `ultra_low_latency_nasdaq_itch50_cutthrough` (v2)
+
+> **v2 measured results (2026-11-03):**
+> - 1,000,000-record full-field Verilator regression: **0 mismatches**, 31,383,973 bytes,
+>   1,961,516 cycles, 41.290 Gbps model, 9,994 corrupt/resync.
+> - Formal: **Z3 PASS + CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported.
+> - Synthesis (Yosys/ABC cmos4): 22,629 / 25,201 / 29,628 cells for 128/256/512-bit,
+>   2,228 DFFs.
+> - Browser: 1,000,000 messages in 664 ms wall, WebGPU compute, 0 errors.
+> - Native Vulkan (Radeon 680M): 200,000 records in 7.85 ms, bins match CPU.
+> - Honest latency: **2 clocks from `s_axis_tdata` to registered output** at the
+>   322.26 MHz model clock; 1 clock from the window. No Fmax sign-off.
+>
+> The historical table below is kept for context and is **not** the v2 evidence.
 
 ---
 

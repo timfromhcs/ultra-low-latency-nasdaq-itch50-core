@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ChipLab — ITCH-50 silicon lab</title>
+  <meta name="description" content="Run a WebAssembly twin of the ITCH-50 market-data parser, compare chip models and inspect the order book. Local-first, WebGPU accelerated, no cloud." />
+  <meta name="theme-color" content="#0e100f" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ChipLab — ITCH-50 silicon lab" />
+  <meta property="og:description" content="Run the feed. See the silicon. A local-first WebAssembly + WebGPU lab for a NASDAQ ITCH 5.0 parser." />
+  <meta property="og:image" content="./og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="ds">
+  <a class="skip" href="#lab">Skip to lab</a>
+
+  <header class="topbar">
+    <a class="brand" href="#lab" aria-label="ChipLab home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="24" height="24"><rect x="7" y="7" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 11h10v10H11z" fill="none" stroke="currentColor" stroke-width="1"/><path d="M3 12h4M3 20h4M25 12h4M25 20h4M12 3v4M20 3v4M12 25v4M20 25v4" stroke="currentColor" stroke-width="1.2"/></svg>
+      </span>
+      <span class="brand-word">CHIPLAB</span>
+      <span class="brand-sub">ITCH-50</span>
+    </a>
+    <div class="top-status" aria-live="polite">
+      <span class="ds-badge ds-badge-outline" id="wasm-badge">WASM · probing</span>
+      <span class="ds-badge ds-badge-outline" id="gpu-badge">GPU · probing</span>
+      <span class="ds-badge ds-badge-outline" id="net-badge">LOCAL</span>
+    </div>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#lab" aria-current="page">Lab</a>
+      <a href="#compare">Compare</a>
+      <a href="#containers">Containers</a>
+      <a href="#history">Runs</a>
+    </nav>
+  </header>
+
+  <main id="lab" class="main">
+    <section class="hero">
+      <div class="hero-copy">
+        <h1 class="ds-display">Run the feed.<br />See the silicon.</h1>
+        <p class="ds-supporting">A WebAssembly twin of the ITCH-50 core, measured on your hardware.</p>
+
+        <form class="controls" id="controls" autocomplete="off">
+          <div class="ds-field">
+            <label class="ds-label" for="chip">Chip</label>
+            <select class="ds-select" id="chip" name="chip"></select>
+          </div>
+          <div class="ds-field">
+            <label class="ds-label" for="count">Messages</label>
+            <select class="ds-select" id="count" name="count">
+              <option value="10000">10,000</option>
+              <option value="100000" selected>100,000</option>
+              <option value="500000">500,000</option>
+              <option value="1000000">1,000,000</option>
+            </select>
+          </div>
+          <div class="ds-field field-seed">
+            <label class="ds-label" for="seed">Seed</label>
+            <input class="ds-input" id="seed" name="seed" value="1337" inputmode="numeric" pattern="[0-9]*" />
+          </div>
+          <div class="ds-field">
+            <label class="ds-label" for="mode">Stream</label>
+            <select class="ds-select" id="mode" name="mode">
+              <option value="0" selected>Raw ITCH</option>
+              <option value="1">MoldUDP64</option>
+              <option value="2">Ethernet + Mold</option>
+            </select>
+          </div>
+          <button class="ds-btn ds-btn-primary run" id="run" type="submit" disabled>
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.8v10.4L13 8 4 2.8Z" fill="currentColor"/></svg>
+            Run feed
+          </button>
+          <button class="ds-btn ds-btn-outline" id="live" type="button" aria-pressed="false">Live</button>
+        </form>
+        <p class="ds-supporting status" id="status" role="status">Ready. Everything runs locally.</p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 420 300" role="img">
+          <defs>
+            <pattern id="pins" width="14" height="14" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="7" height="3" fill="currentColor" opacity=".25" />
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="420" height="300" fill="none" />
+          <g stroke="currentColor" fill="none" opacity=".22">
+            <path d="M0 60h420M0 120h420M0 180h420M0 240h420" stroke-width=".5" />
+            <path d="M60 0v300M120 0v300M180 0v300M240 0v300M300 0v300M360 0v300" stroke-width=".5" />
+          </g>
+          <g transform="translate(120 55)">
+            <rect x="0" y="0" width="180" height="180" rx="10" fill="#121613" stroke="var(--border)" stroke-width="1.5" />
+            <rect x="18" y="18" width="144" height="144" rx="6" fill="none" stroke="var(--primary)" stroke-width="1.2" opacity=".7" />
+            <rect x="42" y="42" width="96" height="96" rx="3" fill="none" stroke="var(--primary)" stroke-width=".8" opacity=".5" />
+            <path d="M54 132h20v-22h20V88h20V66h20" stroke="var(--primary)" stroke-width="2" fill="none" />
+            <circle cx="54" cy="132" r="3" fill="var(--primary)" />
+            <circle cx="134" cy="66" r="3" fill="var(--warning)" />
+            <path d="M0 30h-26M0 60h-26M0 90h-26M0 120h-26M0 150h-26M180 30h26M180 60h26M180 90h26M180 120h26M180 150h26" stroke="var(--border)" stroke-width="3" />
+            <path d="M30 0v-26M60 0v-26M90 0v-26M120 0v-26M150 0v-26M30 180v26M60 180v26M90 180v26M120 180v26M150 180v26" stroke="var(--border)" stroke-width="3" />
+            <text x="90" y="80" text-anchor="middle" fill="var(--foreground)" font-size="10" letter-spacing="2">ITCH</text>
+            <text x="90" y="96" text-anchor="middle" fill="var(--muted-foreground)" font-size="7" letter-spacing="1">AXI4-S · 128b</text>
+            <text x="90" y="110" text-anchor="middle" fill="var(--muted-foreground)" font-size="7" letter-spacing="1">L3 PRE-TRIGGER</text>
+          </g>
+          <g fill="var(--muted-foreground)" font-size="8" letter-spacing="1">
+            <text x="18" y="290">S_AXIS_TDATA</text>
+            <text x="312" y="290">M_ORDER</text>
+            <text x="312" y="18">322.26 MHz</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Run metrics">
+      <div class="metric lead">
+        <span class="metric-label">Throughput</span>
+        <strong class="metric-value" id="m-gbps">—</strong>
+        <span class="metric-foot" id="m-gbps-foot">Gbps · model</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Messages</span>
+        <strong class="metric-value" id="m-msgs">—</strong>
+        <span class="metric-foot">verified records</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Rate</span>
+        <strong class="metric-value" id="m-mps">—</strong>
+        <span class="metric-foot">M msg/s</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Latency</span>
+        <strong class="metric-value" id="m-lat">—</strong>
+        <span class="metric-foot">cycles · model</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Errors</span>
+        <strong class="metric-value" id="m-err">—</strong>
+        <span class="metric-foot" id="m-err-foot">vs golden</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel tape-panel">
+        <header class="panel-head">
+          <h2 class="ds-section-title">Tape</h2>
+          <span class="ds-badge ds-badge-outline" id="tape-count">0 rows</span>
+        </header>
+        <div class="table-wrap">
+          <table class="ds-table tape">
+            <thead><tr><th>Type</th><th>Symbol</th><th class="num">Price</th><th class="num">Shares</th><th class="num">Lat</th></tr></thead>
+            <tbody id="tape-body"><tr><td colspan="5" class="empty">Run the feed to see messages.</td></tr></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel depth-panel">
+        <header class="panel-head">
+          <h2 class="ds-section-title">Depth density</h2>
+          <span class="ds-badge" id="gpu-mode">CPU</span>
+        </header>
+        <div class="canvas-wrap">
+          <canvas id="gpu-canvas" aria-label="Order book price density"></canvas>
+        </div>
+        <p class="ds-supporting panel-note">Price bins from the run. WebGPU computes them on the GPU; Canvas2D is the fallback.</p>
+      </article>
+
+      <article class="panel lat-panel">
+        <header class="panel-head">
+          <h2 class="ds-section-title">Latency</h2>
+          <span class="ds-badge ds-badge-outline" id="lat-mode">cycles</span>
+        </header>
+        <div class="canvas-wrap short">
+          <canvas id="hist-canvas" aria-label="Latency histogram"></canvas>
+        </div>
+        <dl class="kv">
+          <div><dt>Corrupt</dt><dd id="k-corrupt">—</dd></div>
+          <div><dt>Bytes in</dt><dd id="k-bytes">—</dd></div>
+          <div><dt>Frames</dt><dd id="k-frames">—</dd></div>
+          <div><dt>Wall</dt><dd id="k-wall">—</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section id="compare" class="grid two">
+      <article class="panel compare-panel">
+        <header class="panel-head">
+          <h2 class="ds-section-title">Chip comparison</h2>
+          <button class="ds-btn ds-btn-outline ds-btn-sm" id="compare-btn" type="button" disabled>Compare all</button>
+        </header>
+        <div class="table-wrap">
+          <table class="ds-table">
+            <thead><tr><th>Chip</th><th class="num">Gbps</th><th class="num">M msg/s</th><th class="num">Lat</th><th>Result</th></tr></thead>
+            <tbody id="compare-body"><tr><td colspan="5" class="empty">Run a comparison to test every model against the golden parser.</td></tr></tbody>
+          </table>
+        </div>
+        <p class="ds-supporting panel-note">Lossy is the negative control. It must fail.</p>
+      </article>
+
+      <article id="containers" class="panel container-panel">
+        <header class="panel-head">
+          <h2 class="ds-section-title">Chip containers</h2>
+          <span class="ds-badge ds-badge-outline" id="container-count">8 models</span>
+        </header>
+        <div id="containers-body" class="containers"></div>
+        <p class="ds-supporting panel-note">Each chip runs sandboxed in the Worker. Local only.</p>
+      </article>
+    </section>
+
+    <section id="history" class="panel history-panel">
+      <header class="panel-head">
+        <h2 class="ds-section-title">Local runs</h2>
+        <button class="ds-btn ds-btn-ghost ds-btn-sm" id="clear" type="button">Clear</button>
+      </header>
+      <div id="history-body" class="history"><p class="ds-supporting">No runs saved yet. Results stay in this browser (OPFS).</p></div>
+    </section>
+
+    <footer class="foot">
+      <p>Pre-silicon RTL + executable twin. Not investment advice, not a tapeout.</p>
+      <p><a href="https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core">Source</a> · <a href="./docs.html">Docs</a> · PolyForm Small Business</p>
+    </footer>
+  </main>
+
+  <nav class="bottomnav" aria-label="Mobile sections">
+    <a href="#lab" aria-current="page">Lab</a>
+    <a href="#compare">Compare</a>
+    <a href="#containers">Containers</a>
+    <a href="#history">Runs</a>
+  </nav>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

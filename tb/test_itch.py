@@ -22,6 +22,7 @@ async def test_itch_stream_regression(dut):
     dut.rst_n.value = 0
     dut.s_axis_tvalid.value = 0
     dut.s_axis_tdata.value = 0
+    dut.s_axis_tkeep.value = 0
     dut.s_axis_tlast.value = 0
 
     for _ in range(10):
@@ -55,6 +56,7 @@ async def test_itch_stream_regression(dut):
                     chunk = chunk + (b'\x00' * (16 - len(chunk)))
                 word = int.from_bytes(chunk, 'little')
                 dut.s_axis_tdata.value = word
+                dut.s_axis_tkeep.value = 0xFFFF
                 dut.s_axis_tvalid.value = 1
                 offset += 16
             else:
@@ -62,6 +64,7 @@ async def test_itch_stream_regression(dut):
 
         await RisingEdge(dut.clk)
         dut.s_axis_tvalid.value = 0
+        dut.s_axis_tkeep.value = 0
 
     # Monitor Coroutine
     async def monitor():

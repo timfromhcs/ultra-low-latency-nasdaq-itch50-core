@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node scripts/build_vercel.mjs",
+  "outputDirectory": "public",
+  "framework": null,
+  "functions": {
+    "api/*.mjs": {
+      "includeFiles": "web/wasm/**"
+    }
+  },
+  "headers": [
+    {
+      "source": "/wasm/(.*)",
+      "headers": [{ "key": "content-type", "value": "application/wasm" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "x-content-type-options", "value": "nosniff" },
+        { "key": "referrer-policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

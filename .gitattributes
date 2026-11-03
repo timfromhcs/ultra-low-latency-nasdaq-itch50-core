@@ -1,0 +1,7 @@
+# Keep shell scripts LF so WSL/Linux can execute them after checkout.
+*.sh text eol=lf
+*.sv text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf
+*.ps1 text eol=crlf
+*.md text eol=lf

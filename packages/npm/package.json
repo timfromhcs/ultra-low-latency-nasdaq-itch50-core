@@ -1,0 +1,24 @@
+{
+  "name": "@chiplab/core",
+  "version": "0.2.0",
+  "description": "ITCH-50 parser, MoldUDP64 framing, chip models and top-of-book builder in WebAssembly.",
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./wasm": "./wasm/chiplab_core.wasm"
+  },
+  "bin": {
+    "chiplab": "./bin/chiplab.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "bin/chiplab.mjs",
+    "wasm/chiplab_core.wasm",
+    "README.md"
+  ],
+  "keywords": ["itch", "nasdaq", "market-data", "hft", "webassembly", "webgpu", "orderbook"],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "engines": { "node": ">=20" },
+  "repository": { "type": "git", "url": "https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core" }
+}

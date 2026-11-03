@@ -1,30 +1,81 @@
-name: CI Verification
+name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
+  workflow_dispatch:
 
 jobs:
-  verify:
+  rtl:
+    name: RTL + formal + model
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Hardware Toolchains
+      - uses: actions/checkout@v4
+      - name: Toolchain
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y yosys iverilog verilator z3 python3-pip
-
-      - name: Setup Python Virtualenv and Dependencies
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq verilator yosys iverilog z3 cvc5 python3-pip
+      - name: Python deps
         run: |
-          python3 -m venv .venv
-          source .venv/bin/activate
-          pip install --upgrade pip
-          pip install cocotb cocotb-tools pytest scapy wavedrom klayout
-
-      - name: Run Complete Verification Suite
+          python3 -m pip install --upgrade pip
+          python3 -m pip install cocotb pytest scapy
+      - name: Lint
+        run: make lint
+      - name: Vectors (50k for CI time)
+        run: python3 tb/itch_model.py --count 50000 --out tb/vectors
+      - name: Full-field regression
+        run: make sim VECTORS=tb/vectors
+      - name: Formal
+        run: ./formal/run_formal.sh z3
+      - name: Model tests
+        run: python3 -m pytest -q tb/test_model.py
+      - name: Cocotb
         run: |
-          make verify_all
+          python3 tb/run_cocotb.py
+          python3 tb/run_pipeline_cocotb.py
+
+  wasm-web:
+    name: WASM + backend + MCP + Vercel
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Build WASM
+        run: |
+          cd wasm-core && cargo build --target wasm32-unknown-unknown --release
+          cp target/wasm32-unknown-unknown/release/chiplab_core.wasm ../web/wasm/chiplab_core.wasm
+      - name: Gate
+        run: node scripts/gate.mjs
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t chiplab:ci .
+
+  packages:
+    name: npm + PyPI artifacts
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: npm pack
+        run: cd packages/npm && npm pack
+      - name: Python build
+        run: |
+          python -m pip install build
+          cd packages/python && python -m build

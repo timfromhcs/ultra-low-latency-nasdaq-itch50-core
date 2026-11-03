@@ -1,41 +1,63 @@
-# ultra-low-latency-nasdaq-itch50-core (Full Specification)
-# Deterministic 0/1-Cycle Cut-Through NASDAQ ITCH 5.0 Market Data Parser IP Core
+# ChipLab — full specification
+# Local-first ITCH-50 silicon lab: RTL + WebAssembly + WebGPU + MCP + EXE + Docker + Vercel
 
-## 1. Executive Overview
-The `ultra-low-latency-nasdaq-itch50-core` repository provides a production-ready, formally verified, silicon-synthesizable Hardware IP Core implementing NASDAQ TotalView-ITCH 5.0 market data feed parsing at line rates up to 41.25 Gbps.
+## 1. What it is
+ChipLab is a pre-silicon lab around a NASDAQ TotalView-ITCH 5.0 parser. The RTL
+(`rtl/`) is the hardware specification; the Rust/WASM core (`wasm-core/`) is the
+executable twin used by the browser, Node, MCP, npm, PyPI and the single EXE.
 
-## 2. Microarchitecture Specifications
-- Top-level Module: `ultra_low_latency_nasdaq_itch50_cutthrough`
-- Ingress Interface: AXI4-Stream 128-bit Slave (`s_axis_tdata[127:0]`, `s_axis_tvalid`, `s_axis_tready`, `s_axis_tlast`)
-- Frequency Target: 322.26 MHz ($T_{clk} = 3.10 ns$) for 25GbE / 100GbE line rate integration
-- Latency (Registered): Exactly 1 Clock Cycle (3.10 ns @ 322.26 MHz)
-- Latency (Asynchronous Bypass): <= 1.10 ns combinatorial gate propagation (0 clock cycles)
-- Direct L3 Pre-Trigger: Extracts 16-bit Stock Locate identifier in Cycle 0 in < 0.30 ns
-- Barrel Shifting Matrix: 512-bit sliding lookahead buffer resolving unaligned frame boundaries with 0 stall penalty
-- Message Filtering: Early non-trade drop gate instantly identifying admin messages ('S', 'R', 'H', 'Y', 'L', 'V', 'W', 'K', 'J', 'h')
+## 2. RTL
+- Top: `ultra_low_latency_nasdaq_itch50_cutthrough`, parameters DATA_WIDTH 128/256/512.
+- `itch_shifter.sv`: tkeep-aware, cleared append window, 512-bit sliding window.
+- `itch_parser_core.sv`: all 22 official opcodes, full 512-bit payload, 64-bit shares.
+- `itch_top.sv`: tkeep/tlast, registered egress, async bypass, counters.
+- `moldudp64_frontend.sv`: Ethernet/IPv4/UDP filter, Mold header, seq/gap.
+- `moldudp64_depacketizer.sv`: strips per-message 2-byte length prefixes.
+- `moldudp64_pipeline.sv`: single-frame end-to-end; multi-frame backpressure open.
 
-## 3. Supported Protocol Messages
-- Add Order ('A', 36 bytes)
-- Add Order with MPID ('F', 40 bytes)
-- Order Executed ('E', 31 bytes)
-- Order Executed with Price ('C', 36 bytes)
-- Order Cancel ('X', 23 bytes)
-- Order Delete ('D', 19 bytes)
-- Order Replace ('U', 35 bytes)
-- Trade Message Non-Cross ('P', 44 bytes)
-- Cross Trade ('Q', 40 bytes)
-- Broken Trade ('B', 19 bytes)
-- Net Order Imbalance Indicator NOII ('I', 50 bytes)
-- Retail Price Improvement Indicator RPII ('N', 20 bytes)
-- System Event / Stock Directory / Administrative Messages ('S', 'R', 'H', 'Y', 'L', 'V', 'W', 'K', 'J', 'h')
+Latency (honest):
+- s_axis_tdata -> window register: 1 clock.
+- window -> registered output: 1 clock.
+- wire-to-registered-output: 2 clocks (6.20 ns at 322.26 MHz).
+- async bypass: same cycle as window, not zero from the wire.
 
-## 4. Verification Sign-Off
-- Formal Verification: SymbiYosys + Z3 SMT solver. Bounded Model Checking (25 steps) and K-Induction temporal proof PASSED with 0 counterexamples.
-- Stress Test: 1,000,000 synthetic MoldUDP64/ITCH packets verified against independent golden parser in C++/Verilator with 0 bit-level mismatches.
-- Integration Test: Cocotb Python regression verified on Icarus Verilog.
-- Gate Count: 21,811 standard cells (1,485 sequential DFFs, 20,326 combinatorial logic gates).
+## 3. Protocol coverage
+S 12, R 39, H 25, Y 20, L 26, V 35, W 12, K 28, J 35, h 21, A 36, F 40, E 31,
+C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 
-## 5. Licensing and Attribution
-- Small Business & Community Tier (Free): Free for entities with gross annual revenue < $100,000 USD.
-- Mandatory Attribution String: "Hardware powered by ultra-low-latency-nasdaq-itch50-core by @timfromhcs (https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core)"
-- Enterprise Custom Commercial Tier: Entities with gross annual revenue >= $100,000 USD must contact `timfromhcs@gmail.com` to purchase an Enterprise License.
+## 4. Verification
+- `tb/itch_model.py`: independent reference, 80-byte canonical record.
+- `tb/sim_main.cpp`: full-field Verilator regression.
+- 1,000,000 records, 0 mismatches, 31,383,973 bytes, 1,961,516 cycles, 41.290 Gbps.
+- `formal/itch_formal.sv`: pre-trigger equivalence, class exclusivity, legal lengths,
+  register equivalence, flow control. Z3 PASS, CVC5 PASS, Boolector 1.5 unsupported.
+- `formal/solver_matrix.sh`, `scripts/mutate.py`, `scripts/synth_matrix.sh`.
+- Yosys cells: 22,629 (128), 25,201 (256), 29,628 (512); 2,228 DFFs.
+- OpenLane configs are flow-ready; no P&R/Fmax sign-off is claimed.
+
+## 5. Web/WASM
+- `web/worker.js` owns the WASM memory; `web/core.js` decodes records.
+- `web/gpu.js`: WebGPU compute bins + render; Canvas2D fallback.
+- `web/app.js`: responsive dense-tool UI, Worker, OPFS history, PWA.
+- 1M messages in 664 ms wall on the test host, 0 errors.
+
+## 6. Backend/MCP/API
+- `backend/server.mjs`: `/api/health`, `/api/chips`, `/api/run`, `/api/compare`, `/api/book`.
+- `backend/run.mjs`: CLI.
+- `mcp/server.mjs`: `chiplab.chips`, `chiplab.run`, `chiplab.compare`, `chiplab.book`,
+  `chiplab.formal_status`.
+- `api/*.mjs`: Vercel serverless wrappers; static-first, user data stays in the browser.
+
+## 7. Distribution
+- `npm run build:exe` -> `dist/chiplab.exe` (Node SEA, embedded web + WASM).
+- `Dockerfile` -> non-root Node 22 alpine, healthcheck.
+- `vercel.json` + `scripts/build_vercel.mjs` -> `public/` + `api/`.
+- npm `@chiplab/core`; PyPI `chiplab-itch`.
+- Native `chiplab-native` (wgpu Vulkan/DX12, `--probe`, `--boost`).
+
+## 8. Honest limits
+Pre-silicon, synthetic feed, no tapeout, no Fmax sign-off, multi-frame Mold flow control
+open, WebGPU f32 only for visual heights. Not investment advice.
+
+## 9. Licence
+PolyForm Small Business 1.0.0. Attribution string required under $100k annual revenue.

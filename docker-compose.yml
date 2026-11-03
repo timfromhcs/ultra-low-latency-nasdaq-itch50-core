@@ -1,0 +1,10 @@
+services:
+  chiplab:
+    build: .
+    image: chiplab:0.2.0
+    ports:
+      - "4173:4173"
+    environment:
+      PORT: "4173"
+      HOST: "0.0.0.0"
+    restart: unless-stopped

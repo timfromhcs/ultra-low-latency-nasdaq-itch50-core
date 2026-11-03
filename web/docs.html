@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChipLab — docs</title>
+  <meta name="description" content="ChipLab quickstart: web demo, local backend, MCP, npm, PyPI, Docker, single EXE, Vercel and the formal verification stack." />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="ds">
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">◧</span><span class="brand-word">CHIPLAB</span><span class="brand-sub">DOCS</span></a>
+    <nav class="topnav" aria-label="Docs"><a href="./" >Lab</a><a href="#run">Run</a><a href="#api">API</a><a href="#mcp">MCP</a><a href="#limits">Limits</a></nav>
+  </header>
+  <main class="main docs">
+    <h1 class="ds-display">ChipLab docs</h1>
+    <p class="ds-supporting">The same WASM core runs in the browser, Node, MCP, npm, PyPI and the single EXE. No cloud required.</p>
+
+    <section id="run" class="panel">
+      <h2 class="ds-section-title">Run it</h2>
+      <pre><code># web + API (Node 22)
+node backend/server.mjs
+# open http://127.0.0.1:4173
+
+# CLI
+node backend/run.mjs --compare --count 1000000
+node backend/run.mjs --chip 6 --mode 1 --count 250000
+
+# desktop app (single file)
+dist\chiplab.exe --port 4173
+
+# docker
+docker compose up --build</code></pre>
+      <p class="ds-supporting">The web app also works as a static PWA. WebGPU is optional; Canvas2D is the fallback.</p>
+    </section>
+
+    <section id="api" class="panel">
+      <h2 class="ds-section-title">Local API</h2>
+      <pre><code>GET  /api/health
+GET  /api/chips
+POST /api/run      { "chip": 1, "count": 100000, "seed": 1337, "mode": 0 }
+POST /api/compare  { "count": 100000, "seed": 1337 }
+POST /api/book     { "count": 100000, "seed": 1337 }</code></pre>
+      <p class="ds-supporting">All numbers are model numbers at 322.26 MHz. The feed is synthetic and reproducible from the seed.</p>
+    </section>
+
+    <section id="mcp" class="panel">
+      <h2 class="ds-section-title">MCP</h2>
+      <pre><code>node mcp/server.mjs
+# tools: chiplab.chips, chiplab.run, chiplab.compare,
+#        chiplab.book, chiplab.formal_status</code></pre>
+      <p class="ds-supporting">The MCP server is a thin stdio JSON-RPC wrapper over the same WASM core.</p>
+    </section>
+
+    <section id="limits" class="panel">
+      <h2 class="ds-section-title">Honest limits</h2>
+      <ul class="ds-supporting">
+        <li>Pre-silicon. Not a tapeout, not silicon-proven.</li>
+        <li>The RTL async bypass is one clock after the ingress register, not zero clocks from the wire.</li>
+        <li>WebGPU visualises a sample of the run; totals come from the exact parser.</li>
+        <li>Multi-frame MoldUDP64 back-to-back flow control is still experimental (single-frame proof passes).</li>
+        <li>No investment advice, no order routing, no live exchange connection.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

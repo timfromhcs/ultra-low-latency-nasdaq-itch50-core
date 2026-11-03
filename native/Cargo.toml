@@ -1,0 +1,18 @@
+[package]
+name = "chiplab-native"
+version = "0.2.0"
+edition = "2021"
+
+[[bin]]
+name = "chiplab-native"
+path = "src/main.rs"
+
+[dependencies]
+wgpu = "0.19"
+pollster = "0.3"
+bytemuck = { version = "1", features = ["derive"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

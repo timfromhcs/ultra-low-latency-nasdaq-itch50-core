@@ -1,0 +1,57 @@
+{
+  "total": 10,
+  "killed": 10,
+  "score": 100.0,
+  "rows": [
+    {
+      "name": "drop_gate_A_len",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 4 len got=35 exp=36"
+    },
+    {
+      "name": "parser_A_shares_offset",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 4 shares got=342711881 exp=1338718"
+    },
+    {
+      "name": "parser_E_share_regression",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 1 shares got=408847058 exp=1597058"
+    },
+    {
+      "name": "shifter_no_append",
+      "status": "KILLED",
+      "detail": "[FAIL] only 0 / 5000 records after 100000 cycles (stalled or dropped)"
+    },
+    {
+      "name": "top_shares_zero",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 0 shares got=0 exp=1625712"
+    },
+    {
+      "name": "locate_byte_swap",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 0 locate got=46603 exp=2998"
+    },
+    {
+      "name": "C_printable_invert",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 0 printable got=1 exp=0"
+    },
+    {
+      "name": "Q_shares_truncate",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 28 shares got=62271 exp=267456030846452"
+    },
+    {
+      "name": "top_reference_zero",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 5 flags got=0 exp=2"
+    },
+    {
+      "name": "shifter_consume_guard",
+      "status": "KILLED",
+      "detail": "[FAIL] pkt 9 type got=80 exp=87"
+    }
+  ]
+}

@@ -1,5 +1,12 @@
 # Hardware Microarchitecture & Specification
-## Core: `ultra_low_latency_nasdaq_itch50_cutthrough`
+## Core: `ultra_low_latency_nasdaq_itch50_cutthrough` (v2)
+
+> **v2 truth note (2026-11-03):** the original text below described a 452-bit record and
+> a "0-cycle / 1.10 ns" bypass. v2 widens shares to 64 bit (484-bit record), adds
+> `tkeep`/`tlast`, preserves the full payload, and states the honest latency:
+> **2 clocks from `s_axis_tdata` to registered output** (1 clock from the window
+> register). The async bypass is valid in the same cycle as the window, one clock after
+> ingress. Fmax is a model target, not a sign-off.
 
 ---
 
@@ -74,7 +81,8 @@ The architecture is partitioned into four decoupled, ultra-fast sub-modules:
 ### AXI4-Stream Slave Ingress
 | Signal | Direction | Width | Description |
 | :--- | :---: | :---: | :--- |
-| `s_axis_tdata` | Input | 128 | 128-bit streaming packet data |
+| `s_axis_tdata` | Input | 128/256/512 | Streaming packet data (parameterised) |
+| `s_axis_tkeep` | Input | 16/32/64 | Valid byte mask per beat |
 | `s_axis_tvalid` | Input | 1 | Data valid handshake signal |
 | `s_axis_tlast` | Input | 1 | Frame end delimiter |
 | `s_axis_tready` | Output | 1 | Flow control backpressure ready flag |
@@ -102,14 +110,16 @@ The architecture is partitioned into four decoupled, ultra-fast sub-modules:
 | `m_order_ref_num` | Output | 64 | 64-bit unique order reference number |
 | `m_new_order_ref_num` | Output | 64 | 64-bit replacement order reference number (Msg 'U') |
 | `m_side` | Output | 8 | Buy ('B' / 0x42) or Sell ('S' / 0x53) |
-| `m_shares` | Output | 32 | 32-bit order share quantity |
+| `m_shares` | Output | 64 | 64-bit order/cross share quantity ('Q' needs 64 bit) |
+| `m_payload` | Output | 512 | Full message bytes, including reference data |
 | `m_stock` | Output | 64 | 8-character ASCII stock symbol |
 | `m_price` | Output | 32 | 32-bit fixed-point price ($4\text{ decimal places}$) |
 | `m_match_number` | Output | 64 | 64-bit exchange match execution number |
 | `m_mpid` | Output | 32 | 4-character Market Participant Identifier |
 | `m_printable` | Output | 1 | Non-displayable execution flag ('Y'/'N') |
 | `m_is_trade` | Output | 1 | Asserted for trade messages ('A', 'F', 'E', 'C', 'X', 'D', 'U', 'P', 'Q') |
-| `m_is_drop` | Output | 1 | Asserted for administrative drop messages |
+| `m_is_reference` | Output | 1 | Reference/administrative message (R/H/Y/L/...) |
+| `m_is_drop` | Output | 1 | Alias of `m_is_reference` (no information is discarded) |
 | `m_error_corrupt` | Output | 1 | Asserted when invalid opcode or corrupt framing is encountered |
 
 ---

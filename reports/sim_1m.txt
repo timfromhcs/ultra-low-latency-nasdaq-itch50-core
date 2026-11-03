@@ -1,0 +1,29 @@
+=================================================================
+ ITCH 5.0 FULL-FIELD REGRESSION (Verilator vs Python model)
+=================================================================
+[INFO] stream bytes    : 31383973
+[INFO] expected records: 1000000 (limit 1000000)
+[PROGRESS] 100000 / 1000000
+[PROGRESS] 200000 / 1000000
+[PROGRESS] 300000 / 1000000
+[PROGRESS] 400000 / 1000000
+[PROGRESS] 500000 / 1000000
+[PROGRESS] 600000 / 1000000
+[PROGRESS] 700000 / 1000000
+[PROGRESS] 800000 / 1000000
+[PROGRESS] 900000 / 1000000
+[PROGRESS] 1000000 / 1000000
+
+=================================================================
+ RESULT
+=================================================================
+ Records verified        : 1000000 / 1000000
+ Full-field mismatches   : 0
+ Bytes consumed (model)  : 31383973
+ status_msg_count        : 1000000
+ status_byte_count       : 31383973
+ status_corrupt_count    : 9994
+ Simulated cycles        : 1961516 (6.0807e+06 ns)
+ First output at cycle   : 4
+ Throughput (model)      : 41.290 Gbps
+=================================================================

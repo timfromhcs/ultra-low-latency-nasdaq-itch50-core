@@ -1,0 +1,40 @@
+name: Windows single EXE
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install build tools
+        run: npm install
+      - name: Ensure WASM exists
+        shell: bash
+        run: |
+          if [ ! -f web/wasm/chiplab_core.wasm ]; then
+            rustup target add wasm32-unknown-unknown
+            (cd wasm-core && cargo build --target wasm32-unknown-unknown --release)
+            cp wasm-core/target/wasm32-unknown-unknown/release/chiplab_core.wasm web/wasm/chiplab_core.wasm
+          fi
+      - name: Build
+        run: npm run build:exe
+      - name: Smoke test
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath "dist\chiplab.exe" -ArgumentList "--port","4191","--no-open" -PassThru
+          Start-Sleep -Seconds 3
+          $h = Invoke-RestMethod http://127.0.0.1:4191/api/health
+          if (-not $h.ok) { throw "health failed" }
+          Stop-Process -Id $p.Id -Force
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chiplab-windows-exe
+          path: dist/chiplab.exe
