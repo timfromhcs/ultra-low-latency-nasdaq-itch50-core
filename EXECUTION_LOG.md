@@ -273,6 +273,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Replaced it with a provable gating invariant (prefetch only for a known, non-corrupt
   opcode with non-zero length); the other invariants are unchanged. Local proof PASS.
 - Root-cause note: toolchain drift plus a too-strong property, not an RTL regression.
+- Verified on the runner: deep proof (BMC 20 + k-induction + covers) **success** with
+  oss-cad-suite 2026-11-03; mutation job success (9/9).
+- The full solver matrix was re-running every solver at depth 20 and would blow the job
+  timeout, so it is now **opt-in** via `workflow_dispatch` input `solver_matrix` (capped
+  at 20 min). Weekly runs execute the pinned deep proof only.
 
 ## Phase 2a - Mutation testing for the BBO path
 
