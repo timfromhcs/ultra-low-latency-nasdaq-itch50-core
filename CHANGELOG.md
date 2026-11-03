@@ -85,6 +85,10 @@ All notable changes to ChipLab are documented here. The format follows
   **−9.14 ns at 3.10 ns**, i.e. Fmax **≈81.5 MHz**; the worst path runs from a shifter
   counter FF to `raw_payload[0]` (the asynchronous bypass). Pre-PnR only, **not** a
   timing sign-off. `reports/openlane_sky130-250mhz-sta.json`.
+- **WASM reproducible-build check**: `scripts/repro_wasm.sh` builds the crate twice
+  into clean target dirs with the same toolchain and compares SHA-256. Result:
+  byte-identical (`d2b5f58f…`, 50,322 bytes, rustc 1.98.1); the committed binary
+  differs because the toolchain is not pinned yet (`reports/repro_wasm.json`).
 - **Docker keyless signing**: `docker-publish.yml` now signs the pushed image with
   `cosign sign` (Sigstore keyless, `id-token: write`) in addition to
   `provenance: mode=max` and the SBOM attestation; README documents `cosign verify`

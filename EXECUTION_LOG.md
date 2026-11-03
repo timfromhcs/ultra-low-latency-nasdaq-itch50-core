@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 00:25 - WASM reproducible-build check
+
+- Added `scripts/repro_wasm.sh` (+ `make repro-wasm`): builds `wasm-core` twice into
+  clean `CARGO_TARGET_DIR`s with the same toolchain, compares SHA-256 and writes
+  `reports/repro_wasm.json`.
+- Result: **PASS**, both builds `d2b5f58f5a8c9131…`, 50,322 bytes, rustc 1.98.1.
+  The committed `web/wasm/chiplab_core.wasm` is `fc55bb6b…` (different toolchain), so
+  `matchesCommitted` is false; pinning the Rust toolchain is the follow-up.
+- Roadmap split accordingly.
+
 ## 2026-11-04 00:15 - Keyless cosign signature for the container image
 
 - `docker-publish.yml`: added `id-token: write`, an `id: build` on the build step,
