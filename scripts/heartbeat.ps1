@@ -48,3 +48,13 @@ if ($InvokeAgent) {
     Add-Content -Path $Log -Value "[heartbeat] opencode failed: $_" -Encoding utf8
   } finally { Pop-Location }
 }
+
+# Keep the evidence log bounded; the durable summary lives in EXECUTION_LOG.md.
+if (Test-Path $Log) {
+  $size = (Get-Item $Log).Length
+  if ($size -gt 200KB) {
+    $tail = Get-Content -Path $Log -Tail 200
+    Set-Content -Path $Log -Value $tail -Encoding utf8
+    Add-Content -Path $Log -Value "[heartbeat] log rotated at $size bytes" -Encoding utf8
+  }
+}
