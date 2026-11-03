@@ -74,6 +74,9 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Multi-gap recovery test**: two loss events (3; 6+7) repaired by replayed ranges →
+  markers [1..8], 2 requests, no abandon (`tb/test_arbiter.py`). The test acts as the
+  replay source; the hardware request interface is the contract.
 
 ## 0.3.1 — 2026-11-03
 

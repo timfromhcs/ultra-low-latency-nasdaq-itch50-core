@@ -201,3 +201,385 @@ Commit `b652e2f` ist gepusht; CI l├ñuft.
 [heartbeat] log rotated at 212381 bytes
 [2026-11-03T19:18:05.5835540+01:00] hallo, es ist 19:18
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 10; git status -sb | Select-Object 
+-First 5; git log --oneline -3
+[tick] ran 0, failed 0
+## main...origin/main
+ M reports/heartbeat.log
+b652e2f feat(rtl): Mold sequence recovery with retransmit requests and timeout
+9a079ef feat(rtl): downstream back-pressure through the Mold pipeline
+258e66a feat(rtl): two-feed Mold system with A/B arbitration
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 2 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"b652e2f\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  return { run: 
+{status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,conclusion:j
+.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/arb_recovery.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/arb_recovery.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\mold_feed_arbiter.sv -Pattern 'ST_IDLE:|ST_STREAM:' | 
+Select-Object LineNumber,Line
+LineNumber Line                    
+---------- ----                    
+       231         ST_IDLE: begin  
+       252         ST_STREAM: begin
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/mold_feed_arbiter.sv [90m[limit=70, offset=225][0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\mold_feed_arbiter.sv -Pattern 
+'recovery_en|req_valid|req_pending|REC_TIMEOUT|requests' | Select-Object -First 12 LineNumber,Line
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\arb_recovery.mjs"; Select-String -Path rtl\mold_feed_arbiter.sv 
+-Pattern 'recovery_en|req_pending' | Select-Object -First 6
+arbiter recovery mode added
+
+rtl\mold_feed_arbiter.sv:30:  input  wire                        recovery_en,
+rtl\mold_feed_arbiter.sv:96:  reg       req_pending;
+rtl\mold_feed_arbiter.sv:245:            if (recovery_en && win_gap && !force_accept) begin
+rtl\mold_feed_arbiter.sv:253:              req_pending <= 1'b1;
+rtl\mold_feed_arbiter.sv:281:              if (req_pending) begin
+rtl\mold_feed_arbiter.sv:282:                req_pending <= 1'b0;
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\mold_feed_arbiter.sv -Pattern 'ST_IDLE:|ST_STREAM:' | 
+Select-Object LineNumber,Line; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall 
+-Wno-DECLFILENAME -Irtl rtl/mold_feed_arbiter.sv 2>&1 | grep -E 'Warning-|Error' | head -8; echo LINT_END"
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ %Error: rtl/mold_feed_arbiter.sv:251:54: syntax error, unexpected '['
+%Error: Exiting due to 1 error(s)
+LINT_END
+LineNumber Line                    
+---------- ----                    
+       242         ST_IDLE: begin  
+       290         ST_IDLE: begin  
+       305         ST_STREAM: begin
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/mold_feed_arbiter.sv [90m[limit=75, offset=240][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/mold_feed_arbiter.sv
+Index: rtl/mold_feed_arbiter.sv
+===================================================================
+--- rtl/mold_feed_arbiter.sv
++++ rtl/mold_feed_arbiter.sv
+@@ -246,10 +246,9 @@
+               // Request the missing range and drop the out-of-order frames so
+               // the replay can use the buffers.
+               req_valid   <= 1'b1;
+               req_seq     <= expected_seq;
+-              req_count   <= (win_seq - expected_seq > 64'd65535) ? 16'hFFFF :
+-                             (win_seq - expected_seq)[15:0];
++              req_count   <= (miss > 64'd65535) ? 16'hFFFF : miss[15:0];
+               requests    <= requests + 32'd1;
+               req_pending <= 1'b1;
+               req_timer   <= 10'd0;
+               full_a      <= 1'b0;
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/mold_feed_arbiter.sv
+Index: rtl/mold_feed_arbiter.sv
+===================================================================
+--- rtl/mold_feed_arbiter.sv
++++ rtl/mold_feed_arbiter.sv
+@@ -130,8 +130,9 @@
+ 
+   wire [7:0] nra = (m_tvalid && m_tready && !m_tlast) ? ra + 8'd1 : ra;
+ 
+   wire win_gap = pick_a ? (sa != expected_seq) : (sb != expected_seq);
++  wire [63:0] miss = pick_a ? (sa - expected_seq) : (sb - expected_seq);
+   wire [63:0] win_seq = pick_a ? sa : sb;
+   wire [15:0] win_cnt = pick_a ? ca : cb;
+ 
+   // Single clocked block: capture, wait counters, arbitration, output stream.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/mold_feed_arbiter.sv
+Index: rtl/mold_feed_arbiter.sv
+===================================================================
+--- rtl/mold_feed_arbiter.sv
++++ rtl/mold_feed_arbiter.sv
+@@ -284,13 +284,9 @@
+               end
+               expected_seq <= win_seq + {48'd0, win_cnt};
+             end
+           end
+-        end
+-
+-        ST_IDLE: begin
+-          m_tvalid <= 1'b0;
+-          if (req_pending) begin
++          if (req_pending && !decide) begin
+             if (req_timer >= REC_TIMEOUT) begin
+               req_pending  <= 1'b0;
+               req_valid    <= 1'b0;
+               force_accept <= 1'b1;
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/mold_feed_arbiter.sv 2>&1 | grep -E 'Warning-|Error' | head -8; echo LINT_END"
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/wire_arb_sys.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/wire_arb_sys.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\wire_arb_sys.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main 
+&& verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_ab_system.sv 2>&1 | grep -E 'Warning-|Error' | head 
+-5; echo LINT_END"
+system + tests wired
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_arb_rec_test.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_arb_rec_test.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_arb_rec_test.mjs"; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && python3 tb/run_arbiter_cocotb.py > /tmp/arbrec1.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc 
+"grep -E 'Arbiter:|Recovery mode|TESTS=|Assertion|Timeout|Error' /tmp/arbrec1.txt | tail -8"
+recovery mode test added
+RC=True
+   613.80ns INFO     cocotb.mold_feed_arbiter           Arbiter: 6 frames selected [1, 2, 3, 4, 7, 8], gaps=1, 
+drop_a=3 drop_b=3 PASS
+                                                            raise ValueError(f"Cannot convert {self!r} to int")
+                                                        ValueError: Cannot convert Logic('X') to int
+                                                        ** TESTS=2 PASS=1 FAIL=1 SKIP=0                   637.05       
+    0.02      38859.75  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\mold_feed_arbiter.sv -Pattern 'req_valid <=|req_seq <=|req_count 
+<=|requests <=|req_pending <=|force_accept <=' | Select-Object LineNumber,Line
+LineNumber Line                                 
+---------- ----                                 
+       253               req_pending <= 1'b1;   
+       279                 force_accept <= 1'b0;
+       282                 req_pending <= 1'b0; 
+       292               force_accept <= 1'b1;
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\mold_feed_arbiter.sv -Pattern 'expected_seq <= 64' -Context 2,3 | 
+Select-Object -First 2
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\mold_feed_arbiter.sv -Pattern 'expected_seq' | Select-Object 
+-First 8 LineNumber,Line
+LineNumber Line                                                                    
+---------- ----                                                                    
+        65   output reg  [63:0]                 expected_seq,                      
+       111   wire match_a   = full_a && (sa == expected_seq);                      
+       112   wire match_b   = full_b && (sb == expected_seq);                      
+       133   wire win_gap = pick_a ? (sa != expected_seq) : (sb != expected_seq);  
+       134   wire [63:0] miss = pick_a ? (sa - expected_seq) : (sb - expected_seq);
+       159       expected_seq <= initial_seq;                                      
+       250               req_seq     <= expected_seq;                              
+       285               expected_seq <= win_seq + {48'd0, win_cnt};
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/mold_feed_arbiter.sv [90m[limit=26, offset=146][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/mold_feed_arbiter.sv
+Index: rtl/mold_feed_arbiter.sv
+===================================================================
+--- rtl/mold_feed_arbiter.sv
++++ rtl/mold_feed_arbiter.sv
+@@ -156,10 +156,20 @@
+       m_tlast <= 1'b0;
+       gap <= 1'b0;
+       gaps <= 32'd0;
+       expected_seq <= initial_seq;
++      req_valid <= 1'b0;
++      req_seq <= 64'd0;
++      req_count <= 16'd0;
++      abandon <= 1'b0;
++      requests <= 32'd0;
++      abandoned <= 32'd0;
++      req_pending <= 1'b0;
++      req_timer <= 10'd0;
++      force_accept <= 1'b0;
+     end else begin
+       gap <= 1'b0;
++      abandon <= 1'b0;
+ 
+       // ---------------- input capture ----------------
+       if (a_first) begin
+         in_a <= 1'b1;
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/mold_feed_arbiter.sv 2>&1 | grep -E 'Warning-|Error' | head -5; python3 tb/run_arbiter_cocotb.py > 
+/tmp/arbrec2.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 'Arbiter:|Recovery 
+mode|TESTS=|Assertion|ValueError|Error' /tmp/arbrec2.txt | tail -6"
+RC=True
+   613.80ns INFO     cocotb.mold_feed_arbiter           Arbiter: 6 frames selected [1, 2, 3, 4, 7, 8], gaps=1, 
+drop_a=3 drop_b=3 PASS
+  2086.30ns INFO     cocotb.mold_feed_arbiter           Recovery mode: markers [1, 2, 3, 6], requests=2, abandon=1 PASS
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0                  2086.30       
+    0.02      84996.46  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -217,9 +217,9 @@
+ | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
+ | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; 
+risk limits | `tb/test_book.py` |
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+-| A/B feed arbiter | **6 frames, sequence-based selection, 1 gap, byte-exact** | `tb/test_arbiter.py` |
++| A/B feed arbiter | **6 frames, sequence selection, 1 gap, byte-exact; recovery mode: requestÔåÆreplayÔåÆabandon** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+ | Supply chain | 163-component SBOM | `reports/sbom.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -114,9 +114,12 @@
+ - [x] A/B system integration: two Mold Ethernet pipelines ÔåÆ arbiter ÔåÆ one ITCH stream
+       (`rtl/mold_ab_system.sv`; 2 feeds, 10 records, 1 gap).
+ - [x] Sequence recovery request generator: missing-range request, replay recovery,
+       timeout resync and duplicate rejection (`rtl/mold_recovery.sv`, 4-accept test).
+-- [ ] Wire the recovery block to the A/B arbiter and a replay source.
++- [x] Arbiter recovery mode: a gap requests the missing range and drops the
++      out-of-order frames; the replay is accepted in order; timeout abandons and
++      force-accepts (`recovery_en`, test markers [1,2,3,6]).
++- [ ] A replay source (upstream retransmit) and multi-gap stress.
+ - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
+       output, 400-event + 100 back-to-back tests.
+ - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
+       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -69,8 +69,12 @@
+ - **Sequence recovery** (`rtl/mold_recovery.sv`): in-order accept, missing-range request
+   (`req_seq`/`req_count`), replay recovery, timeout resync (`abandon`) and duplicate
+   rejection, with counters. Test: 4 accepts, 2 gaps, 1 recovered, 1 abandoned,
+   1 duplicate. Wiring it to the arbiter and a replay source is the next step.
++- **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
++  range, drops the out-of-order frames, accepts the replay in order, and abandons to a
++  force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
++  Test: markers [1,2,3,6], 2 requests, 1 abandon.
+ 
+ ## 0.3.1 ÔÇö 2026-11-03
+ 
+ Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,20 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 19:18 - Autonomy tick + arbiter recovery mode
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b652e2f` (sequence
++  recovery module) green.
++- Added `recovery_en` to `mold_feed_arbiter`: on a forward gap it requests the missing
++  range (`req_seq`/`req_count`), drops both out-of-order frames, accepts the replay in
++  order, and falls back to `abandon` + force-accept after a 256-cycle timeout.
++- Exposed the recovery signals through `mold_ab_system` (`cfg_recovery_en`,
++  `req_*`, `abandon`, `requests`, `abandoned`).
++- New arbiter test: markers [1,2,3,6], 2 requests, 1 abandon; existing selection test
++  still passes.
++
+ ## 2026-11-03 17:59 - Autonomy tick + sequence recovery
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9a079ef` (pipeline
+   back-pressure) green.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -E 'Warning-|Error' | head -4; echo 
+LINT_OK"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main; python3 tb/run_arbiter_cocotb.py > /tmp/y1.txt 2>&1; python3 
+tb/run_ab_system_cocotb.py > /tmp/y2.txt 2>&1; grep -h 'TESTS=' /tmp/y1.txt /tmp/y2.txt"
+LINT_OK
+                                                        ** TESTS=2 PASS=2 FAIL=0 SKIP=0                  2086.30       
+    0.03      75674.64  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                 502.20         
+  0.08       6571.17  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; git add -A; git commit -m "feat(rtl): 
+recovery mode in the A/B arbiter (request, replay, abandon)" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | 
+Select-Object -Last 2
+PASS vercel-api (650 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_ab_system.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_arbiter.py', LF will be replaced by CRLF the next time Git touches it
+[main 659957e] feat(rtl): recovery mode in the A/B arbiter (request, replay, abandon)
+ 11 files changed, 302 insertions(+), 3450 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:200
++ ... don)" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   b652e2f..659957e  main -> main
+> build ┬À deepseek-v4.1-flash
+## Weiter: Recovery-Modus im A/B-Arbiter
+
+### Autonomy-Tick
+- `node scripts/autonomy.mjs` ÔåÆ Queue leer, 0 Tasks.
+- CI auf `b652e2f` (Sequence-Recovery-Modul) **gr├╝n**.
+
+### Arbiter-Recovery
+
+Neuer Modus `recovery_en` in `mold_feed_arbiter`:
+
+1. **Gap erkannt** (kein Feed hat die erwartete Sequenz) ÔåÆ fehlender Bereich wird als `req_valid`/`req_seq`/`req_count` angefordert, beide Out-of-Order-Frames werden verworfen (Puffer wieder frei), es wird **nichts** gestreamt.
+2. **Replay** mit der erwarteten Sequenz ÔåÆ normaler Empfang, Request gel├Âscht, `expected_seq` weitergez├ñhlt.
+3. **Timeout** (256 Zyklen) ÔåÆ `abandon`-Puls, Force-Accept des n├ñchsten verf├╝gbaren Frames, `abandoned++`.
+4. Z├ñhler: `requests`, `abandoned`, `gaps`, `dropped_a/b`.
+
+Durchgereicht ├╝ber `mold_ab_system`: `cfg_recovery_en`, `req_valid/req_seq/req_count`, `abandon`, `requests`, `abandoned`.
+
+### Verifikation
+
+| Szenario | Ergebnis |
+|---|---|
+| Normal (recovery aus) | 6 Frames [1,2,3,4,7,8], 1 Gap ÔÇö unver├ñndert PASS |
+| Gap ÔåÆ Request ÔåÆ Replay | Marker **[1,2,3,6]**, 2 Requests |
+| Timeout ohne Replay | **1 Abandon**, Force-Accept |
+| A/B-System (recovery aus) | PASS |
+| Lint / Gate | 0 Warnungen / 10/10 |
+
+### Dokumentation
+`README.md`, `LONG_TERM_PLAN.md` (Arbiter-Recovery abgehakt; Replay-Quelle offen), `CHANGELOG.md`, `EXECUTION_LOG.md`.
+
+Commit `659957e` ist gepusht; CI l├ñuft.
+
+### N├ñchster Punkt
+**Replay-Quelle** (Upstream sendet den angeforderten Bereich erneut) und **Multi-Gap-Stresstest**; danach Performance-Counter/PCIe-Integration.
+[2026-11-03T19:59:18.5874383+01:00] hallo, es ist 19:59
+[tick] ran 0, failed 0

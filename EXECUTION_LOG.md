@@ -259,6 +259,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 19:59 - Autonomy tick + multi-gap recovery
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `659957e` green.
+- New `test_recovery_multi_gap`: lose frame 3, then frames 6+7; each loss is repaired by
+  replaying the requested range. Output markers [1..8], 2 requests, 0 abandons.
+- The test acts as the replay source; the arbiter's request interface
+  (`req_valid/req_seq/req_count`) is the hardware contract for an upstream retransmitter.
+
 ## 2026-11-03 19:18 - Autonomy tick + arbiter recovery mode
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b652e2f` (sequence

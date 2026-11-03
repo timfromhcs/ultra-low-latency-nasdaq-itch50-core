@@ -118,7 +118,10 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] Arbiter recovery mode: a gap requests the missing range and drops the
       out-of-order frames; the replay is accepted in order; timeout abandons and
       force-accepts (`recovery_en`, test markers [1,2,3,6]).
-- [ ] A replay source (upstream retransmit) and multi-gap stress.
+- [x] Replay loop validated with two loss events: multi-gap repair markers [1..8],
+      2 requests, no abandon (the test acts as the replay source).
+- [ ] Hardware/upstream retransmit requester (network protocol) — out of scope for the
+      local core; the request interface is the contract.
 - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
       output, 400-event + 100 back-to-back tests.
 - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a

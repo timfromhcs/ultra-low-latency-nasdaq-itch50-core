@@ -230,3 +230,88 @@ async def test_recovery_mode(dut):
     assert markers == [1, 2, 3, 6], f"markers {markers}"
     dut._log.info(f"Recovery mode: markers {markers}, requests=2, abandon=1 PASS")
 
+@cocotb.test()
+async def test_recovery_multi_gap(dut):
+    """Two loss events, each repaired by a replayed range; no abandon."""
+    cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
+    dut.rst_n.value = 0
+    dut.initial_seq.value = 1
+    dut.recovery_en.value = 1
+    dut.a_tvalid.value = 0
+    dut.a_tlast.value = 0
+    dut.a_tdata.value = 0
+    dut.a_tkeep.value = 0
+    dut.a_seq.value = 0
+    dut.a_count.value = 0
+    dut.b_tvalid.value = 0
+    dut.b_tlast.value = 0
+    dut.b_tdata.value = 0
+    dut.b_tkeep.value = 0
+    dut.b_seq.value = 0
+    dut.b_count.value = 0
+    dut.m_tready.value = 1
+    for _ in range(6):
+        await RisingEdge(dut.clk)
+    dut.rst_n.value = 1
+    await RisingEdge(dut.clk)
+
+    got = []
+    cur = bytearray()
+
+    async def monitor():
+        while True:
+            await FallingEdge(dut.clk)
+            if int(dut.m_tvalid.value) and int(dut.m_tready.value):
+                keep = int(dut.m_tkeep.value)
+                data = int(dut.m_tdata.value)
+                for i in range(DATA_BYTES):
+                    if (keep >> i) & 1:
+                        cur.append((data >> (8 * i)) & 0xFF)
+                if int(dut.m_tlast.value):
+                    got.append(bytes(cur))
+                    cur.clear()
+
+    cocotb.start_soon(monitor())
+
+    async def pair(seq):
+        await send_frame(dut, "a", seq, 1, frame(seq))
+        await send_frame(dut, "b", seq, 1, frame(seq))
+
+    async def wait_req(seq, count):
+        for _ in range(6):
+            await RisingEdge(dut.clk)
+        assert int(dut.req_valid.value) == 1, "no request"
+        assert int(dut.req_seq.value) == seq, f"req_seq {int(dut.req_seq.value)} != {seq}"
+        assert int(dut.req_count.value) == count, f"req_count {int(dut.req_count.value)} != {count}"
+
+    await pair(1)
+    await pair(2)
+    await wait_frames(dut, got, 2)
+
+    # Lose 3, send 4 -> gap at 3.
+    await pair(4)
+    await wait_req(3, 1)
+    assert len(got) == 2, "out-of-order frame leaked"
+    await pair(3)
+    await wait_frames(dut, got, 3)
+    await pair(4)
+    await pair(5)
+    await wait_frames(dut, got, 5)
+
+    # Lose 6 and 7, send 8 -> gap of two messages at 6.
+    await pair(8)
+    await wait_req(6, 2)
+    await pair(6)
+    await wait_frames(dut, got, 6)
+    await pair(7)
+    await pair(8)
+    await wait_frames(dut, got, 8)
+
+    markers = [f[0] for f in got]
+    assert markers == list(range(1, 9)), f"markers {markers}"
+    for seq, f in zip(markers, got):
+        assert f == frame(seq), f"frame {seq} bytes differ"
+    assert int(dut.requests.value) == 2, f"requests {int(dut.requests.value)}"
+    assert int(dut.abandoned.value) == 0, "unexpected abandon"
+    dut._log.info(f"Recovery multi-gap: markers {markers}, requests=2 PASS")
+
