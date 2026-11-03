@@ -267,6 +267,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   sdist; container workflow publishes `provenance: mode=max` + SBOM.
 - README documents `gh attestation verify`; roadmap split into SBOM+SLSA (done) and
   reproducible builds/cosign signatures (open).
+- Verified end-to-end on run 41713284699 (`exe.yml`, commit `057ca5b`):
+  `gh attestation verify chiplab.exe` → **exit 0**, subject sha256
+  `5ca234a220eb…`, builder `exe.yml@refs/heads/main`, SLSA provenance v1.
+- Container workflow run on `057ca5b` succeeded; `docker buildx imagetools inspect`
+  shows the index with an `attestation-manifest` entry (provenance + SBOM).
 
 ## 2026-11-03 22:20 - Optional ingress skid stage
 

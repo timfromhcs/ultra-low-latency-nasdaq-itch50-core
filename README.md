@@ -143,7 +143,9 @@ gh attestation verify chiplab.exe --repo timfromhcs/ultra-low-latency-nasdaq-itc
 gh attestation verify chiplab-core-0.3.1.tgz --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core
 ```
 
-The container image publishes `provenance: mode=max` and an SBOM attestation.
+The container image publishes `provenance: mode=max` and an SBOM attestation; inspect
+the attestation manifest with
+`docker buildx imagetools inspect ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main`.
 The first published release is
 [v0.3.1](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.1) (first: [v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0))
 with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
