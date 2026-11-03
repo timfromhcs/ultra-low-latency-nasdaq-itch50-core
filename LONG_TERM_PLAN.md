@@ -89,7 +89,7 @@ MDN PWA best practices, GitHub Actions docs.
 - [ ] Timing-closed BBO: BRAM/hash order store, pipelined ladder, no rescan stall.
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
-**Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches; lint/formal still green.
+**Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.
 
 ### Phase 2 — Physical (2 → 4 months)
 - [ ] LibreLane Sky130 hardening smoke (`--dockerized --smoke-test`), then full run.
