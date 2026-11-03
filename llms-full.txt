@@ -1,5 +1,6 @@
 # ChipLab — full specification
 # Local-first ITCH-50 silicon lab: RTL + WebAssembly + WebGPU + MCP + EXE + Docker + Vercel
+# Version: 0.3.0 "Local Cloud"
 
 ## 1. What it is
 ChipLab is a pre-silicon lab around a NASDAQ TotalView-ITCH 5.0 parser. The RTL
@@ -42,15 +43,27 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 - 1M messages in 664 ms wall on the test host, 0 errors.
 
 ## 6. Backend/MCP/API
-- `backend/server.mjs`: `/api/health`, `/api/chips`, `/api/run`, `/api/compare`, `/api/book`.
+- `backend/server.mjs`: `/api/health`, `/api/chips`, `/api/run`, `/api/compare`, `/api/book`,
+  `/api/cloud/info`, `/api/store[/:namespace]`.
+- Local cloud: atomic JSON store under `.data/`, 1 MB cap, revision conflicts, optional
+  bearer token; loopback-only writes without a token. Flags: `--host --port --token --data-dir`.
 - `backend/run.mjs`: CLI.
-- `mcp/server.mjs`: `chiplab.chips`, `chiplab.run`, `chiplab.compare`, `chiplab.book`,
-  `chiplab.formal_status`.
+- `mcp/server.mjs` (12 read-only tools): `chiplab.chips`, `chiplab.run`, `chiplab.compare`,
+  `chiplab.book`, `chiplab.formal_status`, `chiplab.health`, `chiplab.cloud_info`,
+  `chiplab.history`, `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`,
+  `chiplab.docs` (fixed 8-key catalog).
 - `api/*.mjs`: Vercel serverless wrappers; static-first, user data stays in the browser.
 
+## 6b. Release (v0.3.0)
+- One version across npm, Cargo, PyPI, MCP, SBOM and the Vercel health endpoint.
+- `Release` workflow on tag `v*`: verify → EXE → npm/PyPI packages → SBOM →
+  `SHA256SUMS.txt` → GitHub Release.
+- `scripts/release_check.mjs` gates version/changelog/artifacts; `scripts/checksums.mjs`
+  writes the manifest.
+
 ## 7. Distribution
-- `npm run build:exe` -> `dist/chiplab.exe` (Node SEA, embedded web + WASM).
-- `Dockerfile` -> non-root Node 22 alpine, healthcheck.
+- `npm run build:exe` -> `dist/chiplab.exe` (Node SEA, embedded web + WASM + local cloud).
+- `Dockerfile` -> non-root Node 22 alpine, healthcheck; set `CHIPLAB_TOKEN` for writes.
 - `vercel.json` + `scripts/build_vercel.mjs` -> `public/` + `api/`.
 - npm `@chiplab/core`; PyPI `chiplab-itch`.
 - Native `chiplab-native` (wgpu Vulkan/DX12, `--probe`, `--boost`).

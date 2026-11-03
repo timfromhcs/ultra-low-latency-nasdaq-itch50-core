@@ -135,6 +135,11 @@ Release artifacts:
 | `SHA256SUMS.txt` | `node scripts/checksums.mjs dist/release` |
 
 Verify a download with `sha256sum -c SHA256SUMS.txt` (or `Get-FileHash` on Windows).
+The first published release is
+[v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0)
+with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
+`SHA256SUMS.txt`. Builds are **not** bit-for-bit reproducible yet (Node SEA embeds a
+build timestamp), so trust the manifest shipped with the release.
 
 ---
 

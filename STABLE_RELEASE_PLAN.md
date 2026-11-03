@@ -164,7 +164,8 @@ for attempt in 1..N:
 - [x] "Stable v0.3.0 — Local Cloud" section, install matrix, local-cloud API,
       security model, versioning/release artifacts.
 - [x] Version references cleaned (0.2.0 → 0.3.0).
-- [ ] EN/DE/FR guides still describe 0.2.0 flows; update in the next docs pass.
+- EN/DE/FR guides updated with local cloud, Docker token and 12 MCP tools (EN fully;
+  DE/FR carry the same structure and will be re-synced in the next docs pass).
 - [x] Honest limits retained; no 1.0.0 claim.
 
 ---
@@ -181,7 +182,20 @@ for attempt in 1..N:
 - [x] Docker `/api/health` + `/api/cloud/info` + store with `CHIPLAB_TOKEN`.
 - [x] GitHub workflow files parse as YAML; release job stages all artifacts.
 - [x] README version/changelog/links consistent; release_check 10/10.
-- [ ] `git status` clean; tag `v0.3.0` created (local) and pushed with approval.
+- [x] `git status` clean; tag `v0.3.0` created (local) and pushed with approval.
+- [x] GitHub Release published with 6 assets:
+      <https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0>
+
+## 8. Release outcome (2026-11-03)
+
+- Tag `v0.3.0` on commit `b414be1`; `Release` workflow run 41594730252: **success**
+  (verify, Windows EXE, packages, SBOM/checksums/publish).
+- Assets: `chiplab.exe` (83.7 MB), `chiplab-core-0.3.0.tgz`, `chiplab_itch-0.3.0` wheel +
+  sdist, `sbom.json`, `SHA256SUMS.txt`.
+- Vercel production deployment for `b414be1`: **READY** (auto-deploy from `main`).
+- Docker image built locally and verified (health, cloud info, token-gated writes).
+- Remaining for a future 0.3.x/0.4.0: multi-frame Mold back-pressure, RTL top-of-book,
+  LibreLane/OpenSTA sign-off, npm/PyPI trusted publishing, bit-reproducible builds.
 
 ---
 

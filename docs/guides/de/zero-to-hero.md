@@ -65,25 +65,40 @@ Deep-Gate; die CI nutzt eine kleinere Zahl wegen der Laufzeit.
 npm install
 npm run build:exe
 dist\chiplab.exe --port 4190
+dist\chiplab.exe --host 0.0.0.0 --port 4173 --token "langes-token"
 ```
 
 Die EXE enthält Web-App und 50-KB-WASM. Sie öffnet den Browser und serviert dieselben
-`/api/*`-Endpunkte. Auf dem Zielrechner ist keine Node-Installation nötig.
+`/api/*`-Endpunkte plus die lokale Cloud. Auf dem Zielrechner ist keine
+Node-Installation nötig.
+
+## 5b. Lokale Cloud (v0.3.0)
+
+```bash
+node backend/server.mjs --host 0.0.0.0 --token "langes-token"
+# gibt die LAN-URL aus, z. B. http://192.168.1.20:4173
+```
+
+Diese URL auf dem Handy im selben Netz öffnen, Token im Panel **Local cloud** eintragen,
+**Test**, dann **Sync** oder **Pull**. Runs liegen als JSON unter `.data/`. Ohne
+`--token` dürfen nur Loopback-Clients schreiben.
 
 ## 6. Docker und Vercel
 
 ```bash
-docker compose up --build          # http://localhost:4173
+docker build -t chiplab:0.3.0 .
+docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.0
 node scripts/build_vercel.mjs      # public/ + api/ für Vercel
 ```
 
 Der Vercel-Build ist static-first. Der Run-Verlauf bleibt im Browser (OPFS); `/api/*`
-ist zustandslose Compute-Funktion. Absicht: Deine Daten bleiben lokal.
+ist zustandslose Compute-Funktion. Absicht: Deine Daten bleiben lokal. Docker-Schreib-
+zugriffe brauchen `CHIPLAB_TOKEN`, weil Requests von einer Nicht-Loopback-Bridge kommen.
 
 ## 7. Pakete und MCP
 
 ```bash
-node mcp/client_smoke.mjs                    # MCP-Handshake + 5 Tools
+node mcp/client_smoke.mjs                    # MCP-Handshake + 12 Tools
 cd packages/npm && npm pack                  # @chiplab/core
 cd packages/python && python -m build        # chiplab-itch
 ```

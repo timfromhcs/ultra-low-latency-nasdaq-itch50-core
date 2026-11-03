@@ -66,25 +66,40 @@ profonde ; la CI utilise un compte plus petit pour le temps.
 npm install
 npm run build:exe
 dist\chiplab.exe --port 4190
+dist\chiplab.exe --host 0.0.0.0 --port 4173 --token "jeton-long"
 ```
 
 L'EXE embarque l'application web et le WASM de 50 Ko. Il ouvre le navigateur et sert les
-mêmes endpoints `/api/*`. Aucune installation de Node n'est nécessaire sur la cible.
+mêmes endpoints `/api/*` plus le cloud local. Aucune installation de Node n'est
+nécessaire sur la cible.
+
+## 5b. Cloud local (v0.3.0)
+
+```bash
+node backend/server.mjs --host 0.0.0.0 --token "jeton-long"
+# affiche l'URL LAN, par ex. http://192.168.1.20:4173
+```
+
+Ouvrez cette URL sur un téléphone du même réseau, collez le jeton dans le panneau
+**Local cloud**, puis **Test**, **Sync** ou **Pull**. Les runs sont stockés en JSON sous
+`.data/`. Sans `--token`, seuls les clients loopback peuvent écrire.
 
 ## 6. Docker et Vercel
 
 ```bash
-docker compose up --build          # http://localhost:4173
+docker build -t chiplab:0.3.0 .
+docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=jeton-long chiplab:0.3.0
 node scripts/build_vercel.mjs      # public/ + api/ pour Vercel
 ```
 
 Le build Vercel est static-first. L'historique reste dans le navigateur (OPFS) ;
-`/api/*` est un calcul sans état. C'est volontaire : vos données restent locales.
+`/api/*` est un calcul sans état. C'est volontaire : vos données restent locales. Les
+écritures Docker exigent `CHIPLAB_TOKEN`, car les requêtes viennent d'un pont non-loopback.
 
 ## 7. Paquets et MCP
 
 ```bash
-node mcp/client_smoke.mjs                    # handshake MCP + 5 outils
+node mcp/client_smoke.mjs                    # handshake MCP + 12 outils
 cd packages/npm && npm pack                  # @chiplab/core
 cd packages/python && python -m build        # chiplab-itch
 ```
