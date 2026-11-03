@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 15:59 - Autonomy tick + A/B system integration
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a4ce459` (risk checks) green.
+- Added frame sequence/count sidebands to `moldudp64_pipeline`.
+- Added `rtl/mold_ab_system.sv`: two Mold Ethernet pipelines (independent AXI feeds) ->
+  frame arbiter -> one ITCH stream.
+- New `test_ab_system`: A/B Ethernet frames with a lagging feed, a tie, a gap and a
+  single-feed fallback -> 10 records, 1 gap, byte-exact.
+- Note: the Mold pipeline still has no downstream tready; the arbiter buffers one frame
+  per feed (<=2 KB), which is sufficient for the tested frame sizes.
+
 ## 2026-11-03 14:59 - Autonomy tick + BBO risk checks
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f952c56` (A/B arbiter) green.

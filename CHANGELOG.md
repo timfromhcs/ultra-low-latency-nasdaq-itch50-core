@@ -59,6 +59,9 @@ All notable changes to ChipLab are documented here. The format follows
 - **BBO risk checks**: `cfg_max_shares` rejects oversized orders and `cfg_collar`
   rejects prices outside last-trade ± collar (0 disables each); `risk_rejects` counter.
   Rejected adds/replaces never touch the book or the level table.
+- **A/B system integration** (`rtl/mold_ab_system.sv`): two Mold Ethernet pipelines
+  (independent AXI inputs) feed the frame arbiter; frame sequence/count sidebands added
+  to `moldudp64_pipeline`. Test: 2 feeds, 10 records, 1 gap, byte-exact.
 
 ## 0.3.1 — 2026-11-03
 

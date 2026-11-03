@@ -40,6 +40,8 @@ module moldudp64_pipeline #(
   output wire [79:0]                 mold_session,
   output wire [63:0]                 mold_seq,
   output wire [15:0]                 mold_msg_count,
+  output wire [63:0]                 frame_seq,
+  output wire [15:0]                 frame_msg_count,
   output wire                        mold_gap,
   output wire                        mold_frame_ok,
   output wire                        mold_frame_drop,
@@ -131,6 +133,10 @@ module moldudp64_pipeline #(
     .busy(dep_busy)
   );
   /* verilator lint_on PINCONNECTEMPTY */
+
+  // Frame sidebands: valid while the frame's payload is on the output stream.
+  assign frame_seq       = mold_seq;
+  assign frame_msg_count = mold_msg_count;
 
 endmodule
 

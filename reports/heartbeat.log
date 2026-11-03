@@ -1537,3 +1537,319 @@ Commit `f952c56` ist gepusht; CI l├ñuft.
 **Sequence-Recovery mit Retransmission** (Gap ÔåÆ Request/Timeout) bzw. **Risk-Checks** (Preis-Collar, Max-Order-Size) im BBO.
 [2026-11-03T14:59:18.4425409+01:00] hallo, es ist 14:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 10
+[tick] ran 0, failed 0
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\n  
+const out = [];\n  for (const run of r.workflow_runs || []) {\n    const jobs = await tools.github.actions_list({ 
+method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 10 });\n    const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n    out.push({ 
+sha: run.head_sha?.slice(0,7), status: run.status, conclusion: run.conclusion, rtl: j?.conclusion, failed: 
+j?.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name) });\n  }\n  return out;\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_risk.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_risk.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_risk.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_of_book.sv 2>&1 | grep -E 'Warning-|Error' | head -6; 
+echo LINT_END"
+risk checks added
+%Error: rtl/itch_top_of_book.sv:222:32: Can't find definition of variable: 'idx'
+%Error: Exiting due to 1 error(s)
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\itch_top_of_book.sv -Pattern 'wire \[3:0\] idx|wire risk_bad|wire 
+same_level' | Select-Object LineNumber,Line
+LineNumber Line                                                                            
+---------- ----                                                                            
+       221   wire risk_bad_size = (cfg_max_shares != 64'd0) && (s_shares > cfg_max_shares);
+       223   wire risk_bad_price = (cfg_collar != 32'd0) && have_last &&                   
+       228   wire same_level = found && rem_found && add_found &&
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path rtl\itch_top_of_book.sv -Pattern 'loc_idx|idx' | Select-Object -First 
+10 LineNumber,Line
+LineNumber Line                                            
+---------- ----                                            
+       112   wire [3:0] loc_idx = s_locate[3:0];           
+       120   reg [7:0]  found_idx;                         
+       122   reg [7:0]  free_idx;                          
+       125     found_idx  = ord_base;                      
+       127     free_idx   = ord_base;                      
+       130       found = 1'b1; found_idx = ord_base;       
+       133       found = 1'b1; found_idx = ord_base + 8'd1;
+       136       found = 1'b1; found_idx = ord_base + 8'd2;
+       139       found = 1'b1; found_idx = ord_base + 8'd3;
+       143       free_found = 1'b1; free_idx = ord_base;
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');let 
+s=fs.readFileSync('rtl/itch_top_of_book.sv','utf8');s=s.replace('last_p[idx]','last_p[loc_idx]');s=s.replace('s_price 
+> last_p[loc_idx] + cfg_collar','s_price > last_p[loc_idx] + 
+cfg_collar');fs.writeFileSync('rtl/itch_top_of_book.sv',s);console.log('ok')"; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_of_book.sv 2>&1 | grep -E 
+'Warning-|Error' | head -5; echo LINT_END"
+ok
+%Error: rtl/itch_top_of_book.sv:224:44: Can't find definition of variable: 'idx'
+%Error: Exiting due to 1 error(s)
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/itch_top_of_book.sv [90m[limit=10, offset=219][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -220,10 +220,10 @@
+ 
+   wire risk_bad_size = (cfg_max_shares != 64'd0) && (s_shares > cfg_max_shares);
+   wire have_last     = (last_p[loc_idx] != 32'd0);
+   wire risk_bad_price = (cfg_collar != 32'd0) && have_last &&
+-                        ((s_price > last_p[idx] + cfg_collar) ||
+-                         (s_price + cfg_collar < last_p[idx]));
++                        ((s_price > last_p[loc_idx] + cfg_collar) ||
++                         (s_price + cfg_collar < last_p[loc_idx]));
+   wire risk_reject   = risk_bad_size || risk_bad_price;
+ 
+   wire same_level = found && rem_found && add_found &&
+                     (old_bid == add_bid) &&
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_top_of_book.sv 2>&1 | grep -E 'Warning-|Error' | head -5; echo LINT_END"
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/add_risk_test.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/add_risk_test.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\add_risk_test.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main 
+&& python3 tb/run_book_cocotb.py > /tmp/risk1.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 
+'Risk:|Book:|No-stall|TESTS=|Assertion|rejects' /tmp/risk1.txt | tail -8"
+risk test added
+RC=True
+  6169.00ns INFO     cocotb.itch_top_of_book            Book: 400 events, 0 level overflows, 0 table overflows PASS
+  8949.70ns INFO     cocotb.itch_top_of_book            No-stall: 100 events back-to-back, 1 event/cycle PASS
+ 11466.90ns INFO     cocotb.itch_top_of_book            Risk: 2 rejects (size, collar), valid events pass, PASS
+                                                        ** TESTS=3 PASS=3 FAIL=0 SKIP=0                      11466.90  
+         0.24      48478.57  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/wire_risk.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/wire_risk.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\wire_risk.mjs"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && 
+verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_top_book.sv 2>&1 | grep -E 'Warning-|Error' | head -5; 
+python3 tb/run_book_top_cocotb.py > /tmp/rtop1.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 
+'Top\+book|TESTS=|Assertion' /tmp/rtop1.txt | tail -3"
+wrapper + top test updated
+RC=True
+  3394.50ns INFO     cocotb.itch_top_book               Top+book: 152 messages, 0 mismatches PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                  3394.50       
+    0.12      27344.30  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tools/mutate_book.py 2>&1 | tail -4"
+KILLED   trade_volume_ignored AssertionError: message 36 BBO
+KILLED   last_price_zero AssertionError: message 36 BBO
+KILLED   order_side_always_bid AssertionError: message 62 BBO
+mutation_book: 9/9 killed (100.0%)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -212,9 +212,9 @@
+ | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+ | Local cloud | token required for non-loopback writes, revision conflict ÔåÆ 409, traversal ÔåÆ 400 | 
+`backend/store.mjs` |
+ | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
+ | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
+-| RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth | 
+`tb/test_book.py` |
++| RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; 
+risk limits | `tb/test_book.py` |
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **6 frames, sequence-based selection, 1 gap, byte-exact** | `tb/test_arbiter.py` |
+ | Supply chain | 163-component SBOM | `reports/sbom.json` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -111,9 +111,10 @@
+       gap pulse (`rtl/mold_feed_arbiter.sv`, 6-frame test).
+ - [ ] Full MoldUDP64 packet parser with retransmission/sequence recovery.
+ - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
+       output, 400-event + 100 back-to-back tests.
+-- [ ] Risk checks (price collar, max order size) and a hashed order store.
++- [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
++      reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
+ - [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
+ - [ ] Performance counters: messages/s, gaps, drops, queue occupancy, latency histogram.
+ - [x] RTL Ôåö WASM equivalence on the same vectors: **100,000 records, every canonical
+       field equal** (`scripts/rtl_wasm_equiv.mjs`, weekly `equivalence` job).
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -55,8 +55,11 @@
+ - **A/B feed arbiter** (`rtl/mold_feed_arbiter.sv`): one 2 KB frame buffer per feed,
+   sequence-based selection (prefer A on ties), a 64-cycle redundancy window for the
+   single-feed case, loser discard and a gap pulse. Test: 6 frames, selection
+   [1,2,3,4,7,8], byte-exact, 1 gap (`tb/test_arbiter.py`).
++- **BBO risk checks**: `cfg_max_shares` rejects oversized orders and `cfg_collar`
++  rejects prices outside last-trade ┬▒ collar (0 disables each); `risk_rejects` counter.
++  Rejected adds/replaces never touch the book or the level table.
+ 
+ ## 0.3.1 ÔÇö 2026-11-03
+ 
+ Patch release: packaging metadata and release-loop fixes. No protocol or API change.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,10 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
+-## 2026-11-03 13:59 - Autonomy tick + A/B feed arbiter
++## 2026-11-03 14:59 - Autonomy tick + BBO risk checks
+ 
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f952c56` (A/B arbiter) green.
++- Added optional BBO risk limits: `cfg_max_shares` (order size) and `cfg_collar`
++  (price vs. last trade); rejected adds/replaces leave the book untouched and increment
++  `risk_rejects`. Wired through `itch_top_book`.
++- New `test_risk_checks`: 2 rejects (size, collar), valid add/execute/replace pass;
++  book suite now 3 tests, mutation still 9/9.
++
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b60446b` green.
+ - Added `rtl/mold_feed_arbiter.sv`: two 2 KB store-and-forward frame buffers, sequence-
+   based selection (prefer A on ties), 64-cycle redundancy window, loser discard, gap
+   pulse, and byte-exact forwarding.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead EXECUTION_LOG.md [90m[limit=10, offset=262][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -267,8 +267,10 @@
+   `risk_rejects`. Wired through `itch_top_book`.
+ - New `test_risk_checks`: 2 rejects (size, collar), valid add/execute/replace pass;
+   book suite now 3 tests, mutation still 9/9.
+ 
++## 2026-11-03 13:59 - Autonomy tick + A/B feed arbiter
++
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b60446b` green.
+ - Added `rtl/mold_feed_arbiter.sv`: two 2 KB store-and-forward frame buffers, sequence-
+   based selection (prefer A on ties), 64-cycle redundancy window, loser discard, gap
+   pulse, and byte-exact forwarding.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -E 'Warning-|Error' | head -4; echo 
+LINT_OK"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main; python3 tb/run_book_cocotb.py > /tmp/v1.txt 2>&1; python3 
+tb/run_book_top_cocotb.py > /tmp/v2.txt 2>&1; grep -h 'TESTS=' /tmp/v1.txt /tmp/v2.txt"
+LINT_OK
+                                                        ** TESTS=3 PASS=3 FAIL=0 SKIP=0                      11466.90  
+         0.25      46002.27  **
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                  3394.50       
+    0.12      27661.71  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; git add -A; git commit -m "feat(bbo): 
+optional size and price-collar risk checks" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Select-Object 
+-Last 2
+PASS vercel-api (224 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/mutation_book.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_book.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_book_top.py', LF will be replaced by CRLF the next time Git touches it
+[main a4ce459] feat(bbo): optional size and price-collar risk checks
+ 11 files changed, 942 insertions(+), 15 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:183
++ ... ecks" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   f952c56..a4ce459  main -> main
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 2 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"a4ce459\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status]) };\n  const jobs = await tools.github.actions_list({ 
+method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 10 });\n  return { run: run.status, jobs: 
+jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,conclusion:j.conclusion})) };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+## Weiter: BBO-Risk-Checks
+
+### Autonomy-Tick
+- `node scripts/autonomy.mjs` ÔåÆ Queue leer, 0 Tasks.
+- CI auf `f952c56` (A/B-Arbiter) **gr├╝n**.
+
+### Neue Risk-Checks im Top-of-Book
+
+`itch_top_of_book` hat jetzt optionale Risikolimits (0 = deaktiviert):
+
+| Parameter | Wirkung |
+|---|---|
+| `cfg_max_shares` | Add/Replace mit mehr Shares wird verworfen |
+| `cfg_collar` | Preis au├ƒerhalb `last_trade ┬▒ collar` wird verworfen |
+| `risk_rejects` | Z├ñhler der abgelehnten Events |
+
+Abgelehnte Adds/Replaces ver├ñndern **weder Order-Tabelle noch Preislevel**; der alte Order bleibt bei einem abgelehnten Replace erhalten. Durchgereicht ├╝ber `itch_top_book` (`cfg_max_shares`, `cfg_collar`, `risk_rejects`).
+
+### Verifikation
+
+Neuer `test_risk_checks`:
+- Order mit 2000 Shares (Limit 1000) ÔåÆ **abgelehnt**
+- Preis 10500 bei Last 10000 und Collar 100 ÔåÆ **abgelehnt**
+- G├╝ltiger Add bei 10050 ÔåÆ akzeptiert; zweiter Add aggregiert auf 600 Shares
+- Execute (100) und Replace ÔåÆ korrekt
+- `risk_rejects == 2`
+
+Gesamt:
+| Test | Ergebnis |
+|---|---|
+| Book (400 zuf├ñllig, 100 back-to-back, Risk) | **3/3 PASS** |
+| ParserÔåÆBBO (152 Messages) | **PASS** |
+| Mutation | **9/9** |
+| Lint / Gate | 0 Warnungen / 10/10 |
+
+### Dokumentation
+`README.md`, `LONG_TERM_PLAN.md` (Risk-Checks abgehakt), `CHANGELOG.md`, `EXECUTION_LOG.md`.
+
+Commit `a4ce459` ist gepusht; CI l├ñuft.
+
+### N├ñchster Punkt
+**Full MoldUDP64-Parser mit Retransmission/Sequence-Recovery** (Gap ÔåÆ Request/Timeout) oder **Performance-Counter/PCIe-Integration**.
+[2026-11-03T15:59:19.0086206+01:00] hallo, es ist 15:59
+[tick] ran 0, failed 0

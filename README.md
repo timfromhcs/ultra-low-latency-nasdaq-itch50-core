@@ -217,6 +217,7 @@ Reports live in [`reports/`](reports/).
 | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
 | Parser → BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
 | A/B feed arbiter | **6 frames, sequence-based selection, 1 gap, byte-exact** | `tb/test_arbiter.py` |
+| A/B system | **2 Ethernet feeds → arbiter → 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
 | Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
