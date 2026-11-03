@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 22:20 - Optional ingress skid stage
+
+- `itch_top_book` parameter `INGRESS_SKID` (default 0) inserts `axis_skid_buffer` on
+  the AXI4-Stream ingress for timing isolation at higher clock rates.
+- New runner `tb/run_book_top_skid_cocotb.py` rebuilds the same top with
+  `-Pitch_top_book.INGRESS_SKID=1` and runs the parser→BBO test. `send_bytes` now
+  injects periodic input gaps, so both builds are exercised under stalls.
+- Result: identical BBO (152 messages, 0 mismatches), metrics 4800 bytes and
+  occ_max 52 in both builds; lint clean. Added to `make cocotb` and CI.
+
 ## 2026-11-03 21:55 - Nightly 10M regression
 
 - Added `.github/workflows/nightly.yml` (daily 02:40 UTC): 10,000,000-message

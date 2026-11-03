@@ -92,6 +92,12 @@ parser is held in reset. Do not send traffic before `ready`; the parser will acc
 it but the book will not have a valid state. In simulation, wait for `ready` before
 the first beat.
 
+**Timing isolation:** `itch_top_book #(.INGRESS_SKID(1))` (default `0`) inserts the
+2-entry `axis_skid_buffer` in front of the parser. It is functionally transparent
+(same BBO, same counters) and adds at most one beat of latency; use it when the input
+path, not the book, is the critical path. `tb/run_book_top_skid_cocotb.py` runs the
+same 152-message test against both builds with periodic input gaps.
+
 **Book scope:** 16 stock locates, 16 price levels per side, 256 orders (4-way
 associative per 64-slot set), top-4 depth on the outputs. Events for other locates or
 beyond the level capacity are counted in `drops_overflow`/`level_overflow` (internal)

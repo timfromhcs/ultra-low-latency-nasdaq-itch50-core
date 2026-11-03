@@ -104,7 +104,14 @@ class Book:
 
 async def send_bytes(dut, data: bytes):
     off = 0
+    beats = 0
     while off < len(data):
+        # Periodic idle cycle: proves the handshake (and the optional ingress
+        # skid stage) is transparent under input gaps.
+        if beats % 4 == 3:
+            dut.s_axis_tvalid.value = 0
+            await RisingEdge(dut.clk)
+        beats += 1
         chunk = data[off:off + DATA_BYTES]
         off += len(chunk)
         pad = chunk + b"\x00" * (DATA_BYTES - len(chunk))

@@ -17,7 +17,8 @@
 `include "itch_top_of_book.sv"
 
 module itch_top_book #(
-  parameter DATA_WIDTH = 128
+  parameter DATA_WIDTH = 128,
+  parameter INGRESS_SKID = 0
 )(
   input  wire                        clk,
   input  wire                        rst_n,
@@ -79,6 +80,45 @@ module itch_top_book #(
   wire [7:0]  m_msg_len;
   wire [7:0]  status_buf_count;
 
+  // Optional ingress elastic stage: isolates the input path timing at higher
+  // clocks. It is transparent (same beats, zero loss), adds at most one beat of
+  // latency and honors back-pressure.
+  wire [DATA_WIDTH-1:0]     p_tdata;
+  wire [(DATA_WIDTH/8)-1:0] p_tkeep;
+  wire                      p_tvalid;
+  wire                      p_tlast;
+  wire                      p_tready;
+
+  /* verilator lint_off PINCONNECTEMPTY */
+  generate
+    if (INGRESS_SKID) begin : g_skid
+      axis_skid_buffer #(
+        .DATA_WIDTH(DATA_WIDTH)
+      ) u_ingress (
+        .clk(clk),
+        .rst_n(rst_n),
+        .s_tdata(s_axis_tdata),
+        .s_tkeep(s_axis_tkeep),
+        .s_tvalid(s_axis_tvalid),
+        .s_tlast(s_axis_tlast),
+        .s_tready(s_axis_tready),
+        .m_tdata(p_tdata),
+        .m_tkeep(p_tkeep),
+        .m_tvalid(p_tvalid),
+        .m_tlast(p_tlast),
+        .m_tready(p_tready),
+        .occupancy()
+      );
+    end else begin : g_direct
+      assign p_tdata = s_axis_tdata;
+      assign p_tkeep = s_axis_tkeep;
+      assign p_tvalid = s_axis_tvalid;
+      assign p_tlast = s_axis_tlast;
+      assign s_axis_tready = p_tready;
+    end
+  endgenerate
+  /* verilator lint_on PINCONNECTEMPTY */
+
   // Hold the parser in reset until the book has cleared its tables, otherwise
   // messages parsed during the ~800-cycle init would be lost.
   assign ready = book_ready;
@@ -89,11 +129,11 @@ module itch_top_book #(
   ) u_top (
     .clk(clk),
     .rst_n(rst_n && book_ready),
-    .s_axis_tdata(s_axis_tdata),
-    .s_axis_tkeep(s_axis_tkeep),
-    .s_axis_tvalid(s_axis_tvalid),
-    .s_axis_tlast(s_axis_tlast),
-    .s_axis_tready(s_axis_tready),
+    .s_axis_tdata(p_tdata),
+    .s_axis_tkeep(p_tkeep),
+    .s_axis_tvalid(p_tvalid),
+    .s_axis_tlast(p_tlast),
+    .s_axis_tready(p_tready),
     .raw_order_valid(),
     .raw_order_data(),
     .raw_stock_locate_pre_trigger(),

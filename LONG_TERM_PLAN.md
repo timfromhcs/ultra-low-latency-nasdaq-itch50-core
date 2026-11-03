@@ -93,7 +93,10 @@ MDN PWA best practices, GitHub Actions docs.
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and
       pipeline, beats held until accepted; 329 bytes under random stalls, no loss.
-- [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
+- [x] Optional skid/FIFO stage for timing isolation at higher clock rates:
+      `itch_top_book #(.INGRESS_SKID(1))` inserts the 2-entry `axis_skid_buffer` on
+      ingress. The 152-message parser→BBO test runs against both builds with periodic
+      input gaps and produces identical BBO and counters.
 
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.
 

@@ -74,6 +74,10 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Optional ingress skid** (v0.3.1+): `itch_top_book #(.INGRESS_SKID(1))` puts the
+  2-entry `axis_skid_buffer` in front of the parser for timing isolation at higher
+  clocks; default 0 keeps the direct path. The parser→BBO test now injects periodic
+  input gaps and runs against both builds with identical BBO and counters.
 - **Nightly regression** (`.github/workflows/nightly.yml`): daily 02:40 UTC, 10,000,000
   messages through the model and the Verilator full-field simulator, then the reusable
   `Formal` workflow (formal proof, mutation score, RTL↔WASM equivalence). Verified

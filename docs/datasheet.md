@@ -49,6 +49,7 @@ Two egress paths exist:
 | Ingress | 128-bit/beat, one message may span beats | `tready` is asserted while the shifter has room |
 | Sustained rate | 1 parsed message per clock (book: 1 event/clock) | Verified back-to-back |
 | Pipeline depth | 2 clocks registered | 1 clock from window register |
+| Optional ingress skid | `INGRESS_SKID=1`: 2-entry elastic buffer | At most +1 beat latency, zero loss |
 | I/O | All single clock domain | No CDC inside the core |
 
 > Fmax and area are **model numbers**. There is no OpenSTA/LibreLane sign-off in this

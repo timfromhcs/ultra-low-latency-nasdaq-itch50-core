@@ -71,6 +71,7 @@ cocotb:
 	$(PYTHON) tb/run_multi_cocotb.py
 	$(PYTHON) tb/run_book_cocotb.py
 	$(PYTHON) tb/run_book_top_cocotb.py
+	$(PYTHON) tb/run_book_top_skid_cocotb.py
 	$(PYTHON) tb/run_arbiter_cocotb.py
 	$(PYTHON) tb/run_ab_system_cocotb.py
 	$(PYTHON) tb/run_recovery_cocotb.py
