@@ -2752,3 +2752,236 @@ warning: in the working copy of 'reports/scorecard.json', LF will be replaced by
 [0mÔåÆ [0mRead Makefile [90m[limit=40, offset=58][0m
 > build ┬À deepseek-v4.1-flash
 [0mÔåÆ [0mRead .github/workflows/formal.yml 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead tb/Makefile 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "mismatch|return|exit|PASS|FAIL" tb/sim_main.cpp | Select-Object -First 15
+38:static uint16_t rd16(const uint8_t* p) { return (uint16_t)p[0] | ((uint16_t)p[1] << 8); }
+40:    return (uint32_t)p[0] | ((uint32_t)p[1] << 8) | ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
+45:    return v;
+65:    return e;
+71:    return h;
+76:    if (!f) return false;
+82:    return true;
+86:    return (uint8_t)((dut->m_payload[i >> 2] >> ((i & 3) * 8)) & 0xFF);
+106:        std::cerr << "[FAIL] cannot read " << vec_dir << "/stream.bin\n"
+108:        return 2;
+111:        std::cerr << "[FAIL] cannot read " << vec_dir << "/expected.bin\n";
+112:        return 2;
+145:        std::cerr << "[FAIL] pkt " << received << " " << what
+147:        return 1;
+186:            if (dut->m_order_type != e.type) return fail("type", dut->m_order_type, e.type);
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite .github/workflows/nightly.yml
+Created file successfully: .github/workflows/nightly.yml
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/formal.yml
+Index: .github/workflows/formal.yml
+===================================================================
+--- .github/workflows/formal.yml
++++ .github/workflows/formal.yml
+@@ -2,8 +2,9 @@
+ 
+ on:
+   schedule:
+     - cron: "17 3 * * 1"   # weekly, Monday 03:17 UTC
++  workflow_call:
+   workflow_dispatch:
+     inputs:
+       solver_matrix:
+         description: "Run every available solver (slow)"
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 -c \"import yaml,sys; [yaml.safe_load(open(f)) for f 
+in ['.github/workflows/nightly.yml','.github/workflows/formal.yml']]; print('YAML OK')\""
+In Zeile:1 Zeichen:95
++ ... /chips/main && python3 -c \"import yaml,sys; [yaml.safe_load(open(f)) ...
++                                                                  ~
+Schlie´┐¢ende ")" fehlt in einem Ausdruck.
+In Zeile:1 Zeichen:102
++ ... ain && python3 -c \"import yaml,sys; [yaml.safe_load(open(f)) for f i ...
++                                                                 ~
+Unerwartetes Token ")" in Ausdruck oder Anweisung.
+In Zeile:1 Zeichen:107
++ ... && python3 -c \"import yaml,sys; [yaml.safe_load(open(f)) for f in [' ...
++                                                                  ~
+´┐¢ffnende "(" fehlt nach dem Schl´┐¢sselwort "for".
+In Zeile:1 Zeichen:79
++ ... /chips/main && python3 -c \"import yaml,sys; [yaml.safe_load(open(f)) ...
++                                                  ~~~~~~~~~~~~~~~~
+Unerwartetes Attribut "yaml.safe_load".
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingEndParenthesisInExpression
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py"
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ .github/workflows/nightly.yml OK ['name', True, 'concurrency', 'jobs'] ['schedule', 'workflow_dispatch']
+.github/workflows/formal.yml OK ['name', True, 'jobs'] ['schedule', 'workflow_call', 'workflow_dispatch']
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && rm -rf tb/vectors_nightly && time python3 tb/itch_model.py 
+--count 200000 --out tb/vectors_nightly 2>&1 | tail -3 && du -sh tb/vectors_nightly"
+"record_size": 80,
+  "record_magic": "0x42414C43"
+}
+
+real	0m3.318s
+user	0m2.481s
+sys	0m0.174s
+22M	tb/vectors_nightly
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && time make sim VECTORS=tb/vectors_nightly > 
+/tmp/nightly_sim.log 2>&1; echo RC=$?; grep -E 'mismatch|records|PASS|FAIL' /tmp/nightly_sim.log | tail -8"
+real	0m19.099s
+user	0m26.787s
+sys	0m4.184s
+RC=True
+[INFO] expected records: 200000 (limit 200000)
+ Full-field mismatches   : 0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && rm -rf tb/vectors_nightly && time python3 tb/itch_model.py 
+--count 10000000 --out tb/vectors_nightly 2>&1 | tail -2 && du -sh tb/vectors_nightly"
+"record_magic": "0x42414C43"
+}
+
+real	2m54.179s
+user	2m17.658s
+sys	0m11.881s
+1.1G	tb/vectors_nightly
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && time make sim VECTORS=tb/vectors_nightly > 
+/tmp/nightly10m.log 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 'expected records|mismatches|PASS|FAIL' 
+/tmp/nightly10m.log | tail -6"
+RC=True
+
+real	3m5.721s
+user	2m26.061s
+sys	0m9.123s
+[INFO] expected records: 10000000 (limit 10000000)
+ Full-field mismatches   : 0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && rm -rf tb/vectors_nightly /tmp/itch_workspace && df -h 
+/mnt/e | tail -1"; cd E:\chips\main; git status -sb | Select-Object -First 6
+E:\             466G  326G  140G  70% /mnt/e
+## main...origin/main
+ M .github/workflows/formal.yml
+ M reports/heartbeat.log
+?? .github/workflows/nightly.yml
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -219,8 +219,9 @@
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
++| Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | 
+`tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
+ | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the 
+parserÔåÆBBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+ | Supply chain | 163-component SBOM | `reports/sbom.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -141,9 +141,11 @@
+ - [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+ - [ ] Reproducible builds; SBOM + SLSA provenance; signed Docker/npm/PyPI.
+ - [x] Mutation: 9 parserÔåÆBBO mutants killed (`tools/mutate_book.py`,
+       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
+-- [ ] Nightly 10M regression + formal + mutation.
++- [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,
++      daily 02:40 UTC, default 10,000,000 messages, calls the reusable `Formal`
++      workflow). Verified locally: 10M messages, **0 mismatches**.
+ - [x] Docs: datasheet, integration guide, errata and API reference
+       (`docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md`,
+       `docs/api.md`; served through the 12-key `chiplab.docs` catalog).
+ - [ ] Optional shuttle submission; otherwise label "tapeout-ready, not fabricated".
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,13 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **Nightly regression** (`.github/workflows/nightly.yml`): daily 02:40 UTC, 10,000,000
++  messages through the model and the Verilator full-field simulator, then the reusable
++  `Formal` workflow (formal proof, mutation score, RTLÔåöWASM equivalence). Verified
++  locally: 10M messages, **0 mismatches**, 3m06s simulation after 2m54s generation;
++  `workflow_dispatch` takes a custom count.
+ - **Docs set** (v0.3.1+): `docs/datasheet.md` (ports, timing targets, area, evidence),
+   `docs/integration-guide.md` (instantiation, startup `ready`, Mold/arbiter contract,
+   counter math, simulation), `docs/errata.md` (E1ÔÇôE10: no physical sign-off, no
+   100G/PCIe, bounded book, gap counter tied low, 32-bit wrapping, registry publish
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 21:55 - Nightly 10M regression
++
++- Added `.github/workflows/nightly.yml` (daily 02:40 UTC): 10,000,000-message
++  modelÔåÆVerilator regression, then the `Formal` workflow as a reusable workflow
++  (`workflow_call` added to `formal.yml`).
++- Verified locally with the exact workflow commands: generation 2m54s, simulation
++  3m06s, **10,000,000 expected records, 0 mismatches**; 200k smoke run 19s.
++- Docs/README/CHANGELOG updated.
++
+ ## 2026-11-03 21:30 - Documentation set (datasheet, integration, errata, API)
+ 
+ - Wrote `docs/datasheet.md`, `docs/integration-guide.md`, `docs/errata.md` (E1ÔÇôE10)
+   and `docs/api.md`; linked from the README and served by `chiplab.docs`, whose
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 4; git add -A; git commit -m "ci: nightly 
+10M full-field regression plus formal, mutation and equivalence" 2>&1 | Select-Object -Last 2; git push origin main 
+2>&1 | Select-Object -Last 1; git log --oneline -1
+PASS release-check (1766 ms)
+PASS vercel-api (531 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/formal.yml', LF will be replaced by CRLF the next time Git touches 
+it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.github/workflows/nightly.yml', LF will be replaced by CRLF the next time Git touches 
+it
+ 9 files changed, 330 insertions(+), 15 deletions(-)
+ create mode 100644 .github/workflows/nightly.yml
+   5b9cfd1..5528645  main -> main
+5528645 ci: nightly 10M full-field regression plus formal, mutation and equivalence
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const names = await tools.github.actions_list ? null : null;\nconst r = await 
+tools.github.actions_list({ method: \"list_workflow_runs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\nreturn r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion, x.created_at]);"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const s = await search({ query: \"dispatch workflow run\", namespace: \"github\", limit: 
+10 });\nreturn s.items.map(i => i.path);"} 

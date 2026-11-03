@@ -2,6 +2,8 @@
 ## Core: `ultra_low_latency_nasdaq_itch50_cutthrough` (v2)
 
 > **v2 measured results (2026-11-03):**
+> - 10,000,000-record full-field Verilator regression (nightly default): **0 mismatches**,
+>   3m06s host simulation time after 2m54s vector generation.
 > - 1,000,000-record full-field Verilator regression: **0 mismatches**, 31,383,973 bytes,
 >   1,961,516 cycles, 41.290 Gbps model, 9,994 corrupt/resync.
 > - Formal: **Z3 PASS + CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported.
