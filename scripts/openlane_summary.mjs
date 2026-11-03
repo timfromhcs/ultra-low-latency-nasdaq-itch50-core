@@ -16,7 +16,11 @@ function newestRun() {
     .readdirSync(runsRoot, { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => path.join(runsRoot, d.name))
-    .filter((d) => fs.existsSync(path.join(d, "metrics.json")) || fs.existsSync(path.join(d, "final", "metrics.json")))
+    .filter(
+      (d) =>
+        fs.existsSync(path.join(d, "metrics.json")) ||
+        fs.existsSync(path.join(d, "final", "metrics.json")),
+    )
     .map((d) => ({ d, t: fs.statSync(d).mtimeMs }))
     .sort((a, b) => b.t - a.t);
   return dirs[0]?.d ?? null;
@@ -51,6 +55,7 @@ if (fs.existsSync(resolvedPath)) {
     /* keep null */
   }
 }
+
 const ws = Number(metrics.timing__setup__ws);
 const derived = {};
 if (Number.isFinite(ws) && Number.isFinite(clockPeriod)) {
@@ -82,11 +87,53 @@ const summary = {
   route: pick([/^route__/i]),
 };
 
+// Locate the worst-path report (prefer the ss corner) for publication.
+function findFiles(root, name) {
+  const hits = [];
+  const walk = (dir) => {
+    let entries;
+    try {
+      entries = fs.readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const e of entries) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name === name) hits.push(p);
+    }
+  };
+  walk(root);
+  return hits;
+}
+
+let worstPath = null;
+const reports = findFiles(runDir, "max.rpt")
+  .map((p) => ({ p, corner: p.includes("ss_") ? 0 : 1 }))
+  .sort((a, b) => a.corner - b.corner);
+if (reports.length) {
+  const lines = fs.readFileSync(reports[0].p, "utf8").split(/\r?\n/).slice(0, 40);
+  const grab = (re) => lines.map((l) => l.match(re)).find(Boolean)?.[1]?.trim();
+  const startpoint = grab(/^Startpoint:\s+(.+)$/);
+  const endpoint = grab(/^Endpoint:\s+(.+)$/);
+  const pathGroup = grab(/^Path Group:\s+(.+)$/);
+  if (startpoint || endpoint) {
+    worstPath = {
+      file: reports[0].p.replace(/\\/g, "/"),
+      startpoint,
+      endpoint,
+      pathGroup,
+      slackNs: Number.isFinite(ws) ? ws : null,
+    };
+  }
+}
+
 const report = {
   tag,
   generatedAt: new Date().toISOString(),
   metricsPath: metricsPath.replace(/\\/g, "/"),
   derived,
+  worstPath,
   summary,
   metrics,
 };
@@ -94,7 +141,8 @@ fs.mkdirSync("reports", { recursive: true });
 const out = `reports/openlane_${tag}.json`;
 fs.writeFileSync(out, JSON.stringify(report, null, 2) + "\n");
 
-const fmt = (o) => (Object.keys(o).length ? Object.entries(o).map(([k, v]) => `  ${k} = ${v}`).join("\n") : "  (none)");
+const fmt = (o) =>
+  Object.keys(o).length ? Object.entries(o).map(([k, v]) => `  ${k} = ${v}`).join("\n") : "  (none)";
 console.log(`[OK] ${tag}`);
 console.log(`metrics: ${metricsPath}`);
 console.log("die/core:\n" + fmt({ ...summary.dieBbox, ...summary.coreBbox }));
@@ -104,4 +152,5 @@ console.log("hold:\n" + fmt(summary.hold));
 console.log("drc:\n" + fmt(summary.drc));
 console.log("lvs:\n" + fmt(summary.lvs));
 console.log("derived:\n" + fmt(derived));
+if (worstPath) console.log("worst path:\n" + fmt(worstPath));
 console.log(`wrote ${out}`);

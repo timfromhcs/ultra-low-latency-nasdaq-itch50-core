@@ -589,3 +589,799 @@ Up 54 minutes
 > build ┬À deepseek-v4.1-flash
 [0mÔåÉ [0mWrite rtl/itch_book_snapshot.sv
 Created file successfully: rtl/itch_book_snapshot.sv
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot.sv
+Index: rtl/itch_book_snapshot.sv
+===================================================================
+--- rtl/itch_book_snapshot.sv
++++ rtl/itch_book_snapshot.sv
+@@ -20,11 +20,9 @@
+ `define ITCH_BOOK_SNAPSHOT_SV
+ 
+ module itch_book_snapshot #(
+   parameter LOCATES = 16,
+-  parameter DEPTH   = 4,
+-  parameter LOC_AW  = (LOCATES <= 1) ? 1 : $clog2(LOCATES),
+-  parameter LVL_AW  = (DEPTH <= 1) ? 1 : $clog2(DEPTH)
++  parameter LOC_AW  = (LOCATES <= 1) ? 1 : $clog2(LOCATES)
+ )(
+   input  wire                        clk,
+   input  wire                        rst_n,
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot.sv
+Index: rtl/itch_book_snapshot.sv
+===================================================================
+--- rtl/itch_book_snapshot.sv
++++ rtl/itch_book_snapshot.sv
+@@ -60,8 +60,9 @@
+   output reg  [63:0]                 snap_ask_s0, snap_ask_s1, snap_ask_s2, snap_ask_s3,
+   output reg  [31:0]                 updates
+ );
+ 
++  localparam DEPTH = 4;
+   localparam N = LOCATES * DEPTH;
+ 
+   reg        hit    [0:LOCATES-1];
+   reg [31:0] bidp   [0:LOCATES-1];
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/test_snapshot.py
+Created file successfully: tb/test_snapshot.py
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/run_snapshot_cocotb.py
+Created file successfully: tb/run_snapshot_cocotb.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_book_snapshot.sv 2>&1 | grep -E 'Warning-|Error' | head -6; echo LINT_END"; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && python3 tb/run_snapshot_cocotb.py > /tmp/snap1.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -E 
+'Snapshot:|TESTS=|Assertion|error:' /tmp/snap1.txt | tail -6"
+%Warning-UNUSEDSIGNAL: rtl/itch_book_snapshot.sv:31:38: Bits of signal are not used: 'upd_locate'[15:4]
+%Error: Exiting due to 1 warning(s)
+LINT_END
+    44.95ns INFO     cocotb.itch_book_snapshot          Snapshot: locate 1/2 read back, miss on 3, updates=4 PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                 44.95          
+ 0.01       7852.47  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot.sv
+Index: rtl/itch_book_snapshot.sv
+===================================================================
+--- rtl/itch_book_snapshot.sv
++++ rtl/itch_book_snapshot.sv
+@@ -27,9 +27,9 @@
+   input  wire                        rst_n,
+ 
+   // Update port (from the book's per-message output).
+   input  wire                        upd_valid,
+-  input  wire [15:0]                 upd_locate,
++  input  wire [LOC_AW-1:0]           upd_locate,
+   input  wire [31:0]                 upd_bid_price,
+   input  wire [63:0]                 upd_bid_shares,
+   input  wire [31:0]                 upd_ask_price,
+   input  wire [63:0]                 upd_ask_shares,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot.sv
+Index: rtl/itch_book_snapshot.sv
+===================================================================
+--- rtl/itch_book_snapshot.sv
++++ rtl/itch_book_snapshot.sv
+@@ -77,9 +77,9 @@
+   reg [63:0] dbs [0:N-1];
+   reg [31:0] dap [0:N-1];
+   reg [63:0] das [0:N-1];
+ 
+-  wire [LOC_AW-1:0] upd_idx = upd_locate[LOC_AW-1:0];
++  wire [LOC_AW-1:0] upd_idx = upd_locate;
+   wire [LOC_AW-1:0] rd_idx  = rd_locate;
+ 
+   integer i;
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_book_snapshot.sv 2>&1 | grep -E 'Warning-|Error' | head -6; echo LINT_END"; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && python3 tb/run_snapshot_cocotb.py > /tmp/snap2.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -E 
+'Snapshot:|TESTS=' /tmp/snap2.txt | tail -4"
+LINT_END
+    44.95ns INFO     cocotb.itch_book_snapshot          Snapshot: locate 1/2 read back, miss on 3, updates=4 PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                 44.95          
+ 0.01       8206.77  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -54,8 +54,9 @@
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_feed_arbiter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_ab_system.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/mold_recovery.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_metrics.sv
++	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_book_snapshot.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
+ 
+ sim:
+ 	$(MAKE) -C tb sim VECTORS=$(abspath $(VECTORS))
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -78,8 +78,9 @@
+ 	$(PYTHON) tb/run_arbiter_cocotb.py
+ 	$(PYTHON) tb/run_ab_system_cocotb.py
+ 	$(PYTHON) tb/run_recovery_cocotb.py
+ 	$(PYTHON) tb/run_metrics_cocotb.py
++	$(PYTHON) tb/run_snapshot_cocotb.py
+ 	$(PYTHON) tb/run_skid_cocotb.py
+ 
+ synth-book:
+ 	./scripts/synth_book.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -42,8 +42,9 @@
+           python3 tb/run_arbiter_cocotb.py
+           python3 tb/run_ab_system_cocotb.py
+           python3 tb/run_recovery_cocotb.py 
+           python3 tb/run_metrics_cocotb.py  
++          python3 tb/run_snapshot_cocotb.py 
+           python3 tb/run_skid_cocotb.py     
+ 
+   wasm-web:
+     name: WASM + backend + MCP + Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -134,9 +134,12 @@
+ - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
+       output, 400-event + 100 back-to-back tests.
+ - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
+       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
+-- [ ] PCIe/DMA or 100G MAC integration; host API for book snapshots.
++- [x] Host book-snapshot block (`rtl/itch_book_snapshot.sv`): per-locate top-of-book,
++      last trade, volume and top-4 depth, one-cycle registered read port with a hit flag
++      and an update counter; test reads two locates, a miss, stability and a re-read.
++- [ ] PCIe/DMA or 100G MAC integration.
+ - [x] Performance counters (`rtl/itch_metrics.sv`): message/byte totals, gap/drop
+       pulses, free-running cycle counter, max queue occupancy and an 8-bin
+       inter-message gap histogram. Wired into `itch_top_book` (`metrics_*`);
+       test: 9-message histogram and 152-message integration (`tb/test_metrics.py`,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -232,8 +232,9 @@
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+ | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | 
+`tb/run_book_top_skid_cocotb.py` |
++| Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
+ | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | 
+`tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
+ | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the 
+parserÔåÆBBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+ | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM | `reports/sbom.json`, `release.yml` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,13 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **Host book snapshot** (`rtl/itch_book_snapshot.sv`): per-locate (16) snapshot of
++  top-of-book, last trade, volume and top-4 bid/ask depth, updated from the book's
++  event stream; one-cycle registered read port with `snap_valid`, `snap_hit` and an
++  `updates` counter. Test: two locates, a never-updated miss, snapshot stability
++  across unrelated updates, re-read after an update (updates=4).
+ - **LibreLane toolchain verification**: LibreLane **3.0.17** installed and its smoke test
+   passed (Classic flow 80/80, DRC Ô£à, LVS Ô£à, RC 0) using
+   `ghcr.io/librelane/librelane:3.0.17` under Docker Desktop with a cached PDK volume.
+   This validates the flow toolchain only; the ChipLab design itself has **no**
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-03 23:35 - Host book snapshot block
++
++- Added `rtl/itch_book_snapshot.sv`: per-locate (16) top-of-book, last trade, volume
++  and top-4 depth, updated from the book output; registered read port with
++  `snap_valid`, `snap_hit`, full 16-bit locate and an `updates` counter.
++- New test `tb/test_snapshot.py` (+ runner): locate 1/2 read back, miss on an
++  un-updated locate, snapshot stable across unrelated updates, re-read after update
++  ÔåÆ PASS, updates=4. Lint clean.
++- Wired into `make lint`, `make cocotb` and CI; docs/README/roadmap updated.
++
+ ## 2026-11-03 22:59 - Autonomy tick + LibreLane summary tool
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate 10/10; CI on `2f8ed55` green.
+ - Full Sky130 run still active (passes floorplan/placement/CTS; around step 37/80 after
+
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit docs/integration-guide.md failed
+[91m[1mError: [0mNo changes to apply: oldString and newString are identical.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -128,8 +128,36 @@
+ `req_count` (16-bit saturating) for one cycle and expects the requested sequence range
+ to reappear on either feed within 256 clocks. This is the boundary to a real network
+ stack; the RTL does not speak a retransmit protocol itself.
+ 
++## 5. Host book snapshots
++
++`itch_book_snapshot` mirrors the book into a per-locate table so a host can read the
++current state without replaying events:
++
++```systemverilog
++itch_book_snapshot #(.LOCATES(16)) u_snap (
++  .clk(clk), .rst_n(rst_n),
++  .upd_valid(bbo_valid),
++  .upd_locate(bbo_locate[3:0]),     // LOC_AW = clog2(LOCATES)
++  .upd_bid_price(bbo_bid_price), .upd_bid_shares(bbo_bid_shares),
++  .upd_ask_price(bbo_ask_price), .upd_ask_shares(bbo_ask_shares),
++  .upd_last_price(bbo_last_price), .upd_last_shares(bbo_last_shares),
++  .upd_volume(bbo_volume),
++  .upd_bid_p0(bbo_bid_p0), /* p1..p3, s0..s3, ask... */
++  .rd_valid(host_rd), .rd_locate(host_locate),
++  .snap_valid(snap_valid), .snap_hit(snap_hit),
++  .snap_locate(snap_locate), .snap_bid_price(snap_bid), /* ... */
++  .updates(snap_updates)
++);
++```
++
++Present `rd_locate` with `rd_valid`; the snapshot is registered and appears one clock
++later with `snap_valid`, holding until the next read. `snap_hit` is low for a locate
++that has never been updated, and `updates` counts applied events. The table costs about
++18 K flip-flops at 16 locates ├ù 4 levels ÔÇö put it at the host bridge, not in the feed
++path.
++
+ ## 5. Performance counters
+ 
+ `itch_metrics` is clocked with the pipeline and resets with `rst_n`. Poll it from a
+ management bus or a slow clock domain (the counters are static for many cycles at
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "^## " docs/integration-guide.md
+9:## 1. Pick your boundary
+19:## 2. Minimal parser instantiation
+61:## 3. Parser + book
+106:## 4. MoldUDP64 front-end
+132:## 5. Host book snapshots
+160:## 5. Performance counters
+180:## 6. Simulation
+200:## 7. Synthesis
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -156,9 +156,9 @@
+ that has never been updated, and `updates` counts applied events. The table costs about
+ 18 K flip-flops at 16 locates ├ù 4 levels ÔÇö put it at the host bridge, not in the feed
+ path.
+ 
+-## 5. Performance counters
++## 6. Performance counters
+ 
+ `itch_metrics` is clocked with the pipeline and resets with `rst_n`. Poll it from a
+ management bus or a slow clock domain (the counters are static for many cycles at
+ typical rates, but if you cross domains, sample through a handshake or a gray-coded
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -176,9 +176,9 @@
+ `itch_top_book` it is tied low (gaps are a Mold concept) and corrupt messages are
+ counted as drops. Instantiate `itch_metrics` yourself if your pipeline has a
+ different definition of gap/drop.
+ 
+-## 6. Simulation
++## 7. Simulation
+ 
+ ```bash
+ # Lint (Verilator, 0 warnings required)
+ make lint
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -196,9 +196,9 @@
+ The Cocotb runners accept `CHIPLAB_RTL` to point at a different `rtl/` directory.
+ Vectors are plain files: `stream.bin` (concatenated ITCH messages) and
+ `expected.bin` (80-byte records), generated by `tb/itch_model.py`.
+ 
+-## 7. Synthesis
++## 8. Synthesis
+ 
+ ```bash
+ # Book area estimate (reduced 32/4/4 config)
+ bash scripts/synth_book.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -36,8 +36,10 @@
+ - Risk checks per event: maximum shares per order (`cfg_max_shares`) and price
+   collar versus the last trade (`cfg_collar`), with a reject counter.
+ - Performance counters: message/byte totals, gap/drop pulses, free-running cycle
+   counter, maximum queue occupancy, 8-bin inter-message gap histogram.
++- Host snapshot table: per-locate top-of-book, last trade, volume and top-4 depth with
++  a one-cycle registered read port.
+ - MoldUDP64 front-end (Ethernet/IP/UDP ÔåÆ sequence tracking) and a two-feed A/B
+   arbiter with retransmit request, replay recovery and timeout resync.
+ 
+ ## 3. Electrical / timing targets
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -E 'Warning-|Error' | head -4; echo 
+LINT_END; make cocotb > /tmp/allcocotb3.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -E 'TESTS=' /tmp/allcocotb3.txt | sed 
+-E 's/.*TESTS=([0-9]+) PASS=([0-9]+) FAIL=([0-9]+).*/T=\1 P=\2 F=\3/' | tr '\n' ' '; echo; grep -c 'FAIL=0' 
+/tmp/allcocotb3.txt"
+LINT_END
+T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 
+F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 
+13
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "feat(rtl): 
+per-locate host book snapshot with registered read port" 2>&1 | Select-Object -Last 2; git push origin main 2>&1 | 
+Select-Object -Last 1
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/run_snapshot_cocotb.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_snapshot.py', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 tb/run_snapshot_cocotb.py
+ create mode 100644 tb/test_snapshot.py
+   fc86fa8..83aca95  main -> main
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker ps --format "{{.Status}}"; Get-ChildItem openlane\runs\chiplab-sky130 -Directory | 
+Select-Object -Last 3 Name; if ((Get-Item openlane\runs\chiplab-sky130\error.log).Length -gt 0) { Get-Content 
+openlane\runs\chiplab-sky130\error.log -Tail 10 } else { "no error.log content" }
+Up 56 minutes
+
+Name                            
+----                            
+36-openroad-stamidpnr-1         
+37-openroad-resizertimingpostcts
+tmp                             
+no error.log content
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Item 
+openlane\runs\chiplab-sky130\37-openroad-resizertimingpostcts\openroad-resizertimingpostcts.log | Select-Object 
+LastWriteTime,Length; Get-Content 
+openlane\runs\chiplab-sky130\37-openroad-resizertimingpostcts\openroad-resizertimingpostcts.log -Tail 3
+LastWriteTime       Length
+-------------       ------
+03.11.2026 22:41:18  24709
+     1570 |       5 |    1485 |       23 |      0 |     9 |    +0.5% |  -11.243 |   -31656.0 |   4466 | _34811_/D
+     1580 |       5 |    1494 |       23 |      1 |     9 |    +0.5% |  -11.243 |   -31555.7 |   4466 | _34811_/D
+     1590 |       5 |    1499 |       30 |      1 |     9 |    +0.6% |  -11.243 |   -31621.1 |   4466 | _34811_/D
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-Date; docker stats --no-stream --format "{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}}" 2>&1 | 
+Select-Object -First 3
+Dienstag, 3. November 2026 23:04:47
+condescending_shockley CPU=101.76% MEM=1.671GiB / 15.73GiB
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_250mhz.json
+Created file successfully: openlane/sky130_250mhz.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm ghcr.io/librelane/librelane:3.0.17 librelane --help 2>&1 | Select-String -Pattern "to |from 
+|last-run|run-tag" -Context 0,1 | Select-Object -First 12
+>   --save-views-to DIRECTORY      A directory to copy the final views to, where
+                                   each format is saved under a directory named
+>   --ef-save-views-to DIRECTORY   A directory to copy the final views to in the
+                                   Efabless format, compatible with Caravel User
+>                                  Used to mount more directories in dockerized
+                                   mode. If a valid directory is specified, it
+>                                  will be passed to the container engine
+                                   verbatim. Must be passed before
+>                                  by passing -t to the Docker-compatible
+                                   container engine invocation. Must be passed
+>   --run-example TEXT             Copies one of the LibreLane examples to the
+                                   current working directory and runs it.
+>                                  you want to use a custom PDK version.
+                                   [default: volare-pdk]
+>   -p, --pdk TEXT                 The process design kit to use.  [default:
+                                   sky130A]
+>   -s, --scl TEXT                 The standard cell library to use. If None, the
+                                   PDK's default standard cell library is used.
+>   --pad TEXT                     The standard pad library to use. If None, the
+                                   PDK's default standard cell library is used
+>   -F, --from TEXT                Start from a step with this id. Supported by
+                                   sequential flows.
+>   -T, --to TEXT                  Stop at a step with this id. Supported by
+                                   sequential flows.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path openlane\runs\chiplab-sky130\flow.log -Pattern "STAPrePNR|Step|step 
+id" | Select-Object -First 5 Line; Get-ChildItem openlane\runs\chiplab-sky130 | Where-Object Name -like "*staprepnr*" 
+| Select-Object Name
+Line                                                                                                                   
+----                                                                                                                   
+'PNR_SDC_FILE' is not defined. Using generic fallback SDC for OpenROAD PnR steps.                                      
+'SIGNOFF_SDC_FILE' is not defined. Using generic fallback SDC for OpenROAD PnR steps.                                  
+Running 'OpenROAD.STAPrePNR' at 'openlane/runs/chiplab-sky130/12-openroad-staprepnr'.                                  
+Logging subprocess to [repr.filename]'openlane/runs/chiplab-sky130/12-openroad-staprepnr/nom_tt_025C_1v80/sta.log'[/...
+Logging subprocess to [repr.filename]'openlane/runs/chiplab-sky130/12-openroad-staprepnr/nom_ss_100C_1v60/sta.log'[/...
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel 
+ghcr.io/librelane/librelane:3.0.17 librelane --run-tag sky130-250mhz-sta --to OpenROAD.STAPrePNR 
+openlane/sky130_250mhz.json > $env:TEMP\opencode\librelane_250.log 2>&1; "RC=$LASTEXITCODE" | Out-File -Append 
+$env:TEMP\opencode\librelane_250.log
+Command moved to the background (shell ID: sh_1a371e0eb001mwRzNO5ODoiyvA).
+Output is streaming to: 
+C:\Users\hcsme\.local\share\opencode\shell\e4621e381242949174fc78ea4ba2c23bf97dac84\sh_1a371e0eb001mwRzNO5ODoiyvA.out
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\chiplab-sky130\12-openroad-staprepnr | Select-Object 
+Name,Length; Select-String -Path openlane\runs\chiplab-sky130\12-openroad-staprepnr\nom_tt_025C_1v80\sta.log -Pattern 
+"slack" | Select-Object -Last 3 Line
+Name             Length
+----             ------
+nom_ff_n40C_1v95       
+nom_ss_100C_1v60       
+nom_tt_025C_1v80       
+COMMANDS         465   
+config.json      7977  
+runtime.txt      12    
+state_in.json    621   
+state_out.json   5743  
+summary.rpt      2778
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content openlane\runs\chiplab-sky130\12-openroad-staprepnr\summary.rpt | Select-Object 
+-First 40
+´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"
+´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢""
+´┐¢"´┐¢                      ´┐¢"´┐¢ Hold     ´┐¢"´┐¢ Reg to   ´┐¢"´┐¢          ´┐¢"´┐¢          ´┐¢"´┐¢ of which  
+´┐¢"´┐¢ Setup    ´┐¢"´┐¢           ´┐¢"´┐¢          ´┐¢"´┐¢           ´┐¢"´┐¢ of which ´┐¢"´┐¢           ´┐¢"´┐¢       
+   ´┐¢"´┐¢
+´┐¢"´┐¢                      ´┐¢"´┐¢ Worst    ´┐¢"´┐¢ Reg      ´┐¢"´┐¢          ´┐¢"´┐¢ Hold Vio ´┐¢"´┐¢ reg to    
+´┐¢"´┐¢ Worst    ´┐¢"´┐¢ Reg to    ´┐¢"´┐¢ Setup    ´┐¢"´┐¢ Setup Vio ´┐¢"´┐¢ reg to   ´┐¢"´┐¢ Max Cap   ´┐¢"´┐¢ Max 
+Slew ´┐¢"´┐¢
+´┐¢"´┐¢ Corner/Group         ´┐¢"´┐¢ Slack    ´┐¢"´┐¢ Paths    ´┐¢"´┐¢ Hold TNS ´┐¢"´┐¢ Count    ´┐¢"´┐¢ reg       
+´┐¢"´┐¢ Slack    ´┐¢"´┐¢ Reg Paths ´┐¢"´┐¢ TNS      ´┐¢"´┐¢ Count     ´┐¢"´┐¢ reg      ´┐¢"´┐¢ Violatio´┐¢?´┐¢ ´┐¢"´┐¢ 
+Violati´┐¢?´┐¢ ´┐¢"´┐¢
+´┐¢"´┐¢´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐
+¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?
+´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢
+"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´
+┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"
+?´┐¢"?´┐¢╬â"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢
+´┐¢"' Overall              ´┐¢"' 0.1011   ´┐¢"' 0.1011   ´┐¢"' 0.0000   ´┐¢"' 0        ´┐¢"' 0         ´┐¢"' -9.1413  
+´┐¢"' -9.1413   ´┐¢"' -25193.´┐¢?´┐¢ ´┐¢"' 9552      ´┐¢"' 6519     ´┐¢"' 2         ´┐¢"' 3320     ´┐¢"'
+´┐¢"' nom_tt_025C_1v80     ´┐¢"' 0.2751   ´┐¢"' 0.2751   ´┐¢"' 0.0000   ´┐¢"' 0        ´┐¢"' 0         ´┐¢"' -3.7002  
+´┐¢"' -3.0098   ´┐¢"' -8988.3´┐¢?´┐¢ ´┐¢"' 3210      ´┐¢"' 2198     ´┐¢"' 0         ´┐¢"' 260      ´┐¢"'
+´┐¢"' nom_ss_100C_1v60     ´┐¢"' 0.7613   ´┐¢"' 0.7613   ´┐¢"' 0.0000   ´┐¢"' 0        ´┐¢"' 0         ´┐¢"' -9.1413  
+´┐¢"' -9.1413   ´┐¢"' -25193.´┐¢?´┐¢ ´┐¢"' 3237      ´┐¢"' 2222     ´┐¢"' 2         ´┐¢"' 3320     ´┐¢"'
+´┐¢"' nom_ff_n40C_1v95     ´┐¢"' 0.1011   ´┐¢"' 0.1011   ´┐¢"' 0.0000   ´┐¢"' 0        ´┐¢"' 0         ´┐¢"' -1.5489  
+´┐¢"' -0.7912   ´┐¢"' -2662.9´┐¢?´┐¢ ´┐¢"' 3105      ´┐¢"' 2099     ´┐¢"' 0         ´┐¢"' 13       ´┐¢"'
+´┐¢""´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"
+´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´
+┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐
+¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢
+"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"
+?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?
+´┐¢"?´┐¢"?´┐¢"?´┐¢"´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"?´┐¢"~
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -6,8 +6,9 @@
+ | File | PDK | Clock target |
+ |---|---|---|
+ | `config.json` | legacy Sky130 baseline | 3.10 ns |
+ | `sky130.json` | Sky130 | 3.10 ns |
++| `sky130_250mhz.json` | Sky130 | 4.00 ns (250 MHz) |
+ | `gf180.json` | GF180MCU | 3.10 ns |
+ | `ihp-sg13g2.json` | IHP SG13G2 | 3.10 ns |
+ 
+ ## Verified toolchain (2026-11-03)
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-Content "$env:TEMP\opencode\librelane_250.log" -Tail 8 -ErrorAction SilentlyContinue
+Version 8afc8346a57fe1ab7934ba5a6056ea8b43078e71 not found locally, attempting 
+to downloadÔÇª
+Downloading common.tar.zstÔÇª 
+ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöü 
+100% 0:00:00
+Downloading sky130_fd_io.tar.zstÔÇª 
+ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöü 100% 0:00:00
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add openlane; git commit -m "chore(openlane): add 250 MHz Sky130 config for pre-PnR 
+STA" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'openlane/sky130_250mhz.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 openlane/sky130_250mhz.json
+   83aca95..e964ce5  main -> main
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const ci = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 5 });\nreturn 
+ci.workflow_runs?.filter(x => x.head_branch === \"main\").slice(0,3).map(x => [x.head_sha?.slice(0,7), x.status, 
+x.conclusion]);"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-Content "$env:TEMP\opencode\librelane_250.log" -Tail 6 -ErrorAction SilentlyContinue; docker ps --format 
+"{{.Status}} {{.Command}}"
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2328:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2328 | module sky130_fd_sc_hd__clkdlybuf4s25_2(X, A, VPWR, VGND, VPB, VNB);    
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                 
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2343:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2343 | module sky130_fd_sc_hd__clkdlybuf4s50_1(X, A, VPWR, VGND, VPB, VNB);    
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                 
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2358:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2358 | module sky130_fd_sc_hd__clkdlybuf4s50_2(X, A, VPWR, VGND, VPB, VNB);    
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                 
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2373:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2373 | module sky130_fd_sc_hd__clkinv_1(Y, A, VPWR, VGND, VPB, VNB);           
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~                                        
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2388:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2388 | module sky130_fd_sc_hd__clkinv_16(Y, A, VPWR, VGND, VPB, VNB);          
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~                                       
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2403:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2403 | module sky130_fd_sc_hd__clkinv_2(Y, A, VPWR, VGND, VPB, VNB);           
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~                                        
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2418:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2418 | module sky130_fd_sc_hd__clkinv_4(Y, A, VPWR, VGND, VPB, VNB);           
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~                                        
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2433:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2433 | module sky130_fd_sc_hd__clkinv_8(Y, A, VPWR, VGND, VPB, VNB);           
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~                                        
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2448:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2448 | module sky130_fd_sc_hd__clkinvlp_2(Y, A, VPWR, VGND, VPB, VNB);         
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~                                      
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2463:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2463 | module sky130_fd_sc_hd__clkinvlp_4(Y, A, VPWR, VGND, VPB, VNB);         
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~                                      
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2478:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2478 | module sky130_fd_sc_hd__conb_1(HI, LO, VPWR, VGND, VPB, VNB);           
+      |        ^~~~~~~~~~~~~~~~~~~~~~~                                          
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2493:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2493 | module sky130_fd_sc_hd__decap_12(VPWR, VGND, VPB, VNB);                 
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~                                        
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2504:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2504 | module sky130_fd_sc_hd__decap_3(VPWR, VGND, VPB, VNB);                  
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2515:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2515 | module sky130_fd_sc_hd__decap_4(VPWR, VGND, VPB, VNB);                  
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2526:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2526 | module sky130_fd_sc_hd__decap_6(VPWR, VGND, VPB, VNB);                  
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2537:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2537 | module sky130_fd_sc_hd__decap_8(VPWR, VGND, VPB, VNB);                  
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2548:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2548 | module sky130_fd_sc_hd__dfbbn_1(Q, Q_N, D, CLK_N, SET_B, RESET_B, VPWR, 
+VGND, VPB, VNB);                                                                
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2571:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2571 | module sky130_fd_sc_hd__dfbbn_2(Q, Q_N, D, CLK_N, SET_B, RESET_B, VPWR, 
+VGND, VPB, VNB);                                                                
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2594:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2594 | module sky130_fd_sc_hd__dfbbp_1(Q, Q_N, D, CLK, SET_B, RESET_B, VPWR,   
+VGND, VPB, VNB);                                                                
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2617:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2617 | module sky130_fd_sc_hd__dfrbp_1(Q, Q_N, CLK, D, RESET_B, VPWR, VGND,    
+VPB, VNB);                                                                      
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2638:8: Timescale missing on this module as other modules have it (IEEE         
+1800-2023 3.14.2.3)                                                             
+ 2638 | module sky130_fd_sc_hd__dfrbp_2(Q, Q_N, CLK, D, RESET_B, VPWR, VGND,    
+VPB, VNB);                                                                      
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~                                         
+                       /work/rtl/itch_drop_gate.sv:19:8: ... Location of module 
+with timescale                                                                  
+   19 | module itch_drop_gate (                                                 
+      |        ^~~~~~~~~~~~~~                                                   
+%Warning-TIMESCALEMOD:                                                          
+/work/openlane/runs/sky130-250mhz-sta/tmp/21eddb8c87514adda303ef8b35cc9d49.bb.v:
+2659:8: Timescale missing on this module as other modules have it (IEEE         
+Up About a minute "librelane --run-tagÔÇª"
+Up 58 minutes "librelane --run-tagÔÇª"
+> build ┬À deepseek-v4.1-flash
+Zwischenstand (Tick 22:59):
+
+- **Autonomy**: Queue leer, 0 Tasks; Gate **10/10**; CI auf `2f8ed55`/`07d34b1`/`83aca95` gr├╝n.
+- **Neu: Host-Book-Snapshot** (`rtl/itch_book_snapshot.sv`): 16 Locates, Top-of-Book, Last Trade, Volume, Top-4-Depth; 1-Takt-Leseport mit `snap_valid`/`snap_hit` und `updates`-Z├ñhler. Test: 2 Locates, Miss, Stabilit├ñt, Re-Read (updates=4) ÔåÆ **PASS**; `make cocotb` jetzt **13 Suiten / 18 Tests, 0 Fehler**; lint sauber. Commit `83aca95`.
+- **Neu: LibreLane-Summary-Tool** `scripts/openlane_summary.mjs` (+ `make openlane-summary`), inkl. Fmax-Sch├ñtzung `1000/(TÔêÆWNS)`; an synthetischen Metrics verifiziert. Commit `261d792`/`fc86fa8`.
+- **250-MHz-Config** `openlane/sky130_250mhz.json` angelegt (Commit `e964ce5`).
+- **Physische L├ñufe**:
+  - 322-MHz-Vollrun l├ñuft seit ~58 min, aktuell Step 37/80 (Post-CTS-Resizer), Pre-PnR-STA-Zwischenstand: **Setup-WNS ÔêÆ9,14 ns (ss), TNS ÔêÆ25.193 ns** ÔåÆ keine Timing-Schlie├ƒung bei 3,10 ns, wie im Errata dokumentiert.
+  - 250-MHz-Pre-PnR-STA-Lauf (`--to OpenROAD.STAPrePNR`) l├ñuft; Ergebnis wird als N├ñchstes in `reports/openlane_250mhz.json` publiziert.

@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 23:45 - Sky130 pre-PnR STA at 250 MHz and 322 MHz
+
+- Ran `openlane/sky130_250mhz.json` to `OpenROAD.STAPrePNR` (57 s after PDK cache):
+  setup WNS **−8.27 ns** (ss/100C/1.60 V), TNS −22,463 ns, 19,936 instances,
+  199,739 µm². Fmax estimate **81.47 MHz**.
+- Existing 3.10 ns run's pre-PnR STA: WNS **−9.14 ns**, TNS −25,193 ns → Fmax
+  ≈81.6 MHz. Worst path in both: a shifter counter FF → `raw_payload[0]`
+  (asynchronous bypass), so the limit is the bypass/decoder logic, not pipeline depth.
+- `scripts/openlane_summary.mjs` now also publishes the worst-path startpoint/endpoint
+  and `reports/openlane_sky130-250mhz-sta.json` (6.5 KB) is committed. Clearly labeled
+  pre-PnR, not a sign-off.
+- The full 3.10 ns P&R run is still active (post-CTS resizer, ~1 h).
+
 ## 2026-11-03 23:35 - Host book snapshot block
 
 - Added `rtl/itch_book_snapshot.sv`: per-locate (16) top-of-book, last trade, volume

@@ -55,7 +55,10 @@ Two egress paths exist:
 | I/O | All single clock domain | No CDC inside the core |
 
 > Fmax and area are **model numbers**. There is no OpenSTA/LibreLane sign-off in this
-> repository; do not quote them as silicon results.
+> repository; do not quote them as silicon results. A pre-PnR Sky130 run (2026-11-03)
+> measures WNS −8.27 ns at 4.00 ns and −9.14 ns at 3.10 ns (ss corner), i.e. an Fmax
+> estimate of ≈81.5 MHz with the worst path ending at `raw_payload[0]`. That is an
+> honest pre-place-and-route number, not a sign-off.
 
 ## 4. Area estimate
 

@@ -108,7 +108,11 @@ MDN PWA best practices, GitHub Actions docs.
       cached PDK volume; see `openlane/README.md`.
 - [ ] Full LibreLane Sky130 run of `openlane/sky130.json` (wide 484-bit record; long
       run, pin-count/area fit still open).
-- [ ] OpenSTA slack at 250 MHz and 322 MHz; publish worst path.
+- [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
+      250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
+      Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
+      Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
+- [ ] Post-route STA with the full flow (the 322 MHz run is still in progress).
 - [ ] GF180 + IHP SG13G2 configs, one run each.
 - [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
 - [x] Replace illustrative GDS with an actual LibreLane render or label clearly: the

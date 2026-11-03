@@ -33,6 +33,29 @@ python3 -m pip install --break-system-packages librelane
 python3 -m librelane --dockerized --smoke-test     # or: make librelane-smoke
 ```
 
+## Measured pre-PnR STA (2026-11-03)
+
+`OpenROAD.STAPrePNR`, sky130_fd_sc_hd, ss/100C/1.60 V, 19,936 instances
+(199,739 µm²):
+
+| Clock | Setup WNS | Setup TNS | Fmax estimate |
+|---|---|---|---|
+| 4.00 ns (250 MHz) | **−8.27 ns** | −22,463 ns | **81.47 MHz** |
+| 3.10 ns (322 MHz) | **−9.14 ns** | −25,193 ns | ≈81.6 MHz |
+
+Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynchronous
+bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
+depth. **Pre-PnR only — no placement/routing, no sign-off.**
+
+Reproduce the 250 MHz STA-only run:
+
+```powershell
+docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel `
+  ghcr.io/librelane/librelane:3.0.17 `
+  librelane --run-tag sky130-250mhz-sta --to OpenROAD.STAPrePNR openlane/sky130_250mhz.json
+node scripts/openlane_summary.mjs openlane/runs/sky130-250mhz-sta
+```
+
 ## Running this design
 
 ```powershell

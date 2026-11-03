@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Sky130 pre-PnR STA**: LibreLane/OpenROAD run to `OpenROAD.STAPrePNR` (19,936
+  instances, 199,739 µm²) gives ss-corner setup WNS **−8.27 ns at 4.00 ns** and
+  **−9.14 ns at 3.10 ns**, i.e. Fmax **≈81.5 MHz**; the worst path runs from a shifter
+  counter FF to `raw_payload[0]` (the asynchronous bypass). Pre-PnR only, **not** a
+  timing sign-off. `reports/openlane_sky130-250mhz-sta.json`.
 - **Host book snapshot** (`rtl/itch_book_snapshot.sv`): per-locate (16) snapshot of
   top-of-book, last trade, volume and top-4 bid/ask depth, updated from the book's
   event stream; one-cycle registered read port with `snap_valid`, `snap_hit` and an
