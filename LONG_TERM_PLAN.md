@@ -89,6 +89,8 @@ MDN PWA best practices, GitHub Actions docs.
       max/min reduction; 2-cycle latency.
 - [x] 4-way set-associative order lookup (4 compares, was 256).
 - [ ] Physical timing sign-off of the level table + reduction (Phase 2).
+- [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
+      (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.

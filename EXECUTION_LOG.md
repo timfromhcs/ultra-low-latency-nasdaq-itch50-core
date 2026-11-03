@@ -250,6 +250,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Full Yosys logs are git-ignored; only the compact JSON is committed.
 - Added `make synth-book`.
 
+## Phase 1e - Parser -> BBO integration
+
+- Added `rtl/itch_top_book.sv`: parser + BBO, parser held in reset until the BBO init
+  completes so no message is lost.
+- Fixed U (replace) semantics: the replacement inherits the original order's side
+  (ITCH U has no side field) and is inserted under the new ref's hash set.
+- Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+- `make lint` and CI now cover the wrapper and the new test.
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.

@@ -33,6 +33,13 @@ All notable changes to ChipLab are documented here. The format follows
   timing/DRC/LVS sign-off is claimed.
 - CI/Makefile run the book cocotb test and lint the module.
 
+### Added
+- `rtl/itch_top_book.sv`: end-to-end wrapper (ITCH parser -> BBO). The parser is held
+  in reset until the BBO tables are initialised, so no message is lost.
+- `tb/test_book_top.py`: **152 raw ITCH messages -> 0 BBO mismatches**; U (replace)
+  inherits the original side, matching the protocol.
+- CI/Makefile run the parser+BBO cocotb test and lint the wrapper.
+
 ## 0.3.1 — 2026-11-03
 
 Patch release: packaging metadata and release-loop fixes. No protocol or API change.

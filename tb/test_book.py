@@ -62,7 +62,8 @@ class Book:
     def replace(self, locate, ref, side, price, shares):
         o = self.orders.get(locate, {}).get(ref)
         if o is not None:
-            o[0], o[1], o[2] = side, price, shares
+            # ITCH U has no side field: the replacement keeps the old side.
+            o[1], o[2] = price, shares
             return ref
         self.orders.setdefault(locate, {})[ref] = [side, price, shares]
         return ref

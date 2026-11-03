@@ -141,6 +141,26 @@ module itch_top_of_book #(
     end
   end
 
+  // A replace creates a new ref, which belongs to its own set; it must not
+  // inherit the old ref's slot (that would make later lookups miss).
+  wire [5:0] new_set  = s_new_ref[5:0];
+  wire [7:0] new_base = {new_set, 2'b00};
+  reg        new_free_found;
+  reg [7:0]  new_free_idx;
+  always @(*) begin
+    new_free_found = 1'b0;
+    new_free_idx   = new_base;
+    if (!ord_valid[new_base]) begin
+      new_free_found = 1'b1; new_free_idx = new_base;
+    end else if (!ord_valid[new_base+1]) begin
+      new_free_found = 1'b1; new_free_idx = new_base + 8'd1;
+    end else if (!ord_valid[new_base+2]) begin
+      new_free_found = 1'b1; new_free_idx = new_base + 8'd2;
+    end else if (!ord_valid[new_base+3]) begin
+      new_free_found = 1'b1; new_free_idx = new_base + 8'd3;
+    end
+  end
+
   // --------------------------------------------------------------------------
   // Level search helpers (combinational)
   // --------------------------------------------------------------------------
@@ -151,6 +171,8 @@ module itch_top_of_book #(
 
   wire ev_bid  = (s_side == 8'h42);
   wire old_bid = (ord_side[found_idx] == 8'h42);
+  // ITCH U has no side field: the replacement keeps the original side.
+  wire add_bid = (s_msg_type == T_REPLACE && found) ? old_bid : ev_bid;
 
   always @(*) begin
     add_found     = 1'b0;
@@ -158,12 +180,12 @@ module itch_top_of_book #(
     add_free      = 1'b0;
     add_free_slot = 5'd0;
     for (j = 0; j < LEVELS; j = j + 1) begin
-      if (ev_bid ? (lb_valid[loc_idx*LEVELS+j] && lb_price[loc_idx*LEVELS+j] == s_price)
+      if (add_bid ? (lb_valid[loc_idx*LEVELS+j] && lb_price[loc_idx*LEVELS+j] == s_price)
                  : (la_valid[loc_idx*LEVELS+j] && la_price[loc_idx*LEVELS+j] == s_price)) begin
         add_found = 1'b1;
         add_slot  = j[4:0];
       end
-      if (ev_bid ? !lb_valid[loc_idx*LEVELS+j] : !la_valid[loc_idx*LEVELS+j]) begin
+      if (add_bid ? !lb_valid[loc_idx*LEVELS+j] : !la_valid[loc_idx*LEVELS+j]) begin
         add_free      = 1'b1;
         add_free_slot = j[4:0];
       end
@@ -188,7 +210,7 @@ module itch_top_of_book #(
                        (s_shares > ord_shares[found_idx] ? ord_shares[found_idx] : s_shares);
 
   wire same_level = found && rem_found && add_found &&
-                    (old_bid == ev_bid) &&
+                    (old_bid == add_bid) &&
                     (ord_price[found_idx] == s_price) &&
                     (rem_slot == add_slot);
 
@@ -343,7 +365,7 @@ module itch_top_of_book #(
               ord_valid[found_idx] <= 1'b0;
               if (same_level) begin
                 // Same price level: net update, no invalidate/add pair.
-                if (ev_bid) begin
+                if (add_bid) begin
                   if ((lb_shares[loc_idx*LEVELS+add_slot] - rm_amt + s_shares) == 64'd0)
                     lb_valid[loc_idx*LEVELS+add_slot] <= 1'b0;
                   else
@@ -374,18 +396,14 @@ module itch_top_of_book #(
           end
 
           if (s_msg_type == T_REPLACE) begin
-            if (found) begin
-              ord_ref[found_idx]    <= s_new_ref;
-              ord_side[found_idx]   <= s_side;
-              ord_price[found_idx]  <= s_price;
-              ord_shares[found_idx] <= s_shares;
-              ord_valid[found_idx]  <= 1'b1;
-            end else if (free_found) begin
-              ord_valid[free_idx]  <= 1'b1;
-              ord_ref[free_idx]    <= s_new_ref;
-              ord_side[free_idx]   <= s_side;
-              ord_price[free_idx]  <= s_price;
-              ord_shares[free_idx] <= s_shares;
+            if (new_free_found) begin
+              ord_valid[new_free_idx]  <= 1'b1;
+              ord_ref[new_free_idx]    <= s_new_ref;
+              ord_side[new_free_idx]   <= add_bid ? 8'h42 : 8'h53;
+              ord_price[new_free_idx]  <= s_price;
+              ord_shares[new_free_idx] <= s_shares;
+            end else begin
+              drops_overflow <= drops_overflow + 32'd1;
             end
           end else if (free_found) begin
             ord_valid[free_idx]  <= 1'b1;
@@ -399,12 +417,12 @@ module itch_top_of_book #(
 
           if (!same_level) begin
             if (add_found) begin
-              if (ev_bid) lb_shares[loc_idx*LEVELS+add_slot] <=
+              if (add_bid) lb_shares[loc_idx*LEVELS+add_slot] <=
                   lb_shares[loc_idx*LEVELS+add_slot] + s_shares;
               else        la_shares[loc_idx*LEVELS+add_slot] <=
                   la_shares[loc_idx*LEVELS+add_slot] + s_shares;
             end else if (add_free) begin
-              if (ev_bid) begin
+              if (add_bid) begin
                 lb_valid[loc_idx*LEVELS+add_free_slot]  <= 1'b1;
                 lb_price[loc_idx*LEVELS+add_free_slot]  <= s_price;
                 lb_shares[loc_idx*LEVELS+add_free_slot] <= s_shares;

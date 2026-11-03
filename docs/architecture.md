@@ -154,3 +154,9 @@ The architecture is partitioned into four decoupled, ultra-fast sub-modules:
   back-to-back at 1 event/cycle (`tb/test_book.py`).
 - Order lookup: 4-way set-associative bank (4 parallel compares), 64 sets x 4 ways.
   Physical timing of the level table + reduction is a Phase 2 sign-off item.
+
+### End-to-end wrapper (`rtl/itch_top_book.sv`)
+
+- Wires the parser's registered egress into the BBO; no FIFO is needed because the BBO accepts one event per cycle.
+- The parser is held in reset until the BBO tables are initialised, so no message is lost during the ~800-cycle init.
+- Proof: 152 raw ITCH messages -> 0 BBO mismatches (`tb/test_book_top.py`).
