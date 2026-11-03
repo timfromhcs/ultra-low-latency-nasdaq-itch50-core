@@ -2,7 +2,9 @@
 // File: mcp/server.mjs
 // Description: Minimal MCP (stdio JSON-RPC) server for ChipLab.
 //   Tools: chiplab.chips, chiplab.run, chiplab.compare, chiplab.book,
-//          chiplab.formal_status
+//          chiplab.formal_status, chiplab.health, chiplab.cloud_info,
+//          chiplab.history, chiplab.release_status, chiplab.sbom,
+//          chiplab.synth_status, chiplab.docs
 //   No external dependencies. Logs go to stderr; stdout is protocol-only.
 // =============================================================================
 import readline from "node:readline";
@@ -66,14 +68,77 @@ const TOOLS = [
     description: "Return the last formal verification report committed in reports/formal.json.",
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
   },
+  {
+    name: "chiplab.health",
+    description: "Return service version, WASM ABI, host summary and which evidence reports exist.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
+    name: "chiplab.cloud_info",
+    description: "Describe the local cloud data directory and namespaces. Read-only; never starts a server.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
+    name: "chiplab.history",
+    description: "Summarize the local cloud run history (revision, updatedAt, run count, last summary). No raw payloads.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
+    name: "chiplab.release_status",
+    description: "Check version consistency, gate scorecard, changelog and required artifacts for a release.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
+    name: "chiplab.sbom",
+    description: "Summarize reports/sbom.json: component count, scopes and a few notable components.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
+    name: "chiplab.synth_status",
+    description: "Parse reports/synth_*.log and return the last cell count per width.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
+    name: "chiplab.docs",
+    description: "Return one documentation file from a fixed catalog. Never reads arbitrary paths.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        doc: {
+          type: "string",
+          enum: ["architecture", "benchmarks", "long-term-plan", "release-plan", "mold-backpressure", "mcp-security", "readme", "changelog"],
+          default: "architecture",
+        },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 const ALLOWED = {
   "chiplab.chips": [],
   "chiplab.formal_status": [],
+  "chiplab.health": [],
+  "chiplab.cloud_info": [],
+  "chiplab.history": [],
+  "chiplab.release_status": [],
+  "chiplab.sbom": [],
+  "chiplab.synth_status": [],
+  "chiplab.docs": ["doc"],
   "chiplab.run": ["chip", "count", "seed", "mode"],
   "chiplab.compare": ["count", "seed"],
   "chiplab.book": ["count", "seed"],
+};
+
+const DOCS = {
+  "architecture": "docs/architecture.md",
+  "benchmarks": "docs/benchmarks.md",
+  "long-term-plan": "LONG_TERM_PLAN.md",
+  "release-plan": "STABLE_RELEASE_PLAN.md",
+  "mold-backpressure": "docs/design/mold-backpressure.md",
+  "mcp-security": "mcp/SECURITY.md",
+  "readme": "README.md",
+  "changelog": "CHANGELOG.md",
 };
 
 function validateArgs(name, args) {
@@ -82,6 +147,11 @@ function validateArgs(name, args) {
   if (!allowed) throw new Error(`unknown tool: ${name}`);
   for (const k of Object.keys(args)) if (!allowed.includes(k)) throw new Error(`unexpected argument: ${k}`);
   const out = {};
+  if (allowed.includes("doc")) {
+    const d = args.doc ?? "architecture";
+    if (typeof d !== "string" || !(d in DOCS)) throw new Error(`doc must be one of: ${Object.keys(DOCS).join(", ")}`);
+    out.doc = d;
+  }
   if (allowed.includes("count")) {
     const n = Number(args.count ?? 100000);
     if (!Number.isInteger(n) || n < 1 || n > 2_000_000) throw new Error("count must be an integer in 1..2000000");
@@ -128,8 +198,123 @@ function summary(header, streamBytes) {
   };
 }
 
+function readJson(rel, fallback = null) {
+  try { return JSON.parse(fs.readFileSync(path.resolve(root, rel), "utf8")); } catch { return fallback; }
+}
+
+function dataDir() {
+  return path.resolve(root, process.env.CHIPLAB_DATA_DIR || ".data");
+}
+
+function listNamespaces() {
+  try {
+    return fs.readdirSync(dataDir())
+      .filter((f) => f.endsWith(".json"))
+      .map((f) => f.slice(0, -5))
+      .filter((n) => /^[a-zA-Z0-9_-]{1,32}$/.test(n))
+      .slice(0, 64);
+  } catch { return []; }
+}
+
 function runTool(name, args = {}) {
   if (name === "chiplab.chips") return { chips: CHIPS, host };
+  if (name === "chiplab.health") {
+    const reports = ["formal.json", "scorecard.json", "sbom.json", "sim_1m.txt", "mutation.json"]
+      .map((f) => ({ file: f, present: fs.existsSync(path.resolve(root, "reports", f)) }));
+    return {
+      ok: true,
+      service: "chiplab-mcp",
+      version: readJson("package.json", {})?.version || "unknown",
+      wasm: { version: core.version(), bytes: core.wasmBytes },
+      chips: CHIPS.length,
+      host,
+      reports,
+    };
+  }
+  if (name === "chiplab.cloud_info") {
+    return {
+      ok: true,
+      service: "chiplab-local-cloud",
+      version: readJson("package.json", {})?.version || "unknown",
+      dataDir: path.basename(dataDir()),
+      namespaces: listNamespaces(),
+      persistence: "local-json",
+      note: "Read-only view. Start backend/server.mjs or chiplab.exe for the HTTP service.",
+    };
+  }
+  if (name === "chiplab.history") {
+    const rec = readJson(path.join(path.basename(dataDir()), "default.json"));
+    if (!rec) return { ok: true, exists: false, runs: 0, note: "no local cloud history" };
+    const runs = Array.isArray(rec.data?.runs) ? rec.data.runs : [];
+    return {
+      ok: true,
+      exists: true,
+      revision: rec.revision ?? null,
+      updatedAt: rec.updatedAt ?? null,
+      runs: runs.length,
+      lastRun: rec.data?.lastRun ?? null,
+    };
+  }
+  if (name === "chiplab.release_status") {
+    const expected = readJson("package.json", {})?.version;
+    const versions = {};
+    for (const [k, rel] of Object.entries({
+      npm: "packages/npm/package.json",
+      native: "native/Cargo.toml",
+      wasm: "wasm-core/Cargo.toml",
+      python: "packages/python/pyproject.toml",
+    })) {
+      const text = fs.readFileSync(path.resolve(root, rel), "utf8");
+      versions[k] = /"version"\s*:\s*"([^"]+)"/.exec(text)?.[1] || /^version\s*=\s*"([^"]+)"/m.exec(text)?.[1] || "?";
+    }
+    const changelog = fs.existsSync(path.resolve(root, "CHANGELOG.md"))
+      ? fs.readFileSync(path.resolve(root, "CHANGELOG.md"), "utf8") : "";
+    const scorecard = readJson("reports/scorecard.json", null);
+    const artifacts = ["web/wasm/chiplab_core.wasm", "reports/sbom.json"]
+      .map((rel) => ({ path: rel, present: fs.existsSync(path.resolve(root, rel)) }));
+    return {
+      version: expected,
+      versions,
+      consistent: Object.values(versions).every((v) => v === expected),
+      changelogHasVersion: Boolean(expected && changelog.includes(`## ${expected}`)),
+      scorecard: scorecard ? { score: scorecard.score, deep: scorecard.deep, generatedAt: scorecard.generatedAt } : null,
+      artifacts,
+    };
+  }
+  if (name === "chiplab.sbom") {
+    const sbom = readJson("reports/sbom.json", null);
+    if (!sbom) return { ok: false, note: "run node scripts/sbom.mjs" };
+    const components = Array.isArray(sbom.components) ? sbom.components : [];
+    const scopes = {};
+    for (const c of components) scopes[c.scope || "runtime"] = (scopes[c.scope || "runtime"] || 0) + 1;
+    return {
+      ok: true,
+      bomFormat: sbom.bomFormat,
+      specVersion: sbom.specVersion,
+      component: sbom.metadata?.component || null,
+      count: components.length,
+      scopes,
+      sample: components.slice(0, 12).map((c) => ({ name: c.name, version: c.version, scope: c.scope })),
+    };
+  }
+  if (name === "chiplab.synth_status") {
+    const dir = path.resolve(root, "reports");
+    const out = {};
+    try {
+      for (const f of fs.readdirSync(dir).filter((x) => /^synth_\d+\.log$/.test(x))) {
+        const text = fs.readFileSync(path.join(dir, f), "utf8");
+        const cells = [...text.matchAll(/Number of cells:\s+(\d+)/g)].map((m) => Number(m[1]));
+        const dff = [...text.matchAll(/Number of \$_(S?DFF[^\s]*)/g)].length;
+        out[f.replace(/^synth_|\.log$/g, "")] = { lastCells: cells.at(-1) ?? null, cellLines: cells.length, dffCells: dff };
+      }
+    } catch { /* no reports */ }
+    return { ok: Object.keys(out).length > 0, widths: out };
+  }
+  if (name === "chiplab.docs") {
+    const rel = DOCS[args.doc || "architecture"];
+    const text = fs.readFileSync(path.resolve(root, rel), "utf8");
+    return { doc: args.doc || "architecture", path: rel, bytes: Buffer.byteLength(text), truncated: text.length > 20000, text: text.slice(0, 20000) };
+  }
   if (name === "chiplab.formal_status") {
     const p = path.resolve(root, "reports/formal.json");
     return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf8")) : { status: "unknown", note: "run formal/run_formal.sh" };
@@ -173,7 +358,7 @@ rl.on("line", (line) => {
       send({ jsonrpc: "2.0", id, result: {
         protocolVersion: "2024-11-05",
         capabilities: { tools: {} },
-        serverInfo: { name: "chiplab", version: "0.2.0" },
+        serverInfo: { name: "chiplab", version: "0.3.0" },
       }});
       return;
     }

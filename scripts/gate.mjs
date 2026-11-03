@@ -21,8 +21,10 @@ const checks = [
   ["wasm-crosscheck", `${PY} scripts/check_wasm_fixture.py`],
   ["backend-compare", "node backend/run.mjs --compare --count 20000"],
   ["mcp", "node mcp/client_smoke.mjs"],
+  ["cloud-api", "node scripts/test_cloud_api.mjs"],
   ["web-smoke", "node scripts/web_smoke.mjs"],
   ["sbom", "node scripts/sbom.mjs"],
+  ["release-check", "node scripts/release_check.mjs"],
   ["vercel-api", "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs"],
 ];
 if (deep) {

@@ -1,0 +1,116 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    name: Verify release candidate
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Python deps
+        run: |
+          python3 -m pip install --break-system-packages --upgrade pip
+          python3 -m pip install --break-system-packages pytest
+      - name: Versions
+        run: node scripts/version.mjs
+      - name: Gate
+        run: node scripts/gate.mjs
+      - name: Release consistency
+        run: node scripts/release_check.mjs
+
+  exe:
+    name: Windows single EXE
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install deps
+        run: npm ci
+      - name: Build EXE
+        run: npm run build:exe
+      - name: Probe EXE
+        run: dist\chiplab.exe --probe --no-open
+      - name: Stage artifact
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/release | Out-Null
+          Copy-Item dist/chiplab.exe dist/release/chiplab.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-exe
+          path: dist/release/chiplab.exe
+
+  packages:
+    name: npm + PyPI packages
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: npm pack
+        run: cd packages/npm && npm pack
+      - name: Python build
+        run: |
+          python -m pip install --upgrade build
+          cd packages/python && python -m build
+      - name: Stage artifacts
+        run: |
+          mkdir -p dist/release
+          cp packages/npm/*.tgz dist/release/
+          cp packages/python/dist/*.whl packages/python/dist/*.tar.gz dist/release/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-packages
+          path: dist/release/*
+
+  publish:
+    name: SBOM, checksums, GitHub Release
+    needs: [verify, exe, packages]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist/release
+          merge-multiple: true
+      - name: SBOM
+        run: |
+          node scripts/sbom.mjs
+          cp reports/sbom.json dist/release/sbom.json
+      - name: Checksums
+        run: node scripts/checksums.mjs dist/release dist/release/SHA256SUMS.txt
+      - name: Release notes
+        run: |
+          node -e "const fs=require('fs');const v=require('./package.json').version;const c=fs.readFileSync('CHANGELOG.md','utf8');const i=c.indexOf('## '+v);const j=c.indexOf('\n## ',i+3);fs.writeFileSync('RELEASE_NOTES.md',i>=0?c.slice(i,j>i?j:undefined):'See CHANGELOG.md')"
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          files: |
+            dist/release/chiplab.exe
+            dist/release/*.tgz
+            dist/release/*.whl
+            dist/release/*.tar.gz
+            dist/release/sbom.json
+            dist/release/SHA256SUMS.txt
+          fail_on_unmatched_files: true

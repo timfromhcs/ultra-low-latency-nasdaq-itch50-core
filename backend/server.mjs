@@ -10,18 +10,66 @@
 // =============================================================================
 import http from "node:http";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCore, CHIPS, decodeRecord, hostInfo, countRecordErrors } from "./wasm.mjs";
+import { LocalStore, MAX_BYTES } from "./store.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
 const webDir = path.resolve(root, "web");
-const PORT = Number(process.env.PORT || 4173);
-const HOST = process.env.HOST || "127.0.0.1";
+const av = process.argv.slice(2);
+const cli = (name, fallback) => {
+  const i = av.indexOf(`--${name}`);
+  return i >= 0 && i + 1 < av.length ? av[i + 1] : fallback;
+};
+const PORT = Number(cli("port", process.env.PORT || 4173));
+const HOST = cli("host", process.env.HOST || "127.0.0.1");
+const TOKEN = cli("token", process.env.CHIPLAB_TOKEN || "");
+const DATA_DIR = path.resolve(cli("data-dir", process.env.CHIPLAB_DATA_DIR || path.join(root, ".data")));
+const store = new LocalStore(DATA_DIR);
 
 const core = await loadCore();
 const host = hostInfo();
+const startedAt = Date.now();
+
+function lanUrls() {
+  const out = [];
+  for (const [, addrs] of Object.entries(os.networkInterfaces())) {
+    for (const a of addrs || []) {
+      if (a.family === "IPv4" && !a.internal) out.push(`http://${a.address}:${PORT}`);
+    }
+  }
+  return out;
+}
+
+function isLoopback(req) {
+  const a = req.socket.remoteAddress || "";
+  return a === "127.0.0.1" || a === "::1" || a === "::ffff:127.0.0.1";
+}
+
+function authorized(req) {
+  if (TOKEN) return (req.headers.authorization || "") === `Bearer ${TOKEN}`;
+  return isLoopback(req);
+}
+
+function cloudInfo() {
+  return {
+    ok: true,
+    service: "chiplab-local-cloud",
+    version: "0.3.0",
+    host: HOST,
+    port: PORT,
+    lanUrls: lanUrls(),
+    tokenRequired: Boolean(TOKEN),
+    persistence: "local-json",
+    dataDir: path.basename(DATA_DIR),
+    uptimeSec: Math.round((Date.now() - startedAt) / 1000),
+    namespaces: store.list(),
+    hostInfo: host,
+  };
+}
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -50,13 +98,18 @@ function json(res, code, obj) {
 function readBody(req, limit = 2 * 1024 * 1024) {
   return new Promise((resolve, reject) => {
     let size = 0;
+    let tooBig = false;
     const chunks = [];
     req.on("data", (c) => {
+      if (tooBig) return;
       size += c.length;
-      if (size > limit) { reject(new Error("body too large")); req.destroy(); return; }
+      if (size > limit) { tooBig = true; chunks.length = 0; return; }
       chunks.push(c);
     });
     req.on("end", () => {
+      if (tooBig) {
+        return reject(Object.assign(new Error("body too large"), { status: 413 }));
+      }
       try { resolve(chunks.length ? JSON.parse(Buffer.concat(chunks).toString("utf8")) : {}); }
       catch (e) { reject(e); }
     });
@@ -140,8 +193,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "OPTIONS") {
       res.writeHead(204, {
         "access-control-allow-origin": "*",
-        "access-control-allow-methods": "GET,POST,OPTIONS",
-        "access-control-allow-headers": "content-type",
+        "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "access-control-allow-headers": "content-type,authorization",
       });
       return res.end();
     }
@@ -150,11 +203,44 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, {
         ok: true,
         service: "chiplab",
+        version: "0.3.0",
         wasm: { version: core.version(), bytes: core.wasmBytes },
         chips: CHIPS,
         host,
         upstream: "local",
+        cloud: { tokenRequired: Boolean(TOKEN), persistence: "local-json" },
       });
+    }
+    if (url.pathname === "/api/cloud/info") {
+      return json(res, 200, cloudInfo());
+    }
+    if (url.pathname === "/api/store" && req.method === "GET") {
+      if (!authorized(req)) return json(res, 401, { ok: false, error: "unauthorized" });
+      return json(res, 200, { ok: true, namespaces: store.list() });
+    }
+    if (url.pathname.startsWith("/api/store/")) {
+      if (!authorized(req)) return json(res, 401, { ok: false, error: "unauthorized" });
+      const ns = decodeURIComponent(url.pathname.slice("/api/store/".length));
+      if (!/^[a-zA-Z0-9_-]{1,32}$/.test(ns)) return json(res, 400, { ok: false, error: "invalid namespace" });
+      if (req.method === "GET") {
+        const rec = store.get(ns);
+        if (!rec) return json(res, 404, { ok: false, error: "not found", namespace: ns });
+        return json(res, 200, { ok: true, namespace: ns, ...rec });
+      }
+      if (req.method === "PUT" || req.method === "POST") {
+        try {
+          const body = await readBody(req, MAX_BYTES);
+          const meta = store.put(ns, body.data ?? body, body.expectedRevision ?? null);
+          return json(res, 200, { ok: true, namespace: ns, ...meta });
+        } catch (e) {
+          return json(res, e.status || 500, { ok: false, error: String(e.message || e) });
+        }
+      }
+      if (req.method === "DELETE") {
+        store.del(ns);
+        return json(res, 200, { ok: true, namespace: ns, deleted: true });
+      }
+      return json(res, 405, { ok: false, error: "GET/PUT/DELETE only" });
     }
     if (url.pathname === "/api/chips") {
       return json(res, 200, { ok: true, chips: CHIPS });
@@ -191,8 +277,10 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  const line = `ChipLab backend listening on http://${HOST}:${PORT}`;
-  console.log(line);
+  console.log(`ChipLab local cloud listening on http://${HOST}:${PORT}`);
   console.log(`  wasm: ${core.wasmBytes} bytes, version 0x${core.version().toString(16)}`);
   console.log(`  chips: ${CHIPS.length}, host: ${host.cpu} / ${host.cores} cores / ${host.memoryGb} GB`);
+  console.log(`  data: ${DATA_DIR}`);
+  console.log(`  token: ${TOKEN ? "required" : "loopback-only writes"}`);
+  for (const u of lanUrls()) console.log(`  LAN: ${u}`);
 });

@@ -1,6 +1,6 @@
 {
   "name": "chiplab",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Local-first ITCH-50 silicon lab: WebAssembly, WebGPU, Node backend, MCP, single EXE, Docker and Vercel.",
@@ -14,7 +14,11 @@
     "build:wasm": "cargo build --manifest-path wasm-core/Cargo.toml --target wasm32-unknown-unknown --release",
     "build:exe": "node scripts/build_exe.mjs",
     "build:vercel": "node scripts/build_vercel.mjs",
-    "verify": "node scripts/gate.mjs"
+    "verify": "node scripts/gate.mjs",
+    "test:cloud": "node scripts/test_cloud_api.mjs",
+    "release:check": "node scripts/release_check.mjs",
+    "release:checksums": "node scripts/checksums.mjs dist/release",
+    "release:sbom": "node scripts/sbom.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",

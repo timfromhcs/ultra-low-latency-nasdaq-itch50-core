@@ -38,12 +38,16 @@
     {
       "id": "native-bins",
       "cmd": "node scripts/check_native_bins.mjs",
-      "status": "pending"
+      "status": "done",
+      "lastRun": "2026-11-03T06:59:19.518Z",
+      "lastResult": "PASS"
     },
     {
       "id": "formal-z3",
       "cmd": "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3",
-      "status": "pending"
+      "status": "done",
+      "lastRun": "2026-11-03T06:59:36.772Z",
+      "lastResult": "PASS"
     }
   ]
 }

@@ -182,6 +182,7 @@ function renderCompare(rows) {
 }
 
 function renderHistory(history) {
+  state.history = history || [];
   const box = $("history-body");
   box.innerHTML = "";
   if (!history?.length) {
@@ -246,6 +247,112 @@ function toggleLive() {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Local cloud
+// ---------------------------------------------------------------------------
+const CLOUD_KEY = "chiplab.cloud";
+
+function loadCloudSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem(CLOUD_KEY) || "{}");
+    if (s.url) $("cloud-url").value = s.url;
+    if (s.token) $("cloud-token").value = s.token;
+    return s;
+  } catch { return {}; }
+}
+
+function saveCloudSettings() {
+  const s = { url: $("cloud-url").value.trim().replace(/\/+$/, ""), token: $("cloud-token").value };
+  localStorage.setItem(CLOUD_KEY, JSON.stringify(s));
+  return s;
+}
+
+async function cloudFetch(path, opts = {}) {
+  const base = saveCloudSettings().url;
+  if (!base) throw new Error("enter a local cloud URL");
+  const token = saveCloudSettings().token;
+  const headers = { ...(opts.headers || {}) };
+  if (token) headers.authorization = `Bearer ${token}`;
+  const r = await fetch(`${base}${path}`, { ...opts, headers, cache: "no-store" });
+  let body = null;
+  try { body = await r.json(); } catch { /* empty */ }
+  if (!r.ok) throw new Error(body?.error || `HTTP ${r.status}`);
+  return body;
+}
+
+function setCloudStatus(text, kind = "") {
+  const el = $("cloud-status");
+  el.textContent = text;
+  el.className = `ds-supporting status ${kind}`;
+}
+
+async function testCloud() {
+  try {
+    const s = saveCloudSettings();
+    if (!s.url) throw new Error("enter a local cloud URL");
+    const info = await cloudFetch("/api/cloud/info");
+    $("cloud-badge").textContent = "connected";
+    $("cloud-badge").className = "ds-badge ds-badge-safe";
+    $("cloud-endpoint").textContent = s.url;
+    $("cloud-lan").textContent = info.lanUrls?.[0] || "—";
+    $("cloud-token-state").textContent = info.tokenRequired ? "required" : "loopback only";
+    $("cloud-ns").textContent = (info.namespaces || []).join(", ") || "—";
+    setCloudStatus(`Connected to ${info.service} v${info.version} · ${info.dataDir} · ${info.uptimeSec}s uptime.`, "ok");
+  } catch (e) {
+    $("cloud-badge").textContent = "not connected";
+    $("cloud-badge").className = "ds-badge ds-badge-outline";
+    setCloudStatus(`Local cloud: ${e.message}`, "error");
+  }
+}
+
+async function syncCloud() {
+  try {
+    const s = saveCloudSettings();
+    if (!s.url) throw new Error("enter a local cloud URL");
+    let current = null;
+    try { current = await cloudFetch("/api/store/default"); } catch { /* first write */ }
+    const payload = {
+      data: { runs: state.history || [], lastRun: state.lastRun?.summary || null },
+      expectedRevision: current?.revision ?? 0,
+    };
+    const out = await cloudFetch("/api/store/default", {
+      method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(payload),
+    });
+    await testCloud();
+    setCloudStatus(`Synced ${payload.data.runs.length} runs as revision ${out.revision}.`, "ok");
+  } catch (e) {
+    setCloudStatus(`Sync failed: ${e.message}`, "error");
+  }
+}
+
+async function pullCloud() {
+  try {
+    const rec = await cloudFetch("/api/store/default");
+    const runs = rec?.data?.runs;
+    if (Array.isArray(runs)) {
+      renderHistory(runs);
+      setCloudStatus(`Pulled ${runs.length} runs from revision ${rec.revision}.`, "ok");
+    } else {
+      setCloudStatus("Local cloud has no runs yet.", "");
+    }
+  } catch (e) {
+    setCloudStatus(`Pull failed: ${e.message}`, "error");
+  }
+}
+
+async function probeLocalCloud() {
+  if (!/^https?:$/.test(location.protocol)) return;
+  try {
+    const r = await fetch(`${location.origin}/api/cloud/info`, { headers: { accept: "application/json" } });
+    if (!r.ok) return;
+    const info = await r.json();
+    if (info?.service !== "chiplab-local-cloud") return;
+    $("cloud-url").value = location.origin;
+    saveCloudSettings();
+    await testCloud();
+  } catch { /* not served by the local cloud service */ }
+}
+
 async function init() {
   fillChips();
   state.gpu = new GpuLab($("gpu-canvas"));
@@ -261,7 +368,7 @@ async function init() {
       state.ready = true;
       $("run").disabled = false;
       $("compare-btn").disabled = false;
-      setBadge("wasm-badge", `WASM · v${(m.version >>> 16)}.${(m.version >>> 8) & 0xff} · ${(m.wasmBytes / 1024).toFixed(0)} KB`, "safe");
+      setBadge("wasm-badge", `WASM · v${(m.version >>> 16)}.${(m.version >>> 8) & 0xff}.${m.version & 0xff} · ${(m.wasmBytes / 1024).toFixed(0)} KB`, "safe");
       setStatus("Ready. Local only.", "ok");
       state.worker.postMessage({ type: "history" });
       return;
@@ -295,6 +402,14 @@ async function init() {
   $("compare-btn").addEventListener("click", compare);
   $("live").addEventListener("click", toggleLive);
   $("clear").addEventListener("click", () => state.worker.postMessage({ type: "clear" }));
+
+  // Local cloud panel: only auto-connect when this page is actually served by
+  // the local cloud service (the Vercel deployment has no cloud endpoint).
+  loadCloudSettings();
+  $("cloud-test").addEventListener("click", testCloud);
+  $("cloud-sync").addEventListener("click", syncCloud);
+  $("cloud-pull").addEventListener("click", pullCloud);
+  probeLocalCloud();
   $("chip").addEventListener("change", () => { renderContainers(); setStatus(`${chipById($("chip").value).name} selected.`); });
   $("mode").addEventListener("change", () => {
     if (Number($("mode").value) !== 0 && Number($("chip").value) !== 6) {

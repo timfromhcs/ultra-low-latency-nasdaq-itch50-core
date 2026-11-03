@@ -59,7 +59,7 @@ const bom = {
   bomFormat: "CycloneDX",
   specVersion: "1.5",
   version: 1,
-  metadata: { timestamp: new Date().toISOString(), component: { type: "application", name: "chiplab", version: "0.2.0" } },
+  metadata: { timestamp: new Date().toISOString(), component: { type: "application", name: "chiplab", version: "0.3.0" } },
   components: unique,
 };
 fs.mkdirSync(path.join(root, "reports"), { recursive: true });

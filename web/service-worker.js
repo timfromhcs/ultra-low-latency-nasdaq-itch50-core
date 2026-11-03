@@ -3,7 +3,7 @@
 // Description: Offline cache for the ChipLab PWA. Cache-first for the app
 //              shell and WASM, network fallback for everything else.
 // =============================================================================
-const CACHE = "chiplab-v3";
+const CACHE = "chiplab-v4";
 const ASSETS = [
   "./", "./index.html", "./styles.css", "./app.js", "./core.js", "./worker.js", "./gpu.js",
   "./wasm/chiplab_core.wasm", "./manifest.webmanifest", "./icons/icon.svg",
@@ -26,6 +26,8 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+  // API responses are live data and may be 401/404 — never cache them.
+  if (url.pathname.startsWith("/api/")) return;
 
   // App shell is network-first so a new deploy is picked up immediately.
   const shell = /\.(?:html|js|css|wasm|webmanifest)$/.test(url.pathname) || url.pathname.endsWith("/");

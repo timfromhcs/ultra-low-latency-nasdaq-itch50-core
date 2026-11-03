@@ -5,9 +5,13 @@
 //              the browser. This is a single-file distribution of the demo.
 // =============================================================================
 import http from "node:http";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { exec } from "node:child_process";
 import { ASSETS } from "../dist/web_assets.generated.mjs";
 import { loadCoreFromBytes, CHIPS, decodeRecord, hostInfo, countRecordErrors } from "../backend/wasm.mjs";
+import { LocalStore, MAX_BYTES, NAMESPACE_RE } from "../backend/store.mjs";
 
 const MIME = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
@@ -23,7 +27,9 @@ const getArg = (name, dflt) => {
   return i >= 0 && i + 1 < args.length ? args[i + 1] : dflt;
 };
 const PORT = Number(getArg("port", process.env.PORT || 4190));
-const HOST = getArg("host", "127.0.0.1");
+const HOST = getArg("host", process.env.HOST || "127.0.0.1");
+const TOKEN = getArg("token", process.env.CHIPLAB_TOKEN || "");
+const DATA_DIR = path.resolve(getArg("data-dir", process.env.CHIPLAB_DATA_DIR || path.join(process.cwd(), ".data")));
 const NO_OPEN = args.includes("--no-open");
 const PROBE = args.includes("--probe");
 
@@ -34,6 +40,46 @@ const wasm = files.get("wasm/chiplab_core.wasm");
 if (!wasm) { console.error("embedded WASM missing"); process.exit(1); }
 const core = await loadCoreFromBytes(wasm);
 const host = hostInfo();
+const store = new LocalStore(DATA_DIR);
+const startedAt = Date.now();
+
+function readBody(req, limit = MAX_BYTES) {
+  return new Promise((resolve, reject) => {
+    let size = 0; let tooBig = false; const chunks = [];
+    req.on("data", (c) => {
+      if (tooBig) return;
+      size += c.length;
+      if (size > limit) { tooBig = true; chunks.length = 0; return; }
+      chunks.push(c);
+    });
+    req.on("end", () => {
+      if (tooBig) return reject(Object.assign(new Error("body too large"), { status: 413 }));
+      try { resolve(chunks.length ? JSON.parse(Buffer.concat(chunks).toString("utf8")) : {}); }
+      catch (e) { reject(e); }
+    });
+    req.on("error", reject);
+  });
+}
+
+function lanUrls() {
+  const out = [];
+  for (const [, addrs] of Object.entries(os.networkInterfaces())) {
+    for (const a of addrs || []) {
+      if (a.family === "IPv4" && !a.internal) out.push(`http://${a.address}:${PORT}`);
+    }
+  }
+  return out;
+}
+
+function isLoopback(req) {
+  const a = req.socket.remoteAddress || "";
+  return a === "127.0.0.1" || a === "::1" || a === "::ffff:127.0.0.1";
+}
+
+function authorized(req) {
+  if (TOKEN) return (req.headers.authorization || "") === `Bearer ${TOKEN}`;
+  return isLoopback(req);
+}
 
 function json(res, code, obj) {
   const body = JSON.stringify(obj, (_k, v) => (typeof v === "bigint" ? v.toString() : v));
@@ -69,10 +115,46 @@ if (PROBE) {
     const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
     try {
       if (req.method === "OPTIONS") {
-        res.writeHead(204, { "access-control-allow-origin": "*", "access-control-allow-methods": "GET,POST,OPTIONS", "access-control-allow-headers": "content-type" });
+        res.writeHead(204, { "access-control-allow-origin": "*", "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS", "access-control-allow-headers": "content-type,authorization" });
         return res.end();
       }
-      if (url.pathname === "/api/health") return json(res, 200, { ok: true, service: "chiplab-sea", wasm: { version: core.version(), bytes: wasm.length }, chips: CHIPS, host, upstream: "local" });
+      if (url.pathname === "/api/health") return json(res, 200, { ok: true, service: "chiplab-sea", version: "0.3.0", wasm: { version: core.version(), bytes: wasm.length }, chips: CHIPS, host, upstream: "local", cloud: { tokenRequired: Boolean(TOKEN), persistence: "local-json" } });
+      if (url.pathname === "/api/cloud/info") {
+        return json(res, 200, {
+          ok: true, service: "chiplab-local-cloud", version: "0.3.0", host: HOST, port: PORT,
+          lanUrls: lanUrls(), tokenRequired: Boolean(TOKEN), persistence: "local-json",
+          dataDir: path.basename(DATA_DIR), uptimeSec: Math.round((Date.now() - startedAt) / 1000),
+          namespaces: store.list(), hostInfo: host,
+        });
+      }
+      if (url.pathname === "/api/store" && req.method === "GET") {
+        if (!authorized(req)) return json(res, 401, { ok: false, error: "unauthorized" });
+        return json(res, 200, { ok: true, namespaces: store.list() });
+      }
+      if (url.pathname.startsWith("/api/store/")) {
+        if (!authorized(req)) return json(res, 401, { ok: false, error: "unauthorized" });
+        const ns = decodeURIComponent(url.pathname.slice("/api/store/".length));
+        if (!NAMESPACE_RE.test(ns)) return json(res, 400, { ok: false, error: "invalid namespace" });
+        if (req.method === "GET") {
+          const rec = store.get(ns);
+          if (!rec) return json(res, 404, { ok: false, error: "not found", namespace: ns });
+          return json(res, 200, { ok: true, namespace: ns, ...rec });
+        }
+        if (req.method === "PUT" || req.method === "POST") {
+          try {
+            const body = await readBody(req);
+            const meta = store.put(ns, body.data ?? body, body.expectedRevision ?? null);
+            return json(res, 200, { ok: true, namespace: ns, ...meta });
+          } catch (e) {
+            return json(res, e.status || 500, { ok: false, error: String(e.message || e) });
+          }
+        }
+        if (req.method === "DELETE") {
+          store.del(ns);
+          return json(res, 200, { ok: true, namespace: ns, deleted: true });
+        }
+        return json(res, 405, { ok: false, error: "GET/PUT/DELETE only" });
+      }
       if (url.pathname === "/api/chips") return json(res, 200, { ok: true, chips: CHIPS });
       if (url.pathname === "/api/run" && req.method === "POST") {
         let buf = "";
@@ -108,8 +190,11 @@ if (PROBE) {
     }
   });
   server.listen(PORT, HOST, () => {
-    console.log(`ChipLab single EXE listening on http://${HOST}:${PORT}`);
+    console.log(`ChipLab local cloud (single EXE) listening on http://${HOST}:${PORT}`);
     console.log(`  embedded files: ${files.size}, WASM: ${wasm.length} bytes, chips: ${CHIPS.length}`);
+    console.log(`  data: ${DATA_DIR}`);
+    console.log(`  token: ${TOKEN ? "required" : "loopback-only writes"}`);
+    for (const u of lanUrls()) console.log(`  LAN: ${u}`);
     if (!NO_OPEN) {
       const url = `http://${HOST}:${PORT}/`;
       if (process.platform === "win32") exec(`cmd /c start "" "${url}"`);

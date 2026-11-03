@@ -1,6 +1,6 @@
 {
   "name": "@chiplab/core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "ITCH-50 parser, MoldUDP64 framing, chip models and top-of-book builder in WebAssembly.",
   "type": "module",
   "main": "./index.mjs",

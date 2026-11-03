@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chiplab-itch"
-version = "0.2.0"
+version = "0.3.0"
 description = "Independent NASDAQ ITCH 5.0 reference model, vector generator and CLI from the ChipLab silicon lab."
 readme = "README.md"
 requires-python = ">=3.9"

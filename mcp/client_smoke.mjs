@@ -49,6 +49,26 @@ try {
   const run = await call("tools/call", { name: "chiplab.run", arguments: { chip: 1, count: 5000, seed: 7 } });
   const out = JSON.parse(run.content[0].text);
   console.log("run:", out.messages, out.gbps.toFixed(2), "Gbps", out.records.length, "sample records");
+
+  for (const [tool, args] of [
+    ["chiplab.health", {}],
+    ["chiplab.cloud_info", {}],
+    ["chiplab.history", {}],
+    ["chiplab.release_status", {}],
+    ["chiplab.sbom", {}],
+    ["chiplab.synth_status", {}],
+    ["chiplab.docs", { doc: "release-plan" }],
+  ]) {
+    const r = await call("tools/call", { name: tool, arguments: args });
+    const data = JSON.parse(r.content[0].text);
+    if (data.ok === false && tool !== "chiplab.history") throw new Error(`${tool} reported not ok`);
+    console.log(`${tool}: ok`);
+  }
+  let rejected = false;
+  try { await call("tools/call", { name: "chiplab.docs", arguments: { doc: "../../etc/passwd" } }); }
+  catch { rejected = true; }
+  if (!rejected) throw new Error("chiplab.docs must reject arbitrary paths");
+
   if (rows.find((r) => r.key === "lossy").status !== "FAIL") throw new Error("lossy must fail");
   if (out.messages !== 5000) throw new Error("run count mismatch");
   console.log("MCP SMOKE PASS");

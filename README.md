@@ -1,9 +1,9 @@
-<!--
+﻿<!--
 JSON-LD for search engines and AI indexers
 {
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
-  "name": "ChipLab — ITCH-50 silicon lab",
+  "name": "ChipLab â€” ITCH-50 silicon lab",
   "description": "Local-first WebAssembly + WebGPU lab for a NASDAQ ITCH 5.0 parser, with RTL, formal proofs, a Node backend, MCP, npm/PyPI packages, a single EXE, Docker and Vercel.",
   "programmingLanguage": ["SystemVerilog", "Rust", "JavaScript", "Python"],
   "author": { "@type": "Person", "name": "timfromhcs", "email": "timfromhcs@gmail.com", "url": "https://github.com/timfromhcs" },
@@ -12,7 +12,7 @@ JSON-LD for search engines and AI indexers
 }
 -->
 
-# ChipLab — ITCH-50 silicon lab
+# ChipLab â€” ITCH-50 silicon lab
 
 [![CI](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml/badge.svg)](.github/workflows/ci.yml)
 [![RTL](https://img.shields.io/badge/RTL-SystemVerilog-1f6feb)](rtl/)
@@ -25,7 +25,7 @@ JSON-LD for search engines and AI indexers
 parser, measured on your own hardware, with a WebGPU order-book visualisation and a
 single-file local backend. Pre-silicon, reproducible, and honest about what is not proven.
 
-**[Live demo](https://chiplab-ten.vercel.app/)** · **[Local demo](http://127.0.0.1:4173)** after `node backend/server.mjs`.
+**[Live demo](https://chiplab-ten.vercel.app/)** Â· **[Local demo](http://127.0.0.1:4173)** after `node backend/server.mjs`.
 
 ![ChipLab desktop demo](reports/web-1440-depth.png)
 
@@ -62,6 +62,82 @@ single-file local backend. Pre-silicon, reproducible, and honest about what is n
 
 ---
 
+## Stable release: v0.3.0 "Local Cloud"
+
+v0.3.0 is the first release meant to be installed and used without a developer.
+It ships **local cloud + web + EXE + GitHub Releases**, with honest limits.
+
+| Piece | What you get |
+|---|---|
+| **Local cloud** | LAN service on your machine, local JSON persistence under `.data/`, optional bearer token, no cloud account |
+| **Web** | Same PWA at `localhost`, on a phone over LAN, and on Vercel; WebGPU with Canvas2D fallback |
+| **EXE** | `dist\chiplab.exe` starts the local cloud + web UI from one file |
+| **GitHub** | Tag-driven release with EXE, npm tarball, Python wheel/sdist, SBOM and SHA-256 checksums |
+| **MCP** | 12 read-only tools for agents, strict schemas, hashed audit log |
+| **Design** | Reviewed copy, mobile 390 px and desktop 1440 px layouts |
+
+### Local cloud quickstart
+
+```bash
+# loopback only (default): writes allowed from this machine
+node backend/server.mjs
+
+# LAN: phone/tablet on the same network, token required for remote writes
+node backend/server.mjs --host 0.0.0.0 --token "choose-a-long-token"
+
+# or use the single EXE
+dist\chiplab.exe --host 0.0.0.0 --port 4173 --token "choose-a-long-token"
+```
+
+Open the LAN URL printed on startup in the **Local cloud** panel of the web app,
+enter the token if you set one, then press **Test** â†’ **Sync** / **Pull**.
+
+### Local cloud API
+
+| Endpoint | Method | Auth | Purpose |
+|---|---|---|---|
+| `/api/cloud/info` | GET | none | version, LAN URLs, token state, data dir, uptime, namespaces |
+| `/api/store` | GET | token if set, else loopback | list namespaces |
+| `/api/store/:namespace` | GET | same | read `{revision, updatedAt, data}` |
+| `/api/store/:namespace` | PUT | same | write `{data, expectedRevision}`; 409 on conflict, 413 over 1 MB |
+| `/api/store/:namespace` | DELETE | same | delete one namespace |
+
+Namespaces are `[A-Za-z0-9_-]{1,32}`. Files are written atomically (temp + rename),
+mode `0o600`, and capped at 1 MB. There is no directory browsing.
+
+### Local cloud security model
+
+- Loopback by default; `--host 0.0.0.0` is an explicit opt-in.
+- With `--token`, **all** store operations require `Authorization: Bearer <token>`.
+  Without a token, only loopback clients may read or write.
+- Data lives only in `.data/` on your machine (git-ignored); the Vercel deployment has
+  no database and never receives it.
+- The EXE is **not code-signed**; verify the published SHA-256 before running it.
+
+### Versioning and releases
+
+- Semantic Versioning; contents of a published version never change.
+- `CHANGELOG.md` follows Keep a Changelog and is the source of release notes.
+- `.github/workflows/release.yml` runs on tag `v*`: verify → Windows EXE → npm/Python
+  packages → SBOM → `SHA256SUMS.txt` → GitHub Release.
+- **v1.0.0 is deliberately not claimed.** It is reserved for multi-frame MoldUDP64
+  back-pressure, RTL top-of-book, LibreLane/OpenSTA timing/DRC/LVS sign-off and
+  published artifacts with provenance.
+
+Release artifacts:
+
+| Artifact | Produced by |
+|---|---|
+| `chiplab.exe` | `npm run build:exe` (Node SEA, unsigned) |
+| `chiplab-core-0.3.0.tgz` | `cd packages/npm && npm pack` |
+| `chiplab_itch-0.3.0-py3-none-any.whl` + `.tar.gz` | `cd packages/python && python -m build` |
+| `sbom.json` | `node scripts/sbom.mjs` |
+| `SHA256SUMS.txt` | `node scripts/checksums.mjs dist/release` |
+
+Verify a download with `sha256sum -c SHA256SUMS.txt` (or `Get-FileHash` on Windows).
+
+---
+
 ## Quickstart
 
 ```bash
@@ -81,11 +157,12 @@ nothing is uploaded.
 | Runtime | Command | What you get |
 |---|---|---|
 | Web + API | `node backend/server.mjs` | WebGPU/WASM demo, `/api/*` |
+| Local cloud | `node backend/server.mjs --host 0.0.0.0 --token â€¦` | LAN service + local JSON store |
 | CLI | `node backend/run.mjs --compare --count 1000000` | 8-chip comparison |
-| Single EXE | `npm run build:exe && dist\chiplab.exe` | one file, embedded web + WASM |
+| Single EXE | `npm run build:exe && dist\chiplab.exe` | one file, embedded web + WASM + local cloud |
 | Docker | `docker compose up --build` | same demo at `localhost:4173` |
 | Vercel | `npx vercel` (or MCP) | static app + stateless `/api/*` |
-| MCP | `node mcp/server.mjs` | tools for agents |
+| MCP | `node mcp/server.mjs` | 12 read-only tools for agents |
 | npm | `npm i @chiplab/core` | WASM core + CLI |
 | PyPI | `pip install chiplab-itch` | Python reference model + CLI |
 
@@ -117,13 +194,14 @@ Reports live in [`reports/`](reports/).
 | Full-field RTL regression | **1,000,000 / 1,000,000 records, 0 mismatches**, 31,383,973 bytes, 1,961,516 cycles, 41.290 Gbps | `reports/sim_1m.txt` |
 | Fields checked | type, flags, length, locate, tracking, timestamp, ref, new-ref, shares (64b), stock, price, match, MPID, printable, event, payload checksum | `tb/sim_main.cpp` |
 | Reference model | independent Python, all 22 opcodes | `tb/itch_model.py` |
-| WASM ↔ Python | 10,000 records, 0 mismatches | `scripts/check_wasm_fixture.py` |
+| WASM â†” Python | 10,000 records, 0 mismatches | `scripts/check_wasm_fixture.py` |
 | Formal | **Z3 PASS, CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported | `reports/formal.json` |
 | Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | `reports/mutation.json` |
 | Synthesis 128-bit | 22,629 cells, 2,228 DFFs | `reports/synth_128.log` |
 | Synthesis 256-bit | 25,201 cells | `reports/synth_256.log` |
 | Synthesis 512-bit | 29,628 cells | `reports/synth_512.log` |
 | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+| Local cloud | token required for non-loopback writes, revision conflict â†’ 409, traversal â†’ 400 | `backend/store.mjs` |
 | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
 | Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
@@ -149,26 +227,26 @@ a 322 MHz sign-off requires OpenSTA/OpenLane, which is **not** claimed here.
 
 ```
 AXI4-Stream 128/256/512
-        │
-        ▼
-┌─────────────────────────────┐     ┌──────────────────────────────┐
-│ moldudp64_frontend.sv       │     │ itch_shifter.sv              │
-│ L2/L3/L4 filter, Mold hdr,  │────▶│ tkeep, cleared append,       │
-│ sequence gap                │     │ 512-bit sliding window       │
-└─────────────────────────────┘     └──────────────┬───────────────┘
-                                                   │
-                                    ┌──────────────▼───────────────┐
-                                    │ itch_parser_core.sv          │
-                                    │ all 22 opcodes, full payload │
-                                    │ 64-bit shares, pre-trigger   │
-                                    └───────┬──────────────┬───────┘
-                                            │              │
-                              ┌─────────────▼───┐   ┌──────▼─────────────┐
-                              │ registered egress│   │ async bypass       │
-                              │ 1 cycle          │   │ same-cycle window  │
-                              └──────────────────┘   └────────────────────┘
+        â”‚
+        â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ moldudp64_frontend.sv       â”‚     â”‚ itch_shifter.sv              â”‚
+â”‚ L2/L3/L4 filter, Mold hdr,  â”‚â”€â”€â”€â”€â–¶â”‚ tkeep, cleared append,       â”‚
+â”‚ sequence gap                â”‚     â”‚ 512-bit sliding window       â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                                                   â”‚
+                                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                                    â”‚ itch_parser_core.sv          â”‚
+                                    â”‚ all 22 opcodes, full payload â”‚
+                                    â”‚ 64-bit shares, pre-trigger   â”‚
+                                    â””â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
+                                            â”‚              â”‚
+                              â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                              â”‚ registered egressâ”‚   â”‚ async bypass       â”‚
+                              â”‚ 1 cycle          â”‚   â”‚ same-cycle window  â”‚
+                              â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
-Offline twin: Rust → wasm32 → Worker / Node / MCP / npm / EXE / Docker / Vercel
+Offline twin: Rust â†’ wasm32 â†’ Worker / Node / MCP / npm / EXE / Docker / Vercel
 Visualisation: WebGPU compute (bins + histogram) + WebGPU render / Canvas2D fallback
 ```
 
@@ -182,7 +260,7 @@ Visualisation: WebGPU compute (bins + histogram) + WebGPU render / Canvas2D fall
 | 3 | Enyx-class | 3 cycles | commercial-class comparison |
 | 4 | NovaSparks-class | 2 cycles | comparison |
 | 5 | Lossy admin-drop | 1 cycle | negative control, must fail |
-| 6 | MoldUDP64 front-end | 3 cycles | L2–L4 + Mold |
+| 6 | MoldUDP64 front-end | 3 cycles | L2â€“L4 + Mold |
 | 7 | Parser + top-of-book | 2 cycles | parse-to-book |
 
 ---
@@ -222,10 +300,14 @@ curl -s -X POST -H 'content-type: application/json' \
 | `/api/run` | POST | one chip + sample records + book |
 | `/api/compare` | POST | all chips vs golden |
 | `/api/book` | POST | top-of-book |
+| `/api/cloud/info` | GET | local cloud version, LAN URLs, token state, namespaces |
+| `/api/store/:namespace` | GET/PUT/DELETE | local JSON persistence (see Local cloud) |
 
-**MCP** (`node mcp/server.mjs`) exposes the same five operations:
+**MCP** (`node mcp/server.mjs`) exposes 12 read-only tools:
 `chiplab.chips`, `chiplab.run`, `chiplab.compare`, `chiplab.book`,
-`chiplab.formal_status`.
+`chiplab.formal_status`, `chiplab.health`, `chiplab.cloud_info`, `chiplab.history`,
+`chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`, `chiplab.docs`.
+See [`mcp/SECURITY.md`](mcp/SECURITY.md).
 
 ---
 
@@ -234,12 +316,12 @@ curl -s -X POST -H 'content-type: application/json' \
 ```bash
 # npm
 cd packages/npm && npm pack
-npm install ./chiplab-core-0.2.0.tgz
+npm install ./chiplab-core-0.3.0.tgz
 
 # PyPI
 cd packages/python
 python -m build
-pip install dist/chiplab_itch-0.2.0-py3-none-any.whl
+pip install dist/chiplab_itch-0.3.0-py3-none-any.whl
 chiplab-itch selfcheck --count 100000
 ```
 
@@ -253,8 +335,8 @@ web app, Node and the EXE.
 
 | Target | Build | Run |
 |---|---|---|
-| EXE | `npm run build:exe` | `dist\chiplab.exe --port 4190` |
-| Docker | `docker build -t chiplab:0.2.0 .` | `docker run --rm -p 4173:4173 chiplab:0.2.0` |
+| EXE | `npm run build:exe` | `dist\chiplab.exe --port 4190` or `--host 0.0.0.0 --token …` |
+| Docker | `docker build -t chiplab:0.3.0 .` | `docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=… chiplab:0.3.0` |
 | GHCR | CI pushes `ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main` | `docker pull ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core:main` |
 | Vercel | `node scripts/build_vercel.mjs` | `vercel` / Vercel MCP |
 
@@ -270,11 +352,13 @@ chiplab-native --input reports/native_records.bin --auto-boost
 it is opt-in and visible in the output. `--affinity` additionally pins to the first eight
 logical CPUs.
 
-The EXE embeds the web assets and the WASM; it serves the same API and opens the browser.
-The Docker image is a non-root Node 22 alpine runtime with a healthcheck.
+The EXE embeds the web assets and the WASM; it serves the same API, the local cloud
+and opens the browser. Docker runs as a non-root Node 22 alpine user with a healthcheck;
+because requests reach the container from a non-loopback bridge address, **set
+`CHIPLAB_TOKEN` for store writes** (`docker run -e CHIPLAB_TOKEN=…`).
 The Vercel build is static-first (`public/`) plus stateless `api/*` functions; per-user
 data stays in the browser (OPFS/IndexedDB). For server-side persistence, Vercel
-Sandbox Drives are a separate, paid option — not used by this repository.
+Sandbox Drives are a separate, paid option â€” not used by this repository.
 
 ---
 
@@ -300,7 +384,7 @@ Sandbox Drives are a separate, paid option — not used by this repository.
 rtl/                 SystemVerilog parser, shifter, Mold front-end/depacketizer
 formal/              SVA harness, SymbiYosys runner, solver matrix
 tb/                  Python model, vector generator, Verilator/Cocotb tests
-wasm-core/           Rust → wasm32 core (parser, generator, chips, book)
+wasm-core/           Rust â†’ wasm32 core (parser, generator, chips, book)
 web/                 PWA: UI, Worker, WebGPU, Canvas2D, OPFS
 backend/             Node server, CLI, WASM wrapper
 mcp/                 stdio MCP server + smoke client
@@ -323,7 +407,7 @@ reports/             measured evidence (logs, JSON, screenshots)
 
 - [English](docs/guides/en/zero-to-hero.md)
 - [Deutsch](docs/guides/de/zero-to-hero.md)
-- [Français](docs/guides/fr/zero-to-hero.md)
+- [FranÃ§ais](docs/guides/fr/zero-to-hero.md)
 
 Each guide covers: run the demo, read the tape/book, verify a record, run the formal
 proof, build the EXE/Docker image, and understand the honest limits.

@@ -3,3 +3,5 @@
 [2026-11-03T03:59:20.037Z] PASS backend-compare :: node backend/run.mjs --compare --count 20000
 [2026-11-03T04:59:19.916Z] PASS mcp-smoke :: node mcp/client_smoke.mjs
 [2026-11-03T05:59:20.083Z] PASS vercel-api :: node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs
+[2026-11-03T06:59:19.518Z] PASS native-bins :: node scripts/check_native_bins.mjs
+[2026-11-03T06:59:36.772Z] PASS formal-z3 :: wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3

@@ -220,6 +220,34 @@
       <div id="history-body" class="history"><p class="ds-supporting">No runs saved yet. Results stay in this browser (OPFS).</p></div>
     </section>
 
+    <section id="cloud" class="panel cloud-panel">
+      <header class="panel-head">
+        <h2 class="ds-section-title">Local cloud</h2>
+        <span class="ds-badge ds-badge-outline" id="cloud-badge">not connected</span>
+      </header>
+      <p class="ds-supporting">Run <code>chiplab.exe</code> or <code>node backend/server.mjs --host 0.0.0.0 --token …</code> and connect your phone on the same network. Data stays in your local <code>.data</code> directory.</p>
+      <div class="cloud-form">
+        <div class="ds-field">
+          <label class="ds-label" for="cloud-url">Local cloud URL</label>
+          <input class="ds-input" id="cloud-url" placeholder="http://192.168.1.20:4173" autocomplete="off" />
+        </div>
+        <div class="ds-field">
+          <label class="ds-label" for="cloud-token">Token</label>
+          <input class="ds-input" id="cloud-token" type="password" placeholder="optional on localhost" autocomplete="off" />
+        </div>
+        <button class="ds-btn ds-btn-primary" id="cloud-test" type="button">Test</button>
+        <button class="ds-btn ds-btn-outline" id="cloud-sync" type="button">Sync</button>
+        <button class="ds-btn ds-btn-outline" id="cloud-pull" type="button">Pull</button>
+      </div>
+      <p class="ds-supporting status" id="cloud-status" role="status">Not connected. The web app still works with browser-local history.</p>
+      <dl class="kv">
+        <div><dt>Endpoint</dt><dd id="cloud-endpoint">—</dd></div>
+        <div><dt>LAN</dt><dd id="cloud-lan">—</dd></div>
+        <div><dt>Token</dt><dd id="cloud-token-state">—</dd></div>
+        <div><dt>Namespaces</dt><dd id="cloud-ns">—</dd></div>
+      </dl>
+    </section>
+
     <footer class="foot">
       <p>Pre-silicon RTL + executable twin. Not investment advice, not a tapeout.</p>
       <p><a href="https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core">Source</a> · <a href="./docs.html">Docs</a> · PolyForm Small Business</p>

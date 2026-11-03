@@ -169,3 +169,23 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 | R4 | Published npm/PyPI/GHCR artifacts | build/test only (tokens) |
 | R5 | Bitwuzla/Yices solver coverage | not installed |
 | R6 | Vercel preview deployment | not deployed (build verified) |
+
+## 2026-11-03 07:59 - Autonomy tick
+
+- `node scripts/autonomy.mjs` ran 1 task: `formal-z3` -> PASS (no failures to fix).
+- Context: v0.3.0 Local Cloud work is in progress and uncommitted; no long work started in this tick.
+
+## v0.3.0 - Local Cloud release work
+
+- Version unified to 0.3.0 (root/npm/native/wasm/pyproject/MCP/SBOM); WASM ABI 0x000300.
+- `backend/store.mjs` + `/api/cloud/info` + `/api/store[/:ns]`; CLI `--host/--port/--token/--data-dir`.
+- `scripts/test_cloud_api.mjs`: 401, revisions, 409, traversal 400, oversize 413, list, delete.
+  Gate now runs 10 checks.
+- Web local-cloud panel wired (Test/Sync/Pull); auto-connects only when served by the local service.
+- Fixed service worker caching `/api` 404s (cache v4) and mobile overflow of the cloud key/value list.
+- MCP expanded to 12 read-only tools with strict schemas and a fixed docs catalog.
+- `release.yml` + `scripts/checksums.mjs`; CHANGELOG 0.3.0; README stable-release section.
+- EXE rebuilt (83.7 MB) and verified: 401 without token, PUT/GET with token, 400 traversal.
+- npm tgz + Python wheel/sdist built and installed in clean dirs; both self-check OK.
+- Docker image built; writes require `CHIPLAB_TOKEN` (bridge is non-loopback) and that works.
+- UI verified at 390 and 1440 px: run -> sync -> clear -> pull round-trip (revision 4).
