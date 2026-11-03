@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 3 * * 1"   # weekly, Monday 03:17 UTC
   workflow_dispatch:
+    inputs:
+      solver_matrix:
+        description: "Run every available solver (slow)"
+        type: boolean
+        default: false
 
 jobs:
   formal:
@@ -33,7 +38,10 @@ jobs:
           /opt/oss-cad-suite/bin/z3 --version || true
       - name: Deep proof (BMC 20 + k-induction + covers)
         run: ./formal/run_formal.sh z3
-      - name: Solver matrix (best effort)
+      - name: Solver matrix (opt-in, capped)
+        if: github.event_name == 'workflow_dispatch' && inputs.solver_matrix
+        timeout-minutes: 20
+        continue-on-error: true
         run: ./formal/solver_matrix.sh || true
       - uses: actions/upload-artifact@v4
         if: always()
