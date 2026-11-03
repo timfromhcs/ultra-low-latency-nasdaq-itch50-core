@@ -130,7 +130,9 @@ fn main() {
         &wgpu::DeviceDescriptor { label: Some("chiplab"), ..Default::default() }, None,
     )).expect("device");
 
-    if has("--boost") {
+    let auto_boost = has("--auto-boost") && !matches!(info.device_type, wgpu::DeviceType::Cpu);
+    if has("--boost") || auto_boost {
+        if auto_boost { println!("[boost] auto-boost: GPU adapter present"); }
         boost::apply(true, has("--affinity"));
     }
 

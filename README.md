@@ -254,6 +254,18 @@ web app, Node and the EXE.
 | Docker | `docker build -t chiplab:0.2.0 .` | `docker run --rm -p 4173:4173 chiplab:0.2.0` |
 | Vercel | `node scripts/build_vercel.mjs` | `vercel` / Vercel MCP |
 
+Native Vulkan/DX12 runner (optional):
+
+```bash
+cd native && cargo build --release
+chiplab-native --probe
+chiplab-native --input reports/native_records.bin --auto-boost
+```
+
+`--auto-boost` applies Windows `HIGH_PRIORITY_CLASS` only when a GPU adapter is present;
+it is opt-in and visible in the output. `--affinity` additionally pins to the first eight
+logical CPUs.
+
 The EXE embeds the web assets and the WASM; it serves the same API and opens the browser.
 The Docker image is a non-root Node 22 alpine runtime with a healthcheck.
 The Vercel build is static-first (`public/`) plus stateless `api/*` functions; per-user
