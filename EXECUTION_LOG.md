@@ -196,6 +196,24 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   added 3 project skills, and made the cloud probe use `/api/health` first so the
   Vercel deployment no longer logs a 404.
 
+## 2026-11-03 08:59 - Autonomy tick
+
+- `node scripts/autonomy.mjs`: queue exhausted, ran 0 tasks.
+- Continuing Phase 1 (R1): multi-frame MoldUDP64 handoff in `rtl/`.
+
+## R1 resolved - MoldUDP64 multi-frame
+
+- Root causes: `tlast` cleared while a beat was held; a presented beat could be dropped
+  without a handshake; `frame_start` was not handshake-qualified; no `tlast` when the
+  last byte landed on a full beat.
+- Fixes: hold `tvalid/tdata/tkeep/tlast` until `tready`; `final_emit` marks the true last
+  beat; handshake-qualified `frame_start`/`frame_end`; depacketizer derives `tlast` from
+  its own message counter and discards trailing padding.
+- Proof: `tb/test_mold_multi.py` - 5 frames back-to-back (4 valid, 1 gap, 1 dropped
+  port) -> 28 records, 1 gap pulse, 1 drop pulse, 0 mismatches.
+- Single-frame, header-filter, skid, lint: PASS. Gate 10/10, release_check 14/14.
+- CI and Makefile now run the multi-frame test; docs/README/plan updated.
+
 ## v0.3.1 - patch release
 
 - The 0.3.0 Python wheel shipped `__version__ = "0.2.0"`; fixed and rebuilt.

@@ -36,8 +36,7 @@ single-file local backend. Pre-silicon, reproducible, and honest about what is n
 - An **RTL ITCH 5.0 parser** (`rtl/`) that decodes all 22 official opcodes, preserves
   reference data, handles `tkeep`/`tlast`, and ships 128/256/512-bit variants.
 - A **MoldUDP64 front-end** (`moldudp64_frontend.sv` + `depacketizer.sv`) with IP/UDP
-  filtering and sequence-gap detection (single-frame end-to-end proof; multi-frame
-  backpressure is tracked as an open limitation).
+  filtering, sequence-gap detection and **back-to-back multi-frame** flow control.
 - A **field-accurate reference model** in Python (`tb/itch_model.py`) and Rust
   (`wasm-core/`), cross-checked record-by-record.
 - A **local-first web app**: WASM in a Worker, WebGPU compute for price bins and
@@ -57,8 +56,9 @@ single-file local backend. Pre-silicon, reproducible, and honest about what is n
   one clock from `s_axis_tdata` into the window register + one clock to the registered
   output = **2 clocks (6.20 ns at 322.26 MHz)**. The async bypass is valid in the same
   cycle as the window, one clock after ingress.
-- **Not a full multi-frame MoldUDP64 MAC integration yet.** The blocks are verified
-  separately and the single-frame pipeline passes; back-to-back flow control is open.
+- **MoldUDP64 is verified in simulation, not on a 100G MAC.** Back-to-back frames
+  (including a sequence gap and a dropped-port frame) pass end to end; the Ethernet
+  ingress itself is modelled in the testbench.
 
 ---
 
@@ -210,6 +210,7 @@ Reports live in [`reports/`](reports/).
 | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
 | Local cloud | token required for non-loopback writes, revision conflict → 409, traversal → 400 | `backend/store.mjs` |
 | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
+| MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
 | Supply chain | 163-component SBOM | `reports/sbom.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
@@ -440,10 +441,9 @@ Planning and research: [`LONG_TERM_PLAN.md`](LONG_TERM_PLAN.md),
 1. **No tapeout, no silicon.** "Silicon lab" means executable RTL + digital twin.
 2. **No Fmax sign-off.** 322.26 MHz is the target/model clock. OpenLane configs are
    flow-ready; full P&R and slack reports are not claimed.
-3. **Multi-frame MoldUDP64 backpressure is experimental.** Single-frame end-to-end
-   passes; back-to-back frames are tracked in `LONG_TERM_PLAN.md` (Phase 1) and
-   `docs/design/mold-backpressure.md`. A tested `axis_skid_buffer.sv` is in the repo but
-   not yet wired between the front-end and depacketizer.
+3. **MoldUDP64 is simulation-verified, not MAC-integrated.** Five frames back-to-back
+   (4 valid, 1 gap, 1 dropped port) pass end to end; the Ethernet ingress is a
+   testbench model, not a 100G MAC.
 4. **WebGPU numbers are visualisation samples.** Totals come from the exact parser;
    GPU bins use the same integer prices. `f32` is only used for bar heights.
 5. **The feed is synthetic.** Seeded generation is reproducible; it is not a captured
@@ -455,7 +455,9 @@ Planning and research: [`LONG_TERM_PLAN.md`](LONG_TERM_PLAN.md),
 
 ## Roadmap
 
-- [ ] AXI-Stream skid/FIFO for multi-frame MoldUDP64 back-to-back.
+- [x] Back-to-back multi-frame MoldUDP64 (5 frames, gap + drop) — no skid needed,
+  the front-end holds beats under back-pressure.
+- [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 - [ ] Full RTL top-of-book (currently a WASM/visual model).
 - [ ] OpenLane P&R + OpenSTA slack for Sky130/GF180/IHP.
 - [ ] Bitwuzla/Yices in the solver matrix.

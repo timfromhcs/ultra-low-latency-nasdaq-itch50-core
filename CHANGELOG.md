@@ -4,6 +4,20 @@ All notable changes to ChipLab are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+- **MoldUDP64 multi-frame back-to-back flow control** (`rtl/moldudp64_frontend.sv`,
+  `moldudp64_depacketizer.sv`, `moldudp64_pipeline.sv`):
+  - `tlast` is held with a back-pressured beat instead of being cleared after one cycle;
+  - a presented beat is never dropped without a handshake;
+  - `frame_start`/`frame_end` are handshake-qualified;
+  - the depacketizer emits its own message-derived `tlast` and discards trailing
+    Ethernet padding instead of deadlocking.
+- New proof: `tb/test_mold_multi.py` — 5 frames back-to-back (4 valid, 1 gap,
+  1 dropped port) → 28 records, 0 mismatches.
+- CI/Makefile run the multi-frame cocotb test.
+
 ## 0.3.1 — 2026-11-03
 
 Patch release: packaging metadata and release-loop fixes. No protocol or API change.

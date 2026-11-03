@@ -25,7 +25,7 @@ docker build -t chiplab:0.3.1 .
 
 ## Honest limits
 - Pre-silicon; no tapeout, no Fmax sign-off.
-- Multi-frame MoldUDP64 back-to-back flow control is experimental.
+- MoldUDP64 is simulation-verified (5 frames back-to-back); no 100G MAC integration.
 - The feed is synthetic and seeded.
 - WebGPU uses f32 only for bar heights; parsing is integer-exact.
 

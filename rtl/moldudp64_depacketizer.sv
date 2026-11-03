@@ -8,6 +8,10 @@
 //
 //   Throughput: up to BYTES_PER_WORD bytes/cycle; a 2-byte prefix costs one
 //   extra cycle per message. For ITCH (~30 B average) this is <7% overhead.
+//
+//   Frame boundaries: `frame_start` accompanies the first accepted payload beat
+//   and `frame_end` the last accepted beat of the Ethernet frame. `frame_end`
+//   releases the stage, so trailing Ethernet padding can never deadlock it.
 // ============================================================================
 `ifndef MOLDUDp64_DEPACKETIZER_SV
 `define MOLDUDp64_DEPACKETIZER_SV
@@ -24,11 +28,11 @@ module moldudp64_depacketizer #(
 
   input  wire [15:0]                 msg_count,
   input  wire                        frame_start,
+  input  wire                        frame_end,
 
   input  wire [DATA_WIDTH-1:0]       s_axis_tdata,
   input  wire [BYTES_PER_WORD-1:0]   s_axis_tkeep,
   input  wire                        s_axis_tvalid,
-  input  wire                        s_axis_tlast,
   output wire                        s_axis_tready,
 
   output reg  [DATA_WIDTH-1:0]       m_axis_tdata,
@@ -68,6 +72,7 @@ module moldudp64_depacketizer #(
   reg [BUFFER_BYTES*8-1:0] store;
   reg [7:0]                count;
   reg [15:0]               msg_left;
+  reg                      saw_frame_end;
 
   wire [7:0] in_bytes = (s_axis_tvalid && s_axis_tready) ? keep_to_bytes(s_axis_tkeep) : 8'd0;
   wire       in_accept = s_axis_tvalid && s_axis_tready;
@@ -125,22 +130,17 @@ module moldudp64_depacketizer #(
   always @(posedge clk) begin
     if (!rst_n) begin
       store          <= {BUFFER_BYTES*8{1'b0}};
-      count        <= 8'd0;
-      msg_left     <= 16'd0;
-      msgs_left    <= 16'd0;
-      m_axis_tdata <= {DATA_WIDTH{1'b0}};
-      m_axis_tkeep <= {BYTES_PER_WORD{1'b0}};
-      m_axis_tvalid <= 1'b0;
-      m_axis_tlast <= 1'b0;
-      frame_done   <= 1'b0;
-      busy         <= 1'b0;
+      count          <= 8'd0;
+      msg_left       <= 16'd0;
+      msgs_left      <= 16'd0;
+      m_axis_tdata   <= {DATA_WIDTH{1'b0}};
+      m_axis_tkeep   <= {BYTES_PER_WORD{1'b0}};
+      m_axis_tvalid  <= 1'b0;
+      m_axis_tlast   <= 1'b0;
+      frame_done     <= 1'b0;
+      busy           <= 1'b0;
+      saw_frame_end  <= 1'b0;
     end else begin
-      if (frame_start)
-        busy <= 1'b1;
-      else if (busy && msgs_left == 16'd0 && msg_left == 16'd0 &&
-               count == 8'd0 && !m_axis_tvalid)
-        busy <= 1'b0;
-
       m_axis_tvalid <= out_valid;
       m_axis_tlast  <= 1'b0;
       frame_done    <= 1'b0;
@@ -149,21 +149,41 @@ module moldudp64_depacketizer #(
         m_axis_tdata <= store[DATA_WIDTH-1:0] & byte_mask(out_n);
         m_axis_tkeep <= ({24'd0, out_n} >= BYTES_PER_WORD) ? {BYTES_PER_WORD{1'b1}} :
                         (({{(BYTES_PER_WORD-1){1'b0}}, 1'b1} << out_n) - 1'b1);
-        m_axis_tlast <= (next_msgs_left == 16'd0) && s_axis_tlast;
-        if (next_msgs_left == 16'd0) frame_done <= 1'b1;
+        // End of the last message. The front-end's tlast is not cycle-aligned
+        // with this beat because this stage buffers.
+        m_axis_tlast <= (next_msgs_left == 16'd0) && (next_msg_left == 16'd0);
+        if (next_msgs_left == 16'd0 && next_msg_left == 16'd0) frame_done <= 1'b1;
       end
 
       if (frame_start) begin
-        msgs_left <= msg_count;
-        msg_left  <= 16'd0;
+        busy          <= 1'b1;
+        saw_frame_end <= 1'b0;
+        msgs_left     <= msg_count;
+        msg_left      <= 16'd0;
         // Keep a payload beat that arrives in the same cycle as frame_start.
-        store     <= {{(BUFFER_BYTES*8-DATA_WIDTH){1'b0}}, in_masked};
-        count     <= in_bytes;
+        store         <= {{(BUFFER_BYTES*8-DATA_WIDTH){1'b0}}, in_masked};
+        count         <= in_bytes;
       end else begin
-        msgs_left <= next_msgs_left;
-        msg_left  <= next_msg_left;
-        store       <= next_buf;
-        count     <= next_count;
+        if (frame_end) saw_frame_end <= 1'b1;
+
+        if (busy && (saw_frame_end || frame_end) && msgs_left == 16'd0 &&
+            msg_left == 16'd0 && !m_axis_tvalid) begin
+          // Input and output are both done: release the front-end.
+          busy          <= 1'b0;
+          saw_frame_end <= 1'b0;
+          store         <= {BUFFER_BYTES*8{1'b0}};
+          count         <= 8'd0;
+        end else if (busy && msgs_left == 16'd0) begin
+          // All messages are emitted but the Ethernet frame may still deliver
+          // padding; discard it so the buffer cannot fill and deadlock.
+          store <= {BUFFER_BYTES*8{1'b0}};
+          count <= 8'd0;
+        end else begin
+          msgs_left <= next_msgs_left;
+          msg_left  <= next_msg_left;
+          store     <= next_buf;
+          count     <= next_count;
+        end
       end
     end
   end

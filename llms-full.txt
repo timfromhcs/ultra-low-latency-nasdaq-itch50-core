@@ -14,7 +14,7 @@ executable twin used by the browser, Node, MCP, npm, PyPI and the single EXE.
 - `itch_top.sv`: tkeep/tlast, registered egress, async bypass, counters.
 - `moldudp64_frontend.sv`: Ethernet/IPv4/UDP filter, Mold header, seq/gap.
 - `moldudp64_depacketizer.sv`: strips per-message 2-byte length prefixes.
-- `moldudp64_pipeline.sv`: single-frame end-to-end; multi-frame backpressure open.
+- `moldudp64_pipeline.sv`: multi-frame end-to-end (5 frames, gap + drop) PASS.
 
 Latency (honest):
 - s_axis_tdata -> window register: 1 clock.

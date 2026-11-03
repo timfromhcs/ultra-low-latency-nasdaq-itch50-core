@@ -58,15 +58,17 @@ module moldudp64_pipeline #(
   wire                      dep_busy;
   wire                      frame_busy = dep_busy;
 
-  // Align the depacketizer reset with the first payload beat, not with the
-  // earlier header decision. This avoids dropping the first 1-2 payload bytes
-  // when a previous frame is still draining.
+  // Align the depacketizer with accepted payload beats, not with a beat that is
+  // merely being presented. A held beat (tready low) must not re-trigger a frame
+  // start, and frame_end must pulse only when the last beat actually handshakes.
   reg fe_in_frame;
-  wire fe_frame_start = fe_tvalid && !fe_in_frame;
+  wire fe_accept = fe_tvalid && fe_m_axis_tready;
+  wire fe_frame_start = fe_accept && !fe_in_frame;
   always @(posedge clk) begin
     if (!rst_n) fe_in_frame <= 1'b0;
-    else if (fe_frame_end || (fe_tvalid && fe_tlast)) fe_in_frame <= 1'b0;
-    else if (fe_tvalid) fe_in_frame <= 1'b1;
+    else if (fe_frame_end) fe_in_frame <= 1'b0;
+    else if (fe_accept && fe_tlast) fe_in_frame <= 1'b0;
+    else if (fe_accept) fe_in_frame <= 1'b1;
   end
 
   moldudp64_frontend #(
@@ -115,10 +117,10 @@ module moldudp64_pipeline #(
     .rst_n(rst_n),
     .msg_count(mold_msg_count),
     .frame_start(fe_frame_start),
+    .frame_end(fe_frame_end),
     .s_axis_tdata(fe_tdata),
     .s_axis_tkeep(fe_tkeep),
     .s_axis_tvalid(fe_tvalid),
-    .s_axis_tlast(fe_tlast),
     .s_axis_tready(fe_m_axis_tready),
     .m_axis_tdata(m_axis_tdata),
     .m_axis_tkeep(m_axis_tkeep),

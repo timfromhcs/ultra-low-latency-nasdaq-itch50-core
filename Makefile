@@ -59,6 +59,7 @@ cocotb:
 	$(PYTHON) tb/run_cocotb.py
 	$(PYTHON) tb/run_mold_cocotb.py
 	$(PYTHON) tb/run_pipeline_cocotb.py
+	$(PYTHON) tb/run_multi_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
 
 wasm:

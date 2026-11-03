@@ -224,6 +224,11 @@ module moldudp64_frontend #(
   wire [2*DATA_WIDTH-1:0] appended = feed_valid ?
         ({{(2*DATA_WIDTH-DATA_WIDTH){1'b0}}, feed_data} << (rem_count*8)) : {2*DATA_WIDTH{1'b0}};
   wire [7:0]           next_out_count = rem_count + (feed_valid ? feed_bytes : 8'd0);
+  // The frame's last byte is emitted in this cycle: either the input tlast was
+  // accepted now, or it was accepted earlier and this emit empties the buffer.
+  // Without this a frame whose payload ends on a full beat never asserts tlast.
+  wire                 input_done_now = frame_tlast_q || (in_accept && s_axis_tlast);
+  wire                 final_emit     = do_emit && (next_out_count == 8'd0) && input_done_now;
   wire [DATA_WIDTH-1:0] emit_mask = ({24'd0, emit_n} >= BYTES_PER_WORD) ? {DATA_WIDTH{1'b1}} :
         (({{(DATA_WIDTH-1){1'b0}}, 1'b1} << (emit_n*8)) - 1'b1);
 
@@ -255,23 +260,28 @@ module moldudp64_frontend #(
       expected_seq    <= cfg_initial_seq;
     end else begin
       // Defaults
-      m_axis_tlast    <= 1'b0;
       m_axis_frame_end<= 1'b0;
       mold_gap        <= 1'b0;
       mold_frame_ok   <= 1'b0;
       mold_frame_drop <= 1'b0;
 
-      // Emit one repacked beat; hold it if the downstream is not ready.
-      if (!do_emit && out_ready)
+      // Emit one repacked beat; hold it (with tlast) until accepted.
+      if (m_axis_tvalid && m_axis_tready) begin
         m_axis_tvalid <= 1'b0;
+        m_axis_tlast  <= 1'b0;
+      end
 
       if (do_emit) begin
         m_axis_tvalid <= 1'b1;
         m_axis_tdata  <= out_buf[DATA_WIDTH-1:0] & emit_mask;
         m_axis_tkeep  <= ({24'd0, emit_n} >= BYTES_PER_WORD) ? {BYTES_PER_WORD{1'b1}} :
                          (({{(BYTES_PER_WORD-1){1'b0}}, 1'b1} << emit_n) - 1'b1);
-        m_axis_tlast  <= (state == ST_FLUSH) && (rem_count == 8'd0);
+        m_axis_tlast  <= final_emit;
       end
+
+      // frame_end is a handshake event: the last beat must be accepted.
+      if (m_axis_tvalid && m_axis_tready && m_axis_tlast)
+        m_axis_frame_end <= 1'b1;
 
       if (do_emit || feed_valid) begin
         out_buf   <= shifted | appended;
@@ -347,7 +357,10 @@ module moldudp64_frontend #(
             hdr_count       <= 8'd0;
             hdr_data        <= {HDR_BYTES*8{1'b0}};
             drain_ptr       <= 8'd0;
-            m_axis_frame_end<= 1'b1;
+            // Frame boundary for the downstream stage. For frames with no
+            // payload beat there is nothing to handshake; otherwise the
+            // handshake pulse below covers it.
+            if (!m_axis_tvalid) m_axis_frame_end <= 1'b1;
           end
         end
 

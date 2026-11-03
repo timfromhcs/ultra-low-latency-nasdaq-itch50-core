@@ -19,7 +19,7 @@
 | Formal | Z3 + CVC5 PASS; Boolector 1.5 unsupported | `reports/formal.json` |
 | Mutation | **10/10** RTL mutants killed | `reports/mutation.json` |
 | Synthesis | 22,629 / 25,201 / 29,628 cells; 2,228 DFFs | `reports/synth_*.log` |
-| MoldUDP64 | single-frame end-to-end PASS; **multi-frame back-pressure open** | `tb/test_mold_pipeline.py` |
+| MoldUDP64 | **5 frames back-to-back PASS** (4 valid + 1 gap + 1 drop) | `tb/test_mold_multi.py` |
 | WASM/web | WebGPU compute/render, Canvas2D fallback, OPFS, PWA, 390/1440 | `reports/web-*.png` |
 | Backend/MCP | REST + stdio MCP, **12 tools**, local cloud JSON store | `mcp/`, `backend/` |
 | Distribution | **v0.3.0 GitHub Release** (EXE, npm tgz, wheel/sdist, SBOM, SHA-256), Docker, Vercel | `releases/tag/v0.3.0` |
@@ -53,7 +53,7 @@ MDN PWA best practices, GitHub Actions docs.
 | Formal | Z3 + CVC5 PASS | + Bitwuzla/Yices; cover report | equivalence proof RTL ↔ WASM |
 | Mutation score | 100% (10) | ≥95% (50+) | ≥98% (150+) |
 | Fmax (Sky130) | not run | OpenSTA slack at 250 MHz | sign-off at 250–322 MHz |
-| Mold back-pressure | single-frame | 4-frame back-to-back + skid | 64-frame + loss/gap recovery |
+| Mold back-pressure | single-frame | **4+ frames back-to-back PASS** | 64-frame + loss/gap recovery |
 | Order book | WASM top-of-book | RTL BBO | multi-symbol depth + risk checks |
 | Web perf | not measured | Lighthouse ≥90, PWA pass | <200 KB JS, 60 fps mobile |
 | Distribution | Vercel/Docker/EXE | GHCR signed + npm/PyPI | reproducible releases + SBOM |
@@ -77,13 +77,16 @@ MDN PWA best practices, GitHub Actions docs.
 **Gate:** all GitHub Actions green; heartbeat log proves a tick; MCP smoke + audit pass.
 
 ### Phase 1 — Back-pressure + book (2 → 8 weeks)
-- [ ] Implement `axis_skid_buffer.sv` (valid/ready, no data loss, 1-deep).
-- [ ] Integrate front-end → skid → depacketizer; 4-frame back-to-back test; gap/drop test.
+- [x] Implement `axis_skid_buffer.sv` (valid/ready, no data loss, 1-deep).
+- [x] Back-to-back frames with gap + drop: **5 frames, 28 records, 0 mismatches**
+      (`tb/test_mold_multi.py`). No skid stage needed functionally; the front-end
+      holds beats under back-pressure.
+- [x] Add `tlast`/frame counters and an explicit `frame_ready` / `frame_end`.
 - [ ] Implement `itch_top_of_book.sv`: locate-indexed BBO + volume + last, BRAM inference.
 - [ ] Full-field RTL test for BBO against a Python book model.
-- [ ] Add `tlast`/frame counters and an explicit `frame_ready`.
+- [ ] Optional skid/FIFO stage for timing isolation at higher clock rates.
 
-**Gate:** 4-frame back-to-back 0 mismatches; BBO 0 mismatches; lint/formal still green.
+**Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches; lint/formal still green.
 
 ### Phase 2 — Physical (2 → 4 months)
 - [ ] LibreLane Sky130 hardening smoke (`--dockerized --smoke-test`), then full run.
