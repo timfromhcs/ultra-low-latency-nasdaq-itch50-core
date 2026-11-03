@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 14:59 - Autonomy tick + BBO risk checks
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f952c56` (A/B arbiter) green.
+- Added optional BBO risk limits: `cfg_max_shares` (order size) and `cfg_collar`
+  (price vs. last trade); rejected adds/replaces leave the book untouched and increment
+  `risk_rejects`. Wired through `itch_top_book`.
+- New `test_risk_checks`: 2 rejects (size, collar), valid add/execute/replace pass;
+  book suite now 3 tests, mutation still 9/9.
+
 ## 2026-11-03 13:59 - Autonomy tick + A/B feed arbiter
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b60446b` green.

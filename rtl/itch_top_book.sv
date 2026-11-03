@@ -43,6 +43,10 @@ module itch_top_book #(
   output wire [31:0]                 bbo_ask_p0, bbo_ask_p1, bbo_ask_p2, bbo_ask_p3,
   output wire [63:0]                 bbo_ask_s0, bbo_ask_s1, bbo_ask_s2, bbo_ask_s3,
 
+  input  wire [63:0]                 cfg_max_shares,
+  input  wire [31:0]                 cfg_collar,
+  output wire [31:0]                 risk_rejects,
+
   output wire [31:0]                 status_msg_count,
   output wire [31:0]                 status_corrupt_count,
   output wire                        ready
@@ -126,6 +130,8 @@ module itch_top_book #(
     .s_new_ref(m_new_order_ref_num),
     .s_price(m_price),
     .s_shares(m_shares),
+    .cfg_max_shares(cfg_max_shares),
+    .cfg_collar(cfg_collar),
     .s_ready(book_ready),
     .m_valid(bbo_valid),
     .m_locate(bbo_locate),
@@ -142,6 +148,7 @@ module itch_top_book #(
     .m_ask_s0(bbo_ask_s0), .m_ask_s1(bbo_ask_s1), .m_ask_s2(bbo_ask_s2), .m_ask_s3(bbo_ask_s3),
     .drops_overflow(),
     .level_overflow(),
+    .risk_rejects(risk_rejects),
     .rescans(),
     .busy()
   );

@@ -202,6 +202,8 @@ async def test_bytes_to_bbo(dut):
     dut.s_axis_tkeep.value = 0
     dut.s_axis_tlast.value = 0
     dut.s_axis_tdata.value = 0
+    dut.cfg_max_shares.value = 0
+    dut.cfg_collar.value = 0
     for _ in range(6):
         await RisingEdge(dut.clk)
     dut.rst_n.value = 1

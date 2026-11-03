@@ -39,6 +39,8 @@ module itch_top_of_book #(
   input  wire [63:0]                 s_new_ref,
   input  wire [31:0]                 s_price,
   input  wire [63:0]                 s_shares,
+  input  wire [63:0]                 cfg_max_shares,
+  input  wire [31:0]                 cfg_collar,
   output wire                        s_ready,
 
   // Registered top of book for the event's locate (2 cycles after the event)
@@ -61,6 +63,7 @@ module itch_top_of_book #(
   // Observability
   output reg  [31:0]                 drops_overflow,
   output reg  [31:0]                 level_overflow,
+  output reg  [31:0]                 risk_rejects,
   output reg  [31:0]                 rescans,        // kept for ABI compat; always 0
   output wire                        busy            // always 0 (no stall)
 );
@@ -215,6 +218,13 @@ module itch_top_of_book #(
                        ord_shares[found_idx] :
                        (s_shares > ord_shares[found_idx] ? ord_shares[found_idx] : s_shares);
 
+  wire risk_bad_size = (cfg_max_shares != 64'd0) && (s_shares > cfg_max_shares);
+  wire have_last     = (last_p[loc_idx] != 32'd0);
+  wire risk_bad_price = (cfg_collar != 32'd0) && have_last &&
+                        ((s_price > last_p[loc_idx] + cfg_collar) ||
+                         (s_price + cfg_collar < last_p[loc_idx]));
+  wire risk_reject   = risk_bad_size || risk_bad_price;
+
   wire same_level = found && rem_found && add_found &&
                     (old_bid == add_bid) &&
                     (ord_price[found_idx] == s_price) &&
@@ -327,6 +337,7 @@ module itch_top_of_book #(
       m_volume       <= 64'd0;
       drops_overflow <= 32'd0;
       level_overflow <= 32'd0;
+      risk_rejects   <= 32'd0;
       rescans        <= 32'd0;
     end else if (!init_done) begin
       // Clear one table element per cycle (portable across Verilator versions).
@@ -404,6 +415,9 @@ module itch_top_of_book #(
 
       if (s_valid) begin
         if (s_msg_type == T_ADD || s_msg_type == T_ADD_MPID || s_msg_type == T_REPLACE) begin
+          if (risk_reject) begin
+            risk_rejects <= risk_rejects + 32'd1;
+          end else begin
           if (s_msg_type == T_REPLACE) begin
             // Remove the old order.
             if (found) begin
@@ -479,6 +493,7 @@ module itch_top_of_book #(
             end else begin
               level_overflow <= level_overflow + 32'd1;
             end
+          end
           end
         end else if (s_msg_type == T_DELETE || s_msg_type == T_EXEC ||
                      s_msg_type == T_EXEC_PX || s_msg_type == T_CANCEL) begin

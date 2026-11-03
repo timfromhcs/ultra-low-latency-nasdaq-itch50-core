@@ -153,6 +153,8 @@ async def test_random_book(dut):
     dut.s_new_ref.value = 0
     dut.s_price.value = 0
     dut.s_shares.value = 0
+    dut.cfg_max_shares.value = 0
+    dut.cfg_collar.value = 0
     for _ in range(6):
         await RisingEdge(dut.clk)
     dut.rst_n.value = 1
@@ -304,3 +306,51 @@ async def test_no_stall_back_to_back(dut):
             )
     assert got == last_expected, f"back-to-back BBO\n got {got}\n exp {last_expected}"
     dut._log.info("No-stall: 100 events back-to-back, 1 event/cycle PASS")
+
+@cocotb.test()
+async def test_risk_checks(dut):
+    cocotb.start_soon(Clock(dut.clk, 3100, unit="ps").start())
+    dut.rst_n.value = 0
+    dut.s_valid.value = 0
+    dut.s_msg_type.value = 0
+    dut.s_locate.value = 0
+    dut.s_side.value = 0
+    dut.s_order_ref.value = 0
+    dut.s_new_ref.value = 0
+    dut.s_price.value = 0
+    dut.s_shares.value = 0
+    dut.cfg_max_shares.value = 1000
+    dut.cfg_collar.value = 100
+    for _ in range(6):
+        await RisingEdge(dut.clk)
+    dut.rst_n.value = 1
+    await RisingEdge(dut.clk)
+
+    # Last trade establishes the collar reference at 10000.
+    await drive(dut, dict(type=ord("P"), locate=1, side=ord("B"), ref=0, price=10000, shares=10))
+
+    # Rejected: order size above the 1000-share limit.
+    got = await drive(dut, dict(type=ord("A"), locate=1, side=ord("B"), ref=1, price=10000, shares=2000))
+    assert got["bid_levels"][0] == (0, 0), f"oversize add leaked into the book: {got}"
+
+    # Rejected: price 500 away from the last trade, collar is 100.
+    got = await drive(dut, dict(type=ord("A"), locate=1, side=ord("B"), ref=2, price=10500, shares=100))
+    assert got["bid_levels"][0] == (0, 0), f"collar add leaked into the book: {got}"
+
+    # Accepted: inside the collar and the size limit.
+    got = await drive(dut, dict(type=ord("A"), locate=1, side=ord("B"), ref=3, price=10050, shares=100))
+    assert got["bid_levels"][0] == (10050, 100), f"valid add rejected: {got}"
+
+    # Accepted at the same level.
+    got = await drive(dut, dict(type=ord("A"), locate=1, side=ord("B"), ref=4, price=10050, shares=500))
+    assert got["bid_levels"][0] == (10050, 600), f"level aggregation wrong: {got}"
+
+    # Execute the first order, then replace the second.
+    got = await drive(dut, dict(type=ord("E"), locate=1, side=0, ref=3, price=0, shares=100))
+    assert got["bid_levels"][0] == (10050, 500), f"execute mismatch: {got}"
+    got = await drive(dut, dict(type=ord("U"), locate=1, side=ord("B"), ref=4, new_ref=5, price=10050, shares=500))
+    assert got["bid_levels"][0] == (10050, 500), f"replace mismatch: {got}"
+
+    assert int(dut.risk_rejects.value) == 2, f"risk rejects {int(dut.risk_rejects.value)}"
+    dut._log.info("Risk: 2 rejects (size, collar), valid events pass, PASS")
+

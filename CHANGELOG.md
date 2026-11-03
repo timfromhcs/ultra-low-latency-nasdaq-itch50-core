@@ -56,6 +56,9 @@ All notable changes to ChipLab are documented here. The format follows
   sequence-based selection (prefer A on ties), a 64-cycle redundancy window for the
   single-feed case, loser discard and a gap pulse. Test: 6 frames, selection
   [1,2,3,4,7,8], byte-exact, 1 gap (`tb/test_arbiter.py`).
+- **BBO risk checks**: `cfg_max_shares` rejects oversized orders and `cfg_collar`
+  rejects prices outside last-trade ± collar (0 disables each); `risk_rejects` counter.
+  Rejected adds/replaces never touch the book or the level table.
 
 ## 0.3.1 — 2026-11-03
 
