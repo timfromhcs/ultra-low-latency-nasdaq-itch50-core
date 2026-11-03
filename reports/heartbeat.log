@@ -1583,3 +1583,258 @@ f869621 docs: log the post-release verification and encoding fix
 8ec8780 fix(web): probe /api/health before the cloud panel to avoid a Vercel 404
 ## main...origin/main
  M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"707180f\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  return { run: 
+{id:run.id,status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,co
+nclusion:j.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return 
+{ error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601112373\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return 
+j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}));\n} catch (e) { return { error: String(e) }; 
+}"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path docs\architecture.md -Pattern 'mold|top-of-book|book|Module' | 
+Select-Object -First 12 LineNumber,Line
+LineNumber Line                                                                                                        
+---------- ----                                                                                                        
+        17 The architecture is partitioned into four decoupled, ultra-fast sub-modules:                                
+        20 3. **Speculative Parallel Decoder & Pre-Trigger Matrix (`itch_parser_core.sv`)**: Slices the Stock Locate...
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead docs/architecture.md [90m[limit=30, offset=14][0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content docs\architecture.md -Tail 12; (Get-Item docs\architecture.md).Length
+## 4. Latency Budget & Timing Sign-Off
+
+```
+[Cycle 0: Ingress]  s_axis_tdata arriving on 128-bit bus
+                    |--- 0.30 ns ---> raw_stock_locate_pre_trigger valid (L3 Pre-Fetch)
+                    |--- 0.35 ns ---> Early Non-Trade Drop Gate Classification
+                    |--- 0.85 ns ---> Full Speculative Parsing Complete
+                    |--- 1.10 ns ---> raw_order_data valid (Asynchronous Bypass)
+[Cycle 1: Egress]   Clock Edge (3.10 ns @ 322.26 MHz)
+                    |--- +0.12 ns --> m_axis_order_valid & m_* registered outputs valid
+```
+9123
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Add-Content docs\architecture.md "" -Encoding utf8; Add-Content docs\architecture.md "## 
+5. Downstream Blocks" -Encoding utf8; Add-Content docs\architecture.md "" -Encoding utf8; Add-Content 
+docs\architecture.md "### MoldUDP64 pipeline (``rtl/moldudp64_*.sv``)" -Encoding utf8; Add-Content 
+docs\architecture.md "" -Encoding utf8; Add-Content docs\architecture.md "- ``moldudp64_frontend.sv`` filters 
+Ethernet/IPv4/UDP, validates the Mold header and tracks sequence gaps. It holds ``tvalid/tdata/tkeep/tlast`` stable 
+under back-pressure and emits handshake-qualified ``frame_start``/``frame_end`` sidebands." -Encoding utf8; 
+Add-Content docs\architecture.md "- ``moldudp64_depacketizer.sv`` strips per-message 2-byte prefixes, emits its own 
+message-derived ``tlast``, and discards trailing Ethernet padding." -Encoding utf8; Add-Content docs\architecture.md 
+"- Proof: 5 frames back-to-back (4 valid + 1 gap + 1 dropped port) -> 28 records, 0 mismatches 
+(``tb/test_mold_multi.py``)." -Encoding utf8; Add-Content docs\architecture.md "" -Encoding utf8; Add-Content 
+docs\architecture.md "### Top of book (``rtl/itch_top_of_book.sv``)" -Encoding utf8; Add-Content docs\architecture.md 
+"" -Encoding utf8; Add-Content docs\architecture.md "- Locate-indexed best bid/ask with aggregate shares at the best 
+level, last trade and volume." -Encoding utf8; Add-Content docs\architecture.md "- Handles A/F/E/C/X/D/U/P/Q. Events 
+that touch the best price trigger a rescan of that locate/side; the input stalls until it completes." -Encoding utf8; 
+Add-Content docs\architecture.md "- Functional reference: 400 random events vs. a Python book model, 0 mismatches 
+(``tb/test_book.py``). A BRAM/hash order store and a non-stalling ladder are the timing-closed follow-up." -Encoding 
+utf8; Get-Content docs\architecture.md -Tail 14
+```
+## 5. Downstream Blocks
+
+### MoldUDP64 pipeline (`rtl/moldudp64_*.sv`)
+
+- `moldudp64_frontend.sv` filters Ethernet/IPv4/UDP, validates the Mold header and tracks sequence gaps. It holds 
+`tvalid/tdata/tkeep/tlast` stable under back-pressure and emits handshake-qualified `frame_start`/`frame_end` 
+sidebands.
+- `moldudp64_depacketizer.sv` strips per-message 2-byte prefixes, emits its own message-derived `tlast`, and discards 
+trailing Ethernet padding.
+- Proof: 5 frames back-to-back (4 valid + 1 gap + 1 dropped port) -> 28 records, 0 mismatches 
+(`tb/test_mold_multi.py`).
+
+### Top of book (`rtl/itch_top_of_book.sv`)
+
+- Locate-indexed best bid/ask with aggregate shares at the best level, last trade and volume.
+- Handles A/F/E/C/X/D/U/P/Q. Events that touch the best price trigger a rescan of that locate/side; the input stalls 
+until it completes.
+- Functional reference: 400 random events vs. a Python book model, 0 mismatches (`tb/test_book.py`). A BRAM/hash order 
+store and a non-stalling ladder are the timing-closed follow-up.
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const jobs = await tools.github.actions_list({ method: \"list_workflow_jobs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"41601112373\", perPage: 10 });\n 
+ const j = jobs.jobs?.jobs?.find(x=>x.name.startsWith(\"RTL\"));\n  return {status:j?.status,conclusion:j?.conclusion,s
+teps:j?.steps?.map(s=>({name:s.name,status:s.status,conclusion:s.conclusion}))};\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.get_job_logs({ owner:\"timfromhcs\", 
+repo:\"ultra-low-latency-nasdaq-itch50-core\", job_id: 0, run_id: 41601112373, failed_only: true, return_content: 
+true, tail_lines: 60 }).catch(e=>({error:String(e)}));\n  return r;\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -117,8 +117,10 @@
+   localparam [1:0] ST_DONE   = 2'd1;
+   localparam [1:0] ST_RESCAN = 2'd2;
+ 
+   reg [1:0]  state;
++  reg [8:0]  init_i;
++  reg        init_done;
+   reg [3:0]  pend_idx;
+   reg [15:0] pend_locate;
+   reg [15:0] rs_locate;
+   reg        rs_bid;
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -143,9 +143,9 @@
+                        !ord_is_bid && ord_price[found_idx] == bb_ask_p[idx];
+   wire        touch_bbo = found && (at_bid || at_ask);
+   wire        need_rescan = touch_bbo && (is_del || is_exec || is_cxl || is_repl);
+ 
+-  assign s_ready = (state == ST_IDLE);
++  assign s_ready = init_done && (state == ST_IDLE);
+ 
+   integer k;
+   always @(posedge clk) begin
+     if (!rst_n) begin
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -161,8 +161,10 @@
+       m_last_shares  <= 64'd0;
+       m_volume       <= 64'd0;
+       drops_overflow <= 32'd0;
+       rescans        <= 32'd0;
++      init_i         <= 9'd0;
++      init_done      <= 1'b0;
+       pend_idx       <= 4'd0;
+       pend_locate    <= 16'd0;
+       rs_locate      <= 16'd0;
+       rs_bid         <= 1'b1;
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/itch_top_of_book.sv [90m[limit=50, offset=148][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -170,26 +170,34 @@
+       rs_bid         <= 1'b1;
+       rs_i           <= 9'd0;
+       rs_best_p      <= 32'd0;
+       rs_best_s      <= 64'd0;
+-      for (k = 0; k < ORDERS; k = k + 1) begin
+-        ord_valid[k]  <= 1'b0;
+-        ord_ref[k]    <= 64'd0;
+-        ord_locate[k] <= 16'd0;
+-        ord_side[k]   <= 8'd0;
+-        ord_price[k]  <= 32'd0;
+-        ord_shares[k] <= 64'd0;
++    end else if (!init_done) begin
++      // Clear the tables one entry per cycle. A for-loop reset with nonblocking
++      // assignments is not portable across Verilator versions.
++      if (init_i < ORDERS) begin
++        ord_valid[init_i[7:0]]  <= 1'b0;
++        ord_ref[init_i[7:0]]    <= 64'd0;
++        ord_locate[init_i[7:0]] <= 16'd0;
++        ord_side[init_i[7:0]]   <= 8'd0;
++        ord_price[init_i[7:0]]  <= 32'd0;
++        ord_shares[init_i[7:0]] <= 64'd0;
++      end else if (init_i < ORDERS + LOCATES) begin
++        bb_valid[init_i[3:0]]  <= 1'b0;
++        bb_locate[init_i[3:0]] <= 16'd0;
++        bb_bid_p[init_i[3:0]]  <= 32'd0;
++        bb_bid_s[init_i[3:0]]  <= 64'd0;
++        bb_ask_p[init_i[3:0]]  <= 32'hFFFF_FFFF;
++        bb_ask_s[init_i[3:0]]  <= 64'd0;
++        bb_last_p[init_i[3:0]] <= 32'd0;
++        bb_last_s[init_i[3:0]] <= 64'd0;
++        bb_vol[init_i[3:0]]    <= 64'd0;
+       end
+-      for (k = 0; k < LOCATES; k = k + 1) begin
+-        bb_valid[k]  <= 1'b0;
+-        bb_locate[k] <= 16'd0;
+-        bb_bid_p[k]  <= 32'd0;
+-        bb_bid_s[k]  <= 64'd0;
+-        bb_ask_p[k]  <= 32'hFFFF_FFFF;
+-        bb_ask_s[k]  <= 64'd0;
+-        bb_last_p[k] <= 32'd0;
+-        bb_last_s[k] <= 64'd0;
+-        bb_vol[k]    <= 64'd0;
++      if (init_i == ORDERS + LOCATES - 1) begin
++        init_done <= 1'b1;
++        init_i    <= 9'd0;
++      end else begin
++        init_i <= init_i + 9'd1;
+       end
+     end else begin
+       m_valid <= 1'b0;
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -145,9 +145,8 @@
+   wire        need_rescan = touch_bbo && (is_del || is_exec || is_cxl || is_repl);
+ 
+   assign s_ready = init_done && (state == ST_IDLE);
+ 
+-  integer k;
+   always @(posedge clk) begin
+     if (!rst_n) begin
+       state          <= ST_IDLE;
+       busy           <= 1'b0;
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_top_of_book.sv 2>&1 | tail -6"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_book_cocotb.py 
+> /tmp/book8.txt 2>&1; echo RC=$?"; wsl -d Ubuntu bash -lc "grep -E 'Book:|TESTS=|FAIL' /tmp/book8.txt | tail -3"
+- V e r i l a t i o n   R e p o r t: Verilator 5.032 2025-01-01 rev (Debian 5.032-1)
+- Verilator: Built from 0.034 MB sources in 2 modules, into 0.082 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.044 s (elab=0.002, cvt=0.010, bld=0.000); cpu 0.027 s on 1 threads; alloced 8.762 MB
+RC=True
+ 30770.60ns INFO     cocotb.itch_top_of_book            Book: 400 events, 33 rescans, 0 overflows PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0              30770.60          
+ 0.49      62934.80  **
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "fix(rtl): portable table init for Verilator 5.020; document 
+downstream blocks" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Select-Object -Last 2
+warning: in the working copy of 'docs/architecture.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/heartbeat.log', LF will be replaced by CRLF the next time Git touches it
+[main 69dc098] fix(rtl): portable table init for Verilator 5.020; document downstream blocks
+ 3 files changed, 597 insertions(+), 20 deletions(-)
+git : To https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core.git
+In Zeile:1 Zeichen:155
++ ... ocks" 2>&1 | Select-Object -Last 3; git push origin main 2>&1 | Selec ...
++                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...itch50-core.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   707180f..69dc098  main -> main
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.github.actions_list({ method: \"list_workflow_runs\", 
+owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\n  
+const run = r.workflow_runs?.find(x=>x.head_sha?.startsWith(\"69dc098\"));\n  if (!run) return { runs: 
+r.workflow_runs?.map(x=>[x.head_sha?.slice(0,7),x.status,x.conclusion]) };\n  const jobs = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 10 });\n  return { run: 
+{id:run.id,status:run.status,conclusion:run.conclusion}, jobs: jobs.jobs?.jobs?.map(j=>({name:j.name,status:j.status,co
+nclusion:j.conclusion,failed:j.steps?.filter(s=>s.conclusion===\"failure\").map(s=>s.name)})) };\n} catch (e) { return 
+{ error: String(e) }; }"} 

@@ -62,6 +62,10 @@ module itch_top_of_book #(
   localparam [7:0] T_TRADE    = 8'h50; // P
   localparam [7:0] T_CROSS    = 8'h51; // Q
 
+  localparam [8:0] ORDER_COUNT = ORDERS;
+  localparam [8:0] BB_END      = ORDERS + LOCATES;
+  localparam [8:0] INIT_LAST   = ORDERS + LOCATES - 1;
+
   // --------------------------------------------------------------------------
   // Order store
   // --------------------------------------------------------------------------
@@ -173,14 +177,14 @@ module itch_top_of_book #(
     end else if (!init_done) begin
       // Clear the tables one entry per cycle. A for-loop reset with nonblocking
       // assignments is not portable across Verilator versions.
-      if (init_i < ORDERS) begin
+      if (init_i < ORDER_COUNT) begin
         ord_valid[init_i[7:0]]  <= 1'b0;
         ord_ref[init_i[7:0]]    <= 64'd0;
         ord_locate[init_i[7:0]] <= 16'd0;
         ord_side[init_i[7:0]]   <= 8'd0;
         ord_price[init_i[7:0]]  <= 32'd0;
         ord_shares[init_i[7:0]] <= 64'd0;
-      end else if (init_i < ORDERS + LOCATES) begin
+      end else if (init_i < BB_END) begin
         bb_valid[init_i[3:0]]  <= 1'b0;
         bb_locate[init_i[3:0]] <= 16'd0;
         bb_bid_p[init_i[3:0]]  <= 32'd0;
@@ -191,7 +195,7 @@ module itch_top_of_book #(
         bb_last_s[init_i[3:0]] <= 64'd0;
         bb_vol[init_i[3:0]]    <= 64'd0;
       end
-      if (init_i == ORDERS + LOCATES - 1) begin
+      if (init_i == INIT_LAST) begin
         init_done <= 1'b1;
         init_i    <= 9'd0;
       end else begin
@@ -325,7 +329,7 @@ module itch_top_of_book #(
         end
 
         ST_RESCAN: begin
-          if (rs_i < ORDERS) begin
+          if (rs_i < ORDER_COUNT) begin
             if (ord_valid[rs_i[7:0]] && ord_locate[rs_i[7:0]] == rs_locate &&
                 (ord_side[rs_i[7:0]] == 8'h42) == rs_bid) begin
               if (rs_bid) begin
