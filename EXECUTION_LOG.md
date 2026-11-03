@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-03 10:59 - Autonomy tick + formal toolchain fix
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3f80017` green.
+- The manually triggered `Formal` workflow failed: the deep proof on Ubuntu 24.04
+  (apt `yosys`/`z3`) reported a counterexample at step 6, while the same proof passes
+  locally with Yosys 0.52 + Z3 4.13.3 and in the later solver-matrix run.
+- Fix: pin the weekly formal job to **oss-cad-suite 2026-11-03** (Yosys + Z3 bundle)
+  instead of Ubuntu's older packages. Mutation job passed (9/9).
+- Root-cause note: toolchain drift, not an RTL regression; the generated proof and RTL
+  are unchanged.
+
 ## Phase 2a - Mutation testing for the BBO path
 
 - Added `tools/mutate_book.py`: patches a copy of `rtl/` and runs the parser->BBO

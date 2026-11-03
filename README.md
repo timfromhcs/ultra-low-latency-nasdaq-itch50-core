@@ -382,7 +382,8 @@ Sandbox Drives are a separate, paid option — not used by this repository.
   legal lengths, register equivalence and flow control; `formal/run_formal.sh` runs BMC,
   k-induction and covers; `formal/solver_matrix.sh` records each solver. The pull-request
   CI runs lint + 50k full-field + model + cocotb; the **weekly `Formal` workflow** runs the
-  deep 20-step proof (the older Ubuntu runner is too slow for it on every push).
+  deep 20-step proof with a **pinned `oss-cad-suite`** (Yosys + Z3) so results do not drift
+  with Ubuntu's older packages. The weekly workflow also runs the parser→BBO mutation job.
 - **Mutation**: `tools/mutate.py` injects RTL mutants and requires the suite to kill them.
 - **Reference model**: Python and Rust independently, compared field-by-field.
 - **Browser**: Playwright at 390/1440, console-error gate, WebGPU/Canvas2D paths.

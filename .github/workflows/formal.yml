@@ -12,11 +12,16 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-      - name: Toolchain
+      - name: Toolchain (pinned oss-cad-suite)
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq yosys z3 python3-pip
-          sudo apt-get install -y -qq cvc5 || true
+          # Pin Yosys + Z3 to one known-good bundle; Ubuntu's older packages
+          # produced a spurious counterexample in the deep proof.
+          curl -fsSL -o /tmp/oss.tgz \
+            https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-11-03/oss-cad-suite-linux-x64-20261103.tgz
+          tar -xzf /tmp/oss.tgz -C /opt
+          echo "/opt/oss-cad-suite/bin" >> "$GITHUB_PATH"
+          /opt/oss-cad-suite/bin/yosys -V
+          /opt/oss-cad-suite/bin/z3 --version || true
       - name: Deep proof (BMC 20 + k-induction + covers)
         run: ./formal/run_formal.sh z3
       - name: Solver matrix (best effort)
