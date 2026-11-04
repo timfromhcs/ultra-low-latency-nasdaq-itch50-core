@@ -73,11 +73,12 @@ node scripts/openlane_summary.mjs openlane/runs/sky130-250mhz-sta
 | wrapper, 700 µm | Same GRT-0116 congestion at GlobalRouting (clock net with 1,533 terminals, ~20k cells). |
 | wrapper, 1400 µm, 40 % density | GlobalPlacement **diverged** (GPL-0305, invalid step length); RePlAce is numerically unstable with this clock fanout. |
 | wrapper, 1400 µm, 50 % density, timing-driven placement off | GlobalPlacement **diverged again** (GPL-0305). Three configurations fail in three different places; this needs clock planning and a real floorplan, not config tweaks. |
+| wrapper 32-bit, 700 µm | GlobalRouting **still congested** (GRT-0116) even with the narrow interface; clock fanout is 1,566 terminals. |
 
-The pin count and the unbuffered 1,533-terminal clock, not the standard-cell area, are
-the blockers. A physical run needs a designed floorplan/pin plan and clock planning
-(e.g. clock buffers inserted before placement, a fitted die), which is follow-up work.
-**No P&R, DRC or LVS result exists for this design.**
+The **unbuffered ~1,566-terminal clock** and placement density, not the pin count (the
+32-bit wrapper with ~80 pins still congested), are the blockers. A physical run needs
+clock planning (clock buffers before placement) and a fitted floorplan/pin plan, which
+is follow-up work. **No P&R, DRC or LVS result exists for this design.**
 
 ## Running this design
 

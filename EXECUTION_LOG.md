@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 12:59 - Autonomy tick + congestion-allowed routing attempt
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+- `wrap32-full` (700 µm) failed GlobalRouting with GRT-0116 even with the ~80-pin
+  32-bit wrapper → pin count is not the root cause; the ~1,566-terminal clock is.
+- Started `wrap32-big` (1000 µm, 35 % density, `GRT_ALLOW_CONGESTION=1`); GlobalRouting
+  is running extra iterations (31/50 at the time of this entry) instead of aborting.
+- Committed `openlane/sky130_wrap32_big.json` and the updated attempts table.
+
 ## 2026-11-04 12:05 - 32-bit wrapper pre-PnR STA + full-flow attempt
 
 - Added `openlane/sky130_wrap32.json` (wishbone wrapper, `SYNTH_PARAMETERS:
