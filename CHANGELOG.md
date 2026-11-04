@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Narrow physical wrapper** (`rtl/itch_host_wrap.sv`): keeps the 128-bit AXI4-Stream
+  ingress and exposes a 32-bit host register port (message/corrupt/byte counters, last
+  type/locate/price/shares/ref, valid/corrupt flags, updates) instead of the ~1,100-pin
+  debug bus, so the design can be placed and routed. Test: two messages, type/locate/
+  shares/ref read back, unmapped reads zero. Config `openlane/sky130_wrap.json`.
 - **Full-flow status**: two LibreLane sky130 attempts are documented in
   `openlane/README.md`: without skips the post-CTS resizer stalls >1 h on the −9 ns
   path; with the resizer steps skipped, GlobalRouting fails with GRT-0116 congestion

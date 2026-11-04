@@ -111,8 +111,10 @@ MDN PWA best practices, GitHub Actions docs.
       resizer steps skipped, GlobalRouting fails with **GRT-0116 congestion** at the
       700×700 µm die with ~1,100 top-level pins (484-bit `raw_order_data`, 512-bit
       `raw_payload`). Needs a narrow physical wrapper and a fitted/larger die.
-- [ ] Narrow physical wrapper (32-bit host port + snapshot read) and a fitted die,
-      then a full P&R/DRC/LVS run.
+- [x] Narrow physical wrapper `itch_host_wrap` (128-bit AXI4-Stream ingress, 32-bit
+      host register port with counters + last-message fields, no debug payload bus):
+      test passes (2 messages, type/locate/shares/ref read back), lint clean.
+- [ ] Full P&R of the wrapper (`openlane/sky130_wrap.json`) + DRC/LVS/post-route STA.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.

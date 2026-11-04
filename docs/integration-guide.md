@@ -58,6 +58,12 @@ Rules that matter:
    `!m_error_corrupt` if you index tables with their fields, or count them as drops
    (the book does exactly that).
 
+**Narrow physical wrapper:** `itch_host_wrap` keeps the 128-bit AXI4-Stream ingress
+and replaces the wide debug record bus with a 32-bit host register port (counters,
+last message type/locate/price/shares/ref, valid/corrupt flags). Use it for
+place-and-route runs where the ~1,100-pin debug bus would cause pin congestion. Word
+map is in the module header; `openlane/sky130_wrap.json` targets it.
+
 ## 3. Parser + book
 
 ```systemverilog

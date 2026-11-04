@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 09:05 - Narrow host wrapper for physical runs
+
+- Added `rtl/itch_host_wrap.sv`: 128-bit AXI4-Stream ingress, 32-bit host register
+  port (msg/corrupt/byte counters, last type/locate/price/shares/ref, valid/corrupt,
+  updates), no wide debug record bus. Test `tb/test_host_wrap.py`: two messages,
+  type X, locate 3, shares 100, ref round-trip, unmapped reads zero → PASS; lint clean.
+- Added `openlane/sky130_wrap.json` for the wrapper and started a pre-PnR STA run
+  (`wrap-sta`) to validate the narrower pin count.
+- Wired the wrapper into `make lint`, `make cocotb` and CI.
+
 ## 2026-11-04 08:45 - Full Sky130 flow stopped: pin-count congestion
 
 - Resume completed the stored steps but re-ran GlobalRouting and **failed** with
