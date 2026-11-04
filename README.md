@@ -153,11 +153,14 @@ cosign verify ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core@sha256:<di
   --certificate-identity-regexp 'https://github.com/timfromhcs/.*' \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com
 ```
+
 The first published release is
 [v0.3.1](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.1) (first: [v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0))
 with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
-`SHA256SUMS.txt`. Builds are **not** bit-for-bit reproducible yet (Node SEA embeds a
-build timestamp), so trust the manifest shipped with the release.
+`SHA256SUMS.txt`. Reproducibility status: the WASM (`make repro-wasm`, pinned rustc
+1.98.1) and the Python wheel/sdist (`make repro-python`, `SOURCE_DATE_EPOCH` +
+normalized sdist) rebuild byte-identically; the Node SEA **EXE is not reproducible**
+yet (embedded build timestamp), so trust the manifest and attestation for it.
 
 ---
 
