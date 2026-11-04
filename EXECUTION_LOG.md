@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 10:35 - Caravel-style Wishbone wrapper
+
+- Added `rtl/itch_wishbone_wrap.sv`: host register file exposed through a classic
+  Wishbone slave (1-cycle ACK, read-only; writes ACK but are ignored), AXI4-Stream
+  ingress unchanged.
+- Test `tb/test_wishbone.py`: two messages, Wishbone reads of msg count/type/locate/
+  shares/ref, write ACK + ignored → PASS; lint clean. Wired into `make lint`,
+  `make cocotb` and CI.
+
 ## 2026-11-04 09:59 - npm/PyPI blob signing + Sign workflow
 
 - Added `.github/workflows/sign.yml` (dispatch + reusable): builds the npm tarball and

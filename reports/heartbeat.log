@@ -2379,3 +2379,44 @@ warning: in the working copy of 'reports/scorecard.json', LF will be replaced by
 warning: in the working copy of '.github/workflows/sign.yml', LF will be replaced by CRLF the next time Git touches it
  create mode 100644 .github/workflows/sign.yml
    69a83eb..cdf9110  main -> main
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.github.actions_run_trigger({ method: \"run_workflow\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", workflow_id: \"sign.yml\", ref: \"main\" });\n  return 
+\"dispatched\";\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+sign.yml --limit 1 --json status,conclusion,headSha | ConvertFrom-Json | Format-List
+conclusion : success
+headSha    : cdf91107de9dd04ddb3401e5979dda6e2fd942f5
+status     : completed
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"sign.yml\", perPage: 1 });\nconst run = 
+r.workflow_runs?.[0];\nconst j = await tools.github.actions_list({ method: \"list_workflow_jobs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 5 });\nreturn 
+j.jobs?.jobs?.map(x => [x.name, x.conclusion, x.steps?.filter(s => /sign|verify/i.test(s.name)).map(s => [s.name, 
+s.conclusion])]);"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -267,8 +267,10 @@
+ - `release.yml` publish job now has `id-token: write`, signs the artifacts after the
+   checksums, attaches the `*.sigstore.json` bundles to the release, and README shows
+   the `cosign verify-blob` command.
+ - Dispatching `sign.yml` to verify the mechanism in CI.
++- `sign.yml` on `cdf9110`: **success** ÔÇö "Sign artifacts" and "Verify signatures" both
++  green for the npm tarball, wheel and sdist (keyless OIDC + transparency log).
+ 
+ ## 2026-11-04 10:20 - Physical flow blocked after third attempt
+ 
+ - `wrap-full3` (1400 ┬Ám, 50 % density, `PL_TIMING_DRIVEN: 0`) failed GlobalPlacement
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: record verified keyless signing of npm/PyPI artifacts" 
+2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+ 2 files changed, 2383 insertions(+), 2154 deletions(-)
+   cdf9110..ac3341f  main -> main

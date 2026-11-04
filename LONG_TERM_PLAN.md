@@ -170,6 +170,10 @@ MDN PWA best practices, GitHub Actions docs.
 
 ### Phase 4 — Release / silicon-ready (8 → 12 months)
 - [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+- [x] Caravel management path: `itch_wishbone_wrap` exposes the host register file
+      through a classic Wishbone slave (1-cycle ACK, read-only, writes ignored);
+      test drives two messages and reads count/type/locate/shares/ref over Wishbone.
+- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.

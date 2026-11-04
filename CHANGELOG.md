@@ -74,6 +74,10 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+  file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+  ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+  of msg count/type/locate/shares/ref, write ignored → PASS. First step toward Caravel.
 - **npm/PyPI blob signing**: `sign.yml` signs the npm tarball and Python wheel/sdist
   with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
   signs after the checksums and attaches the `*.sigstore.json` bundles. README shows
