@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 13:59 - Autonomy tick + detailed routing in progress
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+- `wrap32-big` passed GlobalRouting (congestion allowed) and is in
+  `OpenROAD.DetailedRouting` (step 43). DRT reports ~695k violations at 40 % of its
+  first optimization iteration — the design is poorly routable at this utilization;
+  letting it run, will stop and document if it does not converge.
+- Committed the datasheet timing paragraph with all measured pre-PnR values
+  (−9.14 / −8.62 / −6.55 ns).
+
 ## 2026-11-04 12:59 - Autonomy tick + congestion-allowed routing attempt
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
