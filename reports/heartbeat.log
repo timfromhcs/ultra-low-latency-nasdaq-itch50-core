@@ -2152,3 +2152,230 @@ Zwischenstand (Tick 08:59, weiter):
 - **Wrapper-Vollrun** (`wrap-full`, Resizer ├╝bersprungen): nach ~15 min bei **Schritt 35 (CTS)** ÔÇö deutlich weiter als der Debug-Bus-Lauf. Als N├ñchstes Global/Detailed Routing, dann DRC/LVS. Ergebnis wird als n├ñchstes publiziert.
 [2026-11-04T09:59:19.3910780+01:00] hallo, es ist 09:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 5; node scripts\gate.mjs 2>&1 | 
+Select-Object -Last 2; git status -sb | Select-Object -First 3
+[tick] ran 0, failed 0
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+## main...origin/main
+ M reports/heartbeat.log
+ M reports/sbom.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite .github/workflows/sign.yml
+Created file successfully: .github/workflows/sign.yml
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/release.yml
+Index: .github/workflows/release.yml
+===================================================================
+--- .github/workflows/release.yml
++++ .github/workflows/release.yml
+@@ -112,8 +112,11 @@
+   publish:
+     name: SBOM, checksums, GitHub Release
+     needs: [verify, exe, packages]
+     runs-on: ubuntu-22.04
++    permissions:
++      contents: write
++      id-token: write
+     steps:
+       - uses: actions/checkout@v4
+       - uses: actions/setup-node@v4
+         with:
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/release.yml
+Index: .github/workflows/release.yml
+===================================================================
+--- .github/workflows/release.yml
++++ .github/workflows/release.yml
+@@ -130,8 +130,17 @@
+           node scripts/sbom.mjs
+           cp reports/sbom.json dist/release/sbom.json
+       - name: Checksums
+         run: node scripts/checksums.mjs dist/release dist/release/SHA256SUMS.txt
++      - uses: sigstore/cosign-installer@v3
++      - name: Sign package artifacts (keyless)
++        env:
++          COSIGN_EXPERIMENTAL: "1"
++        run: |
++          set -euo pipefail
++          for f in dist/release/*.tgz dist/release/*.whl dist/release/*.tar.gz; do
++            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
++          done
+       - name: Release notes
+         run: |
+           node -e "const fs=require('fs');const v=require('./package.json').version;const 
+c=fs.readFileSync('CHANGELOG.md','utf8');const i=c.indexOf('## '+v);const j=c.indexOf('\n## 
+',i+3);fs.writeFileSync('RELEASE_NOTES.md',i>=0?c.slice(i,j>i?j:undefined):'See CHANGELOG.md')"
+       - name: Publish
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/release.yml
+Index: .github/workflows/release.yml
+===================================================================
+--- .github/workflows/release.yml
++++ .github/workflows/release.yml
+@@ -153,5 +153,6 @@
+             dist/release/*.whl
+             dist/release/*.tar.gz
+             dist/release/sbom.json
+             dist/release/SHA256SUMS.txt
++            dist/release/*.sigstore.json
+           fail_on_unmatched_files: true
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -153,8 +153,18 @@
+   --certificate-identity-regexp 'https://github.com/timfromhcs/.*' \
+   --certificate-oidc-issuer https://token.actions.githubusercontent.com
+ ```
+ 
++The npm tarball, Python wheel and sdist are signed as blobs (`*.sigstore.json` bundles
++attached to the release). Verify one with:
++
++```bash
++cosign verify-blob --bundle chiplab-core-0.3.1.tgz.sigstore.json \
++  --certificate-identity-regexp 'https://github.com/timfromhcs/.*' \
++  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
++  chiplab-core-0.3.1.tgz
++```
++
+ The first published release is
+ [v0.3.1](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.1) (first: 
+[v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0))
+ with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
+ `SHA256SUMS.txt`. Reproducibility status: the WASM (`make repro-wasm`, pinned rustc
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -260,9 +260,9 @@
+ | Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
+ | Narrow host wrapper | **128-bit ingress ÔåÆ 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** 
+| `tb/test_host_wrap.py` |
+ | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | 
+`tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
+ | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the 
+parserÔåÆBBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+-| Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM + **keyless cosign signature** | `reports/sbom.json`, `release.yml`, `docker-publish.yml` 
+|
++| Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | 
+`reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |
+ | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all 
+`d2b5f58fÔÇª`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+ | Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | 
+`reports/repro_python.json`, `scripts/repro_python.sh` |
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-04 09:59 - npm/PyPI blob signing + Sign workflow
++
++- Added `.github/workflows/sign.yml` (dispatch + reusable): builds the npm tarball and
++  Python wheel/sdist, signs each with keyless `cosign sign-blob` (`*.sigstore.json`) and
++  immediately verifies with `cosign verify-blob` (identity regexp + OIDC issuer).
++- `release.yml` publish job now has `id-token: write`, signs the artifacts after the
++  checksums, attaches the `*.sigstore.json` bundles to the release, and README shows
++  the `cosign verify-blob` command.
++- Dispatching `sign.yml` to verify the mechanism in CI.
++
+ ## 2026-11-04 10:20 - Physical flow blocked after third attempt
+ 
+ - `wrap-full3` (1400 ┬Ám, 50 % density, `PL_TIMING_DRIVEN: 0`) failed GlobalPlacement
+   with GPL-0305 again. Three configurations now fail in three places: resizer stall,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,12 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **npm/PyPI blob signing**: `sign.yml` signs the npm tarball and Python wheel/sdist
++  with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
++  signs after the checksums and attaches the `*.sigstore.json` bundles. README shows
++  `cosign verify-blob`.
+ - **Full-flow status**: three LibreLane wrapper/debug-bus attempts are documented in
+   `openlane/README.md`: resizer stall (>1 h on ÔêÆ9 ns), GRT-0116 congestion (700 ┬Ám)
+   and GPL-0305 placement divergence (1400 ┬Ám, two density variants). Root causes are
+   the ~1,100-pin debug interface and the unbuffered 1,533-terminal clock; needs clock
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -186,9 +186,11 @@
+       committed artifact are all `d2b5f58fÔÇª` (50,322 bytes), **matchesCommitted: true**.
+ - [x] Reproducible EXE: `scripts/repro_exe.mjs` builds the SEA twice and compares
+       SHA-256 ÔåÆ **identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1). A Windows job
+       in the weekly `Repro` workflow checks it.
+-- [ ] cosign/sigstore signatures for npm/PyPI artifacts.
++- [x] npm/PyPI keyless blob signatures: `sign.yml` builds, signs (`cosign
++      sign-blob`) and verifies the tarball/wheel/sdist; `release.yml` attaches the
++      bundles. Mechanism verified by a dispatch; release integration runs on the next tag.
+ - [x] Mutation: 9 parserÔåÆBBO mutants killed (`tools/mutate_book.py`,
+       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
+ - [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,
+       daily 02:40 UTC, default 10,000,000 messages, calls the reusable `Formal`
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py 2>&1 | tail -9"; cd E:\chips\main; node scripts\gate.mjs 
+2>&1 | Select-Object -Last 2; git add -A; git commit -m "ci: keyless blob signatures for npm/PyPI artifacts + 
+verification workflow" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ .github/workflows/ci.yml OK 4 jobs
+.github/workflows/docker-publish.yml OK 1 jobs
+.github/workflows/exe.yml OK 1 jobs
+.github/workflows/formal.yml OK 3 jobs
+.github/workflows/nightly.yml OK 2 jobs
+.github/workflows/release.yml OK 4 jobs
+.github/workflows/repro.yml OK 2 jobs
+.github/workflows/sign.yml OK 1 jobs
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/release.yml', LF will be replaced by CRLF the next time Git touches 
+it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.github/workflows/sign.yml', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 .github/workflows/sign.yml
+   69a83eb..cdf9110  main -> main

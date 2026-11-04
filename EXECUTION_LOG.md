@@ -268,6 +268,8 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   checksums, attaches the `*.sigstore.json` bundles to the release, and README shows
   the `cosign verify-blob` command.
 - Dispatching `sign.yml` to verify the mechanism in CI.
+- `sign.yml` on `cdf9110`: **success** — "Sign artifacts" and "Verify signatures" both
+  green for the npm tarball, wheel and sdist (keyless OIDC + transparency log).
 
 ## 2026-11-04 10:20 - Physical flow blocked after third attempt
 
