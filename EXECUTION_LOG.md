@@ -267,6 +267,7 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   `openlane/README.md`; no P&R/DRC/LVS result, roadmap marks it blocked.
 - Added `.github/workflows/repro.yml` (weekly + dispatch): Rust 1.98.1 with the wasm
   target runs `repro_wasm.sh`, then `repro_python.sh`, and uploads both reports.
+- Dispatched it on `8d5fbb8`: **success** (both reproducibility checks green in CI).
 
 ## 2026-11-04 09:30 - Reproducible Python packaging
 
