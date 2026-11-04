@@ -106,13 +106,18 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] LibreLane toolchain: **3.0.17 smoke test passed** (Classic flow 80/80, DRC ✅,
       LVS ✅, RC 0) via Docker Desktop + `ghcr.io/librelane/librelane:3.0.17` with a
       cached PDK volume; see `openlane/README.md`.
-- [ ] Full LibreLane Sky130 run of `openlane/sky130.json` (wide 484-bit record; long
-      run, pin-count/area fit still open).
+- [ ] Full LibreLane Sky130 run: **attempted, not achievable with the current pin
+      count**. Without the resizer skips it stalls >1 h on the −9 ns path; with the
+      resizer steps skipped, GlobalRouting fails with **GRT-0116 congestion** at the
+      700×700 µm die with ~1,100 top-level pins (484-bit `raw_order_data`, 512-bit
+      `raw_payload`). Needs a narrow physical wrapper and a fitted/larger die.
+- [ ] Narrow physical wrapper (32-bit host port + snapshot read) and a fitted die,
+      then a full P&R/DRC/LVS run.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
       Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
-- [ ] Post-route STA with the full flow (the 322 MHz run is still in progress).
+- [ ] Post-route STA with the full flow (blocked on the P&R congestion above).
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

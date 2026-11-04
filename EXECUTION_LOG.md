@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 08:45 - Full Sky130 flow stopped: pin-count congestion
+
+- Resume completed the stored steps but re-ran GlobalRouting and **failed** with
+  `GRT-0116: Global routing finished with congestion` at the 700×700 µm die.
+- Earlier attempt without skips stalled >1 h in `OpenROAD.ResizerTimingPostCTS` on the
+  −9 ns path. Both attempts are documented in `openlane/README.md`.
+- Root cause: ~1,100 top-level pins (484-bit `raw_order_data`, 512-bit `raw_payload`)
+  on a 700 µm die. The standard-cell area is not the blocker.
+- Consequence: no post-route STA, DRC or LVS result; roadmap now requires a narrow
+  physical wrapper (32-bit host port + snapshot read) and a fitted/larger die.
+- Errata E1 and README evidence updated; no success claim.
+
 ## 2026-11-04 08:25 - Autonomy tick + LibreLane run resumed
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**. CI on `04be438`

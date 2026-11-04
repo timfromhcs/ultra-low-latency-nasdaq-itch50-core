@@ -60,10 +60,23 @@ docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel `
 node scripts/openlane_summary.mjs openlane/runs/sky130-250mhz-sta
 ```
 
+## Full-flow attempts (best effort, no success claim)
+
+| Attempt | Result |
+|---|---|
+| 3.10 ns, all steps | Post-CTS resizer (`OpenROAD.ResizerTimingPostCTS`) ran >1 h on the −9.14 ns path without progress; killed. |
+| 3.10 ns, resizer steps skipped | Reached **GlobalRouting**, which **failed with congestion** (GRT-0116) at the 700×700 µm die with the full 1,100-pin interface (484-bit `raw_order_data`, 512-bit `raw_payload`, …). |
+
+The pin count of the debug interface, not the standard-cell area, is the blocker: the
+design needs roughly 1,100 top-level pins on a 700 µm die. A physical run needs a
+narrow wrapper (e.g. a 32-bit host port plus the snapshot read port) and a larger or
+fitted die — that is follow-up work, not a timing result. **No P&R, DRC or LVS result
+exists for this design.**
+
 ## Running this design
 
 ```powershell
-docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-pdk:/root/.volare `
+docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel `
   ghcr.io/librelane/librelane:3.0.17 librelane openlane/sky130.json
 ```
 
@@ -71,8 +84,8 @@ docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-pdk:/root/.volare 
 a wide design (484-bit raw record + 512-bit payload), so expect a long run and a large
 pin count; the die area in `sky130.json` is a starting point, not a fitted floorplan.
 
-The configurations have **not** been run through the full flow yet; only the smoke
-test is verified. Commit only the small JSON/report summaries, never the run
+Only the smoke test and the pre-PnR STA runs are verified; the full flow has not
+completed (see above). Commit only the small JSON/report summaries, never the run
 directories (`runs/` and `openlane/runs/` are git-ignored).
 
 After a run, extract the small summary:

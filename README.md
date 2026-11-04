@@ -234,7 +234,7 @@ Reports live in [`reports/`](reports/).
 | Mold back-pressure | **329 bytes under random `m_axis_tready`, no loss or reordering** | `tb/test_mold_pipeline.py` |
 | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
 | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; risk limits | `tb/test_book.py` |
-| LibreLane toolchain | **3.0.17 smoke test: Classic 80/80, DRC ✅, LVS ✅** (not a sign-off of this design) | `openlane/README.md` |
+| LibreLane toolchain | **3.0.17 smoke test: Classic 80/80, DRC ✅, LVS ✅**; full P&R blocked by ~1,100-pin congestion (no sign-off) | `openlane/README.md` |
 | Sky130 pre-PnR STA | **250 MHz WNS −8.27 ns · 322 MHz WNS −9.14 ns · Fmax ≈ 81.5 MHz**; worst path FF → `raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
 | GF180 pre-PnR STA | **322 MHz WNS −19.87 ns · Fmax ≈ 43.5 MHz**; worst path FF → `raw_order_data[260]` (ss/125 °C, pre-PnR) | `reports/openlane_gf180-sta.json` |
 | IHP SG13G2 pre-PnR STA | **322 MHz WNS −3.08 ns · Fmax ≈ 161.9 MHz**; hold WNS −0.052 ns; worst path FF → FF (slow/125 °C, pre-PnR) | `reports/openlane_ihp-sta.json` |

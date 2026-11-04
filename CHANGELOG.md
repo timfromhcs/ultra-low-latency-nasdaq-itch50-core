@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Full-flow status**: two LibreLane sky130 attempts are documented in
+  `openlane/README.md`: without skips the post-CTS resizer stalls >1 h on the −9 ns
+  path; with the resizer steps skipped, GlobalRouting fails with GRT-0116 congestion
+  at 700×700 µm. Root cause is the ~1,100-pin debug interface, not cell area. No
+  post-route STA/DRC/LVS result exists; a narrow physical wrapper is the follow-up.
 - **IHP SG13G2 pre-PnR STA**: slow-corner setup WNS **−3.08 ns** at 3.10 ns (Fmax
   **≈161.9 MHz**) and a small hold violation (WNS −0.052 ns); worst path FF → FF.
   Pre-PnR only. `reports/openlane_ihp-sta.json`.
