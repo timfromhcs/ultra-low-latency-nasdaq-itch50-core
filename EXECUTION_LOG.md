@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 12:05 - 32-bit wrapper pre-PnR STA + full-flow attempt
+
+- Added `openlane/sky130_wrap32.json` (wishbone wrapper, `SYNTH_PARAMETERS:
+  ["DATA_WIDTH=32"]`, 700 µm, 50 % density). `SYNTH_PARAMETERS` must be a list, not a
+  mapping — fixed after the first attempt was rejected.
+- `wrap32-sta`: **WNS −6.55 ns** at 3.10 ns (ss), Fmax **103.67 MHz**, worst path
+  FF → FF; published `reports/openlane_wrap32-sta.json`.
+- Started `wrap32-full` (resizer skips) at ~80 pins to try for routing/DRC/LVS.
+
 ## 2026-11-04 11:49 - Autonomy tick + 32-bit ingress verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.

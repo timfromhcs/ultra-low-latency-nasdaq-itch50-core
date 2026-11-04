@@ -45,6 +45,7 @@ python3 -m librelane --dockerized --smoke-test     # or: make librelane-smoke
 | 3.10 ns, GF180 (ss/125 °C) | **−19.87 ns** | — | **43.54 MHz** |
 | 3.10 ns, IHP SG13G2 (slow/125 °C) | **−3.08 ns** | — | **161.9 MHz** |
 | 3.10 ns, wrapper (ss/100 °C) | **−8.62 ns** | — | **85.34 MHz** |
+| 3.10 ns, wrapper 32-bit ingress | **−6.55 ns** | — | **103.67 MHz** |
 
 IHP also shows a small hold violation (WNS −0.052 ns). All values are pre-PnR. The
 wrapper (`itch_host_wrap`, 32-bit host port instead of the debug bus) removes the

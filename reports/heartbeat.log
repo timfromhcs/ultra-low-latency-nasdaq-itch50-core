@@ -2731,3 +2731,374 @@ Tick 09:59 abgeschlossen.
 - **Weiterhin blockiert**: vollst├ñndiges P&R/DRC/LVS (Clock-Planung + Floorplan n├Âtig), FPGA-Target, vollst├ñndige Caravel-Harness-Integration, PCIe/100G, optionaler Shuttle.
 [2026-11-04T11:49:38.9265573+01:00] hallo, es ist 11:49
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 5; node scripts\gate.mjs 2>&1 | 
+Select-Object -Last 2; git status -sb | Select-Object -First 4
+[tick] ran 0, failed 0
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+## main...origin/main
+ M reports/heartbeat.log
+ M reports/sbom.json
+ M reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git log --oneline -3; rg -n "DATA_WIDTH|127:0|15:0" rtl/itch_host_wrap.sv 
+rtl/itch_wishbone_wrap.sv | Select-Object -First 20
+b108f25 feat(rtl): Caravel-style Wishbone wrapper for the host register file
+ac3341f docs: record verified keyless signing of npm/PyPI artifacts
+cdf9110 ci: keyless blob signatures for npm/PyPI artifacts + verification workflow
+rtl/itch_wishbone_wrap.sv:22:  input  wire [127:0] s_axis_tdata,
+rtl/itch_wishbone_wrap.sv:23:  input  wire [15:0]  s_axis_tkeep,
+rtl/itch_host_wrap.sv:12://     2  {8'b0, last_type[7:0], 8'b0, last_locate[15:0]}
+rtl/itch_host_wrap.sv:36:  input  wire [127:0] s_axis_tdata,
+rtl/itch_host_wrap.sv:37:  input  wire [15:0]  s_axis_tkeep,
+rtl/itch_host_wrap.sv:48:  wire [15:0] msg_locate;
+rtl/itch_host_wrap.sv:59:  reg [15:0] last_locate;
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_host_wrap.sv
+Index: rtl/itch_host_wrap.sv
+===================================================================
+--- rtl/itch_host_wrap.sv
++++ rtl/itch_host_wrap.sv
+@@ -8,9 +8,9 @@
+ //
+ //   Host register map (word address, 32-bit):
+ //     0  status_msg_count
+ //     1  status_corrupt_count
+-//     2  {8'b0, last_type[7:0], 8'b0, last_locate[15:0]}
++//     2  {last_type[7:0], 8'b0, last_locate[15:0]}
+ //     3  last_price
+ //     4  last_shares[31:0]
+ //     5  last_shares[63:32]
+ //     6  last_ref[31:0]
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_host_wrap.sv
+Index: rtl/itch_host_wrap.sv
+===================================================================
+--- rtl/itch_host_wrap.sv
++++ rtl/itch_host_wrap.sv
+@@ -28,14 +28,16 @@
+ `define ITCH_HOST_WRAP_SV
+ 
+ `include "itch_pkg.sv"
+ 
+-module itch_host_wrap (
++module itch_host_wrap #(
++  parameter DATA_WIDTH = 128
++)(
+   input  wire         clk,
+   input  wire         rst_n,
+ 
+-  input  wire [127:0] s_axis_tdata,
+-  input  wire [15:0]  s_axis_tkeep,
++  input  wire [DATA_WIDTH-1:0]       s_axis_tdata,
++  input  wire [(DATA_WIDTH/8)-1:0]   s_axis_tkeep,
+   input  wire         s_axis_tvalid,
+   input  wire         s_axis_tlast,
+   output wire         s_axis_tready,
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_host_wrap.sv
+Index: rtl/itch_host_wrap.sv
+===================================================================
+--- rtl/itch_host_wrap.sv
++++ rtl/itch_host_wrap.sv
+@@ -66,9 +66,11 @@
+   reg        last_corrupt;
+   reg [31:0] updates;
+ 
+   /* verilator lint_off PINCONNECTEMPTY */
+-  ultra_low_latency_nasdaq_itch50_cutthrough u_parse (
++  ultra_low_latency_nasdaq_itch50_cutthrough #(
++    .DATA_WIDTH(DATA_WIDTH)
++  ) u_parse (
+     .clk(clk),
+     .rst_n(rst_n),
+     .s_axis_tdata(s_axis_tdata),
+     .s_axis_tkeep(s_axis_tkeep),
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_wishbone_wrap.sv
+Index: rtl/itch_wishbone_wrap.sv
+===================================================================
+--- rtl/itch_wishbone_wrap.sv
++++ rtl/itch_wishbone_wrap.sv
+@@ -14,14 +14,16 @@
+ 
+ `ifndef ITCH_WISHBONE_WRAP_SV
+ `define ITCH_WISHBONE_WRAP_SV
+ 
+-module itch_wishbone_wrap (
++module itch_wishbone_wrap #(
++  parameter DATA_WIDTH = 128
++)(
+   input  wire         clk,
+   input  wire         rst_n,
+ 
+-  input  wire [127:0] s_axis_tdata,
+-  input  wire [15:0]  s_axis_tkeep,
++  input  wire [DATA_WIDTH-1:0]     s_axis_tdata,
++  input  wire [(DATA_WIDTH/8)-1:0] s_axis_tkeep,
+   input  wire         s_axis_tvalid,
+   input  wire         s_axis_tlast,
+   output wire         s_axis_tready,
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_wishbone_wrap.sv
+Index: rtl/itch_wishbone_wrap.sv
+===================================================================
+--- rtl/itch_wishbone_wrap.sv
++++ rtl/itch_wishbone_wrap.sv
+@@ -42,9 +42,11 @@
+ 
+   // The register file is read-only; the write data/select are accepted but unused.
+   wire _unused = &{1'b0, wb_dat_w, wb_sel};
+ 
+-  itch_host_wrap u_host (
++  itch_host_wrap #(
++    .DATA_WIDTH(DATA_WIDTH)
++  ) u_host (
+     .clk(clk),
+     .rst_n(rst_n),
+     .s_axis_tdata(s_axis_tdata),
+     .s_axis_tkeep(s_axis_tkeep),
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_wishbone.py
+Index: tb/test_wishbone.py
+===================================================================
+--- tb/test_wishbone.py
++++ tb/test_wishbone.py
+@@ -10,9 +10,9 @@
+ from cocotb.triggers import RisingEdge, Timer
+ 
+ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+ 
+-DATA_BYTES = 16
++DATA_BYTES = int(os.environ.get("ITCH_BEAT_BYTES", "16"))
+ STOCK = b"AAPL    "
+ 
+ 
+ def hdr(t, locate, idx):
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/run_wishbone32_cocotb.py
+Created file successfully: tb/run_wishbone32_cocotb.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_wishbone32_cocotb.py > /tmp/wb32.txt 2>&1"; 
+wsl -d Ubuntu bash -lc "grep -E 'Wishbone:|TESTS=|Assertion|error:' /tmp/wb32.txt | tail -6"
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+    127.10ns INFO     cocotb.itch_wishbone_wrap          Wishbone: 2 messages, type X, locate 7, shares 50, ref 
+round-trip PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                127.10          
+ 0.01      11041.35  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -85,8 +85,9 @@
+ 	$(PYTHON) tb/run_metrics_cocotb.py
+ 	$(PYTHON) tb/run_snapshot_cocotb.py
+ 	$(PYTHON) tb/run_host_wrap_cocotb.py
+ 	$(PYTHON) tb/run_wishbone_cocotb.py
++	$(PYTHON) tb/run_wishbone32_cocotb.py
+ 	$(PYTHON) tb/run_skid_cocotb.py
+ 
+ synth-book:
+ 	./scripts/synth_book.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -45,8 +45,9 @@
+           python3 tb/run_metrics_cocotb.py  
+           python3 tb/run_snapshot_cocotb.py 
+           python3 tb/run_host_wrap_cocotb.py 
+           python3 tb/run_wishbone_cocotb.py  
++          python3 tb/run_wishbone32_cocotb.py
+           python3 tb/run_skid_cocotb.py     
+ 
+   wasm-web:
+     name: WASM + backend + MCP + Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -259,8 +259,9 @@
+ | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | 
+`tb/run_book_top_skid_cocotb.py` |
+ | Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
+ | Narrow host wrapper | **128-bit ingress ÔåÆ 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** 
+| `tb/test_host_wrap.py` |
+ | Wishbone wrapper | **Caravel-style Wishbone reads of msg count/type/locate/shares/ref; writes ACK but are ignored** 
+| `tb/test_wishbone.py` |
++| 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow 
+port) | `tb/run_wishbone32_cocotb.py` |
+ | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | 
+`tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
+ | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the 
+parserÔåÆBBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+ | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | 
+`reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |
+ | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all 
+`d2b5f58fÔÇª`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -172,8 +172,10 @@
+ - [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+ - [x] Caravel management path: `itch_wishbone_wrap` exposes the host register file
+       through a classic Wishbone slave (1-cycle ACK, read-only, writes ignored);
+       test drives two messages and reads count/type/locate/shares/ref over Wishbone.
++- [x] 32-bit ingress variant: `DATA_WIDTH` parameter verified through parser + Wishbone
++      (`tb/run_wishbone32_cocotb.py`) ÔÇö the width a Caravel `io_in` stream would use.
+ - [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
+ - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
+       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
+       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -23,10 +23,11 @@
+ | Asynchronous bypass (`raw_*`) | same cycle as the window register | Lowest latency, requires a tight downstream 
+capture stage |
+ 
+ ## 2. Feature summary
+ 
+-- 128-bit AXI4-Stream ingress with `tkeep`/`tlast`, unaligned message boundaries
+-  resolved across beats by a 512-bit sliding window.
++- 128-bit AXI4-Stream ingress (the `DATA_WIDTH` parameter also supports 32-bit
++  ingress, verified through the Wishbone wrapper), with `tkeep`/`tlast`, unaligned
++  message boundaries resolved across beats by a 512-bit sliding window.
+ - All 22 ITCH 5.0 opcodes decoded, including the administrative/reference set
+   (`S R H Y L V W K J h`) and the trading set (`A F E C X D U P Q B N`).
+ - Full payload preserved (`m_payload[511:0]`, `m_msg_len[7:0]`); corrupt or
+   truncated messages are flagged (`m_error_corrupt`) and counted
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -57,13 +57,15 @@
+ 4. **Corrupt messages still pulse `m_axis_order_valid`.** Filter on
+    `!m_error_corrupt` if you index tables with their fields, or count them as drops
+    (the book does exactly that).
+ 
+-**Narrow physical wrapper:** `itch_host_wrap` keeps the 128-bit AXI4-Stream ingress
+-and replaces the wide debug record bus with a 32-bit host register port (counters,
+-last message type/locate/price/shares/ref, valid/corrupt flags). Use it for
+-place-and-route runs where the ~1,100-pin debug bus would cause pin congestion. Word
+-map is in the module header; `openlane/sky130_wrap.json` targets it.
++**Narrow physical wrapper:** `itch_host_wrap` keeps the AXI4-Stream ingress
++(`DATA_WIDTH` 128 by default, 32 verified) and replaces the wide debug record bus with
++a 32-bit host register port (counters, last message type/locate/price/shares/ref,
++valid/corrupt flags). Use it for place-and-route runs where the ~1,100-pin debug bus
++would cause pin congestion; `itch_wishbone_wrap` exposes the same registers over a
++classic Wishbone slave for Caravel-style management. Word map is in the module header;
++`openlane/sky130_wrap.json` targets it.
+ 
+ ## 3. Parser + book
+ 
+ ```systemverilog
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,12 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **32-bit ingress verified**: `DATA_WIDTH` is a real parameter, not 128-only. The
++  Wishbone wrapper built with `-Pitch_wishbone_wrap.DATA_WIDTH=32` runs the same test
++  (2 messages, type/locate/shares/ref read back) ÔåÆ PASS. That is the width a Caravel
++  `io_in` stream or a narrow FPGA port would use.
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-04 11:49 - Autonomy tick + 32-bit ingress verified
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
++- Parameterized `DATA_WIDTH` in `itch_host_wrap`/`itch_wishbone_wrap` (was hardcoded
++  128) and added `tb/run_wishbone32_cocotb.py`: build with
++  `-Pitch_wishbone_wrap.DATA_WIDTH=32`, same Wishbone test. **PASS** ÔÇö 36-byte
++  messages across 9 beats, fields read back correctly. This is the width a Caravel
++  `io_in` stream or narrow FPGA port would use.
++- Wired into `make cocotb` and CI; README/datasheet/integration guide/roadmap updated.
++
+ ## 2026-11-04 10:35 - Caravel-style Wishbone wrapper
+ 
+ - Added `rtl/itch_wishbone_wrap.sv`: host register file exposed through a classic
+   Wishbone slave (1-cycle ACK, read-only; writes ACK but are ignored), AXI4-Stream
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -cE 'Warning-|Error'; echo LINT_DONE; 
+make cocotb > /tmp/allcocotb5.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -c 'FAIL=0' /tmp/allcocotb5.txt; grep -E 
+'TESTS=' /tmp/allcocotb5.txt | sed -E 's/.*TESTS=([0-9]+) PASS=([0-9]+) FAIL=([0-9]+).*/T=\1 P=\2 F=\3/' | tr '\n' ' '"
+0
+LINT_DONE
+16
+T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 
+F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "feat(rtl): 
+parameterize DATA_WIDTH and verify 32-bit ingress through the Wishbone wrapper" 2>&1 | Select-Object -Last 1; git push 
+origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_wishbone.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/run_wishbone32_cocotb.py', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 tb/run_wishbone32_cocotb.py
+   b108f25..9adbb00  main -> main

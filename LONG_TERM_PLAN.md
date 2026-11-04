@@ -116,9 +116,11 @@ MDN PWA best practices, GitHub Actions docs.
       test passes (2 messages, type/locate/shares/ref read back), lint clean.
 - [x] Wrapper pre-PnR STA: **WNS −8.62 ns at 3.10 ns** (ss), Fmax **85.34 MHz**, worst
       path FF → FF; the debug-bus endpoint is gone (`reports/openlane_wrap-sta.json`).
-- [ ] Full P&R of the wrapper: **blocked by placement/routing stability** — 700 µm
-      fails GlobalRouting congestion, 1400 µm diverges in GlobalPlacement (GPL-0305)
-      with the 1,533-terminal clock; needs clock planning/fitted floorplan.
+- [x] 32-bit wrapper config: `openlane/sky130_wrap32.json` (`SYNTH_PARAMETERS:
+      ["DATA_WIDTH=32"]`) → pre-PnR **WNS −6.55 ns**, Fmax **103.67 MHz**, worst path
+      FF → FF (`reports/openlane_wrap32-sta.json`).
+- [ ] Full P&R: the 128-bit wrapper fails GlobalRouting congestion (700 µm) / GPL-0305
+      divergence (1400 µm); a 32-bit-wrapper attempt (`wrap32-full`) is in progress.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
