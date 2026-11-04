@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 09:30 - Reproducible Python packaging
+
+- `scripts/repro_python.sh` (+ `make repro-python`): builds wheel + sdist twice with
+  `SOURCE_DATE_EPOCH=1700000000`, normalizes the sdist container, compares SHA-256.
+- Result **PASS**: wheel `1718b877…` twice; sdist `8814fdcf…` twice after
+  `scripts/normalize_sdist.sh` (sorted members, fixed mtime, numeric owner, `gzip -n`).
+  Without normalization the sdist differs only in generated-file mtimes.
+- `release.yml` packages job now sets `SOURCE_DATE_EPOCH` and normalizes the sdist
+  before staging; README/roadmap updated (`reports/repro_python.json`).
+
 ## 2026-11-04 09:10 - Autonomy tick + wrapper pre-PnR STA
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.

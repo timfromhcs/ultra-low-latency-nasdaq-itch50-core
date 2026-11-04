@@ -171,14 +171,18 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+- [x] Reproducible Python packaging: `scripts/repro_python.sh` builds the wheel and
+      sdist twice with `SOURCE_DATE_EPOCH=1700000000`; the wheel is byte-identical and
+      the sdist is byte-identical after `scripts/normalize_sdist.sh` (fixed order,
+      mtime, owner, no gzip timestamp). `release.yml` applies both. Artifact:
+      `reports/repro_python.json`.
 - [x] Docker supply chain: `provenance: mode=max` + SBOM attestation + **keyless
       cosign signature** (`docker-publish.yml`, `id-token: write`).
 - [x] WASM reproducible build: `wasm-core/rust-toolchain.toml` pins rustc 1.98.1 and
       the shipped binary (`web/wasm`, `public/wasm`, `packages/npm/wasm`) is rebuilt
       from it. `scripts/repro_wasm.sh` (`make repro-wasm`) → two clean builds and the
       committed artifact are all `d2b5f58f…` (50,322 bytes), **matchesCommitted: true**.
-- [ ] cosign/sigstore signatures for npm/PyPI artifacts; reproducible EXE/Python
-      packaging.
+- [ ] cosign/sigstore signatures for npm/PyPI artifacts.
 - [x] Mutation: 9 parser→BBO mutants killed (`tools/mutate_book.py`,
       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
 - [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,

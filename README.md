@@ -250,6 +250,7 @@ Reports live in [`reports/`](reports/).
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
 | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker provenance `mode=max` + SBOM + **keyless cosign signature** | `reports/sbom.json`, `release.yml`, `docker-publish.yml` |
 | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all `d2b5f58f…`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+| Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | `reports/repro_python.json`, `scripts/repro_python.sh` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
 | Docker image | builds and serves `/api/health` | `Dockerfile` |

@@ -1538,3 +1538,181 @@ ihp-sta            03.11.2026 23:13:56
 chiplab-sky130-nor 03.11.2026 23:28:39
 [2026-11-04T08:59:19.4802084+01:00] hallo, es ist 08:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 5; node scripts\openlane_summary.mjs 
+openlane\runs\wrap-sta 2>&1 | Select-Object -Last 12
+[tick] ran 0, failed 0
+  (none)
+derived:
+  clockPeriodNs = 3.1
+  fmaxEstimateMHz = 85.34
+  timingClosed = false
+worst path:
+  file = openlane/runs/wrap-sta/12-openroad-staprepnr/nom_ss_100C_1v60/max.rpt
+  startpoint = _29667_ (rising edge-triggered flip-flop clocked by clk)
+  endpoint = _29700_ (rising edge-triggered flip-flop clocked by clk)
+  pathGroup = clk
+  slackNs = -8.6178790987076
+wrote reports/openlane_wrap-sta.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; Get-Item 
+reports\openlane_wrap-sta.json | Select-Object Length
+PASS vercel-api (261 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+
+Length
+------
+  6451
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel 
+ghcr.io/librelane/librelane:3.0.17 librelane --run-tag wrap-full --skip OpenROAD.ResizerTimingPostCTS --skip 
+OpenROAD.ResizerTimingPostGRT openlane/sky130_wrap.json > $env:TEMP\opencode\librelane_wrap_full.log 2>&1; 
+"RC=$LASTEXITCODE" | Out-File -Append $env:TEMP\opencode\librelane_wrap_full.log
+Command moved to the background (shell ID: sh_1a592655d001YgxOC46Igk6gCC).
+Output is streaming to: 
+C:\Users\hcsme\.local\share\opencode\shell\e4621e381242949174fc78ea4ba2c23bf97dac84\sh_1a592655d001YgxOC46Igk6gCC.out
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -237,8 +237,9 @@
+ | LibreLane toolchain | **3.0.17 smoke test: Classic 80/80, DRC Ô£à, LVS Ô£à**; full P&R blocked by ~1,100-pin 
+congestion (no sign-off) | `openlane/README.md` |
+ | Sky130 pre-PnR STA | **250 MHz WNS ÔêÆ8.27 ns ┬À 322 MHz WNS ÔêÆ9.14 ns ┬À Fmax Ôëê 81.5 MHz**; worst path FF ÔåÆ 
+`raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
+ | GF180 pre-PnR STA | **322 MHz WNS ÔêÆ19.87 ns ┬À Fmax Ôëê 43.5 MHz**; worst path FF ÔåÆ `raw_order_data[260]` 
+(ss/125 ┬░C, pre-PnR) | `reports/openlane_gf180-sta.json` |
+ | IHP SG13G2 pre-PnR STA | **322 MHz WNS ÔêÆ3.08 ns ┬À Fmax Ôëê 161.9 MHz**; hold WNS ÔêÆ0.052 ns; worst path FF ÔåÆ 
+FF (slow/125 ┬░C, pre-PnR) | `reports/openlane_ihp-sta.json` |
++| Wrapper pre-PnR STA | **322 MHz WNS ÔêÆ8.62 ns ┬À Fmax Ôëê 85.3 MHz**; worst path FF ÔåÆ FF, no debug bus (ss, 
+pre-PnR) | `reports/openlane_wrap-sta.json` |
+ | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -43,10 +43,13 @@
+ | 4.00 ns (250 MHz) | **ÔêÆ8.27 ns** | ÔêÆ22,463 ns | **81.47 MHz** |
+ | 3.10 ns (322 MHz) | **ÔêÆ9.14 ns** | ÔêÆ25,193 ns | Ôëê81.6 MHz |
+ | 3.10 ns, GF180 (ss/125 ┬░C) | **ÔêÆ19.87 ns** | ÔÇö | **43.54 MHz** |
+ | 3.10 ns, IHP SG13G2 (slow/125 ┬░C) | **ÔêÆ3.08 ns** | ÔÇö | **161.9 MHz** |
++| 3.10 ns, wrapper (ss/100 ┬░C) | **ÔêÆ8.62 ns** | ÔÇö | **85.34 MHz** |
+ 
+-IHP also shows a small hold violation (WNS ÔêÆ0.052 ns). All values are pre-PnR.
++IHP also shows a small hold violation (WNS ÔêÆ0.052 ns). All values are pre-PnR. The
++wrapper (`itch_host_wrap`, 32-bit host port instead of the debug bus) removes the
++`raw_payload` endpoint from the critical path; the worst path is now FF ÔåÆ FF.
+ 
+ Worst path in both: a shifter-counter flip-flop ÔåÆ `raw_payload[0]` (the asynchronous
+ bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
+ depth. **Pre-PnR only ÔÇö no placement/routing, no sign-off.**
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -113,8 +113,10 @@
+       `raw_payload`). Needs a narrow physical wrapper and a fitted/larger die.
+ - [x] Narrow physical wrapper `itch_host_wrap` (128-bit AXI4-Stream ingress, 32-bit
+       host register port with counters + last-message fields, no debug payload bus):
+       test passes (2 messages, type/locate/shares/ref read back), lint clean.
++- [x] Wrapper pre-PnR STA: **WNS ÔêÆ8.62 ns at 3.10 ns** (ss), Fmax **85.34 MHz**, worst
++      path FF ÔåÆ FF; the debug-bus endpoint is gone (`reports/openlane_wrap-sta.json`).
+ - [ ] Full P&R of the wrapper (`openlane/sky130_wrap.json`) + DRC/LVS/post-route STA.
+ - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
+       250 MHz ÔåÆ **WNS ÔêÆ8.27 ns**, 322 MHz ÔåÆ **WNS ÔêÆ9.14 ns**, both ss/100C/1.60 V;
+       Fmax estimate **Ôëê81.5 MHz**, worst path `_35427_` ÔåÆ `raw_payload[0]`.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-04 08:59 - Autonomy tick + wrapper pre-PnR STA
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
++- `wrap-sta` completed: setup **WNS ÔêÆ8.62 ns** at 3.10 ns (ss/100 ┬░C), Fmax estimate
++  **85.34 MHz**, worst path FF ÔåÆ FF (the `raw_payload` endpoint is gone).
++  Published `reports/openlane_wrap-sta.json`.
++- Started the full wrapper flow `wrap-full` with the resizer steps skipped, to try for
++  routing/DRC/LVS (the debug-bus run failed global routing with congestion).
++
+ ## 2026-11-04 09:05 - Narrow host wrapper for physical runs
+ 
+ - Added `rtl/itch_host_wrap.sv`: 128-bit AXI4-Stream ingress, 32-bit host register
+   port (msg/corrupt/byte counters, last type/locate/price/shares/ref, valid/corrupt,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,9 +258,9 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
+-## 2026-11-04 08:59 - Autonomy tick + wrapper pre-PnR STA
++## 2026-11-04 09:10 - Autonomy tick + wrapper pre-PnR STA
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+ - `wrap-sta` completed: setup **WNS ÔêÆ8.62 ns** at 3.10 ns (ss/100 ┬░C), Fmax estimate
+   **85.34 MHz**, worst path FF ÔåÆ FF (the `raw_payload` endpoint is gone).
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,11 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **Wrapper pre-PnR STA**: `openlane/sky130_wrap.json` gives ss-corner setup
++  **WNS ÔêÆ8.62 ns** at 3.10 ns (Fmax **Ôëê85.3 MHz**), worst path FF ÔåÆ FF; the
++  `raw_payload` endpoint is gone. Pre-PnR only. `reports/openlane_wrap-sta.json`.
+ - **Narrow physical wrapper** (`rtl/itch_host_wrap.sv`): keeps the 128-bit AXI4-Stream
+   ingress and exposes a 32-bit host register port (message/corrupt/byte counters, last
+   type/locate/price/shares/ref, valid/corrupt flags, updates) instead of the ~1,100-pin
+   debug bus, so the design can be placed and routed. Test: two messages, type/locate/
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs(openlane): publish wrapper pre-PnR STA (WNS -8.62 ns, Fmax 
+85.3 MHz)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/openlane_wrap-sta.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 reports/openlane_wrap-sta.json
+   1ab6b1d..f17a962  main -> main

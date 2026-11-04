@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Reproducible Python packaging**: `scripts/repro_python.sh` builds wheel + sdist
+  twice with `SOURCE_DATE_EPOCH=1700000000`; the wheel is byte-identical and the sdist
+  is byte-identical after `scripts/normalize_sdist.sh` (sorted members, fixed mtime,
+  numeric owner, `gzip -n`). `release.yml` sets the epoch and normalizes the sdist
+  before staging. Result PASS, `reports/repro_python.json`.
 - **Wrapper pre-PnR STA**: `openlane/sky130_wrap.json` gives ss-corner setup
   **WNS −8.62 ns** at 3.10 ns (Fmax **≈85.3 MHz**), worst path FF → FF; the
   `raw_payload` endpoint is gone. Pre-PnR only. `reports/openlane_wrap-sta.json`.

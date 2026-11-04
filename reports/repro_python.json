@@ -1,0 +1,8 @@
+{
+  "generatedAt": "2026-11-04T08:02:59Z",
+  "sourceDateEpoch": 1700000000,
+  "python": "3.14.4",
+  "wheel": { "buildA": "1718b87715d0941afc90b5432ef754101b7e3b69cdc32eddccbff87c10fcad0a", "buildB": "1718b87715d0941afc90b5432ef754101b7e3b69cdc32eddccbff87c10fcad0a", "same": true },
+  "sdist": { "buildA": "8814fdcff6e8d05d3210463c319aab0f23fbb38b1665c158526e4d79e2800035", "buildB": "8814fdcff6e8d05d3210463c319aab0f23fbb38b1665c158526e4d79e2800035", "same": true, "normalized": true },
+  "status": "PASS"
+}
