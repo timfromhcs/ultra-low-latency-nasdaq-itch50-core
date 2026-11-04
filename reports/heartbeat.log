@@ -1385,3 +1385,154 @@ Zwischenstand (Tick 22:59):
 - **Physische L├ñufe**:
   - 322-MHz-Vollrun l├ñuft seit ~58 min, aktuell Step 37/80 (Post-CTS-Resizer), Pre-PnR-STA-Zwischenstand: **Setup-WNS ÔêÆ9,14 ns (ss), TNS ÔêÆ25.193 ns** ÔåÆ keine Timing-Schlie├ƒung bei 3,10 ns, wie im Errata dokumentiert.
   - 250-MHz-Pre-PnR-STA-Lauf (`--to OpenROAD.STAPrePNR`) l├ñuft; Ergebnis wird als N├ñchstes in `reports/openlane_250mhz.json` publiziert.
+[2026-11-03T23:59:19.4019768+01:00] hallo, es ist 23:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T00:59:18.8958314+01:00] hallo, es ist 00:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T01:59:23.6626976+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T02:59:20.8424497+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T03:59:18.8910452+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T04:59:18.9107632+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T05:59:18.9198842+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T06:59:23.4026412+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
+opencode.exe : [91m[1mError: [0mBackground service failed to start
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([91m[1mError:...failed to start:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-11-04T08:25:38.4528494+01:00] hallo, es ist 08:25
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 6; git status -sb | Select-Object 
+-First 5; docker ps --format "{{.Status}} {{.Command}}" failed
+[91m[1mError: [0mInteraction cancelled because the location shut down
+[91m[1mError: [0mStep interrupted
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 6; git status -sb | Select-Object 
+-First 6; git log --oneline -2
+[tick] ran 0, failed 0
+## main...origin/main
+ M reports/heartbeat.log
+04be438 build: pin rustc 1.98.1 and ship the reproducible WASM binary
+2557475 build: reproducible WASM check (two clean builds byte-identical)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker ps --format "{{.Status}} {{.Command}}"; Get-ChildItem openlane\runs -Directory 
+-ErrorAction SilentlyContinue | Select-Object Name; if (Test-Path openlane\runs\chiplab-sky130-nor) { (Get-ChildItem 
+openlane\runs\chiplab-sky130-nor -Directory | Measure-Object).Count }
+failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if 
+the daemon is running: open //./pipe/dockerDesktopLinuxEngine: Das System kann die angegebene Datei nicht finden.
+
+Name              
+----              
+chiplab-sky130    
+chiplab-sky130-nor
+gf180-sta         
+ihp-sta           
+sky130-250mhz-sta 
+39
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\chiplab-sky130-nor -Directory | Select-Object -Last 6 Name; 
+Test-Path openlane\runs\chiplab-sky130-nor\final\metrics.json; Get-Content openlane\runs\chiplab-sky130-nor\flow.log 
+-Tail 4
+Name                         
+----                         
+34-openroad-detailedplacement
+35-openroad-cts              
+36-openroad-stamidpnr-1      
+37-openroad-stamidpnr-2      
+38-openroad-globalrouting    
+tmp                          
+False
+Logging subprocess to [repr.filename]'openlane/runs/chiplab-sky130-nor/38-openroad-globalrouting/openroad-globalrouting
+.log'[/repr.filename]´┐¢?´┐¢
+[GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_clk
+[GRT-0273] Disabled NDR (to reduce congestion) for net: clk
+[GRT-0116] Global routing finished with congestion. Check the congestion regions in the DRC Viewer.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue; Start-Sleep 
+-Seconds 90; docker info 2>&1 | Select-String -Pattern "Server Version|Operating System" | Select-Object -First 2
+Server Version: 29.6.1
+ Operating System: Docker Desktop (containerized)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs -Directory | Sort-Object LastWriteTime | Select-Object 
+Name,LastWriteTime
+Name               LastWriteTime      
+----               -------------      
+chiplab-sky130     03.11.2026 22:14:21
+sky130-250mhz-sta  03.11.2026 23:07:06
+gf180-sta          03.11.2026 23:12:05
+ihp-sta            03.11.2026 23:13:56
+chiplab-sky130-nor 03.11.2026 23:28:39

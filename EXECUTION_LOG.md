@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 08:25 - Autonomy tick + LibreLane run resumed
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**. CI on `04be438`
+  (pinned rustc + rebuilt WASM) **green**.
+- The host restart stopped Docker and killed the skipped full run. The run directory
+  `chiplab-sky130-nor` had reached **step 38 (global routing)** and completed it
+  ("finished with congestion").
+- First resume attempt (`--last-run` without a config) failed with "No config file(s)
+  have been provided"; re-ran with `--last-run openlane/sky130.json` plus the same
+  `--skip` flags. LibreLane logs "Using existing run at 'chiplab-sky130-nor'" and
+  continues from global routing.
+
 ## 2026-11-04 00:25 - WASM reproducible-build check
 
 - Added `scripts/repro_wasm.sh` (+ `make repro-wasm`): builds `wasm-core` twice into
