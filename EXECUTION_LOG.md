@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 09:10 - Autonomy tick + wrapper pre-PnR STA
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+- `wrap-sta` completed: setup **WNS −8.62 ns** at 3.10 ns (ss/100 °C), Fmax estimate
+  **85.34 MHz**, worst path FF → FF (the `raw_payload` endpoint is gone).
+  Published `reports/openlane_wrap-sta.json`.
+- Started the full wrapper flow `wrap-full` with the resizer steps skipped, to try for
+  routing/DRC/LVS (the debug-bus run failed global routing with congestion).
+
 ## 2026-11-04 09:05 - Narrow host wrapper for physical runs
 
 - Added `rtl/itch_host_wrap.sv`: 128-bit AXI4-Stream ingress, 32-bit host register

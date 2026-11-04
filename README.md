@@ -238,6 +238,7 @@ Reports live in [`reports/`](reports/).
 | Sky130 pre-PnR STA | **250 MHz WNS −8.27 ns · 322 MHz WNS −9.14 ns · Fmax ≈ 81.5 MHz**; worst path FF → `raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
 | GF180 pre-PnR STA | **322 MHz WNS −19.87 ns · Fmax ≈ 43.5 MHz**; worst path FF → `raw_order_data[260]` (ss/125 °C, pre-PnR) | `reports/openlane_gf180-sta.json` |
 | IHP SG13G2 pre-PnR STA | **322 MHz WNS −3.08 ns · Fmax ≈ 161.9 MHz**; hold WNS −0.052 ns; worst path FF → FF (slow/125 °C, pre-PnR) | `reports/openlane_ihp-sta.json` |
+| Wrapper pre-PnR STA | **322 MHz WNS −8.62 ns · Fmax ≈ 85.3 MHz**; worst path FF → FF, no debug bus (ss, pre-PnR) | `reports/openlane_wrap-sta.json` |
 | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
 | Parser → BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
 | A/B feed arbiter | **selection + recovery: request→replay, multi-gap [1..8], abandon on timeout** | `tb/test_arbiter.py` |

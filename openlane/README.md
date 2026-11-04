@@ -44,8 +44,11 @@ python3 -m librelane --dockerized --smoke-test     # or: make librelane-smoke
 | 3.10 ns (322 MHz) | **−9.14 ns** | −25,193 ns | ≈81.6 MHz |
 | 3.10 ns, GF180 (ss/125 °C) | **−19.87 ns** | — | **43.54 MHz** |
 | 3.10 ns, IHP SG13G2 (slow/125 °C) | **−3.08 ns** | — | **161.9 MHz** |
+| 3.10 ns, wrapper (ss/100 °C) | **−8.62 ns** | — | **85.34 MHz** |
 
-IHP also shows a small hold violation (WNS −0.052 ns). All values are pre-PnR.
+IHP also shows a small hold violation (WNS −0.052 ns). All values are pre-PnR. The
+wrapper (`itch_host_wrap`, 32-bit host port instead of the debug bus) removes the
+`raw_payload` endpoint from the critical path; the worst path is now FF → FF.
 
 Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynchronous
 bypass output). The limit is the bypass/decoder combinational cone, not the pipeline

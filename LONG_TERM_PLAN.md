@@ -114,6 +114,8 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] Narrow physical wrapper `itch_host_wrap` (128-bit AXI4-Stream ingress, 32-bit
       host register port with counters + last-message fields, no debug payload bus):
       test passes (2 messages, type/locate/shares/ref read back), lint clean.
+- [x] Wrapper pre-PnR STA: **WNS −8.62 ns at 3.10 ns** (ss), Fmax **85.34 MHz**, worst
+      path FF → FF; the debug-bus endpoint is gone (`reports/openlane_wrap-sta.json`).
 - [ ] Full P&R of the wrapper (`openlane/sky130_wrap.json`) + DRC/LVS/post-route STA.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;

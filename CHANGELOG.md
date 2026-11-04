@@ -74,6 +74,9 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Wrapper pre-PnR STA**: `openlane/sky130_wrap.json` gives ss-corner setup
+  **WNS −8.62 ns** at 3.10 ns (Fmax **≈85.3 MHz**), worst path FF → FF; the
+  `raw_payload` endpoint is gone. Pre-PnR only. `reports/openlane_wrap-sta.json`.
 - **Narrow physical wrapper** (`rtl/itch_host_wrap.sv`): keeps the 128-bit AXI4-Stream
   ingress and exposes a 32-bit host register port (message/corrupt/byte counters, last
   type/locate/price/shares/ref, valid/corrupt flags, updates) instead of the ~1,100-pin
