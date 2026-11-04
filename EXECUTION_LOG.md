@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 10:20 - Physical flow blocked after third attempt
+
+- `wrap-full3` (1400 µm, 50 % density, `PL_TIMING_DRIVEN: 0`) failed GlobalPlacement
+  with GPL-0305 again. Three configurations now fail in three places: resizer stall,
+  GRT-0116 congestion (700 µm), GPL-0305 divergence (1400 µm, both density variants).
+- Conclusion documented in `openlane/README.md`: the design needs clock planning
+  (1,533-terminal clock) and a fitted floorplan/pin plan, not knob tweaks. No P&R,
+  DRC or LVS result exists; pre-PnR STA remains the honest timing evidence.
+
 ## 2026-11-04 10:05 - Reproducible EXE verified
 
 - `scripts/repro_exe.mjs` (Windows): builds `dist/chiplab.exe` twice and compares

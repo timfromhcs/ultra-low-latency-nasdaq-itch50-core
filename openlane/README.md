@@ -71,6 +71,7 @@ node scripts/openlane_summary.mjs openlane/runs/sky130-250mhz-sta
 | 3.10 ns, resizer steps skipped | Reached **GlobalRouting**, which **failed with congestion** (GRT-0116) at the 700×700 µm die with the full 1,100-pin interface (484-bit `raw_order_data`, 512-bit `raw_payload`, …). |
 | wrapper, 700 µm | Same GRT-0116 congestion at GlobalRouting (clock net with 1,533 terminals, ~20k cells). |
 | wrapper, 1400 µm, 40 % density | GlobalPlacement **diverged** (GPL-0305, invalid step length); RePlAce is numerically unstable with this clock fanout. |
+| wrapper, 1400 µm, 50 % density, timing-driven placement off | GlobalPlacement **diverged again** (GPL-0305). Three configurations fail in three different places; this needs clock planning and a real floorplan, not config tweaks. |
 
 The pin count and the unbuffered 1,533-terminal clock, not the standard-cell area, are
 the blockers. A physical run needs a designed floorplan/pin plan and clock planning
