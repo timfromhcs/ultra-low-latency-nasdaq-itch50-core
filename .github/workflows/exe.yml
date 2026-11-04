@@ -43,7 +43,7 @@ jobs:
           $h = Invoke-RestMethod http://127.0.0.1:4191/api/health
           if (-not $h.ok) { throw "health failed" }
           Stop-Process -Id $p.Id -Force
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: chiplab-windows-exe
           path: dist/chiplab.exe
