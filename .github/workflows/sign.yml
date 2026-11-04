@@ -1,0 +1,72 @@
+name: Sign
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  sign-packages:
+    name: Sign + verify npm/PyPI artifacts (keyless)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build npm tarball
+        run: cd packages/npm && npm pack
+
+      - name: Build Python wheel + sdist
+        env:
+          SOURCE_DATE_EPOCH: "1700000000"
+        run: |
+          python3 -m pip install --upgrade build
+          cd packages/python && python3 -m build
+          cd ../.. && for f in packages/python/dist/*.tar.gz; do
+            bash scripts/normalize_sdist.sh "$f" "$f.norm" && mv "$f.norm" "$f"
+          done
+
+      - uses: sigstore/cosign-installer@v3
+
+      - name: Sign artifacts
+        env:
+          COSIGN_EXPERIMENTAL: "1"
+        run: |
+          set -euo pipefail
+          for f in packages/npm/*.tgz packages/python/dist/*.whl packages/python/dist/*.tar.gz; do
+            echo "signing $f"
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
+
+      - name: Verify signatures
+        run: |
+          set -euo pipefail
+          for f in packages/npm/*.tgz packages/python/dist/*.whl packages/python/dist/*.tar.gz; do
+            echo "verifying $f"
+            cosign verify-blob --bundle "${f}.sigstore.json" \
+              --certificate-identity-regexp 'https://github.com/timfromhcs/.*' \
+              --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+              "$f"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-packages
+          path: |
+            packages/npm/*.tgz
+            packages/npm/*.sigstore.json
+            packages/python/dist/*.whl
+            packages/python/dist/*.tar.gz
+            packages/python/dist/*.sigstore.json
+          if-no-files-found: error

@@ -2150,3 +2150,5 @@ Zwischenstand (Tick 08:59, weiter):
 - **Wrapper-Pre-PnR-STA**: `wrap-sta` fertig ÔÇö Setup-WNS **ÔêÆ8,62 ns** bei 3,10 ns (ss/100 ┬░C), **Fmax Ôëê 85,3 MHz**, Worst Path jetzt FF ÔåÆ FF (der `raw_payload`-Endpunkt ist weg). `reports/openlane_wrap-sta.json` (Commit `f17a962`).
 - **Reproduzierbare Python-Pakete**: `scripts/repro_python.sh` + `make repro-python`; mit `SOURCE_DATE_EPOCH=1700000000` ist das **Wheel byte-identisch** (`1718b877ÔÇª`), das **sdist nach Container-Normalisierung** ebenfalls (`8814fdcfÔÇª`, via `scripts/normalize_sdist.sh`: sortierte Member, feste mtime, numerischer Owner, `gzip -n`). `release.yml` wendet beides an; Report `reports/repro_python.json`. Commit `e949fe9`.
 - **Wrapper-Vollrun** (`wrap-full`, Resizer ├╝bersprungen): nach ~15 min bei **Schritt 35 (CTS)** ÔÇö deutlich weiter als der Debug-Bus-Lauf. Als N├ñchstes Global/Detailed Routing, dann DRC/LVS. Ergebnis wird als n├ñchstes publiziert.
+[2026-11-04T09:59:19.3910780+01:00] hallo, es ist 09:59
+[tick] ran 0, failed 0

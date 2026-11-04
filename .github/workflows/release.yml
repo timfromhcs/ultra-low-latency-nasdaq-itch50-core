@@ -113,6 +113,9 @@ jobs:
     name: SBOM, checksums, GitHub Release
     needs: [verify, exe, packages]
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -128,6 +131,15 @@ jobs:
           cp reports/sbom.json dist/release/sbom.json
       - name: Checksums
         run: node scripts/checksums.mjs dist/release dist/release/SHA256SUMS.txt
+      - uses: sigstore/cosign-installer@v3
+      - name: Sign package artifacts (keyless)
+        env:
+          COSIGN_EXPERIMENTAL: "1"
+        run: |
+          set -euo pipefail
+          for f in dist/release/*.tgz dist/release/*.whl dist/release/*.tar.gz; do
+            cosign sign-blob --yes --bundle "${f}.sigstore.json" "$f"
+          done
       - name: Release notes
         run: |
           node -e "const fs=require('fs');const v=require('./package.json').version;const c=fs.readFileSync('CHANGELOG.md','utf8');const i=c.indexOf('## '+v);const j=c.indexOf('\n## ',i+3);fs.writeFileSync('RELEASE_NOTES.md',i>=0?c.slice(i,j>i?j:undefined):'See CHANGELOG.md')"
@@ -142,4 +154,5 @@ jobs:
             dist/release/*.tar.gz
             dist/release/sbom.json
             dist/release/SHA256SUMS.txt
+            dist/release/*.sigstore.json
           fail_on_unmatched_files: true

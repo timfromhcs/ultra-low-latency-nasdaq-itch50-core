@@ -187,7 +187,9 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] Reproducible EXE: `scripts/repro_exe.mjs` builds the SEA twice and compares
       SHA-256 → **identical** (`67d05b22…`, 87,785,472 B, Node 22.23.1). A Windows job
       in the weekly `Repro` workflow checks it.
-- [ ] cosign/sigstore signatures for npm/PyPI artifacts.
+- [x] npm/PyPI keyless blob signatures: `sign.yml` builds, signs (`cosign
+      sign-blob`) and verifies the tarball/wheel/sdist; `release.yml` attaches the
+      bundles. Mechanism verified by a dispatch; release integration runs on the next tag.
 - [x] Mutation: 9 parser→BBO mutants killed (`tools/mutate_book.py`,
       `reports/mutation_book.json`); weekly `mutation` job in the Formal workflow.
 - [x] Nightly 10M regression + formal + mutation (`.github/workflows/nightly.yml`,

@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 09:59 - npm/PyPI blob signing + Sign workflow
+
+- Added `.github/workflows/sign.yml` (dispatch + reusable): builds the npm tarball and
+  Python wheel/sdist, signs each with keyless `cosign sign-blob` (`*.sigstore.json`) and
+  immediately verifies with `cosign verify-blob` (identity regexp + OIDC issuer).
+- `release.yml` publish job now has `id-token: write`, signs the artifacts after the
+  checksums, attaches the `*.sigstore.json` bundles to the release, and README shows
+  the `cosign verify-blob` command.
+- Dispatching `sign.yml` to verify the mechanism in CI.
+
 ## 2026-11-04 10:20 - Physical flow blocked after third attempt
 
 - `wrap-full3` (1400 µm, 50 % density, `PL_TIMING_DRIVEN: 0`) failed GlobalPlacement

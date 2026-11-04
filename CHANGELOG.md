@@ -74,6 +74,10 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **npm/PyPI blob signing**: `sign.yml` signs the npm tarball and Python wheel/sdist
+  with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
+  signs after the checksums and attaches the `*.sigstore.json` bundles. README shows
+  `cosign verify-blob`.
 - **Full-flow status**: three LibreLane wrapper/debug-bus attempts are documented in
   `openlane/README.md`: resizer stall (>1 h on −9 ns), GRT-0116 congestion (700 µm)
   and GPL-0305 placement divergence (1400 µm, two density variants). Root causes are

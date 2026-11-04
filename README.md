@@ -154,6 +154,16 @@ cosign verify ghcr.io/timfromhcs/ultra-low-latency-nasdaq-itch50-core@sha256:<di
   --certificate-oidc-issuer https://token.actions.githubusercontent.com
 ```
 
+The npm tarball, Python wheel and sdist are signed as blobs (`*.sigstore.json` bundles
+attached to the release). Verify one with:
+
+```bash
+cosign verify-blob --bundle chiplab-core-0.3.1.tgz.sigstore.json \
+  --certificate-identity-regexp 'https://github.com/timfromhcs/.*' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  chiplab-core-0.3.1.tgz
+```
+
 The first published release is
 [v0.3.1](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.1) (first: [v0.3.0](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/releases/tag/v0.3.0))
 with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
@@ -251,7 +261,7 @@ Reports live in [`reports/`](reports/).
 | Narrow host wrapper | **128-bit ingress → 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** | `tb/test_host_wrap.py` |
 | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | `tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
-| Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker provenance `mode=max` + SBOM + **keyless cosign signature** | `reports/sbom.json`, `release.yml`, `docker-publish.yml` |
+| Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | `reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |
 | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all `d2b5f58f…`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
 | Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | `reports/repro_python.json`, `scripts/repro_python.sh` |
 | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22…`, 87,785,472 B, Node 22.23.1); weekly Windows CI job | `reports/repro_exe.json` |
