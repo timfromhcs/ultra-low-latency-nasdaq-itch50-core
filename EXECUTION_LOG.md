@@ -266,6 +266,8 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added a `windows-latest` job to `.github/workflows/repro.yml` that runs it weekly;
   local report `reports/repro_exe.json`. README now states WASM/Python/EXE are
   reproducible and the workflow checks all three.
+- Dispatched `repro.yml` on `aced3c3`: **success**, both the Linux (WASM + Python) and
+  the Windows (EXE twice) jobs green in CI.
 
 ## 2026-11-04 09:45 - Wrapper P&R attempts blocked; Repro workflow
 
