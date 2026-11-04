@@ -260,7 +260,7 @@ Reports live in [`reports/`](reports/).
 | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | `tb/run_book_top_skid_cocotb.py` |
 | Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
 | Narrow host wrapper | **128-bit ingress → 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** | `tb/test_host_wrap.py` |
-| Wishbone wrapper | **Caravel-style Wishbone reads of msg count/type/locate/shares/ref; writes ACK but are ignored** | `tb/test_wishbone.py` |
+| Wishbone wrapper | **Caravel-style Wishbone reads of count/type/locate/shares/ref; writes ACK but are ignored; 20 back-to-back messages, no beat loss** | `tb/test_wishbone.py` |
 | 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow port) | `tb/run_wishbone32_cocotb.py` |
 | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | `tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |

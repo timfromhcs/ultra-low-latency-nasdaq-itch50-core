@@ -74,6 +74,9 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Wishbone burst robustness**: a second test drives 20 messages fully back-to-back
+  (tvalid held high, tready honored) at both 128-bit and 32-bit ingress — msg_count=20,
+  updates=20, 0 corrupt, no beat loss.
 - **32-bit ingress verified**: `DATA_WIDTH` is a real parameter, not 128-only. The
   Wishbone wrapper built with `-Pitch_wishbone_wrap.DATA_WIDTH=32` runs the same test
   (2 messages, type/locate/shares/ref read back) → PASS. That is the width a Caravel

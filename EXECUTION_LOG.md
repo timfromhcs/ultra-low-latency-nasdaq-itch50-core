@@ -259,6 +259,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 14:10 - Wishbone burst test (both widths)
+
+- Added `test_wishbone_burst`: 20 messages back-to-back (tvalid held high, tready
+  honored) at 128-bit and 32-bit ingress → msg_count=20, updates=20, 0 corrupt,
+  no beat loss. Both runners PASS (2 tests each).
+- Committed after the 13:59 tick; `wrap32-big` detailed routing continues in the
+  background (not converged, see next tick).
+
 ## 2026-11-04 13:59 - Autonomy tick + detailed routing in progress
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.

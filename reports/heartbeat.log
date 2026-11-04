@@ -3556,3 +3556,81 @@ Zwischenstand (Tick 12:59):
 Sobald `wrap32-big` durch ist, wird das Ergebnis (Routing/DRC/LVS/Post-Route-STA) ausgewertet und publiziert oder der verbleibende Blocker pr├ñzise dokumentiert.
 [2026-11-04T13:59:19.1037332+01:00] hallo, es ist 13:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-Content "$env:TEMP\opencode\librelane_wrap32_big.log" -Tail 15 -ErrorAction SilentlyContinue; cd 
+E:\chips\main; Test-Path openlane\runs\wrap32-big\final\metrics.json; Get-ChildItem openlane\runs\wrap32-big 
+-Directory -ErrorAction SilentlyContinue | Select-Object -Last 3 Name
+met3     21717                                                       
+           met4      1724                                                       
+-------------------------                                                       
+               296856                                                           
+                                                                                
+                                                                                
+[INFO DRT-0195] Start 1st optimization iteration.                               
+    Completing 10% with 602173 violations.                                      
+    elapsed time = 00:00:27, memory = 3289.30 (MB).                             
+    Completing 20% with 602173 violations.                                      
+    elapsed time = 00:07:31, memory = 3366.17 (MB).                             
+    Completing 30% with 695471 violations.                                      
+    elapsed time = 00:12:08, memory = 3283.27 (MB).                             
+    Completing 40% with 695471 violations.                                      
+    elapsed time = 00:13:42, memory = 3305.64 (MB).                             
+False
+
+Name                       
+----                       
+42-openroad-stamidpnr-3    
+43-openroad-detailedrouting
+tmp
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 5; node scripts\gate.mjs 2>&1 | 
+Select-Object -Last 2; git status -sb | Select-Object -First 4
+[tick] ran 0, failed 0
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+## main...origin/main
+ M docs/datasheet.md
+ M reports/heartbeat.log
+ M reports/sbom.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-04 13:59 - Autonomy tick + detailed routing in progress
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
++- `wrap32-big` passed GlobalRouting (congestion allowed) and is in
++  `OpenROAD.DetailedRouting` (step 43). DRT reports ~695k violations at 40 % of its
++  first optimization iteration ÔÇö the design is poorly routable at this utilization;
++  letting it run, will stop and document if it does not converge.
++- Committed the datasheet timing paragraph with all measured pre-PnR values
++  (ÔêÆ9.14 / ÔêÆ8.62 / ÔêÆ6.55 ns).
++
+ ## 2026-11-04 12:59 - Autonomy tick + congestion-allowed routing attempt
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+ - `wrap32-full` (700 ┬Ám) failed GlobalRouting with GRT-0116 even with the ~80-pin
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: datasheet pre-PnR timing summary + tick log" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 151 insertions(+), 18 deletions(-)
+   415cfd0..895d478  main -> main
