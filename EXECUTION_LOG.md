@@ -259,6 +259,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 10:05 - Reproducible EXE verified
+
+- `scripts/repro_exe.mjs` (Windows): builds `dist/chiplab.exe` twice and compares
+  SHA-256 → **PASS**, both `67d05b22…`, 87,785,472 bytes, Node 22.23.1.
+- Added a `windows-latest` job to `.github/workflows/repro.yml` that runs it weekly;
+  local report `reports/repro_exe.json`. README now states WASM/Python/EXE are
+  reproducible and the workflow checks all three.
+
 ## 2026-11-04 09:45 - Wrapper P&R attempts blocked; Repro workflow
 
 - `wrap-full` (700 µm) failed GlobalRouting with GRT-0116 congestion; `wrap-full2`

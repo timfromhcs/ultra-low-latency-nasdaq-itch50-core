@@ -74,6 +74,11 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Reproducible EXE**: `scripts/repro_exe.mjs` builds the Node SEA twice and compares
+  SHA-256 → **identical** (`67d05b22…`, 87,785,472 B, Node 22.23.1). The weekly `Repro`
+  workflow now also runs this on `windows-latest`. So WASM, Python wheel/sdist and the
+  EXE all rebuild byte-identically; only cross-machine Node-version differences can
+  change the EXE.
 - **Reproducibility workflow**: `.github/workflows/repro.yml` (weekly + dispatch) runs
   `scripts/repro_wasm.sh` under rustc 1.98.1 and `scripts/repro_python.sh`, uploading
   both reports, so the reproducibility claims are continuously checked.

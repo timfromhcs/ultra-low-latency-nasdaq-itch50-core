@@ -43,3 +43,28 @@ jobs:
             reports/repro_python.json
           if-no-files-found: warn
           retention-days: 30
+
+  exe:
+    name: Reproducible Windows EXE
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build twice and compare
+        run: node scripts/repro_exe.mjs
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: repro-exe-report
+          path: reports/repro_exe.json
+          if-no-files-found: warn
+          retention-days: 30
