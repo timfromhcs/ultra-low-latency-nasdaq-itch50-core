@@ -74,6 +74,9 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Reproducibility workflow**: `.github/workflows/repro.yml` (weekly + dispatch) runs
+  `scripts/repro_wasm.sh` under rustc 1.98.1 and `scripts/repro_python.sh`, uploading
+  both reports, so the reproducibility claims are continuously checked.
 - **Reproducible Python packaging**: `scripts/repro_python.sh` builds wheel + sdist
   twice with `SOURCE_DATE_EPOCH=1700000000`; the wheel is byte-identical and the sdist
   is byte-identical after `scripts/normalize_sdist.sh` (sorted members, fixed mtime,

@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 09:45 - Wrapper P&R attempts blocked; Repro workflow
+
+- `wrap-full` (700 µm) failed GlobalRouting with GRT-0116 congestion; `wrap-full2`
+  (1400 µm, 40 % density) failed GlobalPlacement with GPL-0305 (RePlAce diverged) —
+  the 1,533-terminal clock is unbuffered before placement. Documented in
+  `openlane/README.md`; no P&R/DRC/LVS result, roadmap marks it blocked.
+- Added `.github/workflows/repro.yml` (weekly + dispatch): Rust 1.98.1 with the wasm
+  target runs `repro_wasm.sh`, then `repro_python.sh`, and uploads both reports.
+
 ## 2026-11-04 09:30 - Reproducible Python packaging
 
 - `scripts/repro_python.sh` (+ `make repro-python`): builds wheel + sdist twice with

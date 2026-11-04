@@ -69,12 +69,13 @@ node scripts/openlane_summary.mjs openlane/runs/sky130-250mhz-sta
 |---|---|
 | 3.10 ns, all steps | Post-CTS resizer (`OpenROAD.ResizerTimingPostCTS`) ran >1 h on the −9.14 ns path without progress; killed. |
 | 3.10 ns, resizer steps skipped | Reached **GlobalRouting**, which **failed with congestion** (GRT-0116) at the 700×700 µm die with the full 1,100-pin interface (484-bit `raw_order_data`, 512-bit `raw_payload`, …). |
+| wrapper, 700 µm | Same GRT-0116 congestion at GlobalRouting (clock net with 1,533 terminals, ~20k cells). |
+| wrapper, 1400 µm, 40 % density | GlobalPlacement **diverged** (GPL-0305, invalid step length); RePlAce is numerically unstable with this clock fanout. |
 
-The pin count of the debug interface, not the standard-cell area, is the blocker: the
-design needs roughly 1,100 top-level pins on a 700 µm die. A physical run needs a
-narrow wrapper (e.g. a 32-bit host port plus the snapshot read port) and a larger or
-fitted die — that is follow-up work, not a timing result. **No P&R, DRC or LVS result
-exists for this design.**
+The pin count and the unbuffered 1,533-terminal clock, not the standard-cell area, are
+the blockers. A physical run needs a designed floorplan/pin plan and clock planning
+(e.g. clock buffers inserted before placement, a fitted die), which is follow-up work.
+**No P&R, DRC or LVS result exists for this design.**
 
 ## Running this design
 
