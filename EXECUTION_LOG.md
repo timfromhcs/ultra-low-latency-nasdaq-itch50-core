@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-04 11:49 - Autonomy tick + 32-bit ingress verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+- Parameterized `DATA_WIDTH` in `itch_host_wrap`/`itch_wishbone_wrap` (was hardcoded
+  128) and added `tb/run_wishbone32_cocotb.py`: build with
+  `-Pitch_wishbone_wrap.DATA_WIDTH=32`, same Wishbone test. **PASS** — 36-byte
+  messages across 9 beats, fields read back correctly. This is the width a Caravel
+  `io_in` stream or narrow FPGA port would use.
+- Wired into `make cocotb` and CI; README/datasheet/integration guide/roadmap updated.
+
 ## 2026-11-04 10:35 - Caravel-style Wishbone wrapper
 
 - Added `rtl/itch_wishbone_wrap.sv`: host register file exposed through a classic

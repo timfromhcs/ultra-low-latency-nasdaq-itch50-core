@@ -15,12 +15,14 @@
 `ifndef ITCH_WISHBONE_WRAP_SV
 `define ITCH_WISHBONE_WRAP_SV
 
-module itch_wishbone_wrap (
+module itch_wishbone_wrap #(
+  parameter DATA_WIDTH = 128
+)(
   input  wire         clk,
   input  wire         rst_n,
 
-  input  wire [127:0] s_axis_tdata,
-  input  wire [15:0]  s_axis_tkeep,
+  input  wire [DATA_WIDTH-1:0]     s_axis_tdata,
+  input  wire [(DATA_WIDTH/8)-1:0] s_axis_tkeep,
   input  wire         s_axis_tvalid,
   input  wire         s_axis_tlast,
   output wire         s_axis_tready,
@@ -41,7 +43,9 @@ module itch_wishbone_wrap (
   // The register file is read-only; the write data/select are accepted but unused.
   wire _unused = &{1'b0, wb_dat_w, wb_sel};
 
-  itch_host_wrap u_host (
+  itch_host_wrap #(
+    .DATA_WIDTH(DATA_WIDTH)
+  ) u_host (
     .clk(clk),
     .rst_n(rst_n),
     .s_axis_tdata(s_axis_tdata),

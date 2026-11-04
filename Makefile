@@ -86,6 +86,7 @@ cocotb:
 	$(PYTHON) tb/run_snapshot_cocotb.py
 	$(PYTHON) tb/run_host_wrap_cocotb.py
 	$(PYTHON) tb/run_wishbone_cocotb.py
+	$(PYTHON) tb/run_wishbone32_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
 
 synth-book:

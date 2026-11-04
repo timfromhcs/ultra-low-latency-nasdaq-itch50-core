@@ -24,8 +24,9 @@ Two egress paths exist:
 
 ## 2. Feature summary
 
-- 128-bit AXI4-Stream ingress with `tkeep`/`tlast`, unaligned message boundaries
-  resolved across beats by a 512-bit sliding window.
+- 128-bit AXI4-Stream ingress (the `DATA_WIDTH` parameter also supports 32-bit
+  ingress, verified through the Wishbone wrapper), with `tkeep`/`tlast`, unaligned
+  message boundaries resolved across beats by a 512-bit sliding window.
 - All 22 ITCH 5.0 opcodes decoded, including the administrative/reference set
   (`S R H Y L V W K J h`) and the trading set (`A F E C X D U P Q B N`).
 - Full payload preserved (`m_payload[511:0]`, `m_msg_len[7:0]`); corrupt or

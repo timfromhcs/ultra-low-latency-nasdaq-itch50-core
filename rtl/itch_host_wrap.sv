@@ -9,7 +9,7 @@
 //   Host register map (word address, 32-bit):
 //     0  status_msg_count
 //     1  status_corrupt_count
-//     2  {8'b0, last_type[7:0], 8'b0, last_locate[15:0]}
+//     2  {last_type[7:0], 8'b0, last_locate[15:0]}
 //     3  last_price
 //     4  last_shares[31:0]
 //     5  last_shares[63:32]
@@ -29,12 +29,14 @@
 
 `include "itch_pkg.sv"
 
-module itch_host_wrap (
+module itch_host_wrap #(
+  parameter DATA_WIDTH = 128
+)(
   input  wire         clk,
   input  wire         rst_n,
 
-  input  wire [127:0] s_axis_tdata,
-  input  wire [15:0]  s_axis_tkeep,
+  input  wire [DATA_WIDTH-1:0]       s_axis_tdata,
+  input  wire [(DATA_WIDTH/8)-1:0]   s_axis_tkeep,
   input  wire         s_axis_tvalid,
   input  wire         s_axis_tlast,
   output wire         s_axis_tready,
@@ -65,7 +67,9 @@ module itch_host_wrap (
   reg [31:0] updates;
 
   /* verilator lint_off PINCONNECTEMPTY */
-  ultra_low_latency_nasdaq_itch50_cutthrough u_parse (
+  ultra_low_latency_nasdaq_itch50_cutthrough #(
+    .DATA_WIDTH(DATA_WIDTH)
+  ) u_parse (
     .clk(clk),
     .rst_n(rst_n),
     .s_axis_tdata(s_axis_tdata),

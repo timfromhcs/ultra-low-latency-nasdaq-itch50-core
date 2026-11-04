@@ -46,6 +46,7 @@ jobs:
           python3 tb/run_snapshot_cocotb.py 
           python3 tb/run_host_wrap_cocotb.py 
           python3 tb/run_wishbone_cocotb.py  
+          python3 tb/run_wishbone32_cocotb.py
           python3 tb/run_skid_cocotb.py     
 
   wasm-web:

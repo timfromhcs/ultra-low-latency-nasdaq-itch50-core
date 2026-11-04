@@ -173,6 +173,8 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] Caravel management path: `itch_wishbone_wrap` exposes the host register file
       through a classic Wishbone slave (1-cycle ACK, read-only, writes ignored);
       test drives two messages and reads count/type/locate/shares/ref over Wishbone.
+- [x] 32-bit ingress variant: `DATA_WIDTH` parameter verified through parser + Wishbone
+      (`tb/run_wishbone32_cocotb.py`) — the width a Caravel `io_in` stream would use.
 - [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with

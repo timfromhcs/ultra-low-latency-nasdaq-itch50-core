@@ -11,7 +11,7 @@ from cocotb.triggers import RisingEdge, Timer
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-DATA_BYTES = 16
+DATA_BYTES = int(os.environ.get("ITCH_BEAT_BYTES", "16"))
 STOCK = b"AAPL    "
 
 

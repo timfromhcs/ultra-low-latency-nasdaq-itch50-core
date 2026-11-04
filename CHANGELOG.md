@@ -74,6 +74,10 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **32-bit ingress verified**: `DATA_WIDTH` is a real parameter, not 128-only. The
+  Wishbone wrapper built with `-Pitch_wishbone_wrap.DATA_WIDTH=32` runs the same test
+  (2 messages, type/locate/shares/ref read back) → PASS. That is the width a Caravel
+  `io_in` stream or a narrow FPGA port would use.
 - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
