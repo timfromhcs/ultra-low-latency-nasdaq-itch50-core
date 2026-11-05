@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-05 12:56 - Autonomy tick + detailed-routing attempt closed
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+- `wrap32-big` reached **DetailedRouting** (1000 µm, 35 % density, congestion allowed):
+  violations fell from ~695k to ~148k but did not converge; the host restart stopped the
+  container. No final metrics, no DRC/LVS. Documented in `openlane/README.md`.
+- Roadmap item stays blocked on clock planning (≈1,566-terminal clock) and a fitted
+  floorplan; pre-PnR STA remains the timing evidence.
+
 ## 2026-11-04 14:10 - Wishbone burst test (both widths)
 
 - Added `test_wishbone_burst`: 20 messages back-to-back (tvalid held high, tready

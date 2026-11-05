@@ -89,11 +89,12 @@ All notable changes to ChipLab are documented here. The format follows
   with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
   signs after the checksums and attaches the `*.sigstore.json` bundles. README shows
   `cosign verify-blob`.
-- **Full-flow status**: three LibreLane wrapper/debug-bus attempts are documented in
-  `openlane/README.md`: resizer stall (>1 h on −9 ns), GRT-0116 congestion (700 µm)
-  and GPL-0305 placement divergence (1400 µm, two density variants). Root causes are
-  the ~1,100-pin debug interface and the unbuffered 1,533-terminal clock; needs clock
-  planning and a fitted floorplan. No post-route STA/DRC/LVS result exists.
+- **Full-flow status**: four LibreLane attempts are documented in `openlane/README.md`:
+  resizer stall (>1 h on −9 ns), GRT-0116 congestion (700 µm), GPL-0305 divergence
+  (1400 µm, two density variants) and a 1000 µm/35 % 32-bit run that reached
+  DetailedRouting but did not converge (~148k violations). Root causes are the
+  ~1,566-terminal unbuffered clock and placement density; needs clock planning and a
+  fitted floorplan. No post-route STA/DRC/LVS result exists.
 - **Reproducible EXE**: `scripts/repro_exe.mjs` builds the Node SEA twice and compares
   SHA-256 → **identical** (`67d05b22…`, 87,785,472 B, Node 22.23.1). The weekly `Repro`
   workflow now also runs this on `windows-latest`. So WASM, Python wheel/sdist and the
