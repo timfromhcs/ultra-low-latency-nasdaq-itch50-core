@@ -66,6 +66,12 @@ would cause pin congestion; `itch_wishbone_wrap` exposes the same registers over
 classic Wishbone slave for Caravel-style management. Word map is in the module header;
 `openlane/sky130_wrap.json` targets it.
 
+**Caravel-shaped top:** `itch_caravel_wrap` maps the 32-bit stream onto Caravel's
+38-bit `io_in`/`io_out` (bits 31:0 data, 35:32 keep, 36 valid, 37 last, `io_out[0]`
+ready) and the host registers onto the Wishbone management bus (`wbs_adr_i[6:2]`).
+`io_oeb` leaves only bit 0 driven; `la_*` and `user_irq` are tied off. This is the
+boundary shape, not a Caravel harness run.
+
 ## 3. Parser + book
 
 ```systemverilog

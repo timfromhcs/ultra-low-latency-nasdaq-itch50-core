@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-05 13:10 - Caravel-shaped wrapper
+
+- Added `rtl/itch_caravel_wrap.sv`: Caravel user-project boundary. `io_in[31:0]`=data,
+  `[35:32]`=keep, `[36]`=valid, `[37]`=last; `io_out[0]`=ready with `io_oeb` leaving
+  only that bit driven; Wishbone management maps `wbs_adr_i[6:2]` to the host registers;
+  `la_*` and `user_irq` tied off.
+- Test `tb/test_caravel_wrap.py`: two messages over `io_in`, Wishbone reads of
+  count/type/locate/shares/ref → PASS; lint clean. Wired into `make lint`, `make cocotb`
+  and CI. This is the boundary shape, not a Caravel harness run.
+
 ## 2026-11-05 12:56 - Autonomy tick + detailed-routing attempt closed
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.

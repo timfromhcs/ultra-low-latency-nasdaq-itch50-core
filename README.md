@@ -262,6 +262,7 @@ Reports live in [`reports/`](reports/).
 | Narrow host wrapper | **128-bit ingress → 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** | `tb/test_host_wrap.py` |
 | Wishbone wrapper | **Caravel-style Wishbone reads of count/type/locate/shares/ref; writes ACK but are ignored; 20 back-to-back messages, no beat loss** | `tb/test_wishbone.py` |
 | 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow port) | `tb/run_wishbone32_cocotb.py` |
+| Caravel-shaped top | **38-bit io_in stream + Wishbone reads; io_oeb leaves only io_out[0] driven** | `tb/test_caravel_wrap.py` |
 | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | `tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
 | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parser→BBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
 | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | `reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |

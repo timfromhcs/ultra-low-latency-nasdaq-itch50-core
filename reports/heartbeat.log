@@ -201,3 +201,158 @@ Zwischenstand (Tick 13:59):
 [heartbeat] log rotated at 217699 bytes
 [2026-11-05T12:56:22.7781219+01:00] hallo, es ist 12:56
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 5; node scripts\gate.mjs 2>&1 | 
+Select-Object -Last 2; git status -sb | Select-Object -First 4; Test-Path openlane\runs\wrap32-big\final\metrics.json
+[tick] ran 0, failed 0
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+## main...origin/main
+ M reports/heartbeat.log
+ M reports/sbom.json
+ M reports/scorecard.json
+False
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -73,8 +73,9 @@
+ | wrapper, 700 ┬Ám | Same GRT-0116 congestion at GlobalRouting (clock net with 1,533 terminals, ~20k cells). |
+ | wrapper, 1400 ┬Ám, 40 % density | GlobalPlacement **diverged** (GPL-0305, invalid step length); RePlAce is 
+numerically unstable with this clock fanout. |
+ | wrapper, 1400 ┬Ám, 50 % density, timing-driven placement off | GlobalPlacement **diverged again** (GPL-0305). Three 
+configurations fail in three different places; this needs clock planning and a real floorplan, not config tweaks. |
+ | wrapper 32-bit, 700 ┬Ám | GlobalRouting **still congested** (GRT-0116) even with the narrow interface; clock fanout 
+is 1,566 terminals. |
++| wrapper 32-bit, 1000 ┬Ám, 35 % density, congestion allowed | Passed GlobalRouting, entered **DetailedRouting**; 
+violations fell from ~695k to ~148k but the run did not converge and was stopped by a host restart. No DRC/LVS result. 
+|
+ 
+ The **unbuffered ~1,566-terminal clock** and placement density, not the pin count (the
+ 32-bit wrapper with ~80 pins still congested), are the blockers. A physical run needs
+ clock planning (clock buffers before placement) and a fitted floorplan/pin plan, which
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -118,10 +118,12 @@
+       path FF ÔåÆ FF; the debug-bus endpoint is gone (`reports/openlane_wrap-sta.json`).
+ - [x] 32-bit wrapper config: `openlane/sky130_wrap32.json` (`SYNTH_PARAMETERS:
+       ["DATA_WIDTH=32"]`) ÔåÆ pre-PnR **WNS ÔêÆ6.55 ns**, Fmax **103.67 MHz**, worst path
+       FF ÔåÆ FF (`reports/openlane_wrap32-sta.json`).
+-- [ ] Full P&R: the 128-bit wrapper fails GlobalRouting congestion (700 ┬Ám) / GPL-0305
+-      divergence (1400 ┬Ám); a 32-bit-wrapper attempt (`wrap32-full`) is in progress.
++- [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 ┬Ám) / GPL-0305 (1400 ┬Ám); 32-bit
++      wrapper still congested at 700 ┬Ám, and at 1000 ┬Ám/35 % reached DetailedRouting but
++      did not converge (~148k violations when stopped by a host restart). Needs clock
++      planning (Ôëê1,566-terminal clock) and a fitted floorplan.
+ - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
+       250 MHz ÔåÆ **WNS ÔêÆ8.27 ns**, 322 MHz ÔåÆ **WNS ÔêÆ9.14 ns**, both ss/100C/1.60 V;
+       Fmax estimate **Ôëê81.5 MHz**, worst path `_35427_` ÔåÆ `raw_payload[0]`.
+       Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-05 12:56 - Autonomy tick + detailed-routing attempt closed
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
++- `wrap32-big` reached **DetailedRouting** (1000 ┬Ám, 35 % density, congestion allowed):
++  violations fell from ~695k to ~148k but did not converge; the host restart stopped the
++  container. No final metrics, no DRC/LVS. Documented in `openlane/README.md`.
++- Roadmap item stays blocked on clock planning (Ôëê1,566-terminal clock) and a fitted
++  floorplan; pre-PnR STA remains the timing evidence.
++
+ ## 2026-11-04 14:10 - Wishbone burst test (both widths)
+ 
+ - Added `test_wishbone_burst`: 20 messages back-to-back (tvalid held high, tready
+   honored) at 128-bit and 32-bit ingress ÔåÆ msg_count=20, updates=20, 0 corrupt,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs -Directory | ForEach-Object { $s=(Get-ChildItem $_.FullName 
+-Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum; [PSCustomObject]@{Name=$_.Name; 
+GB=[math]::Round($s/1GB,2)} } | Sort-Object GB -Descending | Format-Table -AutoSize
+Name                 GB
+----                 --
+chiplab-sky130-nor  0,9
+wrap32-big         0,63
+wrap32-full        0,45
+chiplab-sky130     0,42
+wrap-full          0,39
+wrap-full3         0,27
+wrap-full2         0,27
+gf180-sta          0,19
+ihp-sta            0,15
+sky130-250mhz-sta  0,14
+wrap32-sta         0,14
+wrap-sta           0,12
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -88,13 +88,14 @@
+ - **npm/PyPI blob signing**: `sign.yml` signs the npm tarball and Python wheel/sdist
+   with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
+   signs after the checksums and attaches the `*.sigstore.json` bundles. README shows
+   `cosign verify-blob`.
+-- **Full-flow status**: three LibreLane wrapper/debug-bus attempts are documented in
+-  `openlane/README.md`: resizer stall (>1 h on ÔêÆ9 ns), GRT-0116 congestion (700 ┬Ám)
+-  and GPL-0305 placement divergence (1400 ┬Ám, two density variants). Root causes are
+-  the ~1,100-pin debug interface and the unbuffered 1,533-terminal clock; needs clock
+-  planning and a fitted floorplan. No post-route STA/DRC/LVS result exists.
++- **Full-flow status**: four LibreLane attempts are documented in `openlane/README.md`:
++  resizer stall (>1 h on ÔêÆ9 ns), GRT-0116 congestion (700 ┬Ám), GPL-0305 divergence
++  (1400 ┬Ám, two density variants) and a 1000 ┬Ám/35 % 32-bit run that reached
++  DetailedRouting but did not converge (~148k violations). Root causes are the
++  ~1,566-terminal unbuffered clock and placement density; needs clock planning and a
++  fitted floorplan. No post-route STA/DRC/LVS result exists.
+ - **Reproducible EXE**: `scripts/repro_exe.mjs` builds the Node SEA twice and compares
+   SHA-256 ÔåÆ **identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1). The weekly `Repro`
+   workflow now also runs this on `windows-latest`. So WASM, Python wheel/sdist and the
+   EXE all rebuild byte-identically; only cross-machine Node-version differences can
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item -Recurse -Force openlane\runs\chiplab-sky130, 
+openlane\runs\chiplab-sky130-nor, openlane\runs\wrap-full, openlane\runs\wrap-full2, openlane\runs\wrap-full3, 
+openlane\runs\wrap32-full, openlane\runs\wrap32-big -ErrorAction SilentlyContinue; Get-ChildItem openlane\runs 
+-Directory | Select-Object Name
+Name             
+----             
+gf180-sta        
+ihp-sta          
+sky130-250mhz-sta
+wrap-sta         
+wrap32-sta
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"docs(openlane): close detailed-routing attempt; keep only STA run dirs" 2>&1 | Select-Object -Last 1; git push origin 
+main 2>&1 | Select-Object -Last 1
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 7 files changed, 237 insertions(+), 3657 deletions(-)
+   1f09f96..d5ca856  main -> main

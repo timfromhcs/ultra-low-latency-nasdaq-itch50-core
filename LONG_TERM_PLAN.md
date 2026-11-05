@@ -174,11 +174,12 @@ MDN PWA best practices, GitHub Actions docs.
 
 ### Phase 4 — Release / silicon-ready (8 → 12 months)
 - [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
-- [x] Caravel management path: `itch_wishbone_wrap` exposes the host register file
-      through a classic Wishbone slave (1-cycle ACK, read-only, writes ignored);
-      test drives two messages and reads count/type/locate/shares/ref over Wishbone.
-- [x] 32-bit ingress variant: `DATA_WIDTH` parameter verified through parser + Wishbone
-      (`tb/run_wishbone32_cocotb.py`) — the width a Caravel `io_in` stream would use.
+- [x] Caravel-shaped wrapper (`rtl/itch_caravel_wrap.sv`): 38-bit `io_in` carries the
+      32-bit AXI stream (data/keep/valid/last), Wishbone management maps byte
+      `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
+      Test drives two messages over `io_in` and reads them back over Wishbone → PASS.
+- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
+      Caravel simulation).
 - [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with

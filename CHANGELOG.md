@@ -74,6 +74,12 @@ All notable changes to ChipLab are documented here. The format follows
   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
   Test: markers [1,2,3,6], 2 requests, 1 abandon.
+- **Caravel-shaped top** (`rtl/itch_caravel_wrap.sv`): 38-bit `io_in` carries the
+  32-bit AXI stream (data/keep/valid/last), `io_out[0]` is ready (`io_oeb` set so only
+  that bit is driven), and Wishbone management (`wbs_adr_i[6:2]`) reads the host
+  registers. Test: two messages over `io_in`, Wishbone reads of count/type/locate/
+  shares/ref → PASS. The Caravel *boundary shape* is there; a full Caravel harness run
+  is not.
 - **Wishbone burst robustness**: a second test drives 20 messages fully back-to-back
   (tvalid held high, tready honored) at both 128-bit and 32-bit ingress — msg_count=20,
   updates=20, 0 corrupt, no beat loss.
