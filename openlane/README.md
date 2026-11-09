@@ -14,6 +14,7 @@ no parser Fmax, slack or die-area claim is made.
 | `sky130_wrap.json` | `itch_host_wrap` (128-bit) | Sky130 | 3.10 ns |
 | `sky130_wrap32.json` | `itch_wishbone_wrap` (32-bit) | Sky130 | 3.10 ns |
 | `sky130_wrap32_big.json` | 32-bit wrapper, congestion allowed | Sky130 | 3.10 ns |
+| `sky130_wrap32_100mhz.json` | 32-bit wrapper at 100 MHz, relaxed flow | Sky130 | 10.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
