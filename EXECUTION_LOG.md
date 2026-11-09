@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 17:59 - Autonomy tick (green, no unblocked roadmap work left)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**. Working tree clean.
+- README CI evidence row now points at the latest `main` run instead of a fixed old
+  run number, so it cannot go stale.
+- No new engineering: every remaining roadmap item needs an external prerequisite —
+  parser P&R (clock planning + fitted floorplan + a stable multi-hour environment),
+  FPGA target (hardware), full Caravel harness (Caravel repo/PDK), PCIe/100G (large
+  integration), registry publishing (OIDC/token), shuttle (optional).
+- Last verified state: `itch_metrics` full flow 0 DRC/0 LVS/timing closed; all RTL
+  suites (18/25 tests), reproducibility (WASM/Python/EXE), SLSA/cosign and the gate
+  green. No claims added.
+
 ## 2026-11-09 17:30 - Fast parser flow aborted by container restart
 
 - `wrap32-100mhz-fast2` (10 ns, 1500 µm, antenna repair off, resizer skipped) reached

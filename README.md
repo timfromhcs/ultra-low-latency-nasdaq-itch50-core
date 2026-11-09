@@ -281,7 +281,7 @@ Reports live in [`reports/`](reports/).
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
 | Docker image | builds and serves `/api/health` | `Dockerfile` |
 | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
-| GitHub CI | **green**: lint, 50k full-field, model, Icarus cocotb, Docker, packages | Actions run #24 |
+| GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (18 suites), Docker, packages | [Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
 | npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
 | PyPI package | wheel builds and `selfcheck` covers all 22 opcodes | `packages/python/` |
 
