@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 22:59 - Autonomy tick + Caravel integration recipe
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
+- Wrote `caravel/README.md`: exact port mapping, what is verified here (lint + cocotb
+  against the `user_project_wrapper` top) and what is not (pad ring, `caravel.v`,
+  Caravel simulation), plus the `make setup`/`make verify` recipe and the warning not
+  to claim a Caravel sign-off until that run exists.
+- Extended the docs link check to `caravel/` (now 24 Markdown files, 0 dead links);
+  linked the recipe from the integration guide.
+
 ## 2026-11-09 21:59 - Autonomy tick + Caravel drop-in user_project_wrapper
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

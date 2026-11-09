@@ -1441,3 +1441,55 @@ warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF
 warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
  create mode 100644 caravel/README.md
 [31;1m   3252015..52bda12  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/check_docs_links.mjs
+Index: scripts/check_docs_links.mjs
+===================================================================
+--- scripts/check_docs_links.mjs
++++ scripts/check_docs_links.mjs
+@@ -21,9 +21,9 @@
+ 
+ for (const f of ["README.md", "CHANGELOG.md", "CONTRIBUTING.md", "LONG_TERM_PLAN.md", "STABLE_RELEASE_PLAN.md"]) {
+   if (fs.existsSync(f)) files.push(path.join(root, f));
+ }
+-for (const d of ["docs", "openlane", "mcp", ".opencode"]) {
++for (const d of ["docs", "openlane", "mcp", "caravel", ".opencode"]) {
+   if (fs.existsSync(d)) walk(path.join(root, d));
+ }
+ 
+ const linkRe = /\[[^\]]*\]\(([^)\s]+)\)/g;
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 3; git add -A; git commit -m 
+"chore(docs): include caravel/ in the link check" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+[OK] 24 Markdown files, no dead relative links
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+ 3 files changed, 121 insertions(+), 2 deletions(-)
+[31;1m   52bda12..27176c0  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 22:59 - Autonomy tick + Caravel integration recipe
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
++- Wrote `caravel/README.md`: exact port mapping, what is verified here (lint + cocotb
++  against the `user_project_wrapper` top) and what is not (pad ring, `caravel.v`,
++  Caravel simulation), plus the `make setup`/`make verify` recipe and the warning not
++  to claim a Caravel sign-off until that run exists.
++- Extended the docs link check to `caravel/` (now 24 Markdown files, 0 dead links);
++  linked the recipe from the integration guide.
++
+ ## 2026-11-09 21:59 - Autonomy tick + Caravel drop-in user_project_wrapper
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Added `caravel/user_project_wrapper.v` with Caravel's exact module name and port
+
