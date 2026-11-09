@@ -446,3 +446,110 @@ Zwischenstand (Tick 16:59):
 Sobald Detailed Routing abgeschlossen ist, werden DRC/LVS/Post-Route-STA ausgewertet und als `reports/openlane_wrap32-100mhz-fast2.json` publiziert oder der exakte Fehlerpunkt dokumentiert.
 [2026-11-09T17:59:20.2699239+01:00] hallo, es ist 17:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; node scripts\gate.mjs 2>&1 | 
+Select-Object -Last 2; rg -n "Actions run #|run #24|CI \| green" README.md docs/*.md 2>$null | Select-Object -First 8
+[tick] ran 0, failed 0
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+README.md:284:| GitHub CI | **green**: lint, 50k full-field, model, Icarus cocotb, Docker, packages | Actions run #24 |
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -280,9 +280,9 @@
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+ | Docker image | builds and serves `/api/health` | `Dockerfile` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
+-| GitHub CI | **green**: lint, 50k full-field, model, Icarus cocotb, Docker, packages | Actions run #24 |
++| GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (18 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+ | npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
+ | PyPI package | wheel builds and `selfcheck` covers all 22 opcodes | `packages/python/` |
+ 
+ **Throughput model.** 128-bit @ 322.26 MHz = 41.25 Gbps line rate. The parser consumes
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 17:59 - Autonomy tick (green, no unblocked roadmap work left)
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**. Working tree clean.
++- README CI evidence row now points at the latest `main` run instead of a fixed old
++  run number, so it cannot go stale.
++- No new engineering: every remaining roadmap item needs an external prerequisite ÔÇö
++  parser P&R (clock planning + fitted floorplan + a stable multi-hour environment),
++  FPGA target (hardware), full Caravel harness (Caravel repo/PDK), PCIe/100G (large
++  integration), registry publishing (OIDC/token), shuttle (optional).
++- Last verified state: `itch_metrics` full flow 0 DRC/0 LVS/timing closed; all RTL
++  suites (18/25 tests), reproducibility (WASM/Python/EXE), SLSA/cosign and the gate
++  green. No claims added.
++
+ ## 2026-11-09 17:30 - Fast parser flow aborted by container restart
+ 
+ - `wrap32-100mhz-fast2` (10 ns, 1500 ┬Ám, antenna repair off, resizer skipped) reached
+   GlobalRouting and was at extra iteration 32/50 when the **container died**
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"docs: keep CI evidence row current; tick log (all unblocked work done)" 2>&1 | Select-Object -Last 1; git push origin 
+main 2>&1 | Select-Object -Last 1
+[OK] 23 Markdown files, no dead relative links
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 31 insertions(+), 16 deletions(-)
+[31;1m   ca5d91a..86ae19f  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+86ae19f completed success
+ca5d91a completed success
+> build ┬À deepseek-v4.1-flash
+Tick 17:59 abgeschlossen ÔÇö **keine unblockierte Roadmap-Arbeit mehr vorhanden**.
+
+## In diesem Tick
+- `node scripts/autonomy.mjs`: Queue leer, 0 Tasks.
+- Gate **11/11**, Docs-Links **23 Dateien / 0 tot**, Arbeitsbaum clean.
+- README-Evidenzzeile ÔÇ×GitHub CI" zeigte auf einen alten Run (`#24`) ÔÇö jetzt auf den jeweils aktuellen `main`-Lauf verlinkt, damit sie nicht veraltet.
+- Tick-Eintrag im `EXECUTION_LOG.md`; Commit `86ae19f`; CI auf `86ae19f` **success**.
+
+## Verifizierter Endstand
+- **RTL/Tests**: `make lint` 0 Warnungen; `make cocotb` 18 Suiten / 25 Tests gr├╝n; 10M-Nightly, Formal, Mutation, Equivalence gr├╝n.
+- **Reproduzierbarkeit**: WASM (rustc 1.98.1), Python-Wheel/sdist und EXE byte-identisch, per `Repro`-Workflow (Linux + Windows) best├ñtigt.
+- **Supply Chain**: SLSA-Attestierungen, Docker-Provenance + SBOM + keyless cosign, npm/PyPI-Blob-Signaturen in CI verifiziert.
+- **Physical**: `itch_metrics` komplett durch den Sky130-Flow (0 DRC, 0 LVS, Timing closed bei 10 ns, Fmax Ôëê101 MHz). Parser-P&R bleibt ohne Ergebnis; f├╝nf dokumentierte Fehlermodi.
+
+## Echte Blocker (extern)
+1. Parser-P&R: Clock-Planung + gefitteter Floorplan + stabile mehrst├╝ndige Laufumgebung.
+2. FPGA-Target: Hardware.
+3. Vollst├ñndige Caravel-Harness-Integration: Caravel-Repo/PDK-Setup.
+4. PCIe/100G: gro├ƒe Integration ohne Simulationsmodelle.
+5. Registry-Publishing: OIDC/Token auf npm/PyPI.
+6. Shuttle: optional, Kosten/Zeitfenster.
+
+Ich stoppe hier, weil jede weitere Aufgabe eine dieser externen Voraussetzungen braucht ÔÇö nicht aus Zeitmangel.
+[2026-11-09T18:59:19.8037882+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
