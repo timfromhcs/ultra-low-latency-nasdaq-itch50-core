@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 01:59 - Autonomy tick + opt-in registry publishing prepared
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+- Release plan's only open item is registry publishing. Added opt-in steps to
+  `release.yml`: `npm publish --provenance --access public` and
+  `pypa/gh-action-pypi-publish` (staged `dist/pypi`), both gated on repository
+  variables `NPM_PUBLISH` / `PYPI_PUBLISH`. Default releases are unchanged (GitHub
+  assets only). Not run against the registries — needs trusted-publisher/OIDC setup.
+- Documented in README, errata E10 and the release plan; removed a duplicate Caravel
+  roadmap line.
+
 ## 2026-11-09 00:59 - Autonomy tick (state re-verified after host restarts)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**. Tree clean at

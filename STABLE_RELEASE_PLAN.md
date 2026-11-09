@@ -157,7 +157,10 @@ for attempt in 1..N:
 - [x] `scripts/checksums.mjs` and `release_check.mjs`.
 - [x] Release notes generated from `CHANGELOG.md`.
 - [x] Docker image builds and serves health + cloud info; writes need `CHIPLAB_TOKEN`.
-- [ ] npm/PyPI **publishing** (trusted publishing) — prepared but requires repo/OIDC setup.
+- [ ] npm/PyPI **publishing** (trusted publishing): the release workflow now has
+      opt-in `npm publish --provenance` and `pypa/gh-action-pypi-publish` steps gated on
+      repository variables `NPM_PUBLISH` / `PYPI_PUBLISH`. Still needs the registry-side
+      trusted-publisher/OIDC setup (or an npm token) and one release run to verify.
 - [x] Tag `v0.3.0` pushed; `Release` run 41594730252 published the six assets (see §8).
       `v0.3.1` followed for the Python version-metadata fix.
 

@@ -179,8 +179,8 @@ MDN PWA best practices, GitHub Actions docs.
       `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
       Test drives two messages over `io_in` and reads them back over Wishbone → PASS.
 - [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
-      Caravel simulation).
-- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
+      Caravel simulation). The boundary shape exists and is tested, but no Caravel
+      harness run has been done.
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.

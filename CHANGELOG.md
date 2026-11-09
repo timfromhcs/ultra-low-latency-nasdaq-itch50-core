@@ -91,6 +91,10 @@ All notable changes to ChipLab are documented here. The format follows
   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
   of msg count/type/locate/shares/ref, write ignored → PASS. First step toward Caravel.
+- **Opt-in registry publishing**: `release.yml` now contains `npm publish --provenance
+  --access public` and `pypa/gh-action-pypi-publish` steps gated on the repository
+  variables `NPM_PUBLISH` / `PYPI_PUBLISH`; with the variables unset the release only
+  produces GitHub assets. Not run against the registries yet (errata E10).
 - **npm/PyPI blob signing**: `sign.yml` signs the npm tarball and Python wheel/sdist
   with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
   signs after the checksums and attaches the `*.sigstore.json` bundles. README shows

@@ -92,7 +92,9 @@ There is no bitstream, no DRC/LVS-clean GDS, and no fabricated silicon.
 **Status:** open (external configuration)
 **Impact:** release artifacts (tarball, wheel, sdist) are built and attached to GitHub
 Releases, but registry publishing needs trusted-publisher/OIDC setup on the registry
-side. Installing from the release assets works today.
+side. `release.yml` contains opt-in publish steps gated on the repository variables
+`NPM_PUBLISH` / `PYPI_PUBLISH`; they have not been run. Installing from the release
+assets works today.
 **Workaround:** `npm install ./chiplab-core-0.3.1.tgz` and
 `pip install ./chiplab_itch-0.3.1-py3-none-any.whl`.
 

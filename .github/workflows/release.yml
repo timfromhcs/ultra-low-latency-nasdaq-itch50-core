@@ -143,6 +143,20 @@ jobs:
       - name: Release notes
         run: |
           node -e "const fs=require('fs');const v=require('./package.json').version;const c=fs.readFileSync('CHANGELOG.md','utf8');const i=c.indexOf('## '+v);const j=c.indexOf('\n## ',i+3);fs.writeFileSync('RELEASE_NOTES.md',i>=0?c.slice(i,j>i?j:undefined):'See CHANGELOG.md')"
+      - name: Publish to npm (opt-in, repository variable NPM_PUBLISH=true)
+        if: vars.NPM_PUBLISH == 'true'
+        working-directory: packages/npm
+        run: npm publish --provenance --access public
+      - name: Stage PyPI files (opt-in, repository variable PYPI_PUBLISH=true)
+        if: vars.PYPI_PUBLISH == 'true'
+        run: |
+          mkdir -p dist/pypi
+          cp dist/release/*.whl dist/release/*.tar.gz dist/pypi/
+      - name: Publish to PyPI (trusted publishing)
+        if: vars.PYPI_PUBLISH == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/pypi
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:

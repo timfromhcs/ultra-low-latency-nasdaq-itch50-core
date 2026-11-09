@@ -172,6 +172,12 @@ with `chiplab.exe`, the npm tarball, the Python wheel/sdist, `sbom.json` and
 sdist) and the Windows EXE (`node scripts/repro_exe.mjs`, same Node 22 toolchain)
 rebuild byte-identically. The weekly `Repro` workflow checks all three.
 
+Registry publishing is opt-in and off by default: set the repository variable
+`NPM_PUBLISH=true` (npm trusted publishing or token) or `PYPI_PUBLISH=true` (PyPI
+trusted publishing) before pushing a tag. Without them the Release workflow only
+produces the GitHub Release assets. The publish steps are prepared but have not been
+run against the registries.
+
 ---
 
 ## Quickstart

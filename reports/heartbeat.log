@@ -1691,3 +1691,94 @@ In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Micro
 page in OpenCode Console to keep going.
 [2026-11-09T00:59:50.0407706+01:00] hallo, es ist 00:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git log --oneline -5; git status -sb | Select-Object -First 6; node scripts\autonomy.mjs 
+2>&1 | Select-Object -Last 4
+85235cf feat(rtl): Caravel-shaped wrapper (io_in stream + Wishbone management)
+d5ca856 docs(openlane): close detailed-routing attempt; keep only STA run dirs
+1f09f96 test(rtl): back-to-back Wishbone burst at 128/32-bit ingress
+895d478 docs: datasheet pre-PnR timing summary + tick log
+415cfd0 chore(openlane): congestion-allowed 32-bit attempt config + attempts table
+## main...origin/main
+ M reports/heartbeat.log
+[tick] ran 0, failed 0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3
+PASS vercel-api (752 ms)
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mgh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 3 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+85235cf completed success
+d5ca856 completed success
+1f09f96 completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 00:59 - Autonomy tick (state re-verified after host restarts)
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**. Tree clean at
++  `85235cf`; CI on `85235cf`, `d5ca856` and `1f09f96` all **green**.
++- No new code: the last additions (Caravel-shaped wrapper, 32-bit ingress, Wishbone
++  burst, reproducible WASM/Python/EXE, SLSA/cosign) are committed and verified.
++- Remaining roadmap items are blocked: full P&R/DRC/LVS (clock planning + fitted
++  floorplan), FPGA target (no hardware), full Caravel harness (needs Caravel repo/PDK),
++  PCIe/100G (large integration), shuttle (optional). No success claims added.
++
+ ## 2026-11-05 13:10 - Caravel-shaped wrapper
+ 
+ - Added `rtl/itch_caravel_wrap.sv`: Caravel user-project boundary. `io_in[31:0]`=data,
+   `[35:32]`=keep, `[36]`=valid, `[37]`=last; `io_out[0]`=ready with `io_oeb` leaving
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: tick log after host restarts (gate 10/10, CI green)" 2>&1 
+| Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1; git status -sb | Select-Object -First 3
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 1717 insertions(+), 372 deletions(-)
+[31;1m   85235cf..b2c427d  main -> main[0m
+## main...origin/main
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick abgeschlossen ÔÇö Zustand nach den Host-Neustarts re-verifiziert.
+
+## Status
+- **Autonomy**: Queue leer, 0 Tasks.
+- **Gate**: **10/10** (`node scripts/gate.mjs`).
+- **CI**: `85235cf`, `d5ca856`, `1f09f96` alle **success**.
+- **Arbeitsbaum**: clean, HEAD `b2c427d` (nur `reports/heartbeat.log` rotiert weiter).
+
+## Was seit dem letzten inhaltlichen Tick verifiziert wurde
+- **Caravel-f├Ârmiger Wrapper** (`rtl/itch_caravel_wrap.sv`): `io_in[31:0]`=Daten, `[35:32]`=Keep, `[36]`=Valid, `[37]`=Last; `io_out[0]`=Ready; `io_oeb` treibt nur Bit 0; Wishbone `wbs_adr_i[6:2]` ÔåÆ Host-Register. Test: 2 Nachrichten ├╝ber `io_in`, Wishbone-Reads von count/type/locate/shares/ref ÔåÆ **PASS**.
+- **32-bit-Ingress** als echter `DATA_WIDTH`-Parameter verifiziert (128-bit und 32-bit, inkl. 20 Nachrichten back-to-back ohne Beat-Verlust).
+- **Reproduzierbarkeit**: WASM (gepinntes rustc 1.98.1), Python-Wheel/sdist (SOURCE_DATE_EPOCH + normalisiertes sdist) und Windows-EXE bauen byte-identisch; `Repro`-Workflow (Linux+Windows) per Dispatch **success**.
+- **Supply Chain**: SLSA-Attestierungen f├╝r EXE/npm/PyPI, Docker `provenance: mode=max` + SBOM + **keyless cosign**; `sign.yml` signiert und verifiziert npm/PyPI-Artefakte in CI **success**.
+- **Lint/Tests**: `make lint` 0 Warnungen; `make cocotb` **17 Suiten / 24 Tests, 0 Fehler**.
+
+## Blockiert (unver├ñndert, dokumentiert)
+- Vollst├ñndiges P&R/DRC/LVS: Global-Routing-Congestion bzw. GPL-Divergenz; Ursache ist der ungepufferte ~1.566-Terminal-Clock und die Platzierungsdichte. Pre-PnR-STA ist publiziert (Sky130 250/322 MHz, GF180, IHP, Wrapper 128/32-bit), ausdr├╝cklich **kein Sign-off**.
+- FPGA-Target (keine Hardware), vollst├ñndige Caravel-Harness-Integration (Caravel-Repo/PDK n├Âtig), PCIe/100G (gro├ƒe Integration), optionaler Shuttle.
+
+Keine neuen Erfolgsaussagen ohne Beleg; der n├ñchste sinnvolle Schritt bleibt eine Clock-Planung/Floorplan-Runde f├╝r echtes P&R.
+[2026-11-09T01:59:19.3714892+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0
