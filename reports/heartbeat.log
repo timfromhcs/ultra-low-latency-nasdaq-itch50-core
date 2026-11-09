@@ -1322,3 +1322,122 @@ Tick 21:59 abgeschlossen.
 Damit ist der Caravel-**Drop-in** fertig (Datei + Portliste + Test); es fehlt nur noch der echte Harness-Lauf mit Pad-Ring/Caravel-Simulation (Caravel-Repo/PDK n├Âtig). Unver├ñndert blockiert: Parser-P&R (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-09T22:59:19.7102826+01:00] hallo, es ist 22:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd "$env:TEMP\opencode"; if (Test-Path caravel) { Remove-Item -Recurse -Force caravel }; git clone --depth 1 
+https://github.com/efabless/caravel_user_project.git caravel 2>&1 | Select-Object -Last 3; Get-ChildItem caravel | 
+Select-Object Name
+[31;1mUpdating files:  99% (210/212)[0m
+[31;1mUpdating files: 100% (212/212)[0m
+[31;1mUpdating files: 100% (212/212), done.[0m
+
+[32;1mName[0m
+[32;1m----[0m
+.github
+def
+docs
+gds
+lef
+lib
+lvs
+mag
+maglef
+openlane
+sdc
+signoff
+spef
+spi
+verilog
+.gitignore
+.readthedocs.yaml
+LICENSE
+Makefile
+README.md
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd "$env:TEMP\opencode\caravel"; Select-String -Path Makefile -Pattern "^[a-zA-Z0-9_.-]+:" | Select-Object 
+-First 40 Line; Get-ChildItem verilog -Recurse -File | Select-Object -First 20 FullName
+[32;1mLine[0m
+[32;1m----[0m
+.PHONY: % : check-caravel
+.PHONY: install
+install:
+.PHONY: simenv
+simenv:
+.PHONY: simenv-cocotb
+simenv-cocotb:
+.PHONY: setup
+setup: check_dependencies install check-env install_mcw openlane pdk-with-volare setup-timing-scripts setup-cocotb pre.
+.PHONY: $(blocks)
+.PHONY: harden
+harden: $(blocks)
+.PHONY: verify
+verify: $(dv-targets-rtl)
+.PHONY: verify-all-rtl
+verify-all-rtl: $(dv-targets-rtl)
+.PHONY: verify-all-gl
+verify-all-gl: $(dv-targets-gl)
+.PHONY: verify-all-gl-sdf
+verify-all-gl-sdf: $(dv-targets-gl-sdf)
+.PHONY: $(clean-targets)
+.PHONY: what
+what:
+.PHONY: openlane
+openlane:
+.PHONY: simlink
+simlink: check-caravel
+.PHONY: update_caravel
+update_caravel: check-caravel
+.PHONY: uninstall
+uninstall:
+.PHONY: precheck
+precheck:
+.PHONY: run-precheck
+run-precheck: check-pdk check-precheck enable-lvs-pdk
+.PHONY: enable-lvs-pdk
+enable-lvs-pdk:
+.PHONY: clean
+clean:
+check-caravel:
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite caravel/README.md
+Created file successfully: caravel/README.md
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -71,9 +71,10 @@
+ ready) and the host registers onto the Wishbone management bus (`wbs_adr_i[6:2]`).
+ `io_oeb` leaves only bit 0 driven; `la_*` and `user_irq` are tied off. This is the
+ boundary shape, not a Caravel harness run. For a real Caravel user project,
+ `caravel/user_project_wrapper.v` provides the exact module name and port list; copy it
+-plus the `rtl/` sources into `verilog/rtl/`.
++plus the `rtl/` sources into `verilog/rtl/`. The step-by-step recipe and what is
++verified vs. not is in [`caravel/README.md`](../caravel/README.md).
+ 
+ ## 3. Parser + book
+ 
+ ```systemverilog
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 2; node scripts\gate.mjs 2>&1 
+| Select-Object -Last 2; Remove-Item -Recurse -Force "$env:TEMP\opencode\caravel" -ErrorAction SilentlyContinue; git 
+add -A; git commit -m "docs(caravel): integration recipe and verified-vs-unverified scope" 2>&1 | Select-Object -Last 
+1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 23 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 caravel/README.md
+[31;1m   3252015..52bda12  main -> main[0m

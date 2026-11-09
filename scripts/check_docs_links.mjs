@@ -22,7 +22,7 @@ function walk(dir) {
 for (const f of ["README.md", "CHANGELOG.md", "CONTRIBUTING.md", "LONG_TERM_PLAN.md", "STABLE_RELEASE_PLAN.md"]) {
   if (fs.existsSync(f)) files.push(path.join(root, f));
 }
-for (const d of ["docs", "openlane", "mcp", ".opencode"]) {
+for (const d of ["docs", "openlane", "mcp", "caravel", ".opencode"]) {
   if (fs.existsSync(d)) walk(path.join(root, d));
 }
 
