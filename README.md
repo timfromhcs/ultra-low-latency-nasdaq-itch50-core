@@ -258,6 +258,7 @@ Reports live in [`reports/`](reports/).
 | GF180 pre-PnR STA | **322 MHz WNS −19.87 ns · Fmax ≈ 43.5 MHz**; worst path FF → `raw_order_data[260]` (ss/125 °C, pre-PnR) | `reports/openlane_gf180-sta.json` |
 | IHP SG13G2 pre-PnR STA | **322 MHz WNS −3.08 ns · Fmax ≈ 161.9 MHz**; hold WNS −0.052 ns; worst path FF → FF (slow/125 °C, pre-PnR) | `reports/openlane_ihp-sta.json` |
 | Wrapper pre-PnR STA | **322 MHz WNS −8.62 ns · Fmax ≈ 85.3 MHz**; worst path FF → FF, no debug bus (ss, pre-PnR) | `reports/openlane_wrap-sta.json` |
+| Small-block full flow | **`itch_metrics` 6,776 cells: 0 DRC, 0 LVS, timing closed at 10 ns (Fmax ≈ 101 MHz)** | `reports/openlane_metrics-full3.json` |
 | 32-bit wrapper STA | **322 MHz WNS −6.55 ns · Fmax ≈ 103.7 MHz**; worst path FF → FF (ss, pre-PnR) | `reports/openlane_wrap32-sta.json` |
 | BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
 | Parser → BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |

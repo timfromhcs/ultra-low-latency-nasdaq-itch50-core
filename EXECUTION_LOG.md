@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 06:59 - Autonomy tick + first full-flow block (metrics)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Added `openlane/sky130_metrics.json` (`itch_metrics`, 500 µm die, 10 ns clock) and
+  ran the **complete** Classic flow: **0 routing DRC, 0 Magic/KLayout DRC, 0 LVS
+  errors**, timing closed (WNS +0.12 ns, Fmax ≈101 MHz), 6,776 stdcells (456 FFs),
+  42,127 µm² cell area; CTS inserted 107 clock buffers + 9 clock inverters and 300 hold
+  buffers. Artifact `reports/openlane_metrics-full3.json`.
+- Two earlier variants failed: 200 µm die → DPL-0036 (too many pins for the perimeter);
+  3.10 ns → resizer did not converge. Both documented.
+- Fixed `scripts/openlane_summary.mjs` to tolerate `Infinity`/`NaN` in LibreLane's
+  metrics.json (Python writes them; `JSON.parse` rejects them).
+
 ## 2026-11-09 05:59 - Autonomy tick + guides synced (EN/DE/FR)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

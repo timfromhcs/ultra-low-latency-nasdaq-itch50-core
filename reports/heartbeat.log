@@ -2967,3 +2967,546 @@ docs/guides\de\zero-to-hero.md:98:## 7. Pakete und MCP
 docs/guides\de\zero-to-hero.md:101:node mcp/client_smoke.mjs                    # MCP-Handshake + 12 Tools
 > build ┬À deepseek-v4.1-flash
 [0mÔåÆ [0mRead docs/guides/en/zero-to-hero.md 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content docs\guides\de\zero-to-hero.md | Select-Object -Skip 70; "-----FR-----"; 
+Get-Content docs\guides\fr\zero-to-hero.md | Select-Object -Skip 70
+Die EXE enth´┐¢lt Web-App und 50-KB-WASM. Sie ´┐¢ffnet den Browser und serviert dieselben
+`/api/*`-Endpunkte plus die lokale Cloud. Auf dem Zielrechner ist keine
+Node-Installation n´┐¢tig.
+
+## 5b. Lokale Cloud (v0.3.0)
+
+```bash
+node backend/server.mjs --host 0.0.0.0 --token "langes-token"
+# gibt die LAN-URL aus, z. B. http://192.168.1.20:4173
+```
+
+Diese URL auf dem Handy im selben Netz ´┐¢ffnen, Token im Panel **Local cloud** eintragen,
+**Test**, dann **Sync** oder **Pull**. Runs liegen als JSON unter `.data/`. Ohne
+`--token` d´┐¢rfen nur Loopback-Clients schreiben.
+
+## 6. Docker und Vercel
+
+```bash
+docker build -t chiplab:0.3.0 .
+docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.0
+node scripts/build_vercel.mjs      # public/ + api/ f´┐¢r Vercel
+```
+
+Der Vercel-Build ist static-first. Der Run-Verlauf bleibt im Browser (OPFS); `/api/*`
+ist zustandslose Compute-Funktion. Absicht: Deine Daten bleiben lokal. Docker-Schreib-
+zugriffe brauchen `CHIPLAB_TOKEN`, weil Requests von einer Nicht-Loopback-Bridge kommen.
+
+## 7. Pakete und MCP
+
+```bash
+node mcp/client_smoke.mjs                    # MCP-Handshake + 12 Tools
+cd packages/npm && npm pack                  # @chiplab/core
+cd packages/python && python -m build        # chiplab-itch
+```
+
+## 8. Was noch offen ist
+
+- Multi-Frame-MoldUDP64-Backpressure (Single-Frame-Beweis ist gr´┐¢n).
+- OpenLane/OpenSTA-Fmax-Sign-off; 322 MHz ist ein Modellziel.
+- RTL-Top-of-Book (das WASM-Modell hat eines).
+- Ver´┐¢ffentlichte npm/PyPI/GHCR-Artefakte (Tokens n´┐¢tig).
+
+Wenn etwas fehlschl´┐¢gt: `node scripts/autonomy.mjs` ausf´┐¢hren und
+`reports/autonomy.log` lesen; der Lauf startet das n´┐¢chste Gate und protokolliert den
+exakten Befehl.
+-----FR-----
+
+L'EXE embarque l'application web et le WASM de 50 Ko. Il ouvre le navigateur et sert les
+m´┐¢mes endpoints `/api/*` plus le cloud local. Aucune installation de Node n'est
+n´┐¢cessaire sur la cible.
+
+## 5b. Cloud local (v0.3.0)
+
+```bash
+node backend/server.mjs --host 0.0.0.0 --token "jeton-long"
+# affiche l'URL LAN, par ex. http://192.168.1.20:4173
+```
+
+Ouvrez cette URL sur un t´┐¢l´┐¢phone du m´┐¢me r´┐¢seau, collez le jeton dans le panneau
+**Local cloud**, puis **Test**, **Sync** ou **Pull**. Les runs sont stock´┐¢s en JSON sous
+`.data/`. Sans `--token`, seuls les clients loopback peuvent ´┐¢crire.
+
+## 6. Docker et Vercel
+
+```bash
+docker build -t chiplab:0.3.0 .
+docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=jeton-long chiplab:0.3.0
+node scripts/build_vercel.mjs      # public/ + api/ pour Vercel
+```
+
+Le build Vercel est static-first. L'historique reste dans le navigateur (OPFS) ;
+`/api/*` est un calcul sans ´┐¢tat. C'est volontaire : vos donn´┐¢es restent locales. Les
+´┐¢critures Docker exigent `CHIPLAB_TOKEN`, car les requ´┐¢tes viennent d'un pont non-loopback.
+
+## 7. Paquets et MCP
+
+```bash
+node mcp/client_smoke.mjs                    # handshake MCP + 12 outils
+cd packages/npm && npm pack                  # @chiplab/core
+cd packages/python && python -m build        # chiplab-itch
+```
+
+## 8. Ce qui reste ouvert
+
+- Backpressure MoldUDP64 multi-trame (la preuve mono-trame passe).
+- Sign-off Fmax OpenLane/OpenSTA ; 322 MHz est une cible de mod´┐¢le.
+- Top-of-book RTL (le mod´┐¢le WASM en a un).
+- Artefacts npm/PyPI/GHCR publi´┐¢s (tokens requis).
+
+En cas d'´┐¢chec : `node scripts/autonomy.mjs` puis lire `reports/autonomy.log` ; il lance
+la prochaine porte et journalise la commande exacte.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && file docs/guides/*/zero-to-hero.md && python3 -c \"import 
+sys; [print(f, open(f, encoding='utf-8').read(60).splitlines()[0]) for f in 
+['docs/guides/de/zero-to-hero.md','docs/guides/fr/zero-to-hero.md']]\""
+[31;1mParserError: [0m
+[31;1m[36;1mLine |[0m
+[31;1m[36;1m[36;1m   1 | [0m . uides/*/zero-to-hero.md && python3 -c \"import sys; [print(f,[36;1m [0mopen(f, 
+.[0m
+[31;1m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m                                                              
+  ~[0m
+[31;1m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mSchlie´┐¢ende ")" fehlt im Ausdruck.[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/enc_check.py
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/enc_check.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/enc_check.py"
+docs/guides/en/zero-to-hero.md UTF-8 OK no-BOM 3939 chars
+  first line: # Zero to hero ÔÇö ChipLab in 20 minutes
+docs/guides/de/zero-to-hero.md UTF-8 OK no-BOM 3832 chars
+  first line: # Zero to Hero ÔÇö ChipLab in 20 Minuten
+docs/guides/fr/zero-to-hero.md UTF-8 OK no-BOM 3917 chars
+  first line: # Zero to Hero ÔÇö ChipLab en 20 minutes
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/en/zero-to-hero.md
+Index: docs/guides/en/zero-to-hero.md
+===================================================================
+--- docs/guides/en/zero-to-hero.md
++++ docs/guides/en/zero-to-hero.md
+@@ -71,9 +71,9 @@
+ The EXE embeds the web app and the 50 KB WASM. It opens the browser and serves the same
+ `/api/*` endpoints plus the local cloud. No Node installation is needed on the target
+ machine.
+ 
+-## 5b. Local cloud (v0.3.0)
++## 5b. Local cloud (v0.3.1)
+ 
+ ```bash
+ node backend/server.mjs --host 0.0.0.0 --token "long-token"
+ # prints the LAN URL, e.g. http://192.168.1.20:4173
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/en/zero-to-hero.md
+Index: docs/guides/en/zero-to-hero.md
+===================================================================
+--- docs/guides/en/zero-to-hero.md
++++ docs/guides/en/zero-to-hero.md
+@@ -85,10 +85,10 @@
+ 
+ ## 6. Docker and Vercel
+ 
+ ```bash
+-docker build -t chiplab:0.3.0 .
+-docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=long-token chiplab:0.3.0
++docker build -t chiplab:0.3.1 .
++docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=long-token chiplab:0.3.1
+ node scripts/build_vercel.mjs      # public/ + api/ for Vercel
+ ```
+ 
+ The Vercel build is static-first. Run history stays in the browser (OPFS); `/api/*` is
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/en/zero-to-hero.md
+Index: docs/guides/en/zero-to-hero.md
+===================================================================
+--- docs/guides/en/zero-to-hero.md
++++ docs/guides/en/zero-to-hero.md
+@@ -48,8 +48,9 @@
+ sudo apt-get install -y verilator yosys iverilog z3 cvc5 python3-pip
+ python3 -m pip install cocotb pytest scapy
+ 
+ make lint
++node scripts/gate.mjs    # 11 portable checks (model, WASM, MCP, cloud, docs links, ...)
+ python tb/itch_model.py --count 100000 --out tb/vectors
+ make sim                 # full-field Verilator regression
+ formal/run_formal.sh z3  # BMC + k-induction + covers
+ formal/solver_matrix.sh  # records each available solver
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/en/zero-to-hero.md
+Index: docs/guides/en/zero-to-hero.md
+===================================================================
+--- docs/guides/en/zero-to-hero.md
++++ docs/guides/en/zero-to-hero.md
+@@ -105,11 +105,23 @@
+ ```
+ 
+ ## 8. What is still open
+ 
+-- Multi-frame MoldUDP64 backpressure (single-frame proof passes).
+-- OpenLane/OpenSTA Fmax sign-off; the 322 MHz number is a model target.
+-- RTL top-of-book (the WASM model has one).
+-- Published npm/PyPI/GHCR artifacts (tokens required).
++- Physical sign-off: pre-PnR Sky130 STA is published (WNS ÔêÆ9.14 ns at 3.10 ns, Fmax
++  Ôëê81 MHz), but placement/routing needs clock planning and a fitted floorplan. No
++  DRC/LVS or timing sign-off exists.
++- FPGA target (UltraScale+/Agilex with 100G MAC) and PCIe/DMA integration.
++- Full Caravel harness run; the Caravel-shaped wrapper and Wishbone path are tested.
++- npm/PyPI registry publishing: opt-in steps exist, but the registry-side OIDC setup is
++  not done. GitHub Release assets work today.
++- No fabricated silicon; everything here is RTL, simulation and pre-PnR evidence.
+ 
++## 9. Further reading
++
++- [Datasheet](../datasheet.md) ÔÇö ports, timing targets, measured pre-PnR STA
++- [Register map](../register-map.md) ÔÇö host, Wishbone, Caravel, snapshot, counters
++- [Integration guide](../integration-guide.md) ÔÇö wiring and startup
++- [Errata](../errata.md) ÔÇö known limitations, in plain language
++- [API reference](../api.md) ÔÇö HTTP, MCP, npm and Python
++
+ If something fails, run `node scripts/autonomy.mjs` and read
+ `reports/autonomy.log`; it runs the next gate and records the exact command.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/de/zero-to-hero.md
+Index: docs/guides/de/zero-to-hero.md
+===================================================================
+--- docs/guides/de/zero-to-hero.md
++++ docs/guides/de/zero-to-hero.md
+@@ -71,9 +71,9 @@
+ Die EXE enth├ñlt Web-App und 50-KB-WASM. Sie ├Âffnet den Browser und serviert dieselben
+ `/api/*`-Endpunkte plus die lokale Cloud. Auf dem Zielrechner ist keine
+ Node-Installation n├Âtig.
+ 
+-## 5b. Lokale Cloud (v0.3.0)
++## 5b. Lokale Cloud (v0.3.1)
+ 
+ ```bash
+ node backend/server.mjs --host 0.0.0.0 --token "langes-token"
+ # gibt die LAN-URL aus, z. B. http://192.168.1.20:4173
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/de/zero-to-hero.md
+Index: docs/guides/de/zero-to-hero.md
+===================================================================
+--- docs/guides/de/zero-to-hero.md
++++ docs/guides/de/zero-to-hero.md
+@@ -85,10 +85,10 @@
+ 
+ ## 6. Docker und Vercel
+ 
+ ```bash
+-docker build -t chiplab:0.3.0 .
+-docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.0
++docker build -t chiplab:0.3.1 .
++docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.1
+ node scripts/build_vercel.mjs      # public/ + api/ f├╝r Vercel
+ ```
+ 
+ Der Vercel-Build ist static-first. Der Run-Verlauf bleibt im Browser (OPFS); `/api/*`
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content docs\guides\de\zero-to-hero.md | Select-Object -Skip 44 -First 16
+## 4. Volle Verifikation (Linux/WSL)
+
+```bash
+sudo apt-get install -y verilator yosys iverilog z3 cvc5 python3-pip
+python3 -m pip install cocotb pytest scapy
+
+make lint
+python tb/itch_model.py --count 100000 --out tb/vectors
+make sim
+formal/run_formal.sh z3
+formal/solver_matrix.sh
+python -m pytest -q tb/test_model.py
+```
+
+Erwartet: `0` Mismatches, Formal `PASSED`, alle Unit-Tests gr´┐¢n. Der 1M-Lauf ist das
+Deep-Gate; die CI nutzt eine kleinere Zahl wegen der Laufzeit.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/de/zero-to-hero.md
+Index: docs/guides/de/zero-to-hero.md
+===================================================================
+--- docs/guides/de/zero-to-hero.md
++++ docs/guides/de/zero-to-hero.md
+@@ -48,8 +48,9 @@
+ sudo apt-get install -y verilator yosys iverilog z3 cvc5 python3-pip
+ python3 -m pip install cocotb pytest scapy
+ 
+ make lint
++node scripts/gate.mjs    # 11 portable Checks (Modell, WASM, MCP, Cloud, Docs-Links, ...)
+ python tb/itch_model.py --count 100000 --out tb/vectors
+ make sim
+ formal/run_formal.sh z3
+ formal/solver_matrix.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/de/zero-to-hero.md
+Index: docs/guides/de/zero-to-hero.md
+===================================================================
+--- docs/guides/de/zero-to-hero.md
++++ docs/guides/de/zero-to-hero.md
+@@ -105,12 +105,25 @@
+ ```
+ 
+ ## 8. Was noch offen ist
+ 
+-- Multi-Frame-MoldUDP64-Backpressure (Single-Frame-Beweis ist gr├╝n).
+-- OpenLane/OpenSTA-Fmax-Sign-off; 322 MHz ist ein Modellziel.
+-- RTL-Top-of-Book (das WASM-Modell hat eines).
+-- Ver├Âffentlichte npm/PyPI/GHCR-Artefakte (Tokens n├Âtig).
++- Physisches Sign-off: Pre-PnR-Sky130-STA ist ver├Âffentlicht (WNS ÔêÆ9,14 ns bei 3,10 ns,
++  Fmax Ôëê81 MHz), aber Placement/Routing braucht Clock-Planung und einen gefitteten
++  Floorplan. Es gibt kein DRC/LVS- oder Timing-Sign-off.
++- FPGA-Target (UltraScale+/Agilex mit 100G-MAC) und PCIe/DMA-Integration.
++- Vollst├ñndiger Caravel-Harness-Lauf; der Caravel-f├Ârmige Wrapper und der
++  Wishbone-Pfad sind getestet.
++- npm/PyPI-Registry-Publishing: Opt-in-Schritte sind vorhanden, die OIDC-Einrichtung
++  auf Registry-Seite fehlt aber. GitHub-Release-Assets funktionieren heute.
++- Kein gefertigtes Silizium; alles hier ist RTL-, Simulations- und Pre-PnR-Evidenz.
+ 
++## 9. Weiterlesen
++
++- [Datenblatt](../../datasheet.md) ÔÇö Ports, Timing-Ziele, gemessene Pre-PnR-STA
++- [Register-/Port-Map](../../register-map.md) ÔÇö Host, Wishbone, Caravel, Snapshot, Counter
++- [Integrationsleitfaden](../../integration-guide.md) ÔÇö Verdrahtung und Start
++- [Errata](../../errata.md) ÔÇö bekannte Grenzen, im Klartext
++- [API-Referenz](../../api.md) ÔÇö HTTP, MCP, npm und Python
++
+ Wenn etwas fehlschl├ñgt: `node scripts/autonomy.mjs` ausf├╝hren und
+ `reports/autonomy.log` lesen; der Lauf startet das n├ñchste Gate und protokolliert den
+ exakten Befehl.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content docs\guides\fr\zero-to-hero.md | Select-Object -Skip 44 -First 14
+## 4. V´┐¢rification compl´┐¢te (Linux/WSL)
+
+```bash
+sudo apt-get install -y verilator yosys iverilog z3 cvc5 python3-pip
+python3 -m pip install cocotb pytest scapy
+
+make lint
+python tb/itch_model.py --count 100000 --out tb/vectors
+make sim
+formal/run_formal.sh z3
+formal/solver_matrix.sh
+python -m pytest -q tb/test_model.py
+```
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py"
+Traceback (most recent call last):
+  File "/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py", line 4, in <module>
+    s = open(path, encoding="utf-8").read()
+        ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'E:/chips/main/docs/guides/fr/zero-to-hero.md'
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit C:/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py
+Index: C:/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py
+===================================================================
+--- C:/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py
++++ C:/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py
+@@ -1,7 +1,7 @@
+ import re
+ 
+-path = r"E:/chips/main/docs/guides/fr/zero-to-hero.md"
++path = r"/mnt/e/chips/main/docs/guides/fr/zero-to-hero.md"
+ s = open(path, encoding="utf-8").read()
+ 
+ s = s.replace("Cloud local (v0.3.0)", "Cloud local (v0.3.1)")
+ s = s.replace("chiplab:0.3.0", "chiplab:0.3.1")
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/update_fr.py"
+FR updated: 4015 -> 4827
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/verify_guides.py
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/verify_guides.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/verify_guides.py"; cd E:\chips\main; node scripts\check_docs_links.mjs 
+2>&1 | Select-Object -Last 3
+docs/guides/en/zero-to-hero.md replacement-char: False {'(v0.3.1)': True, 'chiplab:0.3.1': True, '## 9. Further 
+reading': True, 'WNS ÔêÆ9.14 ns': True}
+docs/guides/de/zero-to-hero.md replacement-char: False {'(v0.3.1)': True, 'chiplab:0.3.1': True, '## 9. Weiterlesen': 
+True, 'WNS ÔêÆ9,14 ns': True}
+docs/guides/fr/zero-to-hero.md replacement-char: False {'(v0.3.1)': True, 'chiplab:0.3.1': True, '## 9. Pour aller 
+plus loin': True, 'WNS ÔêÆ9,14 ns': True}
+0.3.0 references: none
+OK
+[31;1m  docs/guides/en/zero-to-hero.md:122 -> ../integration-guide.md[0m
+[31;1m  docs/guides/en/zero-to-hero.md:123 -> ../errata.md[0m
+[31;1m  docs/guides/en/zero-to-hero.md:124 -> ../api.md[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/guides/en/zero-to-hero.md
+Index: docs/guides/en/zero-to-hero.md
+===================================================================
+--- docs/guides/en/zero-to-hero.md
++++ docs/guides/en/zero-to-hero.md
+@@ -116,12 +116,12 @@
+ - No fabricated silicon; everything here is RTL, simulation and pre-PnR evidence.
+ 
+ ## 9. Further reading
+ 
+-- [Datasheet](../datasheet.md) ÔÇö ports, timing targets, measured pre-PnR STA
+-- [Register map](../register-map.md) ÔÇö host, Wishbone, Caravel, snapshot, counters
+-- [Integration guide](../integration-guide.md) ÔÇö wiring and startup
+-- [Errata](../errata.md) ÔÇö known limitations, in plain language
+-- [API reference](../api.md) ÔÇö HTTP, MCP, npm and Python
++- [Datasheet](../../datasheet.md) ÔÇö ports, timing targets, measured pre-PnR STA
++- [Register map](../../register-map.md) ÔÇö host, Wishbone, Caravel, snapshot, counters
++- [Integration guide](../../integration-guide.md) ÔÇö wiring and startup
++- [Errata](../../errata.md) ÔÇö known limitations, in plain language
++- [API reference](../../api.md) ÔÇö HTTP, MCP, npm and Python
+ 
+ If something fails, run `node scripts/autonomy.mjs` and read
+ `reports/autonomy.log`; it runs the next gate and records the exact command.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 4
+[OK] 23 Markdown files, no dead relative links
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 05:59 - Autonomy tick + guides synced (EN/DE/FR)
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- The three zero-to-hero guides were stale: they referenced v0.3.0 / `chiplab:0.3.0`
++  and listed already-finished work (multi-frame backpressure, RTL top-of-book,
++  published artifacts) as open. Updated all three to v0.3.1, added the
++  `node scripts/gate.mjs` (11 checks) step, rewrote "what is still open" to the real
++  state (pre-PnR STA only, no P&R/DRC/LVS sign-off; FPGA/PCIe; Caravel harness;
++  opt-in registry publishing) and added a "further reading" section linking the
++  datasheet, register map, integration guide, errata and API.
++- Encoding verified (UTF-8, no replacement chars, no stale `0.3.0`); docs link check:
++  **23 files, 0 dead links**.
++
+ ## 2026-11-09 04:59 - Autonomy tick + book snapshot integration
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
+ - Added `rtl/itch_book_snapshot_top.sv` (parser + BBO + snapshot, top-4 depth wired)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -90,8 +90,13 @@
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
++- **Guides synced (EN/DE/FR)**: the zero-to-hero guides now target v0.3.1 /
++  `chiplab:0.3.1`, include `node scripts/gate.mjs` (11 checks), state the real open
++  items (pre-PnR STA only, no P&R/DRC/LVS sign-off; FPGA/PCIe; Caravel harness;
++  opt-in registry publishing) and link the datasheet, register map, integration
++  guide, errata and API. Encoding and links checked.
+ - **Book snapshot integration** (`rtl/itch_book_snapshot_top.sv`): parser + top-of-book
+   + per-locate snapshot with the book's top-4 depth wired through. Test compares the
+   snapshot for locates 1/2 against the last BBO event field by field and checks a
+   never-updated locate reads as a miss ÔåÆ PASS.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"docs(guides): sync EN/DE/FR zero-to-hero to v0.3.1 and current open items" 2>&1 | Select-Object -Last 1; git push 
+origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 8 files changed, 550 insertions(+), 35 deletions(-)
+[31;1m   79d078c..cb30373  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+cb30373 completed success
+79d078c completed success
+> build ┬À deepseek-v4.1-flash
+Tick 05:59 abgeschlossen.
+
+## Neu und verifiziert
+**Zero-to-Hero-Guides synchronisiert (EN/DE/FR)**
+- Alle drei Guides auf **v0.3.1** / `chiplab:0.3.1` aktualisiert (vorher 0.3.0).
+- `node scripts/gate.mjs` als Verifikationsschritt erg├ñnzt (11 portable Checks).
+- Abschnitt ÔÇ×Was noch offen ist" auf den echten Stand gebracht: Pre-PnR-STA vorhanden, aber **kein P&R/DRC/LVS- oder Timing-Sign-off**; FPGA/PCIe, vollst├ñndiger Caravel-Harness-Lauf, opt-in-Registry-Publishing; kein gefertigtes Silizium.
+- Neuer Abschnitt ÔÇ×Weiterlesen" mit Links zu Datenblatt, Register-/Port-Map, Integrationsleitfaden, Errata und API ÔÇö in allen drei Sprachen.
+
+## Verifikation
+- Encoding gepr├╝ft: UTF-8, keine Replacement-Zeichen, keine `0.3.0`-Reste.
+- Docs-Link-Check: **23 Dateien, 0 tote relative Links**.
+- `node scripts/autonomy.mjs`: Queue leer, 0 Tasks; Gate **11/11 (100 %)**.
+- CI auf `cb30373` **success**; Commit gepusht, Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Release-Plan bis auf das extern blockierte Registry-Publishing abgeschlossen; die verbleibenden Roadmap-Punkte (P&R/DRC/LVS, FPGA, Caravel-Harness, PCIe/100G, Shuttle) bleiben blockiert.
+[2026-11-09T06:59:18.8788757+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; rg -n "name:|run:" 
+.github/workflows/ci.yml | Select-Object -First 60
+[tick] ran 0, failed 0
+1:name: CI
+12:    name: RTL + formal + model
+16:      - name: Toolchain
+17:        run: |
+22:      - name: Python deps
+23:        run: |
+26:      - name: Lint
+27:        run: make lint
+28:      - name: Vectors (50k for CI time)
+29:        run: python3 tb/itch_model.py --count 50000 --out tb/vectors
+30:      - name: Full-field regression
+31:        run: make sim VECTORS=tb/vectors
+32:      - name: Model tests
+33:        run: python3 -m pytest -q tb/test_model.py
+34:      - name: Cocotb
+35:        run: |
+55:    name: WASM + backend + MCP + Vercel
+65:      - name: Build WASM
+66:        run: |
+69:      - name: Python test deps
+70:        run: |
+75:      - name: Gate
+76:        run: node scripts/gate.mjs
+79:    name: Docker build
+83:      - name: Build image
+84:        run: docker build -t chiplab:ci .
+87:    name: npm + PyPI artifacts
+97:      - name: npm pack
+98:        run: cd packages/npm && npm pack
+99:      - name: Python build
+100:        run: |
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_metrics.json
+Created file successfully: openlane/sky130_metrics.json

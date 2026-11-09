@@ -1,0 +1,21 @@
+{
+  "DESIGN_NAME": "itch_metrics",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_metrics.sv"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 10.0,
+  "PDN_MULTILAYER": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 500 500",
+  "CORE_AREA": "10 10 490 490",
+  "PL_TARGET_DENSITY_PCT": 30,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "RUN_KLAYOUT_DRC": true,
+  "RUN_MAGIC_DRC": true,
+  "RUN_LVS": true
+}

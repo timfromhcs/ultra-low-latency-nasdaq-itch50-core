@@ -91,6 +91,11 @@ All notable changes to ChipLab are documented here. The format follows
   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
   of msg count/type/locate/shares/ref, write ignored → PASS. First step toward Caravel.
+- **Small-block full flow (verified)**: `openlane/sky130_metrics.json` runs the whole
+  Classic flow on `itch_metrics` at 10 ns — **0 routing DRC, 0 Magic/KLayout DRC, 0 LVS
+  errors**, timing closed (WNS +0.12 ns, Fmax ≈101 MHz), 6,776 stdcells (456 FFs),
+  42,127 µm² on a 500 µm die. Earlier 200 µm/3.10 ns attempts failed (DPL-0036 / no
+  resizer convergence). This validates the flow, not the parser.
 - **Guides synced (EN/DE/FR)**: the zero-to-hero guides now target v0.3.1 /
   `chiplab:0.3.1`, include `node scripts/gate.mjs` (11 checks), state the real open
   items (pre-PnR STA only, no P&R/DRC/LVS sign-off; FPGA/PCIe; Caravel harness;

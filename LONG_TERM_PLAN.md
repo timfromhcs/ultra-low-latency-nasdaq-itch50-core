@@ -127,6 +127,10 @@ MDN PWA best practices, GitHub Actions docs.
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
       Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
+- [x] Small-block full-flow validation: `openlane/sky130_metrics.json` (`itch_metrics`,
+      10 ns) completed the whole flow — **0 routing/Magic/KLayout DRC, 0 LVS errors,
+      timing closed (WNS +0.12 ns, Fmax ≈101 MHz)**, 6,776 stdcells on a 500 µm die
+      (`reports/openlane_metrics-full3.json`). Flow validation, not a parser result.
 - [ ] Post-route STA with the full flow (blocked on the P&R above).
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).

@@ -1,15 +1,20 @@
 # OpenLane / LibreLane targets
 
-These are **flow-ready** configurations, not sign-off results. No full P&R run has
-been committed, so no Fmax, slack or die-area claim is made.
+These are **flow-ready** configurations, not sign-off results. Only the pre-PnR STA
+runs and the small-block validation are measured; the parser has no completed P&R, so
+no parser Fmax, slack or die-area claim is made.
 
-| File | PDK | Clock target |
-|---|---|---|
-| `config.json` | legacy Sky130 baseline | 3.10 ns |
-| `sky130.json` | Sky130 | 3.10 ns |
-| `sky130_250mhz.json` | Sky130 | 4.00 ns (250 MHz) |
-| `gf180.json` | GF180MCU | 3.10 ns |
-| `ihp-sg13g2.json` | IHP SG13G2 | 3.10 ns |
+| File | Target | PDK | Clock |
+|---|---|---|---|
+| `config.json` | parser (legacy baseline) | Sky130 | 3.10 ns |
+| `sky130.json` | parser | Sky130 | 3.10 ns |
+| `sky130_250mhz.json` | parser, STA only | Sky130 | 4.00 ns (250 MHz) |
+| `gf180.json` | parser, STA only | GF180MCU | 3.10 ns |
+| `ihp-sg13g2.json` | parser, STA only | IHP SG13G2 | 3.10 ns |
+| `sky130_wrap.json` | `itch_host_wrap` (128-bit) | Sky130 | 3.10 ns |
+| `sky130_wrap32.json` | `itch_wishbone_wrap` (32-bit) | Sky130 | 3.10 ns |
+| `sky130_wrap32_big.json` | 32-bit wrapper, congestion allowed | Sky130 | 3.10 ns |
+| `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
 
@@ -63,6 +68,26 @@ docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel `
   librelane --run-tag sky130-250mhz-sta --to OpenROAD.STAPrePNR openlane/sky130_250mhz.json
 node scripts/openlane_summary.mjs openlane/runs/sky130-250mhz-sta
 ```
+
+## Small-block full-flow validation (2026-11-09)
+
+`openlane/sky130_metrics.json` targets the `itch_metrics` block at a **10 ns** clock.
+This is a flow/DRC/LVS validation, not a speed claim for the parser. The complete
+Classic flow finished:
+
+| Result | Value |
+|---|---|
+| Standard cells | 6,776 (456 sequential), 42,127 µm² cell area |
+| Die | 500 × 500 µm (not fitted) |
+| Routing DRC | **0** (iterations 1/2/3: 1 → 0) |
+| Magic DRC / KLayout DRC | **0 / 0** |
+| LVS | **0 errors** (devices, nets, pins, properties) |
+| Timing | closed at 10 ns, WNS ≈ +0.12 ns, Fmax estimate ≈ 101 MHz |
+| CTS | 107 clock buffers + 9 clock inverters; 300 hold buffers |
+
+Two earlier attempts failed: a 200 µm die could not place (~400 top-level pins on an
+800 µm perimeter, DPL-0036) and at 3.10 ns the resizer did not converge. Artifact:
+`reports/openlane_metrics-full3.json`.
 
 ## Full-flow attempts (best effort, no success claim)
 

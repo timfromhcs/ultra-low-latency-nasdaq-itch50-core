@@ -40,7 +40,12 @@ if (!metricsPath) {
   process.exit(2);
 }
 
-const metrics = JSON.parse(fs.readFileSync(metricsPath, "utf8"));
+// Python's json.dump writes Infinity/NaN, which JSON.parse rejects.
+const metricsText = fs
+  .readFileSync(metricsPath, "utf8")
+  .replace(/\b-?Infinity\b/g, "null")
+  .replace(/\bNaN\b/g, "null");
+const metrics = JSON.parse(metricsText);
 const tag = path.basename(runDir);
 
 // Derive an Fmax estimate from the worst setup slack (informative only).

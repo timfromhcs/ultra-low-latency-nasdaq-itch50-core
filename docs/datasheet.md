@@ -155,6 +155,7 @@ arriving earlier are otherwise accepted by the parser but not booked.
 | RTL ↔ WASM equivalence | 100,000 records, every field equal | weekly `equivalence` job |
 | Mutation (book) | 9/9 mutants killed | `reports/mutation_book.json` |
 | Formal | protocol invariants proven (Z3/CVC5) | `formal/`, weekly job |
+| Small-block full flow | `itch_metrics`: **0 DRC, 0 LVS**, timing closed at 10 ns | `reports/openlane_metrics-full3.json` |
 
 ## 8. Known limitations
 

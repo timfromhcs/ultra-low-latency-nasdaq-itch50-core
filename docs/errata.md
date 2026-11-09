@@ -12,7 +12,9 @@ Nothing here is a fabrication claim; the RTL is simulation-verified only.
 model in `docs/timing_cutthrough.*`, not from OpenSTA or a placed-and-routed design.
 A LibreLane 3.0.17 sky130 pre-PnR run measures **WNS −9.14 ns at 3.10 ns** (≈81 MHz
 Fmax estimate); the full flow is blocked by pin-count congestion (~1,100 top-level
-pins on a 700 µm die), so no post-route STA, DRC or LVS result exists.
+pins on a 700 µm die), so no post-route STA, DRC or LVS result exists **for the
+parser**. The small `itch_metrics` block did complete the full flow (0 DRC, 0 LVS,
+timing closed at 10 ns) — that validates the flow, not the parser.
 **Workaround:** treat timing as a target. Run LibreLane/OpenSTA in your own flow; the
 `openlane/` configuration and `scripts/synth_*.sh` are starting points, not results.
 
