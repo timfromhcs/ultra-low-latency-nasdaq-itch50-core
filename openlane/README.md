@@ -101,7 +101,7 @@ Two earlier attempts failed: a 200 µm die could not place (~400 top-level pins 
 | wrapper, 1400 µm, 50 % density, timing-driven placement off | GlobalPlacement **diverged again** (GPL-0305). Three configurations fail in three different places; this needs clock planning and a real floorplan, not config tweaks. |
 | wrapper 32-bit, 700 µm | GlobalRouting **still congested** (GRT-0116) even with the narrow interface; clock fanout is 1,566 terminals. |
 | wrapper 32-bit, 1500 µm, 25 %, 10 ns, no skips | Placement, CTS and resizer ran; GlobalRouting finished with congestion (warning), then **`OpenROAD.DiodeInsertion` failed** with `GRT-0183` (heap underflow in 3D maze routing) after ~7 h. |
-| wrapper 32-bit, 1500 µm, 10 ns, antenna repair off, resizer/diode skipped | Fast retry (`sky130_wrap32_100mhz_fast.json`); result pending. |
+| wrapper 32-bit, 1500 µm, 10 ns, antenna repair off, resizer/diode skipped | GlobalRouting ran without antenna loops but the **container died** ("unexpected EOF" at GRT 32/50, host/Docker restart), so no result. Long P&R runs are not reliable in this environment. |
 | wrapper 32-bit, 1000 µm, 35 % density, congestion allowed | Passed GlobalRouting, entered **DetailedRouting**; violations fell from ~695k to ~148k but the run did not converge and was stopped by a host restart. No DRC/LVS result. |
 
 The **unbuffered ~1,566-terminal clock** and placement density, not the pin count (the

@@ -426,3 +426,21 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
  - The 100 MHz 32-bit-wrapper run (`wrap32-100mhz`, 1500 ┬Ám die, 25 % density) is in
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: tick log for the fast 100 MHz parser flow" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 82 insertions(+), 15 deletions(-)
+[31;1m   a5fc181..8943f69  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+Zwischenstand (Tick 16:59):
+
+- **Autonomy**: Queue leer, 0 Tasks; Gate **11/11**.
+- **`wrap32-100mhz-fast2`**: Global Routing bei **49/50** Extra-Iterationen, danach Detailed Routing. Der Lauf (Parser+Wishbone, 32-bit, 10 ns, 1500 ┬Ám, Antenna-Repair aus, Resizer ├╝bersprungen) ist derzeit der aussichtsreichste Weg zu einem vollst├ñndigen Parser-P&R mit DRC/LVS.
+- Der zuvor nach ~7 h gescheiterte Lauf (`DiodeInsertion`, GRT-0183) ist dokumentiert, sein Run-Verzeichnis entfernt; Tick-Log + Commit `8943f69` gepusht.
+
+Sobald Detailed Routing abgeschlossen ist, werden DRC/LVS/Post-Route-STA ausgewertet und als `reports/openlane_wrap32-100mhz-fast2.json` publiziert oder der exakte Fehlerpunkt dokumentiert.

@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 17:30 - Fast parser flow aborted by container restart
+
+- `wrap32-100mhz-fast2` (10 ns, 1500 µm, antenna repair off, resizer skipped) reached
+  GlobalRouting and was at extra iteration 32/50 when the **container died**
+  ("unexpected EOF"); Docker/host instability, not a flow assertion.
+- Summary of parser attempts: 700 µm congestion, 1400 µm placement divergence,
+  1000 µm/35 % DRT non-convergence, 10 ns/antenna-on `DiodeInsertion` GRT-0183 after
+  ~7 h, 10 ns/antenna-off aborted by the container. Long P&R runs are not reliable in
+  this environment; the `itch_metrics` full flow (0 DRC/LVS, timing closed) remains the
+  flow evidence.
+- Removed the partial run directory; documented in `openlane/README.md` and the roadmap.
+
 ## 2026-11-09 16:59 - Autonomy tick + fast parser flow in routing
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.

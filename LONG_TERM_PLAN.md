@@ -120,9 +120,10 @@ MDN PWA best practices, GitHub Actions docs.
       ["DATA_WIDTH=32"]`) → pre-PnR **WNS −6.55 ns**, Fmax **103.67 MHz**, worst path
       FF → FF (`reports/openlane_wrap32-sta.json`).
 - [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 µm) / GPL-0305 (1400 µm); 32-bit
-      wrapper still congested at 700 µm, and at 1000 µm/35 % reached DetailedRouting but
-      did not converge (~148k violations when stopped by a host restart). Needs clock
-      planning (≈1,566-terminal clock) and a fitted floorplan.
+      wrapper still congested at 700 µm; at 1000 µm/35 % it reached DetailedRouting but
+      did not converge; the 100 MHz relaxed runs either failed in DiodeInsertion
+      (GRT-0183) or were aborted by Docker/host restarts. Needs clock planning and a
+      fitted floorplan, plus a stable long-run environment.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
