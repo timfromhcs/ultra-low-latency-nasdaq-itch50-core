@@ -91,6 +91,11 @@ All notable changes to ChipLab are documented here. The format follows
   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
   of msg count/type/locate/shares/ref, write ignored → PASS. First step toward Caravel.
+- **Guides synced (EN/DE/FR)**: the zero-to-hero guides now target v0.3.1 /
+  `chiplab:0.3.1`, include `node scripts/gate.mjs` (11 checks), state the real open
+  items (pre-PnR STA only, no P&R/DRC/LVS sign-off; FPGA/PCIe; Caravel harness;
+  opt-in registry publishing) and link the datasheet, register map, integration
+  guide, errata and API. Encoding and links checked.
 - **Book snapshot integration** (`rtl/itch_book_snapshot_top.sv`): parser + top-of-book
   + per-locate snapshot with the book's top-4 depth wired through. Test compares the
   snapshot for locates 1/2 against the last BBO event field by field and checks a

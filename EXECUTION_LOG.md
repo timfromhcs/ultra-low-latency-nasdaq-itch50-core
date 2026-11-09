@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 05:59 - Autonomy tick + guides synced (EN/DE/FR)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- The three zero-to-hero guides were stale: they referenced v0.3.0 / `chiplab:0.3.0`
+  and listed already-finished work (multi-frame backpressure, RTL top-of-book,
+  published artifacts) as open. Updated all three to v0.3.1, added the
+  `node scripts/gate.mjs` (11 checks) step, rewrote "what is still open" to the real
+  state (pre-PnR STA only, no P&R/DRC/LVS sign-off; FPGA/PCIe; Caravel harness;
+  opt-in registry publishing) and added a "further reading" section linking the
+  datasheet, register map, integration guide, errata and API.
+- Encoding verified (UTF-8, no replacement chars, no stale `0.3.0`); docs link check:
+  **23 files, 0 dead links**.
+
 ## 2026-11-09 04:59 - Autonomy tick + book snapshot integration
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.

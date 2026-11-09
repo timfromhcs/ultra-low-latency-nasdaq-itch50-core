@@ -2511,3 +2511,459 @@ In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Micro
 > build ┬À deepseek-v4.1-flash
 [0mÔåÉ [0mWrite rtl/itch_book_snapshot_top.sv
 Created file successfully: rtl/itch_book_snapshot_top.sv
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot_top.sv
+Index: rtl/itch_book_snapshot_top.sv
+===================================================================
+--- rtl/itch_book_snapshot_top.sv
++++ rtl/itch_book_snapshot_top.sv
+@@ -43,10 +43,12 @@
+ );
+ 
+   wire bbo_valid;
+   wire [15:0] bbo_locate;
+-  wire [31:0] bbo_bid_price, bbo_ask_price, bbo_last_price;
+-  wire [63:0] bbo_bid_shares, bbo_ask_shares, bbo_last_shares, bbo_volume;
++  wire [31:0] bbo_bid_p0, bbo_bid_p1, bbo_bid_p2, bbo_bid_p3;
++  wire [63:0] bbo_bid_s0, bbo_bid_s1, bbo_bid_s2, bbo_bid_s3;
++  wire [31:0] bbo_ask_p0, bbo_ask_p1, bbo_ask_p2, bbo_ask_p3;
++  wire [63:0] bbo_ask_s0, bbo_ask_s1, bbo_ask_s2, bbo_ask_s3;
+ 
+   /* verilator lint_off PINCONNECTEMPTY */
+   itch_top_book #(
+     .DATA_WIDTH(DATA_WIDTH)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot_top.sv
+Index: rtl/itch_book_snapshot_top.sv
+===================================================================
+--- rtl/itch_book_snapshot_top.sv
++++ rtl/itch_book_snapshot_top.sv
+@@ -43,8 +43,10 @@
+ );
+ 
+   wire bbo_valid;
+   wire [15:0] bbo_locate;
++  wire [31:0] bbo_bid_price, bbo_ask_price, bbo_last_price;
++  wire [63:0] bbo_bid_shares, bbo_ask_shares, bbo_last_shares, bbo_volume;
+   wire [31:0] bbo_bid_p0, bbo_bid_p1, bbo_bid_p2, bbo_bid_p3;
+   wire [63:0] bbo_bid_s0, bbo_bid_s1, bbo_bid_s2, bbo_bid_s3;
+   wire [31:0] bbo_ask_p0, bbo_ask_p1, bbo_ask_p2, bbo_ask_p3;
+   wire [63:0] bbo_ask_s0, bbo_ask_s1, bbo_ask_s2, bbo_ask_s3;
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot_top.sv
+Index: rtl/itch_book_snapshot_top.sv
+===================================================================
+--- rtl/itch_book_snapshot_top.sv
++++ rtl/itch_book_snapshot_top.sv
+@@ -70,12 +70,12 @@
+     .bbo_ask_shares(bbo_ask_shares),
+     .bbo_last_price(bbo_last_price),
+     .bbo_last_shares(bbo_last_shares),
+     .bbo_volume(bbo_volume),
+-    .bbo_bid_p0(), .bbo_bid_p1(), .bbo_bid_p2(), .bbo_bid_p3(),
+-    .bbo_bid_s0(), .bbo_bid_s1(), .bbo_bid_s2(), .bbo_bid_s3(),
+-    .bbo_ask_p0(), .bbo_ask_p1(), .bbo_ask_p2(), .bbo_ask_p3(),
+-    .bbo_ask_s0(), .bbo_ask_s1(), .bbo_ask_s2(), .bbo_ask_s3(),
++    .bbo_bid_p0(bbo_bid_p0), .bbo_bid_p1(bbo_bid_p1), .bbo_bid_p2(bbo_bid_p2), .bbo_bid_p3(bbo_bid_p3),
++    .bbo_bid_s0(bbo_bid_s0), .bbo_bid_s1(bbo_bid_s1), .bbo_bid_s2(bbo_bid_s2), .bbo_bid_s3(bbo_bid_s3),
++    .bbo_ask_p0(bbo_ask_p0), .bbo_ask_p1(bbo_ask_p1), .bbo_ask_p2(bbo_ask_p2), .bbo_ask_p3(bbo_ask_p3),
++    .bbo_ask_s0(bbo_ask_s0), .bbo_ask_s1(bbo_ask_s1), .bbo_ask_s2(bbo_ask_s2), .bbo_ask_s3(bbo_ask_s3),
+     .cfg_max_shares(64'd0),
+     .cfg_collar(32'd0),
+     .risk_rejects(),
+     .status_msg_count(),
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot_top.sv
+Index: rtl/itch_book_snapshot_top.sv
+===================================================================
+--- rtl/itch_book_snapshot_top.sv
++++ rtl/itch_book_snapshot_top.sv
+@@ -97,12 +97,12 @@
+     .upd_ask_shares(bbo_ask_shares),
+     .upd_last_price(bbo_last_price),
+     .upd_last_shares(bbo_last_shares),
+     .upd_volume(bbo_volume),
+-    .upd_bid_p0(32'd0), .upd_bid_p1(32'd0), .upd_bid_p2(32'd0), .upd_bid_p3(32'd0),
+-    .upd_bid_s0(64'd0), .upd_bid_s1(64'd0), .upd_bid_s2(64'd0), .upd_bid_s3(64'd0),
+-    .upd_ask_p0(32'd0), .upd_ask_p1(32'd0), .upd_ask_p2(32'd0), .upd_ask_p3(32'd0),
+-    .upd_ask_s0(64'd0), .upd_ask_s1(64'd0), .upd_ask_s2(64'd0), .upd_ask_s3(64'd0),
++    .upd_bid_p0(bbo_bid_p0), .upd_bid_p1(bbo_bid_p1), .upd_bid_p2(bbo_bid_p2), .upd_bid_p3(bbo_bid_p3),
++    .upd_bid_s0(bbo_bid_s0), .upd_bid_s1(bbo_bid_s1), .upd_bid_s2(bbo_bid_s2), .upd_bid_s3(bbo_bid_s3),
++    .upd_ask_p0(bbo_ask_p0), .upd_ask_p1(bbo_ask_p1), .upd_ask_p2(bbo_ask_p2), .upd_ask_p3(bbo_ask_p3),
++    .upd_ask_s0(bbo_ask_s0), .upd_ask_s1(bbo_ask_s1), .upd_ask_s2(bbo_ask_s2), .upd_ask_s3(bbo_ask_s3),
+     .rd_valid(rd_valid),
+     .rd_locate(rd_locate),
+     .snap_valid(snap_valid),
+     .snap_locate(snap_locate),
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/test_book_snapshot.py
+Created file successfully: tb/test_book_snapshot.py
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit tb/test_book_snapshot.py
+Index: tb/test_book_snapshot.py
+===================================================================
+--- tb/test_book_snapshot.py
++++ tb/test_book_snapshot.py
+@@ -91,12 +91,12 @@
+ 
+     async def monitor():
+         while True:
+             await RisingEdge(dut.clk)
+-            if int(dut.bbo_valid.value):
++            if int(dut.u_book.bbo_valid.value):
+                 await Timer(1, unit="ns")
+-                loc = int(dut.bbo_locate.value)
+-                last[loc] = {name: int(getattr(dut, f"bbo_{name}").value) for name in (
++                loc = int(dut.u_book.bbo_locate.value)
++                last[loc] = {name: int(getattr(dut.u_book, f"bbo_{name}").value) for name in (
+                     "bid_price", "bid_shares", "ask_price", "ask_shares",
+                     "last_price", "last_shares", "volume",
+                     "bid_p0", "bid_p1", "bid_p2", "bid_p3", "bid_s0", "bid_s1", "bid_s2", "bid_s3",
+                     "ask_p0", "ask_p1", "ask_p2", "ask_p3", "ask_s0", "ask_s1", "ask_s2", "ask_s3")}
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/run_book_snapshot_cocotb.py
+Created file successfully: tb/run_book_snapshot_cocotb.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_book_snapshot_top.sv rtl/itch_book_snapshot.sv rtl/itch_top_book.sv rtl/itch_metrics.sv 
+rtl/itch_top_of_book.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv 2>&1 | grep 
+-E 'Warning-|Error' | head -6; echo LINT_END"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+tb/run_book_snapshot_cocotb.py > /tmp/bs1.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -E 'Book 
+snapshot:|TESTS=|Assertion|error:' /tmp/bs1.txt | tail -6"
+%Warning-PINMISSING: rtl/itch_book_snapshot_top.sv:57:5: Cell has missing pin: 'metrics_msg_count'
+%Warning-PINMISSING: rtl/itch_book_snapshot_top.sv:57:5: Cell has missing pin: 'metrics_byte_count'
+%Warning-PINMISSING: rtl/itch_book_snapshot_top.sv:57:5: Cell has missing pin: 'metrics_gap_count'
+%Warning-PINMISSING: rtl/itch_book_snapshot_top.sv:57:5: Cell has missing pin: 'metrics_drop_count'
+%Warning-PINMISSING: rtl/itch_book_snapshot_top.sv:57:5: Cell has missing pin: 'metrics_cycle_count'
+%Warning-PINMISSING: rtl/itch_book_snapshot_top.sv:57:5: Cell has missing pin: 'metrics_occupancy_max'
+LINT_END
+  2559.05ns INFO     cocotb.itch_book_snapshot_top      Book snapshot: locate 1/2 mirror the last BBO, locate 3 is a 
+miss PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                        2559.05 
+          0.05      54573.39  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot_top.sv
+Index: rtl/itch_book_snapshot_top.sv
+===================================================================
+--- rtl/itch_book_snapshot_top.sv
++++ rtl/itch_book_snapshot_top.sv
+@@ -79,8 +79,12 @@
+     .cfg_collar(32'd0),
+     .risk_rejects(),
+     .status_msg_count(),
+     .status_corrupt_count(),
++    .metrics_msg_count(), .metrics_byte_count(), .metrics_gap_count(),
++    .metrics_drop_count(), .metrics_cycle_count(), .metrics_occupancy_max(),
++    .metrics_hist0(), .metrics_hist1(), .metrics_hist2(), .metrics_hist3(),
++    .metrics_hist4(), .metrics_hist5(), .metrics_hist6(), .metrics_hist7(),
+     .ready(ready)
+   );
+   /* verilator lint_on PINCONNECTEMPTY */
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_book_snapshot_top.sv rtl/itch_book_snapshot.sv rtl/itch_top_book.sv rtl/itch_metrics.sv 
+rtl/itch_top_of_book.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv 2>&1 | grep 
+-E 'Warning-|Error' | head -5; echo LINT_END"
+%Warning-UNUSEDSIGNAL: rtl/itch_book_snapshot_top.sv:46:15: Bits of signal are not used: 'bbo_locate'[15:4]
+%Error: Exiting due to 1 warning(s)
+LINT_END
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_book_snapshot_top.sv
+Index: rtl/itch_book_snapshot_top.sv
+===================================================================
+--- rtl/itch_book_snapshot_top.sv
++++ rtl/itch_book_snapshot_top.sv
+@@ -87,8 +87,11 @@
+     .ready(ready)
+   );
+   /* verilator lint_on PINCONNECTEMPTY */
+ 
++  // The snapshot indexes locates with LOC_AW bits; the upper bits are unused here.
++  wire _unused = &{1'b0, bbo_locate[15:4]};
++
+   itch_book_snapshot #(
+     .LOCATES(16)
+   ) u_snap (
+     .clk(clk),
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_book_snapshot_top.sv rtl/itch_book_snapshot.sv rtl/itch_top_book.sv rtl/itch_metrics.sv 
+rtl/itch_top_of_book.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv 2>&1 | grep 
+-E 'Warning-|Error' | head -5; echo LINT_END"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+tb/run_book_snapshot_cocotb.py > /tmp/bs2.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -E 'Book snapshot:|TESTS=' 
+/tmp/bs2.txt | tail -3"
+LINT_END
+  2559.05ns INFO     cocotb.itch_book_snapshot_top      Book snapshot: locate 1/2 mirror the last BBO, locate 3 is a 
+miss PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                        2559.05 
+          0.05      51667.00  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -61,8 +61,9 @@
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_book_snapshot.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv 
+rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv 
+rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
++	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_book_snapshot_top.sv rtl/itch_book_snapshot.sv 
+rtl/itch_top_book.sv rtl/itch_metrics.sv rtl/itch_top_of_book.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
+ 
+ sim:
+ 	$(MAKE) -C tb sim VECTORS=$(abspath $(VECTORS))
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -90,8 +90,9 @@
+ 	$(PYTHON) tb/run_host_wrap_cocotb.py
+ 	$(PYTHON) tb/run_wishbone_cocotb.py
+ 	$(PYTHON) tb/run_wishbone32_cocotb.py
+ 	$(PYTHON) tb/run_caravel_cocotb.py
++	$(PYTHON) tb/run_book_snapshot_cocotb.py
+ 	$(PYTHON) tb/run_skid_cocotb.py
+ 
+ synth-book:
+ 	./scripts/synth_book.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -47,8 +47,9 @@
+           python3 tb/run_host_wrap_cocotb.py 
+           python3 tb/run_wishbone_cocotb.py  
+           python3 tb/run_wishbone32_cocotb.py
+           python3 tb/run_caravel_cocotb.py   
++          python3 tb/run_book_snapshot_cocotb.py
+           python3 tb/run_skid_cocotb.py     
+ 
+   wasm-web:
+     name: WASM + backend + MCP + Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -263,9 +263,9 @@
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+ | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | 
+`tb/run_book_top_skid_cocotb.py` |
+-| Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
++| Host book snapshot | **parserÔåÆbookÔåÆsnapshot mirrors the last BBO per locate; locate 3 is a miss** | 
+`tb/test_book_snapshot.py` |
+ | Narrow host wrapper | **128-bit ingress ÔåÆ 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** 
+| `tb/test_host_wrap.py` |
+ | Wishbone wrapper | **Caravel-style Wishbone reads of count/type/locate/shares/ref; writes ACK but are ignored; 20 
+back-to-back messages, no beat loss** | `tb/test_wishbone.py` |
+ | 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow 
+port) | `tb/run_wishbone32_cocotb.py` |
+ | Caravel-shaped top | **38-bit io_in stream + Wishbone reads; io_oeb leaves only io_out[0] driven** | 
+`tb/test_caravel_wrap.py` |
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "Host book snapshot|Book snapshot" README.md
+267:| Host book snapshot | **parserÔåÆbookÔåÆsnapshot mirrors the last BBO per locate; locate 3 is a miss** | 
+`tb/test_book_snapshot.py` |
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -263,9 +263,10 @@
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+ | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | 
+`tb/run_book_top_skid_cocotb.py` |
+-| Host book snapshot | **parserÔåÆbookÔåÆsnapshot mirrors the last BBO per locate; locate 3 is a miss** | 
+`tb/test_book_snapshot.py` |
++| Host book snapshot (unit) | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
++| Book snapshot integration | **parserÔåÆbookÔåÆsnapshot mirrors the last BBO per locate; locate 3 is a miss** | 
+`tb/test_book_snapshot.py` |
+ | Narrow host wrapper | **128-bit ingress ÔåÆ 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** 
+| `tb/test_host_wrap.py` |
+ | Wishbone wrapper | **Caravel-style Wishbone reads of count/type/locate/shares/ref; writes ACK but are ignored; 20 
+back-to-back messages, no beat loss** | `tb/test_wishbone.py` |
+ | 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow 
+port) | `tb/run_wishbone32_cocotb.py` |
+ | Caravel-shaped top | **38-bit io_in stream + Wishbone reads; io_oeb leaves only io_out[0] driven** | 
+`tb/test_caravel_wrap.py` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -157,8 +157,11 @@
+ - [x] Multi-symbol order book: 16 locates, 16 price levels per side, **top-4 depth**
+       output, 400-event + 100 back-to-back tests.
+ - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
+       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
++- [x] Book snapshot integration (`itch_book_snapshot_top`): parser ÔåÆ top-of-book ÔåÆ
++  per-locate snapshot, with the book's top-4 depth wired through. Test: locate 1/2
++  snapshot equals the last BBO event for every field, locate 3 is a miss.
+ - [x] Host book-snapshot block (`rtl/itch_book_snapshot.sv`): per-locate top-of-book,
+       last trade, volume and top-4 depth, one-cycle registered read port with a hit flag
+       and an update counter; test reads two locates, a miss, stability and a re-read.
+ - [ ] PCIe/DMA or 100G MAC integration.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,16 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 04:59 - Autonomy tick + book snapshot integration
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
++- Added `rtl/itch_book_snapshot_top.sv` (parser + BBO + snapshot, top-4 depth wired)
++  and `tb/test_book_snapshot.py`: locate 1/2 snapshot equals the last BBO event for
++  every field (price/shares/last/volume/depth), locate 3 reads as a miss ÔåÆ **PASS**.
++- Lint clean; wired into `make lint`, `make cocotb` and CI.
++
+ ## 2026-11-09 03:59 - Autonomy tick + register/port map documentation
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
+ - Added `docs/register-map.md`: host register file word map (0ÔÇô10), Wishbone mapping
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -90,8 +90,12 @@
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
++- **Book snapshot integration** (`rtl/itch_book_snapshot_top.sv`): parser + top-of-book
++  + per-locate snapshot with the book's top-4 depth wired through. Test compares the
++  snapshot for locates 1/2 against the last BBO event field by field and checks a
++  never-updated locate reads as a miss ÔåÆ PASS.
+ - **Register/port map** (`docs/register-map.md`): host register file (words 0ÔÇô10),
+   Wishbone (`wbs_adr_i[6:2]`, one-cycle ACK, writes ignored), Caravel
+   `io_in`/`io_out`/`io_oeb` mapping, snapshot read port, performance counters and
+   Mold/arbiter status. Added as the 13th `chiplab.docs` key.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -cE 'Warning-|Error'; echo LINT_DONE; 
+make cocotb > /tmp/allcocotb7.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -c 'FAIL=0' /tmp/allcocotb7.txt; grep -E 
+'TESTS=' /tmp/allcocotb7.txt | sed -E 's/.*TESTS=([0-9]+) PASS=([0-9]+) FAIL=([0-9]+).*/T=\1 P=\2 F=\3/' | tr '\n' ' '"
+0
+LINT_DONE
+18
+T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 
+F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "test(rtl): 
+parser-book-snapshot integration with top-4 depth" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/run_book_snapshot_cocotb.py', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'tb/test_book_snapshot.py', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 tb/test_book_snapshot.py
+[31;1m   5812e5f..79d078c  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 180; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+79d078c completed success
+5812e5f completed success
+> build ┬À deepseek-v4.1-flash
+Tick 04:59 abgeschlossen.
+
+## Neu und verifiziert
+**ParserÔåÆBookÔåÆSnapshot-Integration**
+- `rtl/itch_book_snapshot_top.sv`: verbindet `itch_top_book` mit `itch_book_snapshot`, inklusive der **Top-4-Depth-Ausg├ñnge** des Buchs; nach au├ƒen nur AXI4-Stream-Ingress, `ready` und der Snapshot-Leseport.
+- `tb/test_book_snapshot.py` (eigener Runner): zwei Locates werden mit Add/Cancel bef├╝llt; der Test vergleicht **jedes Snapshot-Feld** (Bid/Ask-Preis und -Size, Last, Volume, Depth p0ÔÇôp3/s0ÔÇôs3) mit dem letzten BBO-Event des jeweiligen Locates und pr├╝ft, dass ein nie aktualisiertes Locate als **Miss** gelesen wird ÔåÆ **PASS**.
+- Lint sauber; in `make lint`, `make cocotb` und CI verdrahtet.
+
+## Verifikation
+- `node scripts/autonomy.mjs`: Queue leer, 0 Tasks.
+- `make lint`: 0 Warnungen; `make cocotb`: **18 Suiten / 25 Tests, 0 Fehler**.
+- Gate **11/11 (100 %)**; CI auf `79d078c` **success**.
+- Commit `79d078c` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Release-Plan bis auf das extern blockierte Registry-Publishing abgeschlossen. Verbleibende Roadmap-Punkte bleiben blockiert: vollst├ñndiges P&R/DRC/LVS (Clock-Planung + Floorplan), FPGA-Target, vollst├ñndige Caravel-Harness-Integration, PCIe/100G, optionaler Shuttle.
+[2026-11-09T05:59:18.8290689+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; Get-ChildItem docs\guides -Recurse 
+-File | Select-Object FullName,Length; rg -n "0\.2\.0|0\.3\.0|12 tools|8 tools|MCP" docs/guides -g "*.md" | 
+Select-Object -First 20
+[tick] ran 0, failed 0
+
+[32;1mFullName                                    [0m[32;1m Length[0m
+[32;1m--------                                    [0m [32;1m------[0m
+E:\chips\main\docs\guides\de\zero-to-hero.md   3854
+E:\chips\main\docs\guides\en\zero-to-hero.md   3941
+E:\chips\main\docs\guides\fr\zero-to-hero.md   3963
+docs/guides\fr\zero-to-hero.md:76:## 5b. Cloud local (v0.3.0)
+docs/guides\fr\zero-to-hero.md:90:docker build -t chiplab:0.3.0 .
+docs/guides\fr\zero-to-hero.md:91:docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=jeton-long chiplab:0.3.0
+docs/guides\fr\zero-to-hero.md:99:## 7. Paquets et MCP
+docs/guides\fr\zero-to-hero.md:102:node mcp/client_smoke.mjs                    # handshake MCP + 12 outils
+docs/guides\en\zero-to-hero.md:75:## 5b. Local cloud (v0.3.0)
+docs/guides\en\zero-to-hero.md:89:docker build -t chiplab:0.3.0 .
+docs/guides\en\zero-to-hero.md:90:docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=long-token chiplab:0.3.0
+docs/guides\en\zero-to-hero.md:98:## 7. Packages and MCP
+docs/guides\en\zero-to-hero.md:101:node mcp/client_smoke.mjs                    # MCP handshake + 12 tools
+docs/guides\de\zero-to-hero.md:75:## 5b. Lokale Cloud (v0.3.0)
+docs/guides\de\zero-to-hero.md:89:docker build -t chiplab:0.3.0 .
+docs/guides\de\zero-to-hero.md:90:docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.0
+docs/guides\de\zero-to-hero.md:98:## 7. Pakete und MCP
+docs/guides\de\zero-to-hero.md:101:node mcp/client_smoke.mjs                    # MCP-Handshake + 12 Tools
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead docs/guides/en/zero-to-hero.md 

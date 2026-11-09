@@ -49,6 +49,7 @@ sudo apt-get install -y verilator yosys iverilog z3 cvc5 python3-pip
 python3 -m pip install cocotb pytest scapy
 
 make lint
+node scripts/gate.mjs    # 11 portable Checks (Modell, WASM, MCP, Cloud, Docs-Links, ...)
 python tb/itch_model.py --count 100000 --out tb/vectors
 make sim
 formal/run_formal.sh z3
@@ -72,7 +73,7 @@ Die EXE enthält Web-App und 50-KB-WASM. Sie öffnet den Browser und serviert di
 `/api/*`-Endpunkte plus die lokale Cloud. Auf dem Zielrechner ist keine
 Node-Installation nötig.
 
-## 5b. Lokale Cloud (v0.3.0)
+## 5b. Lokale Cloud (v0.3.1)
 
 ```bash
 node backend/server.mjs --host 0.0.0.0 --token "langes-token"
@@ -86,8 +87,8 @@ Diese URL auf dem Handy im selben Netz öffnen, Token im Panel **Local cloud** e
 ## 6. Docker und Vercel
 
 ```bash
-docker build -t chiplab:0.3.0 .
-docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.0
+docker build -t chiplab:0.3.1 .
+docker run --rm -p 4173:4173 -e CHIPLAB_TOKEN=langes-token chiplab:0.3.1
 node scripts/build_vercel.mjs      # public/ + api/ für Vercel
 ```
 
@@ -105,10 +106,23 @@ cd packages/python && python -m build        # chiplab-itch
 
 ## 8. Was noch offen ist
 
-- Multi-Frame-MoldUDP64-Backpressure (Single-Frame-Beweis ist grün).
-- OpenLane/OpenSTA-Fmax-Sign-off; 322 MHz ist ein Modellziel.
-- RTL-Top-of-Book (das WASM-Modell hat eines).
-- Veröffentlichte npm/PyPI/GHCR-Artefakte (Tokens nötig).
+- Physisches Sign-off: Pre-PnR-Sky130-STA ist veröffentlicht (WNS −9,14 ns bei 3,10 ns,
+  Fmax ≈81 MHz), aber Placement/Routing braucht Clock-Planung und einen gefitteten
+  Floorplan. Es gibt kein DRC/LVS- oder Timing-Sign-off.
+- FPGA-Target (UltraScale+/Agilex mit 100G-MAC) und PCIe/DMA-Integration.
+- Vollständiger Caravel-Harness-Lauf; der Caravel-förmige Wrapper und der
+  Wishbone-Pfad sind getestet.
+- npm/PyPI-Registry-Publishing: Opt-in-Schritte sind vorhanden, die OIDC-Einrichtung
+  auf Registry-Seite fehlt aber. GitHub-Release-Assets funktionieren heute.
+- Kein gefertigtes Silizium; alles hier ist RTL-, Simulations- und Pre-PnR-Evidenz.
+
+## 9. Weiterlesen
+
+- [Datenblatt](../../datasheet.md) — Ports, Timing-Ziele, gemessene Pre-PnR-STA
+- [Register-/Port-Map](../../register-map.md) — Host, Wishbone, Caravel, Snapshot, Counter
+- [Integrationsleitfaden](../../integration-guide.md) — Verdrahtung und Start
+- [Errata](../../errata.md) — bekannte Grenzen, im Klartext
+- [API-Referenz](../../api.md) — HTTP, MCP, npm und Python
 
 Wenn etwas fehlschlägt: `node scripts/autonomy.mjs` ausführen und
 `reports/autonomy.log` lesen; der Lauf startet das nächste Gate und protokolliert den
