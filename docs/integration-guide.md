@@ -72,7 +72,8 @@ ready) and the host registers onto the Wishbone management bus (`wbs_adr_i[6:2]`
 `io_oeb` leaves only bit 0 driven; `la_*` and `user_irq` are tied off. This is the
 boundary shape, not a Caravel harness run. For a real Caravel user project,
 `caravel/user_project_wrapper.v` provides the exact module name and port list; copy it
-plus the `rtl/` sources into `verilog/rtl/`.
+plus the `rtl/` sources into `verilog/rtl/`. The step-by-step recipe and what is
+verified vs. not is in [`caravel/README.md`](../caravel/README.md).
 
 ## 3. Parser + book
 

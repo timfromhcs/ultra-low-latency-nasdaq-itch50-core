@@ -1024,3 +1024,301 @@ Damit ist der aktuelle Stand lokal vollst├ñndig als Release Candidate verifiz
 Alle noch offenen Roadmap-Punkte sind extern blockiert und unver├ñndert: Parser-P&R (Clock-Planung, Floorplan, stabile Langlauf-Umgebung), FPGA-Target (Hardware), vollst├ñndige Caravel-Harness (Repo/PDK), PCIe/100G (gro├ƒe Integration), Registry-Publishing (OIDC/Token), Shuttle (optional). Es gibt in diesem Repo keine weitere Aufgabe, die ich ohne eine dieser Voraussetzungen ehrlich abschlie├ƒen und verifizieren k├Ânnte.
 [2026-11-09T21:59:19.4554649+01:00] hallo, es ist 21:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite caravel/user_project_wrapper.v
+Created file successfully: caravel/user_project_wrapper.v
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/run_caravel_upw_cocotb.py
+Created file successfully: tb/run_caravel_upw_cocotb.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+caravel/user_project_wrapper.v rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv 
+rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv 2>&1 | grep -E 'Warning-|Error' | 
+head -5; echo LINT_END"; wsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 tb/run_caravel_upw_cocotb.py > 
+/tmp/upw1.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -E 'Caravel wrap:|TESTS=|Assertion|error:' /tmp/upw1.txt | tail -5"
+LINT_END
+   114.70ns INFO     cocotb.user_project_wrapper        Caravel wrap: 2 messages over io_in, Wishbone reads OK PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                       114.70   
+        0.00      26554.18  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -62,8 +62,9 @@
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv 
+rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv 
+rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_book_snapshot_top.sv rtl/itch_book_snapshot.sv 
+rtl/itch_top_book.sv rtl/itch_metrics.sv rtl/itch_top_of_book.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv
++	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl caravel/user_project_wrapper.v rtl/itch_caravel_wrap.sv 
+rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv 
+rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
+ 
+ sim:
+ 	$(MAKE) -C tb sim VECTORS=$(abspath $(VECTORS))
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -92,8 +92,9 @@
+ 	$(PYTHON) tb/run_wishbone_cocotb.py
+ 	$(PYTHON) tb/run_wishbone32_cocotb.py
+ 	$(PYTHON) tb/run_caravel_cocotb.py
+ 	$(PYTHON) tb/run_book_snapshot_cocotb.py
++	$(PYTHON) tb/run_caravel_upw_cocotb.py
+ 	$(PYTHON) tb/run_skid_cocotb.py
+ 
+ synth-book:
+ 	./scripts/synth_book.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -48,8 +48,9 @@
+           python3 tb/run_wishbone_cocotb.py  
+           python3 tb/run_wishbone32_cocotb.py
+           python3 tb/run_caravel_cocotb.py   
+           python3 tb/run_book_snapshot_cocotb.py
++          python3 tb/run_caravel_upw_cocotb.py
+           python3 tb/run_skid_cocotb.py     
+ 
+   wasm-web:
+     name: WASM + backend + MCP + Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -270,8 +270,9 @@
+ | Narrow host wrapper | **128-bit ingress ÔåÆ 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** 
+| `tb/test_host_wrap.py` |
+ | Wishbone wrapper | **Caravel-style Wishbone reads of count/type/locate/shares/ref; writes ACK but are ignored; 20 
+back-to-back messages, no beat loss** | `tb/test_wishbone.py` |
+ | 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow 
+port) | `tb/run_wishbone32_cocotb.py` |
+ | Caravel-shaped top | **38-bit io_in stream + Wishbone reads; io_oeb leaves only io_out[0] driven** | 
+`tb/test_caravel_wrap.py` |
++| Caravel drop-in wrapper | **`caravel/user_project_wrapper.v` (exact Caravel port list) passes the same test** | 
+`tb/run_caravel_upw_cocotb.py` |
+ | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | 
+`tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
+ | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the 
+parserÔåÆBBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+ | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | 
+`reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |
+ | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all 
+`d2b5f58fÔÇª`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -467,9 +467,10 @@
+ native/              Rust wgpu Vulkan/DX12 compute runner + optional boost
+ packages/npm/        @chiplab/core
+ packages/python/     chiplab-itch
+ scripts/             build/gate/synth/formality/heartbeat/autonomy tools
+-docs/guides/         zero-to-hero guides (EN / DE / FR)
++caravel/             user_project_wrapper.v drop-in for the Caravel harness
++
+ docs/design/         Mold back-pressure design note (R1)
+ docs/datasheet.md    ports, timing, area estimate, verification evidence
+ docs/integration-guide.md  how to instantiate parser/book/Mold and poll counters
+ docs/errata.md       known limitations (no physical sign-off, no 100G/PCIe)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -468,8 +468,9 @@
+ packages/npm/        @chiplab/core
+ packages/python/     chiplab-itch
+ scripts/             build/gate/synth/formality/heartbeat/autonomy tools
+ caravel/             user_project_wrapper.v drop-in for the Caravel harness
++docs/guides/         zero-to-hero guides (EN / DE / FR)
+ 
+ docs/design/         Mold back-pressure design note (R1)
+ docs/datasheet.md    ports, timing, area estimate, verification evidence
+ docs/integration-guide.md  how to instantiate parser/book/Mold and poll counters
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -185,11 +185,12 @@
+ - [x] Caravel-shaped wrapper (`rtl/itch_caravel_wrap.sv`): 38-bit `io_in` carries the
+       32-bit AXI stream (data/keep/valid/last), Wishbone management maps byte
+       `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
+       Test drives two messages over `io_in` and reads them back over Wishbone ÔåÆ PASS.
+-- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
+-      Caravel simulation). The boundary shape exists and is tested, but no Caravel
+-      harness run has been done.
++- [x] Caravel drop-in wrapper (`caravel/user_project_wrapper.v`, exact Caravel port
++      list) instantiates `itch_caravel_wrap`; the same io_in/Wishbone test passes
++      against the `user_project_wrapper` top. Lint clean.
++- [ ] Full Caravel harness integration (pad ring, Caravel simulation).
+ - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
+       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
+       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+ - [x] Reproducible Python packaging: `scripts/repro_python.sh` builds the wheel and
+
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit docs/integration-guide.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\docs\integration-guide.md. It must match exactly, 
+including whitespace and indentation.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "Caravel" docs/integration-guide.md | Select-Object -First 8
+66:classic Wishbone slave for Caravel-style management. Word map is in the module header;
+69:**Caravel-shaped top:** `itch_caravel_wrap` maps the 32-bit stream onto Caravel's
+73:boundary shape, not a Caravel harness run.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead docs/integration-guide.md [90m[limit=8, offset=69][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -69,9 +69,11 @@
+ **Caravel-shaped top:** `itch_caravel_wrap` maps the 32-bit stream onto Caravel's
+ 38-bit `io_in`/`io_out` (bits 31:0 data, 35:32 keep, 36 valid, 37 last, `io_out[0]`
+ ready) and the host registers onto the Wishbone management bus (`wbs_adr_i[6:2]`).
+ `io_oeb` leaves only bit 0 driven; `la_*` and `user_irq` are tied off. This is the
+-boundary shape, not a Caravel harness run.
++boundary shape, not a Caravel harness run. For a real Caravel user project,
++`caravel/user_project_wrapper.v` provides the exact module name and port list; copy it
++plus the `rtl/` sources into `verilog/rtl/`.
+ 
+ ## 3. Parser + book
+ 
+ ```systemverilog
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -90,8 +90,12 @@
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
++- **Caravel drop-in wrapper** (`caravel/user_project_wrapper.v`): exact Caravel module
++  name/port list, instantiating `itch_caravel_wrap`; the same io_in stream + Wishbone
++  test passes against the `user_project_wrapper` top, lint clean. Full harness run
++  (pad ring, Caravel simulation) still open.
+ - **Small-block full flow (verified)**: `openlane/sky130_metrics.json` runs the whole
+   Classic flow on `itch_metrics` at 10 ns ÔÇö **0 routing DRC, 0 Magic/KLayout DRC, 0 LVS
+   errors**, timing closed (WNS +0.12 ns, Fmax Ôëê101 MHz), 6,776 stdcells (456 FFs),
+   42,127 ┬Ám┬▓ on a 500 ┬Ám die. Earlier 200 ┬Ám/3.10 ns attempts failed (DPL-0036 / no
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,20 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 21:59 - Autonomy tick + Caravel drop-in user_project_wrapper
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Added `caravel/user_project_wrapper.v` with Caravel's exact module name and port
++  list, forwarding to `itch_caravel_wrap`. Verified with Verilator lint (clean) and the
++  existing Caravel test run against the `user_project_wrapper` top: two messages over
++  `io_in`, Wishbone reads of count/type/locate/shares/ref ÔåÆ **PASS**. Wired into
++  `make lint`, `make cocotb` and CI; documented in the integration guide, README and
++  roadmap.
++- Still open: the actual Caravel harness run (pad ring, Caravel simulation) needs the
++  Caravel repo/PDK.
++
+ ## 2026-11-09 20:59 - Autonomy tick + local release-candidate pass
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Re-ran the full local RTL suite on the current tree: `make lint` **0 warnings**,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -cE 'Warning-|Error'; echo LINT_DONE; 
+make cocotb > /tmp/rc2.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -c 'FAIL=0' /tmp/rc2.txt; grep -E 'TESTS=' /tmp/rc2.txt 
+| sed -E 's/.*TESTS=([0-9]+) PASS=([0-9]+) FAIL=([0-9]+).*/T=\1 P=\2 F=\3/' | tr '\n' ' '"; cd E:\chips\main; node 
+scripts\gate.mjs 2>&1 | Select-Object -Last 2
+0
+LINT_DONE
+19
+T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 
+F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "feat(caravel): drop-in user_project_wrapper with Caravel port 
+list" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'caravel/user_project_wrapper.v', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'tb/run_caravel_upw_cocotb.py', LF will be replaced by CRLF the next time Git touches 
+it
+ create mode 100644 tb/run_caravel_upw_cocotb.py
+[31;1m   11e3c9f..3252015  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 180; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+3252015 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 21:59 abgeschlossen.
+
+## Neu und verifiziert
+**Caravel-Drop-in `user_project_wrapper.v`**
+- `caravel/user_project_wrapper.v` mit **exaktem Caravel-Modulnamen und Port-Layout** (`wb_clk_i/rst_i`, `wbs_*`, `la_data_in/out`, `la_oenb`, `io_in/io_out/io_oeb[37:0]`, `user_irq`), das an `itch_caravel_wrap` weiterleitet.
+- Verilator-Lint: **0 Warnungen**.
+- Der bestehende Caravel-Test l├ñuft jetzt gegen den `user_project_wrapper`-Top: 2 Nachrichten ├╝ber `io_in`, Wishbone-Reads von count/type/locate/shares/ref ÔåÆ **PASS**.
+- In `make lint`, `make cocotb` und CI verdrahtet; Integrationsleitfaden, README und Roadmap aktualisiert.
+
+## Verifikation
+- `make lint`: 0 Warnungen; `make cocotb`: **19 Suiten / 26 Tests, 0 Fehler**.
+- Gate **11/11**; CI auf `3252015` **success**.
+- Autonomy: 0 Tasks; Commit `3252015` gepusht, Arbeitsbaum clean.
+
+## Status
+Damit ist der Caravel-**Drop-in** fertig (Datei + Portliste + Test); es fehlt nur noch der echte Harness-Lauf mit Pad-Ring/Caravel-Simulation (Caravel-Repo/PDK n├Âtig). Unver├ñndert blockiert: Parser-P&R (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-09T22:59:19.7102826+01:00] hallo, es ist 22:59
+[tick] ran 0, failed 0
