@@ -356,3 +356,1338 @@ warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF
 warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
  7 files changed, 237 insertions(+), 3657 deletions(-)
    1f09f96..d5ca856  main -> main
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mgh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 3 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+d5ca856 1f09f96 895d478 queued completed completed  success success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite rtl/itch_caravel_wrap.sv
+Created file successfully: rtl/itch_caravel_wrap.sv
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/test_caravel_wrap.py
+Created file successfully: tb/test_caravel_wrap.py
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite tb/run_caravel_cocotb.py
+Created file successfully: tb/run_caravel_cocotb.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv 2>&1 | grep -E 'Warning-|Error' | head -6; echo LINT_END"; wsl -d Ubuntu 
+bash -lc "cd /mnt/e/chips/main && python3 tb/run_caravel_cocotb.py > /tmp/car1.txt 2>&1"; wsl -d Ubuntu bash -lc "grep 
+-E 'Caravel wrap:|TESTS=|Assertion|error:' /tmp/car1.txt | tail -5"
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ %Warning-UNUSEDSIGNAL: rtl/itch_caravel_wrap.sv:32:23: Bits of signal are not used: 'wbs_adr_i'[31:7,1:0]
+%Error: Exiting due to 1 warning(s)
+LINT_END
+                                                        AssertionError: all other io are inputs
+                                                        ** TESTS=1 PASS=0 FAIL=1 SKIP=0                        18.60   
+        0.01       2745.27  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_caravel_wrap.sv
+Index: rtl/itch_caravel_wrap.sv
+===================================================================
+--- rtl/itch_caravel_wrap.sv
++++ rtl/itch_caravel_wrap.sv
+@@ -66,15 +66,15 @@
+     .wb_dat_r(wbs_dat_o)
+   );
+ 
+   assign io_out = {37'd0, tready};
+-  assign io_oeb = 38'h3FFF_FFFE;   // only io_out[0] driven
++  assign io_oeb = 38'h3F_FFFF_FFFE;   // only io_out[0] driven
+ 
+   assign la_data_out = 128'd0;
+   assign user_irq = 3'd0;
+ 
+-  // The la_* inputs are unused in this revision.
+-  wire _unused = &{1'b0, la_data_in, la_oenb};
++  // Only the word-aligned address bits and the la_* inputs are unused here.
++  wire _unused = &{1'b0, wbs_adr_i[31:7], wbs_adr_i[1:0], la_data_in, la_oenb};
+ 
+ endmodule
+ 
+ `endif
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl 
+rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv 2>&1 | grep -E 'Warning-|Error' | head -5; echo LINT_END"; wsl -d Ubuntu 
+bash -lc "cd /mnt/e/chips/main && python3 tb/run_caravel_cocotb.py > /tmp/car2.txt 2>&1"; wsl -d Ubuntu bash -lc "grep 
+-E 'Caravel wrap:|TESTS=|Assertion' /tmp/car2.txt | tail -4"
+LINT_END
+   114.70ns INFO     cocotb.itch_caravel_wrap           Caravel wrap: 2 messages over io_in, Wishbone reads OK PASS
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                       114.70   
+        0.00      29967.58  **
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -59,8 +59,9 @@
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_metrics.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_book_snapshot.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv 
+rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
++	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv 
+rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+ 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
+ 
+ sim:
+ 	$(MAKE) -C tb sim VECTORS=$(abspath $(VECTORS))
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -87,8 +87,9 @@
+ 	$(PYTHON) tb/run_snapshot_cocotb.py
+ 	$(PYTHON) tb/run_host_wrap_cocotb.py
+ 	$(PYTHON) tb/run_wishbone_cocotb.py
+ 	$(PYTHON) tb/run_wishbone32_cocotb.py
++	$(PYTHON) tb/run_caravel_cocotb.py
+ 	$(PYTHON) tb/run_skid_cocotb.py
+ 
+ synth-book:
+ 	./scripts/synth_book.sh
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -46,8 +46,9 @@
+           python3 tb/run_snapshot_cocotb.py 
+           python3 tb/run_host_wrap_cocotb.py 
+           python3 tb/run_wishbone_cocotb.py  
+           python3 tb/run_wishbone32_cocotb.py
++          python3 tb/run_caravel_cocotb.py   
+           python3 tb/run_skid_cocotb.py     
+ 
+   wasm-web:
+     name: WASM + backend + MCP + Vercel
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -261,8 +261,9 @@
+ | Host book snapshot | **2 locates + miss + stability + re-read, updates=4** | `tb/test_snapshot.py` |
+ | Narrow host wrapper | **128-bit ingress ÔåÆ 32-bit host registers; 2 messages, X/type/locate/shares/ref read back** 
+| `tb/test_host_wrap.py` |
+ | Wishbone wrapper | **Caravel-style Wishbone reads of count/type/locate/shares/ref; writes ACK but are ignored; 20 
+back-to-back messages, no beat loss** | `tb/test_wishbone.py` |
+ | 32-bit ingress | **DATA_WIDTH=32 through parser + Wishbone: same fields read back** (Caravel/FPGA-friendly narrow 
+port) | `tb/run_wishbone32_cocotb.py` |
++| Caravel-shaped top | **38-bit io_in stream + Wishbone reads; io_oeb leaves only io_out[0] driven** | 
+`tb/test_caravel_wrap.py` |
+ | Full-field regression | **10,000,000 messages, 0 mismatches** (nightly default; 200k smoke 19 s, 10M 3m06s sim) | 
+`tb/sim_main.cpp`, `.github/workflows/nightly.yml` |
+ | Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the 
+parserÔåÆBBO integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+ | Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | 
+`reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |
+ | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all 
+`d2b5f58fÔÇª`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -173,13 +173,14 @@
+ **Gate:** end-to-end 100G pcap replay; book matches software at every event.
+ 
+ ### Phase 4 ÔÇö Release / silicon-ready (8 ÔåÆ 12 months)
+ - [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+-- [x] Caravel management path: `itch_wishbone_wrap` exposes the host register file
+-      through a classic Wishbone slave (1-cycle ACK, read-only, writes ignored);
+-      test drives two messages and reads count/type/locate/shares/ref over Wishbone.
+-- [x] 32-bit ingress variant: `DATA_WIDTH` parameter verified through parser + Wishbone
+-      (`tb/run_wishbone32_cocotb.py`) ÔÇö the width a Caravel `io_in` stream would use.
++- [x] Caravel-shaped wrapper (`rtl/itch_caravel_wrap.sv`): 38-bit `io_in` carries the
++      32-bit AXI stream (data/keep/valid/last), Wishbone management maps byte
++      `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
++      Test drives two messages over `io_in` and reads them back over Wishbone ÔåÆ PASS.
++- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
++      Caravel simulation).
+ - [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
+ - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
+       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
+       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/integration-guide.md
+Index: docs/integration-guide.md
+===================================================================
+--- docs/integration-guide.md
++++ docs/integration-guide.md
+@@ -65,8 +65,14 @@
+ would cause pin congestion; `itch_wishbone_wrap` exposes the same registers over a
+ classic Wishbone slave for Caravel-style management. Word map is in the module header;
+ `openlane/sky130_wrap.json` targets it.
+ 
++**Caravel-shaped top:** `itch_caravel_wrap` maps the 32-bit stream onto Caravel's
++38-bit `io_in`/`io_out` (bits 31:0 data, 35:32 keep, 36 valid, 37 last, `io_out[0]`
++ready) and the host registers onto the Wishbone management bus (`wbs_adr_i[6:2]`).
++`io_oeb` leaves only bit 0 driven; `la_*` and `user_irq` are tied off. This is the
++boundary shape, not a Caravel harness run.
++
+ ## 3. Parser + book
+ 
+ ```systemverilog
+ itch_top_book u_book (
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -73,8 +73,14 @@
+ - **Arbiter recovery mode** (`recovery_en`): on a gap the arbiter requests the missing
+   range, drops the out-of-order frames, accepts the replay in order, and abandons to a
+   force-accept on timeout (`req_valid/req_seq/req_count/abandon/requests/abandoned`).
+   Test: markers [1,2,3,6], 2 requests, 1 abandon.
++- **Caravel-shaped top** (`rtl/itch_caravel_wrap.sv`): 38-bit `io_in` carries the
++  32-bit AXI stream (data/keep/valid/last), `io_out[0]` is ready (`io_oeb` set so only
++  that bit is driven), and Wishbone management (`wbs_adr_i[6:2]`) reads the host
++  registers. Test: two messages over `io_in`, Wishbone reads of count/type/locate/
++  shares/ref ÔåÆ PASS. The Caravel *boundary shape* is there; a full Caravel harness run
++  is not.
+ - **Wishbone burst robustness**: a second test drives 20 messages fully back-to-back
+   (tvalid held high, tready honored) at both 128-bit and 32-bit ingress ÔÇö msg_count=20,
+   updates=20, 0 corrupt, no beat loss.
+ - **32-bit ingress verified**: `DATA_WIDTH` is a real parameter, not 128-only. The
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-05 13:10 - Caravel-shaped wrapper
++
++- Added `rtl/itch_caravel_wrap.sv`: Caravel user-project boundary. `io_in[31:0]`=data,
++  `[35:32]`=keep, `[36]`=valid, `[37]`=last; `io_out[0]`=ready with `io_oeb` leaving
++  only that bit driven; Wishbone management maps `wbs_adr_i[6:2]` to the host registers;
++  `la_*` and `user_irq` tied off.
++- Test `tb/test_caravel_wrap.py`: two messages over `io_in`, Wishbone reads of
++  count/type/locate/shares/ref ÔåÆ PASS; lint clean. Wired into `make lint`, `make cocotb`
++  and CI. This is the boundary shape, not a Caravel harness run.
++
+ ## 2026-11-05 12:56 - Autonomy tick + detailed-routing attempt closed
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+ - `wrap32-big` reached **DetailedRouting** (1000 ┬Ám, 35 % density, congestion allowed):
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make lint 2>&1 | grep -cE 'Warning-|Error'; echo LINT_DONE; 
+make cocotb > /tmp/allcocotb6.txt 2>&1"; wsl -d Ubuntu bash -lc "grep -c 'FAIL=0' /tmp/allcocotb6.txt; grep -E 
+'TESTS=' /tmp/allcocotb6.txt | sed -E 's/.*TESTS=([0-9]+) PASS=([0-9]+) FAIL=([0-9]+).*/T=\1 P=\2 F=\3/' | tr '\n' ' '"
+0
+LINT_DONE
+17
+T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 
+F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=1 P=1 F=0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "feat(rtl): 
+Caravel-shaped wrapper (io_in stream + Wishbone management)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/run_caravel_cocotb.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tb/test_caravel_wrap.py', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 tb/test_caravel_wrap.py
+   d5ca856..85235cf  main -> main
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "{0} {1} {2}" -f 
+$_.headSha.Substring(0,7), $_.status, $_.conclusion }
+System.Object[] System.Object[] System.Object[]
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const ci = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\nreturn 
+ci.workflow_runs?.filter(x => x.head_branch === \"main\").slice(0,2).map(x => [x.head_sha?.slice(0,7), x.status, 
+x.conclusion]);"} 
+> build ┬À deepseek-v4.1-flash
+Tick 12:56 abgeschlossen.
+
+## Neu und verifiziert
+
+**Caravel-f├Ârmiger Top-Level** (`rtl/itch_caravel_wrap.sv`)
+- `io_in[31:0]`=AXI-Daten, `[35:32]`=keep, `[36]`=valid, `[37]`=last; `io_out[0]`=ready; `io_oeb` treibt nur Bit 0 (alle anderen IO sind Eing├ñnge).
+- Wishbone-Management: Byte-Adresse `wbs_adr_i[6:2]` ÔåÆ Host-Register; `la_*`/`user_irq` sauber stillgelegt.
+- Test `tb/test_caravel_wrap.py`: zwei Nachrichten ├╝ber `io_in`, Wishbone-Reads von count/type/locate/shares/ref ÔåÆ **PASS**; Lint sauber.
+- `make cocotb`: **17 Suiten / 24 Tests, 0 Fehler**; CI auf `85235cf` **gr├╝n**.
+
+**Aufr├ñumen & Doku**
+- DRT-Versuch `wrap32-big` sauber abgeschlossen dokumentiert: Global Routing passiert, Detailed Routing erreichte ~148k Violations (von ~695k), **nicht konvergiert**, durch Host-Neustart beendet ÔÇö kein DRC/LVS. Attempts-Tabelle, Roadmap und Errata aktualisiert.
+- Fehlgeschlagene P&R-Run-Verzeichnisse gel├Âscht (~3,3 GB), nur die STA-L├ñufe (Referenz f├╝r die Reports) behalten.
+
+## Status
+- Gate **10/10**, Arbeitsbaum clean, Commits `d5ca856`, `85235cf`.
+- **Weiterhin blockiert/gro├ƒ**: vollst├ñndiges P&R/DRC/LVS (Clock-Planung, Floorplan), FPGA-Target, vollst├ñndige Caravel-Harness-Integration (Pad-Ring, `user_project_wrapper`, Caravel-Simulation), PCIe/100G, optionaler Shuttle.
+[2026-11-05T13:59:19.0364031+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T14:59:19.5701666+01:00] hallo, es ist 14:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T16:14:01.6246515+01:00] hallo, es ist 16:14
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T17:59:20.6284603+01:00] hallo, es ist 17:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T18:59:20.0952679+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T19:59:20.8249119+01:00] hallo, es ist 19:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T20:59:21.2252659+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T21:59:20.4101803+01:00] hallo, es ist 21:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-05T22:59:19.8239587+01:00] hallo, es ist 22:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T00:59:19.3668681+01:00] hallo, es ist 00:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T01:59:21.3633619+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T02:59:19.3298362+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T03:59:18.8451886+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T04:59:19.3235446+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T05:59:20.7853876+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T06:59:19.3949798+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T07:59:19.5884404+01:00] hallo, es ist 07:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T08:59:19.1841428+01:00] hallo, es ist 08:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T09:59:19.2873980+01:00] hallo, es ist 09:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T10:59:19.3204966+01:00] hallo, es ist 10:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T12:59:23.4794190+01:00] hallo, es ist 12:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T13:59:20.3970545+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T14:59:19.2703181+01:00] hallo, es ist 14:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T15:59:19.6181149+01:00] hallo, es ist 15:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T16:59:19.9261806+01:00] hallo, es ist 16:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T17:59:19.4507245+01:00] hallo, es ist 17:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T18:59:19.9577875+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T19:59:20.3495124+01:00] hallo, es ist 19:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T20:59:19.4408339+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T21:59:19.5600195+01:00] hallo, es ist 21:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T22:59:20.6419949+01:00] hallo, es ist 22:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-06T23:59:20.3473257+01:00] hallo, es ist 23:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T00:59:20.8620122+01:00] hallo, es ist 00:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T01:59:19.6529532+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T02:59:19.1544461+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T03:59:19.1853282+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T04:59:19.1730531+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T05:59:19.1494130+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T06:59:19.2056016+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T07:59:19.2097556+01:00] hallo, es ist 07:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T08:59:19.0235269+01:00] hallo, es ist 08:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T09:59:19.1496103+01:00] hallo, es ist 09:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T10:59:19.6285906+01:00] hallo, es ist 10:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T11:59:19.6306256+01:00] hallo, es ist 11:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T12:59:31.2631966+01:00] hallo, es ist 12:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T13:59:20.3985584+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T14:59:19.6487582+01:00] hallo, es ist 14:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T15:59:23.3037700+01:00] hallo, es ist 15:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T16:59:19.2124409+01:00] hallo, es ist 16:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T17:59:19.4487248+01:00] hallo, es ist 17:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T18:59:22.1615484+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T19:59:18.9774344+01:00] hallo, es ist 19:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T20:59:21.2811420+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T21:59:19.5086623+01:00] hallo, es ist 21:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T22:59:19.4278715+01:00] hallo, es ist 22:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-07T23:59:19.5912940+01:00] hallo, es ist 23:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T00:59:19.8103175+01:00] hallo, es ist 00:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T01:59:19.5275102+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T02:59:19.9440717+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T03:59:19.7206609+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T04:59:19.8487855+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T05:59:21.2646232+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T06:59:19.7975929+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T07:59:19.8401503+01:00] hallo, es ist 07:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T08:59:19.8277024+01:00] hallo, es ist 08:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T09:59:19.8756647+01:00] hallo, es ist 09:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T10:59:20.1769212+01:00] hallo, es ist 10:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T11:59:19.3944785+01:00] hallo, es ist 11:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T12:59:19.4558310+01:00] hallo, es ist 12:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T13:59:20.0188427+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T14:59:23.4579843+01:00] hallo, es ist 14:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T15:59:20.3042187+01:00] hallo, es ist 15:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T16:59:19.1988385+01:00] hallo, es ist 16:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T17:59:18.9123827+01:00] hallo, es ist 17:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T18:59:18.8512163+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T19:59:19.2286876+01:00] hallo, es ist 19:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T20:59:18.7918884+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T21:59:18.9286787+01:00] hallo, es ist 21:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T22:59:19.3504805+01:00] hallo, es ist 22:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-08T23:59:18.8173643+01:00] hallo, es ist 23:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[91m[1mError: [0mOpenCode Go weekly usage limit reached. Switch to a free model, or turn on Extra Usage on the Go 
+page in OpenCode Console to keep going.
+[2026-11-09T00:59:50.0407706+01:00] hallo, es ist 00:59
+[tick] ran 0, failed 0

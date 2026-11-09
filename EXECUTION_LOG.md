@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 00:59 - Autonomy tick (state re-verified after host restarts)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**. Tree clean at
+  `85235cf`; CI on `85235cf`, `d5ca856` and `1f09f96` all **green**.
+- No new code: the last additions (Caravel-shaped wrapper, 32-bit ingress, Wishbone
+  burst, reproducible WASM/Python/EXE, SLSA/cosign) are committed and verified.
+- Remaining roadmap items are blocked: full P&R/DRC/LVS (clock planning + fitted
+  floorplan), FPGA target (no hardware), full Caravel harness (needs Caravel repo/PDK),
+  PCIe/100G (large integration), shuttle (optional). No success claims added.
+
 ## 2026-11-05 13:10 - Caravel-shaped wrapper
 
 - Added `rtl/itch_caravel_wrap.sv`: Caravel user-project boundary. `io_in[31:0]`=data,
