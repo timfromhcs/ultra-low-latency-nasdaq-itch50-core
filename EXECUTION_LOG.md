@@ -267,6 +267,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   re-verifies the complete portable gate on the current tree, not just in CI.
 - `reports/scorecard.json` now records the deep run (`deep: true`).
 - No code changes; roadmap blockers unchanged.
+- CI anomaly: run #136 (`bcdfba1`, docs-only) ended `failure` with only 2 of 4 jobs
+  created ("WASM…" and "Docker" green; "RTL…" and "npm…" never ran). The next commit
+  `aa02f0e` ran all four jobs green, and GitHub refuses to re-run #136 — treated as a
+  runner/queue hiccup, not a code failure. Re-checked: workflow YAML unchanged since
+  `79d078c`.
 
 ## 2026-11-09 18:59 - Autonomy tick + formal re-verification on main
 

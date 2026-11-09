@@ -857,3 +857,65 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
  - No unblocked roadmap item remains (all need clock planning/hardware/Caravel repo/
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "chore: deep gate 13/13 on the current tree (scorecard + log)" 
+2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 150 insertions(+), 16 deletions(-)
+[31;1m   bcdfba1..aa02f0e  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+aa02f0e completed success
+bcdfba1 completed failure
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 4 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"bcdfba1\"));\nif (!run) return { runs: r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion]) };\nconst j = await tools.github.actions_list({ method: 
+\"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 10 });\nreturn { id: run.id, status: run.status, conclusion: run.conclusion, jobs: 
+j.jobs?.jobs?.map(x => [x.name, x.conclusion, x.steps?.filter(s => s.conclusion === \"failure\").map(s => s.name)]) 
+};"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 6 });\nconst runs = 
+r.workflow_runs?.filter(x => [\"bcdfba1\", \"aa02f0e\"].some(s => x.head_sha?.startsWith(s)));\nconst out = [];\nfor 
+(const run of runs) {\n  const j = await tools.github.actions_list({ method: \"list_workflow_jobs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 20 });\n  
+out.push({ sha: run.head_sha?.slice(0,7), conclusion: run.conclusion, jobs: j.jobs?.jobs?.map(x => [x.name, 
+x.conclusion, x.steps?.filter(s => s.conclusion === \"failure\").map(s => s.name)]) });\n}\nreturn out;"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_get({ method: \"get_workflow_run\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"42671239220\" });\nreturn 
+r?.workflow_run ? { status: r.workflow_run.status, conclusion: r.workflow_run.conclusion, event: r.workflow_run.event, 
+run_attempt: r.workflow_run.run_attempt, created: r.workflow_run.created_at, updated: r.workflow_run.updated_at, 
+jobs_url: r.workflow_run.jobs_url, head: r.workflow_run.head_commit?.message } : r;"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.github.actions_run_trigger({ method: \"rerun_failed_jobs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", run_id: 42671239220 });\n  return \"rerun 
+requested\";\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -266,8 +266,13 @@
+   checks plus the Z3 formal proof (Ôëê90 s) and the native-bin cross-check. This
+   re-verifies the complete portable gate on the current tree, not just in CI.
+ - `reports/scorecard.json` now records the deep run (`deep: true`).
+ - No code changes; roadmap blockers unchanged.
++- CI anomaly: run #136 (`bcdfba1`, docs-only) ended `failure` with only 2 of 4 jobs
++  created ("WASMÔÇª" and "Docker" green; "RTLÔÇª" and "npmÔÇª" never ran). The next commit
++  `aa02f0e` ran all four jobs green, and GitHub refuses to re-run #136 ÔÇö treated as a
++  runner/queue hiccup, not a code failure. Re-checked: workflow YAML unchanged since
++  `79d078c`.
+ 
+ ## 2026-11-09 18:59 - Autonomy tick + formal re-verification on main
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+
