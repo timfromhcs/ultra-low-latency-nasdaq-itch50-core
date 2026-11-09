@@ -106,7 +106,7 @@ const TOOLS = [
       properties: {
         doc: {
           type: "string",
-          enum: ["architecture", "benchmarks", "datasheet", "integration-guide", "errata", "api", "long-term-plan", "release-plan", "mold-backpressure", "mcp-security", "readme", "changelog"],
+          enum: ["architecture", "benchmarks", "datasheet", "register-map", "integration-guide", "errata", "api", "long-term-plan", "release-plan", "mold-backpressure", "mcp-security", "readme", "changelog"],
           default: "architecture",
         },
       },
@@ -134,6 +134,7 @@ const DOCS = {
   "architecture": "docs/architecture.md",
   "benchmarks": "docs/benchmarks.md",
   "datasheet": "docs/datasheet.md",
+  "register-map": "docs/register-map.md",
   "integration-guide": "docs/integration-guide.md",
   "errata": "docs/errata.md",
   "api": "docs/api.md",

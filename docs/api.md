@@ -102,9 +102,9 @@ Twelve read-only tools with strict schemas and a hashed audit log (`mcp/SECURITY
 | `chiplab.docs` | `doc` (enum) | one documentation file |
 
 `chiplab.docs` serves a fixed catalog — never an arbitrary path:
-`architecture`, `benchmarks`, `datasheet`, `integration-guide`, `errata`, `api`,
-`long-term-plan`, `release-plan`, `mold-backpressure`, `mcp-security`, `readme`,
-`changelog`.
+`architecture`, `benchmarks`, `datasheet`, `register-map`, `integration-guide`,
+`errata`, `api`, `long-term-plan`, `release-plan`, `mold-backpressure`,
+`mcp-security`, `readme`, `changelog`.
 
 ---
 

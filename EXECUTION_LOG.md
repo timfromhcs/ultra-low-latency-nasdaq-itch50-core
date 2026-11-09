@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 03:59 - Autonomy tick + register/port map documentation
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
+- Added `docs/register-map.md`: host register file word map (0–10), Wishbone mapping
+  (`wbs_adr_i[6:2]`, 1-cycle ACK, writes ignored), Caravel `io_in/io_out/io_oeb` map,
+  snapshot read port semantics, performance counters and Mold/arbiter status signals.
+- Added it to the MCP `chiplab.docs` catalog (now **13 fixed keys**), README docs list
+  and API reference; `chiplab.docs` returns it (4,607 bytes) and still rejects
+  `../README.md`. Docs link check: **23 files, 0 dead links**.
+
 ## 2026-11-09 02:59 - Autonomy tick + docs link check in the gate
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

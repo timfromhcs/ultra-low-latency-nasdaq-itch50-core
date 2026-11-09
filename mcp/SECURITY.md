@@ -24,7 +24,7 @@ access to committed evidence files:
 | `chiplab.docs` | doc (fixed enum) | reads one catalogued doc |
 
 There is **no shell, filesystem write, network, environment or arbitrary file tool**.
-`chiplab.docs` accepts only twelve fixed keys; any other string is rejected.
+`chiplab.docs` accepts only thirteen fixed keys; any other string is rejected.
 Counts are capped at 2,000,000; seeds/chips/modes are range-checked; unknown arguments
 are rejected.
 

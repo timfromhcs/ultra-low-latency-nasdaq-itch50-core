@@ -482,6 +482,7 @@ reports/             measured evidence (logs, JSON, screenshots)
 ## Zero-to-hero guides
 
 - [Datasheet](docs/datasheet.md) — ports, timing targets, area estimate, evidence
+- [Register map](docs/register-map.md) — host, Wishbone, Caravel, snapshot and counter registers
 - [Integration guide](docs/integration-guide.md) — instantiate, drive, poll counters
 - [API reference](docs/api.md) — HTTP, MCP, npm, Python
 - [Errata](docs/errata.md) — what is deliberately out of scope

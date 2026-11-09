@@ -148,7 +148,7 @@ for attempt in 1..N:
 ### P3 — MCP expansion
 - [x] Added `chiplab.health`, `chiplab.cloud_info`, `chiplab.history`,
       `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`, `chiplab.docs`.
-- [x] Strict schemas; `chiplab.docs` accepts a fixed 12-key catalog; no arbitrary paths.
+- [x] Strict schemas; `chiplab.docs` accepts a fixed 13-key catalog; no arbitrary paths.
 - [x] `mcp/SECURITY.md` updated; smoke covers all tools and rejects `.docs` traversal.
 
 ### P4 — GitHub release

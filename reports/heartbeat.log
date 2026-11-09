@@ -2219,3 +2219,96 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
  - Release plan's only open item is registry publishing. Added opt-in steps to
 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -90,8 +90,12 @@
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
++- **Docs link check**: `scripts/check_docs_links.mjs` (`make docs-links`, also the
++  11th fast gate check) scans all repository Markdown for relative links, skips
++  http/mailto/anchors and code fences, and fails on a missing target. Current result:
++  22 files, 0 dead links (`reports/links.json`).
+ - **Opt-in registry publishing**: `release.yml` now contains `npm publish --provenance
+   --access public` and `pypa/gh-action-pypi-publish` steps gated on the repository
+   variables `NPM_PUBLISH` / `PYPI_PUBLISH`; with the variables unset the release only
+   produces GitHub assets. Not run against the registries yet (errata E10).
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 5; git add -A; git commit -m "chore: add 
+relative Markdown link check to the gate (11 checks)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+PASS release-check (134 ms)
+PASS docs-links (78 ms)
+PASS vercel-api (197 ms)
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'Makefile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 scripts/check_docs_links.mjs
+[31;1m   57d3a5f..5601125  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+5601125 completed success
+57d3a5f completed success
+> build ┬À deepseek-v4.1-flash
+Tick 02:59 abgeschlossen.
+
+## Neu und verifiziert
+**Dokumentations-Link-Check im Gate**
+- `scripts/check_docs_links.mjs` (+ `make docs-links`): pr├╝ft relative Markdown-Links in README, CHANGELOG, CONTRIBUTING, beiden Pl├ñnen, `docs/`, `openlane/`, `mcp/` und `.opencode/`; ├╝berspringt http/mailto/Anker und Code-Fences; schreibt `reports/links.json` und schl├ñgt bei fehlendem Ziel fehl.
+- Ergebnis: **22 Dateien, 0 tote relative Links**.
+- Als **11. Schnell-Gate-Check** in `scripts/gate.mjs` verdrahtet.
+
+## Verifikation
+- `node scripts/autonomy.mjs`: Queue leer, 0 Tasks.
+- `node scripts/gate.mjs`: **11/11 (100 %)** ÔÇö inkl. neuem `docs-links`-Check.
+- CI auf `5601125`: **success**.
+- Commit `5601125` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Release-Plan bis auf das extern blockierte Registry-Publishing abgeschlossen. Verbleibende Roadmap-Punkte bleiben blockiert: vollst├ñndiges P&R/DRC/LVS (Clock-Planung + Floorplan), FPGA-Target, vollst├ñndige Caravel-Harness-Integration, PCIe/100G, optionaler Shuttle.
+[2026-11-09T03:59:18.8282200+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite docs/register-map.md
+Created file successfully: docs/register-map.md
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit mcp/server.mjs
+Index: mcp/server.mjs
+===================================================================
+--- mcp/server.mjs
++++ mcp/server.mjs
+@@ -105,9 +105,9 @@
+       type: "object",
+       properties: {
+         doc: {
+           type: "string",
+-          enum: ["architecture", "benchmarks", "datasheet", "integration-guide", "errata", "api", "long-term-plan", 
+"release-plan", "mold-backpressure", "mcp-security", "readme", "changelog"],
++          enum: ["architecture", "benchmarks", "datasheet", "register-map", "integration-guide", "errata", "api", 
+"long-term-plan", "release-plan", "mold-backpressure", "mcp-security", "readme", "changelog"],
+           default: "architecture",
+         },
+       },
+       additionalProperties: false,
+
