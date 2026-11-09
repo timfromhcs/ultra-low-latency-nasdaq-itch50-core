@@ -287,3 +287,84 @@ Zwischenstand (Tick 07:59):
 [90mwaiting for 1 background job[0m
 [2026-11-09T15:59:19.0556803+01:00] hallo, es ist 15:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; Get-Content 
+"$env:TEMP\opencode\librelane_wrap32_100.log" -Tail 20 -ErrorAction SilentlyContinue; Test-Path 
+openlane\runs\wrap32-100mhz\final\metrics.json
+[tick] ran 0, failed 0
+[INFO GRT-0102] Start extra iteration 28/50                                     
+[INFO GRT-0102] Start extra iteration 29/50                                     
+[INFO GRT-0102] Start extra iteration 30/50                                     
+[INFO GRT-0102] Start extra iteration 31/50                                     
+[INFO GRT-0102] Start extra iteration 32/50                                     
+[INFO GRT-0102] Start extra iteration 33/50                                     
+[INFO GRT-0102] Start extra iteration 34/50                                     
+[INFO GRT-0102] Start extra iteration 35/50                                     
+[INFO GRT-0102] Start extra iteration 36/50                                     
+[INFO GRT-0102] Start extra iteration 37/50                                     
+[INFO GRT-0102] Start extra iteration 38/50                                     
+[INFO GRT-0102] Start extra iteration 39/50                                     
+[INFO GRT-0102] Start extra iteration 40/50                                     
+[INFO GRT-0102] Start extra iteration 41/50                                     
+[INFO GRT-0102] Start extra iteration 42/50                                     
+[INFO GRT-0102] Start extra iteration 43/50                                     
+[INFO GRT-0102] Start extra iteration 44/50                                     
+[INFO GRT-0102] Start extra iteration 45/50                                     
+[INFO GRT-0102] Start extra iteration 46/50                                     
+[INFO GRT-0102] Start extra iteration 47/50                                     
+False
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 15:59 - Autonomy tick + relaxed parser flow in routing
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
++- The 100 MHz 32-bit-wrapper run (`wrap32-100mhz`, 1500 ┬Ám die, 25 % density) is in
++  GlobalRouting extra iterations (47/50) with congestion allowed; it will proceed to
++  detailed routing. No result yet ÔÇö the long pole is DRT on ~20k cells.
++- First full-flow evidence remains the `itch_metrics` block (0 DRC, 0 LVS, timing
++  closed at 10 ns, `reports/openlane_metrics-full3.json`).
++
+ ## 2026-11-09 06:59 - Autonomy tick + first full-flow block (metrics)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Added `openlane/sky130_metrics.json` (`itch_metrics`, 500 ┬Ám die, 10 ns clock) and
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: tick log for the running 100 MHz parser flow" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 313 insertions(+), 3527 deletions(-)
+[31;1m   49ac30f..dfab048  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+Zwischenstand (Tick 15:59):
+
+- **Autonomy**: Queue leer, 0 Tasks; Gate **11/11**.
+- **`wrap32-100mhz`** (Parser+Wishbone, 32-bit, 10 ns, 1500 ┬Ám, 25 % Dichte) l├ñuft weiter: Global Routing bei **47/50** Extra-Iterationen (Congestion erlaubt), danach Detailed Routing. Der Lauf ist der langwierige Teil (~20k Zellen) und l├ñuft im Hintergrund.
+- Bisherige harte P&R-Evidenz bleibt der `itch_metrics`-Block: **0 DRC, 0 LVS, Timing closed bei 10 ns, Fmax Ôëê101 MHz** (`reports/openlane_metrics-full3.json`).
+- Tick-Log + Commit `dfab048` gepusht; Arbeitsbaum clean.
+
+Sobald der Lauf endet, wird das Ergebnis ausgewertet (DRC/LVS/Post-Route-STA) und als `reports/openlane_wrap32-100mhz.json` publiziert oder der exakte Fehlerpunkt dokumentiert.
