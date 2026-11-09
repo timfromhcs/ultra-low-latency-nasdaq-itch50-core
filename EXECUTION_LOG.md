@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 20:59 - Autonomy tick + local release-candidate pass
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Re-ran the full local RTL suite on the current tree: `make lint` **0 warnings**,
+  `make cocotb` **18 suites / 25 tests, 0 failures**. Together with the deep gate
+  13/13 from the previous tick, this is a complete local release-candidate pass.
+- No source changes; the remaining roadmap items still need external prerequisites
+  (clock plan/floorplan + stable long P&R environment, FPGA hardware, Caravel repo/PDK,
+  registry OIDC, optional shuttle).
+
 ## 2026-11-09 19:59 - Autonomy tick + deep gate 13/13
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

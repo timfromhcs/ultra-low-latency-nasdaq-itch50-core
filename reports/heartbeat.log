@@ -919,3 +919,30 @@ Index: EXECUTION_LOG.md
  
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: note the partial CI run (#136) as an infrastructure 
+hiccup" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+ 2 files changed, 67 insertions(+)
+[31;1m   aa02f0e..14d0948  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+14d0948 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 19:59 abgeschlossen.
+
+## Verifikation
+- **Deep Gate lokal**: `node scripts/gate.mjs --deep` ÔåÆ **13/13 (100 %)**, inklusive Z3-Formal (Ôëê90 s) und Native-Bin-Crosscheck. `reports/scorecard.json` dokumentiert den Deep-Lauf (`deep: true`).
+- **Formal-Neulauf auf `main`**: Dispatch von `formal.yml` auf `86ae19f` ÔåÆ **success** (Deep-Proof, Mutation, RTLÔåöWASM-Equivalence).
+- **CI-Anomalie gepr├╝ft**: Run #136 (`bcdfba1`, nur Docs) endete als `failure`, aber nur 2 von 4 Jobs wurden ├╝berhaupt erzeugt (ÔÇ×RTLÔÇª" und ÔÇ×npmÔÇª" fehlten); der Folge-Commit `aa02f0e` lief mit allen vier Jobs gr├╝n, ein Re-Run lehnt GitHub ab (403). Workflow-YAML ist seit `79d078c` unver├ñndert ÔåÆ **Runner-/Queue-Hiccup**, kein Codefehler. CI auf `14d0948` erneut **success**.
+- Autonomy: 0 Tasks; Gate 11/11 (fast), 13/13 (deep).
+
+## Commits
+`aa02f0e` (Deep-Gate-Scorecard + Log), `14d0948` (Dokumentation des CI-Hiccups). Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Unver├ñndert: alle verbleibenden Roadmap-Punkte brauchen externe Voraussetzungen (Parser-P&R: Clock-Planung/Floorplan + stabile Langlauf-Umgebung; FPGA-Hardware; Caravel-Repo/PDK; Registry-OIDC; Shuttle optional). Der verifizierte Stand bleibt gr├╝n: RTL-Suiten 18/25, Reproduzierbarkeit (WASM/Python/EXE), SLSA/cosign, `itch_metrics`-Vollflow mit 0 DRC/0 LVS.
+[2026-11-09T20:59:19.5406390+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
