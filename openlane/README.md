@@ -2,7 +2,8 @@
 
 These are **flow-ready** configurations, not sign-off results. Only the pre-PnR STA
 runs and the small-block validation are measured; the parser has no completed P&R, so
-no parser Fmax, slack or die-area claim is made.
+no parser Fmax, slack or die-area claim is made. Operating notes (resume, knobs,
+failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 
 | File | Target | PDK | Clock |
 |---|---|---|---|

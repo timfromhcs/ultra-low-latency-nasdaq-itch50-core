@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 00:05 - Autonomy tick + long-run operations guide
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+- Wrote `docs/long-runs.md` from the actual run history: Docker/PDN volume setup
+  (`/root/.ciel`), bounded pre-PnR first, the knobs that matter (resizer skips,
+  `GRT_ALLOW_CONGESTION`, antenna repair removing `OpenROAD.DiodeInsertion`), resuming
+  with `--last-run` **plus the config** and repeated skip flags, the observed failure
+  modes (GRT-0116, GPL-0305, DPL-0036, GRT-0183, container EOF), cleanup and the
+  reporting rule (a block-level flow is not a parser sign-off).
+- Linked from the openlane README and the main docs list; link check **25 files,
+  0 dead links**.
+
 ## 2026-11-09 22:59 - Autonomy tick + Caravel integration recipe
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.

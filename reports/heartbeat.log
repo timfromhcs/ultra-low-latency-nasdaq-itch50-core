@@ -1493,3 +1493,31 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
  - Added `caravel/user_project_wrapper.v` with Caravel's exact module name and port
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: tick log for the Caravel recipe" 2>&1 | Select-Object 
+-Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+ 2 files changed, 62 insertions(+)
+[31;1m   27176c0..d31accb  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+d31accb completed success
+> build ┬À deepseek-v4.1-flash
+Tick 22:59 abgeschlossen.
+
+## Neu und verifiziert
+**Caravel-Integrationsrezept** (`caravel/README.md`)
+- Exakte Port-Zuordnung: `io_in[31:0]` Daten, `[35:32]` Keep, `[36]` Valid, `[37]` Last; `io_out[0]` Ready; `io_oeb = 38'h3F_FFFF_FFFE`; Wishbone `wbs_adr_i[6:2]`; `la_*`/`user_irq` stillgelegt.
+- Klar getrennt: **hier verifiziert** = Verilator-Lint + Cocotb-Test gegen den `user_project_wrapper`-Top; **nicht verifiziert** = Pad-Ring, `caravel.v`, Caravel-Simulation, LibreLane-Hardening ÔÇö inklusive `make setup`/`make verify`-Rezept und der ausdr├╝cklichen Warnung, keinen Caravel-Sign-off zu behaupten.
+- Docs-Link-Check deckt jetzt auch `caravel/` ab: **24 Dateien, 0 tote Links**; Rezept aus dem Integrationsleitfaden verlinkt.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `d31accb` **success**.
+- Commits `52bda12`, `27176c0`, `d31accb`; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Der Caravel-Drop-in samt Rezept ist fertig; der echte Harness-Lauf bleibt offen (Caravel-Repo + PDK/sim-Environment, `make setup`). Unver├ñndert extern blockiert: Parser-P&R (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, PCIe/100G, Registry-OIDC, optionaler Shuttle.
+[2026-11-09T23:59:19.3044620+01:00] hallo, es ist 23:59
+[tick] ran 0, failed 0

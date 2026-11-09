@@ -491,6 +491,7 @@ reports/             measured evidence (logs, JSON, screenshots)
 - [Integration guide](docs/integration-guide.md) — instantiate, drive, poll counters
 - [API reference](docs/api.md) — HTTP, MCP, npm, Python
 - [Errata](docs/errata.md) — what is deliberately out of scope
+- [Long LibreLane runs](docs/long-runs.md) — resume, knobs, failure modes, cleanup
 - [English](docs/guides/en/zero-to-hero.md)
 - [Deutsch](docs/guides/de/zero-to-hero.md)
 - [Français](docs/guides/fr/zero-to-hero.md)
