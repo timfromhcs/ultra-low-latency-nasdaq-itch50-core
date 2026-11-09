@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 15:59 - Autonomy tick + relaxed parser flow in routing
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+- The 100 MHz 32-bit-wrapper run (`wrap32-100mhz`, 1500 µm die, 25 % density) is in
+  GlobalRouting extra iterations (47/50) with congestion allowed; it will proceed to
+  detailed routing. No result yet — the long pole is DRT on ~20k cells.
+- First full-flow evidence remains the `itch_metrics` block (0 DRC, 0 LVS, timing
+  closed at 10 ns, `reports/openlane_metrics-full3.json`).
+
 ## 2026-11-09 06:59 - Autonomy tick + first full-flow block (metrics)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
