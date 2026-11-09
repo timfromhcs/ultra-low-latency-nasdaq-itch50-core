@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 16:59 - Autonomy tick + fast parser flow in routing
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+- `wrap32-100mhz-fast2` (antenna repair off, resizer skipped, 10 ns, 1500 µm) is at
+  GlobalRouting extra iteration 49/50, then DetailedRouting. The 7 h run that used
+  antenna repair failed in `OpenROAD.DiodeInsertion` (`GRT-0183`); that run directory
+  was removed after documenting the failure.
+- No parser P&R result yet; `itch_metrics` remains the only completed full flow.
+
 ## 2026-11-09 15:59 - Autonomy tick + relaxed parser flow in routing
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
