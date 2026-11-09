@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 21:59 - Autonomy tick + Caravel drop-in user_project_wrapper
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Added `caravel/user_project_wrapper.v` with Caravel's exact module name and port
+  list, forwarding to `itch_caravel_wrap`. Verified with Verilator lint (clean) and the
+  existing Caravel test run against the `user_project_wrapper` top: two messages over
+  `io_in`, Wishbone reads of count/type/locate/shares/ref → **PASS**. Wired into
+  `make lint`, `make cocotb` and CI; documented in the integration guide, README and
+  roadmap.
+- Still open: the actual Caravel harness run (pad ring, Caravel simulation) needs the
+  Caravel repo/PDK.
+
 ## 2026-11-09 20:59 - Autonomy tick + local release-candidate pass
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

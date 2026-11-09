@@ -186,9 +186,10 @@ MDN PWA best practices, GitHub Actions docs.
       32-bit AXI stream (data/keep/valid/last), Wishbone management maps byte
       `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
       Test drives two messages over `io_in` and reads them back over Wishbone → PASS.
-- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
-      Caravel simulation). The boundary shape exists and is tested, but no Caravel
-      harness run has been done.
+- [x] Caravel drop-in wrapper (`caravel/user_project_wrapper.v`, exact Caravel port
+      list) instantiates `itch_caravel_wrap`; the same io_in/Wishbone test passes
+      against the `user_project_wrapper` top. Lint clean.
+- [ ] Full Caravel harness integration (pad ring, Caravel simulation).
 - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.

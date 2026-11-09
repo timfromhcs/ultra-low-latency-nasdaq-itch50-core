@@ -70,7 +70,9 @@ classic Wishbone slave for Caravel-style management. Word map is in the module h
 38-bit `io_in`/`io_out` (bits 31:0 data, 35:32 keep, 36 valid, 37 last, `io_out[0]`
 ready) and the host registers onto the Wishbone management bus (`wbs_adr_i[6:2]`).
 `io_oeb` leaves only bit 0 driven; `la_*` and `user_irq` are tied off. This is the
-boundary shape, not a Caravel harness run.
+boundary shape, not a Caravel harness run. For a real Caravel user project,
+`caravel/user_project_wrapper.v` provides the exact module name and port list; copy it
+plus the `rtl/` sources into `verilog/rtl/`.
 
 ## 3. Parser + book
 

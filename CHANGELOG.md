@@ -91,6 +91,10 @@ All notable changes to ChipLab are documented here. The format follows
   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
   of msg count/type/locate/shares/ref, write ignored → PASS. First step toward Caravel.
+- **Caravel drop-in wrapper** (`caravel/user_project_wrapper.v`): exact Caravel module
+  name/port list, instantiating `itch_caravel_wrap`; the same io_in stream + Wishbone
+  test passes against the `user_project_wrapper` top, lint clean. Full harness run
+  (pad ring, Caravel simulation) still open.
 - **Small-block full flow (verified)**: `openlane/sky130_metrics.json` runs the whole
   Classic flow on `itch_metrics` at 10 ns — **0 routing DRC, 0 Magic/KLayout DRC, 0 LVS
   errors**, timing closed (WNS +0.12 ns, Fmax ≈101 MHz), 6,776 stdcells (456 FFs),

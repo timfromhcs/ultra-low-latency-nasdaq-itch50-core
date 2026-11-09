@@ -946,3 +946,81 @@ Tick 19:59 abgeschlossen.
 Unver├ñndert: alle verbleibenden Roadmap-Punkte brauchen externe Voraussetzungen (Parser-P&R: Clock-Planung/Floorplan + stabile Langlauf-Umgebung; FPGA-Hardware; Caravel-Repo/PDK; Registry-OIDC; Shuttle optional). Der verifizierte Stand bleibt gr├╝n: RTL-Suiten 18/25, Reproduzierbarkeit (WASM/Python/EXE), SLSA/cosign, `itch_metrics`-Vollflow mit 0 DRC/0 LVS.
 [2026-11-09T20:59:19.5406390+01:00] hallo, es ist 20:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && make lint 2>&1 | grep -cE 'Warning-|Error'; make cocotb > /tmp/rc_cocotb.txt 2>&1; grep -c 
+'FAIL=0' /tmp/rc_cocotb.txt; grep -E 'TESTS=' /tmp/rc_cocotb.txt | sed -E 's/.*TESTS=([0-9]+) PASS=([0-9]+) 
+FAIL=([0-9]+).*/T=\1 P=\2 F=\3/' | tr '\n' ' '"
+[tick] ran 0, failed 0
+0
+18
+T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=3 P=3 F=0 T=1 P=1 F=0 T=1 P=1 
+F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=2 P=2 F=0 T=2 P=2 F=0 T=1 P=1 F=0 T=1 P=1 F=0 T=1 P=1 F=0
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 20:59 - Autonomy tick + local release-candidate pass
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Re-ran the full local RTL suite on the current tree: `make lint` **0 warnings**,
++  `make cocotb` **18 suites / 25 tests, 0 failures**. Together with the deep gate
++  13/13 from the previous tick, this is a complete local release-candidate pass.
++- No source changes; the remaining roadmap items still need external prerequisites
++  (clock plan/floorplan + stable long P&R environment, FPGA hardware, Caravel repo/PDK,
++  registry OIDC, optional shuttle).
++
+ ## 2026-11-09 19:59 - Autonomy tick + deep gate 13/13
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Ran `node scripts/gate.mjs --deep` on this machine: **13/13 (100 %)** ÔÇö the 11 fast
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: local release-candidate pass (lint 0, cocotb 18/25)" 2>&1 
+| Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1; git status -sb | Select-Object -First 2
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+ 2 files changed, 37 insertions(+)
+[31;1m   14d0948..11e3c9f  main -> main[0m
+## main...origin/main
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+11e3c9f completed success
+> build ┬À deepseek-v4.1-flash
+Tick 20:59 abgeschlossen.
+
+## Release-Candidate-Pr├╝fung (lokal)
+| Check | Ergebnis |
+|---|---|
+| `make lint` | **0 Warnungen** |
+| `make cocotb` | **18 Suiten / 25 Tests, 0 Fehler** |
+| `node scripts/gate.mjs --deep` (vorheriger Tick) | **13/13 (100 %)**, inkl. Z3-Formal + Native-Bins |
+| CI auf `11e3c9f` | **success** |
+
+Damit ist der aktuelle Stand lokal vollst├ñndig als Release Candidate verifiziert ÔÇö RTL, Modell, WASM, MCP, Cloud, Docs-Links, Formal, Reproduzierbarkeit und Supply Chain.
+
+- `node scripts/autonomy.mjs`: Queue leer, 0 Tasks; keine Source-├änderungen.
+- Commit `11e3c9f` (Log + Heartbeat), Arbeitsbaum clean bis auf das rotierende Heartbeat-Log.
+
+## Status
+Alle noch offenen Roadmap-Punkte sind extern blockiert und unver├ñndert: Parser-P&R (Clock-Planung, Floorplan, stabile Langlauf-Umgebung), FPGA-Target (Hardware), vollst├ñndige Caravel-Harness (Repo/PDK), PCIe/100G (gro├ƒe Integration), Registry-Publishing (OIDC/Token), Shuttle (optional). Es gibt in diesem Repo keine weitere Aufgabe, die ich ohne eine dieser Voraussetzungen ehrlich abschlie├ƒen und verifizieren k├Ânnte.
+[2026-11-09T21:59:19.4554649+01:00] hallo, es ist 21:59
+[tick] ran 0, failed 0
