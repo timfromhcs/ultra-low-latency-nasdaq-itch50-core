@@ -25,6 +25,7 @@ const checks = [
   ["web-smoke", "node scripts/web_smoke.mjs"],
   ["sbom", "node scripts/sbom.mjs"],
   ["release-check", "node scripts/release_check.mjs"],
+  ["docs-links", "node scripts/check_docs_links.mjs"],
   ["vercel-api", "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs"],
 ];
 if (deep) {

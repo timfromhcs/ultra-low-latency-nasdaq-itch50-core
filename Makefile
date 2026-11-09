@@ -7,7 +7,7 @@ NODE ?= node
 WASM := web/wasm/chiplab_core.wasm
 
 .PHONY: help all verify verify-fast verify-deep vectors lint formal formal-all sim cocotb \
-        synth-book librelane-smoke openlane-summary repro-wasm repro-python mutate-book equiv wasm web backend mcp exe docker demo native test clean
+        synth-book librelane-smoke openlane-summary repro-wasm repro-python docs-links mutate-book equiv wasm web backend mcp exe docker demo native test clean
 
 help:
 	@echo "ChipLab targets:"
@@ -24,6 +24,7 @@ help:
 	@echo "  make openlane-summary  summarize the newest LibreLane run"
 	@echo "  make repro-wasm   rebuild the WASM twice and compare hashes"
 	@echo "  make repro-python rebuild wheel/sdist twice and compare hashes"
+	@echo "  make docs-links   check relative Markdown links"
 	@echo "  make mutate-book  mutation-test the parser -> BBO path"
 	@echo "  make equiv        RTL vs WASM equivalence on one stream"
 	@echo "  make wasm         rebuild the 50 KB WASM core"
@@ -105,6 +106,9 @@ repro-wasm:
 
 repro-python:
 	./scripts/repro_python.sh
+
+docs-links:
+	$(NODE) scripts/check_docs_links.mjs
 
 mutate-book:
 	$(PYTHON) tools/mutate_book.py

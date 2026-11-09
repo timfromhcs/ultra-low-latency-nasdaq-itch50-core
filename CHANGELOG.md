@@ -91,6 +91,10 @@ All notable changes to ChipLab are documented here. The format follows
   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
   of msg count/type/locate/shares/ref, write ignored → PASS. First step toward Caravel.
+- **Docs link check**: `scripts/check_docs_links.mjs` (`make docs-links`, also the
+  11th fast gate check) scans all repository Markdown for relative links, skips
+  http/mailto/anchors and code fences, and fails on a missing target. Current result:
+  22 files, 0 dead links (`reports/links.json`).
 - **Opt-in registry publishing**: `release.yml` now contains `npm publish --provenance
   --access public` and `pypa/gh-action-pypi-publish` steps gated on the repository
   variables `NPM_PUBLISH` / `PYPI_PUBLISH`; with the variables unset the release only

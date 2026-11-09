@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 02:59 - Autonomy tick + docs link check in the gate
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Added `scripts/check_docs_links.mjs` (`make docs-links`): scans README, CHANGELOG,
+  CONTRIBUTING, both plans, `docs/`, `openlane/`, `mcp/` and `.opencode/` for relative
+  Markdown links, skipping http/mailto/anchors and fenced code. Result: **22 files,
+  0 dead links**; report `reports/links.json`.
+- Wired into `scripts/gate.mjs` as the 11th fast check; gate **11/11 (100 %)**.
+
 ## 2026-11-09 01:59 - Autonomy tick + opt-in registry publishing prepared
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.

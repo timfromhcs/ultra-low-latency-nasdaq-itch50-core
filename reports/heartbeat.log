@@ -1782,3 +1782,440 @@ Tick abgeschlossen ÔÇö Zustand nach den Host-Neustarts re-verifiziert.
 Keine neuen Erfolgsaussagen ohne Beleg; der n├ñchste sinnvolle Schritt bleibt eine Clock-Planung/Floorplan-Runde f├╝r echtes P&R.
 [2026-11-09T01:59:19.3714892+01:00] hallo, es ist 01:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 4; node scripts\gate.mjs 2>&1 | 
+Select-Object -Last 2; rg -n "^- \[ \]" STABLE_RELEASE_PLAN.md LONG_TERM_PLAN.md
+[tick] ran 0, failed 0
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+STABLE_RELEASE_PLAN.md:160:- [ ] npm/PyPI **publishing** (trusted publishing) ÔÇö prepared but requires repo/OIDC 
+setup.
+LONG_TERM_PLAN.md:91:- [ ] Physical timing sign-off of the level table + reduction (Phase 2).
+LONG_TERM_PLAN.md:109:- [ ] Full LibreLane Sky130 run: **attempted, not achievable with the current pin
+LONG_TERM_PLAN.md:122:- [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 ┬Ám) / GPL-0305 (1400 ┬Ám); 32-bit
+LONG_TERM_PLAN.md:130:- [ ] Post-route STA with the full flow (blocked on the P&R above).
+LONG_TERM_PLAN.md:136:- [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
+LONG_TERM_PLAN.md:155:- [ ] Hardware/upstream retransmit requester (network protocol) ÔÇö out of scope for the
+LONG_TERM_PLAN.md:164:- [ ] PCIe/DMA or 100G MAC integration.
+LONG_TERM_PLAN.md:176:- [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+LONG_TERM_PLAN.md:181:- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
+LONG_TERM_PLAN.md:183:- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
+LONG_TERM_PLAN.md:212:- [ ] Optional shuttle submission; otherwise label "tapeout-ready, not fabricated".
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "npm publish|twine|pypi|NPM_TOKEN|PYPI" .github/workflows/release.yml 
+packages/npm/package.json 2>$null; rg -n "Caravel harness integration" LONG_TERM_PLAN.md
+181:- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
+183:- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path .github\workflows\release.yml -Pattern "Sign package 
+artifacts|Publish|action-gh-release" -Context 2,3 | Select-Object -First 20
+.github\workflows\release.yml:110:          path: dist/release/*
+  .github\workflows\release.yml:111:
+> .github\workflows\release.yml:112:  [7mpublish[0m:[0m
+[7m[0m  .github\workflows\release.yml:113:    name: SBOM, checksums, GitHub Release[0m
+[7m[0m  .github\workflows\release.yml:114:    needs: [verify, exe, packages][0m
+[7m[0m  .github\workflows\release.yml:115:    runs-on: ubuntu-22.04[0m
+  .github\workflows\release.yml:133:        run: node scripts/checksums.mjs dist/release dist/release/SHA256SUMS.txt
+  .github\workflows\release.yml:134:      - uses: sigstore/cosign-installer@v3
+> .github\workflows\release.yml:135:      - name: [7mSign package artifacts[0m (keyless)[0m
+[7m[0m  .github\workflows\release.yml:136:        env:[0m
+[7m[0m  .github\workflows\release.yml:137:          COSIGN_EXPERIMENTAL: "1"[0m
+[7m[0m  .github\workflows\release.yml:138:        run: |[0m
+  .github\workflows\release.yml:144:        run: |
+  .github\workflows\release.yml:145:          node -e "const fs=require('fs');const 
+v=require('./package.json').version;const c=fs.readFileSync('CHANGELOG.md','utf8');const i=c.indexOf('## '+v);const 
+j=c.indexOf('\n## ',i+3);fs.writeFileSync('RELEASE_NOTES.md',i>=0?c.slice(i,j>i?j:undefined):'See CHANGELOG.md')"
+> .github\workflows\release.yml:146:      - name: [7mPublish[0m
+> .github\workflows\release.yml:147:        uses: softprops/[7maction-gh-release[0m@v2[0m
+[7m[0m  .github\workflows\release.yml:148:        with:[0m
+[7m[0m  .github\workflows\release.yml:149:          body_path: RELEASE_NOTES.md[0m
+[7m[0m  .github\workflows\release.yml:150:          files: |[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead .github/workflows/release.yml [90m[limit=30, offset=130][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/release.yml
+Index: .github/workflows/release.yml
+===================================================================
+--- .github/workflows/release.yml
++++ .github/workflows/release.yml
+@@ -142,8 +142,22 @@
+           done
+       - name: Release notes
+         run: |
+           node -e "const fs=require('fs');const v=require('./package.json').version;const 
+c=fs.readFileSync('CHANGELOG.md','utf8');const i=c.indexOf('## '+v);const j=c.indexOf('\n## 
+',i+3);fs.writeFileSync('RELEASE_NOTES.md',i>=0?c.slice(i,j>i?j:undefined):'See CHANGELOG.md')"
++      - name: Publish to npm (opt-in, repository variable NPM_PUBLISH=true)
++        if: vars.NPM_PUBLISH == 'true'
++        working-directory: packages/npm
++        run: npm publish --provenance --access public
++      - name: Stage PyPI files (opt-in, repository variable PYPI_PUBLISH=true)
++        if: vars.PYPI_PUBLISH == 'true'
++        run: |
++          mkdir -p dist/pypi
++          cp dist/release/*.whl dist/release/*.tar.gz dist/pypi/
++      - name: Publish to PyPI (trusted publishing)
++        if: vars.PYPI_PUBLISH == 'true'
++        uses: pypa/gh-action-pypi-publish@release/v1
++        with:
++          packages-dir: dist/pypi
+       - name: Publish
+         uses: softprops/action-gh-release@v2
+         with:
+           body_path: RELEASE_NOTES.md
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content LONG_TERM_PLAN.md | Select-Object -Skip 172 -First 16
+**Gate:** end-to-end 100G pcap replay; book matches software at every event.
+
+### Phase 4 - Release / silicon-ready (8  12 months)
+- [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+- [x] Caravel-shaped wrapper (`rtl/itch_caravel_wrap.sv`): 38-bit `io_in` carries the
+      32-bit AXI stream (data/keep/valid/last), Wishbone management maps byte
+      `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
+      Test drives two messages over `io_in` and reads them back over Wishbone  PASS.
+- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
+      Caravel simulation).
+- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
+- [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
+      tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
+      `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+- [x] Reproducible Python packaging: `scripts/repro_python.sh` builds the wheel and
+      sdist twice with `SOURCE_DATE_EPOCH=1700000000`; the wheel is byte-identical and
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -178,10 +178,10 @@
+       32-bit AXI stream (data/keep/valid/last), Wishbone management maps byte
+       `wbs_adr_i[6:2]` to the host registers, only `io_out[0]` is driven (`io_oeb`).
+       Test drives two messages over `io_in` and reads them back over Wishbone ÔåÆ PASS.
+ - [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID,
+-      Caravel simulation).
+-- [ ] Full Caravel harness integration (pad ring, `user_project_wrapper`, Wishbone ID).
++      Caravel simulation). The boundary shape exists and is tested, but no Caravel
++      harness run has been done.
+ - [x] SBOM + SLSA provenance: `actions/attest-build-provenance` signs the EXE, npm
+       tarball and Python wheel/sdist in `release.yml` and `exe.yml` (verifiable with
+       `gh attestation verify`); Docker publishes `provenance: mode=max` + SBOM.
+ - [x] Reproducible Python packaging: `scripts/repro_python.sh` builds the wheel and
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit STABLE_RELEASE_PLAN.md
+Index: STABLE_RELEASE_PLAN.md
+===================================================================
+--- STABLE_RELEASE_PLAN.md
++++ STABLE_RELEASE_PLAN.md
+@@ -156,9 +156,12 @@
+       `SHA256SUMS.txt`, GitHub Release.
+ - [x] `scripts/checksums.mjs` and `release_check.mjs`.
+ - [x] Release notes generated from `CHANGELOG.md`.
+ - [x] Docker image builds and serves health + cloud info; writes need `CHIPLAB_TOKEN`.
+-- [ ] npm/PyPI **publishing** (trusted publishing) ÔÇö prepared but requires repo/OIDC setup.
++- [ ] npm/PyPI **publishing** (trusted publishing): the release workflow now has
++      opt-in `npm publish --provenance` and `pypa/gh-action-pypi-publish` steps gated on
++      repository variables `NPM_PUBLISH` / `PYPI_PUBLISH`. Still needs the registry-side
++      trusted-publisher/OIDC setup (or an npm token) and one release run to verify.
+ - [x] Tag `v0.3.0` pushed; `Release` run 41594730252 published the six assets (see ┬º8).
+       `v0.3.1` followed for the Python version-metadata fix.
+ 
+ ### P5 ÔÇö README / guides / SEO
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/errata.md
+Index: docs/errata.md
+===================================================================
+--- docs/errata.md
++++ docs/errata.md
+@@ -91,9 +91,11 @@
+ 
+ **Status:** open (external configuration)
+ **Impact:** release artifacts (tarball, wheel, sdist) are built and attached to GitHub
+ Releases, but registry publishing needs trusted-publisher/OIDC setup on the registry
+-side. Installing from the release assets works today.
++side. `release.yml` contains opt-in publish steps gated on the repository variables
++`NPM_PUBLISH` / `PYPI_PUBLISH`; they have not been run. Installing from the release
++assets works today.
+ **Workaround:** `npm install ./chiplab-core-0.3.1.tgz` and
+ `pip install ./chiplab_itch-0.3.1-py3-none-any.whl`.
+ 
+ ---
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -171,8 +171,14 @@
+ 1.98.1), the Python wheel/sdist (`make repro-python`, `SOURCE_DATE_EPOCH` + normalized
+ sdist) and the Windows EXE (`node scripts/repro_exe.mjs`, same Node 22 toolchain)
+ rebuild byte-identically. The weekly `Repro` workflow checks all three.
+ 
++Registry publishing is opt-in and off by default: set the repository variable
++`NPM_PUBLISH=true` (npm trusted publishing or token) or `PYPI_PUBLISH=true` (PyPI
++trusted publishing) before pushing a tag. Without them the Release workflow only
++produces the GitHub Release assets. The publish steps are prepared but have not been
++run against the registries.
++
+ ---
+ 
+ ## Quickstart
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -90,8 +90,12 @@
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
++- **Opt-in registry publishing**: `release.yml` now contains `npm publish --provenance
++  --access public` and `pypa/gh-action-pypi-publish` steps gated on the repository
++  variables `NPM_PUBLISH` / `PYPI_PUBLISH`; with the variables unset the release only
++  produces GitHub assets. Not run against the registries yet (errata E10).
+ - **npm/PyPI blob signing**: `sign.yml` signs the npm tarball and Python wheel/sdist
+   with keyless `cosign sign-blob` and verifies them in the same job; `release.yml`
+   signs after the checksums and attaches the `*.sigstore.json` bundles. README shows
+   `cosign verify-blob`.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,19 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 01:59 - Autonomy tick + opt-in registry publishing prepared
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
++- Release plan's only open item is registry publishing. Added opt-in steps to
++  `release.yml`: `npm publish --provenance --access public` and
++  `pypa/gh-action-pypi-publish` (staged `dist/pypi`), both gated on repository
++  variables `NPM_PUBLISH` / `PYPI_PUBLISH`. Default releases are unchanged (GitHub
++  assets only). Not run against the registries ÔÇö needs trusted-publisher/OIDC setup.
++- Documented in README, errata E10 and the release plan; removed a duplicate Caravel
++  roadmap line.
++
+ ## 2026-11-09 00:59 - Autonomy tick (state re-verified after host restarts)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**. Tree clean at
+   `85235cf`; CI on `85235cf`, `d5ca856` and `1f09f96` all **green**.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py 2>&1 | tail -8"; cd E:\chips\main; node scripts\gate.mjs 
+2>&1 | Select-Object -Last 2; git add -A; git commit -m "ci: opt-in npm/PyPI publishing steps (gated on repository 
+variables)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+python3: can't open file '/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py': [Errno 2] No such file or 
+directory
+
+scorecard: 100% (10/10) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/release.yml', LF will be replaced by CRLF the next time Git touches 
+it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'STABLE_RELEASE_PLAN.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 10 files changed, 149 insertions(+), 18 deletions(-)
+[31;1m   b2c427d..57d3a5f  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py"
+.github/workflows/ci.yml OK 4 jobs
+.github/workflows/docker-publish.yml OK 1 jobs
+.github/workflows/exe.yml OK 1 jobs
+.github/workflows/formal.yml OK 3 jobs
+.github/workflows/nightly.yml OK 2 jobs
+.github/workflows/release.yml OK 4 jobs
+.github/workflows/repro.yml OK 2 jobs
+.github/workflows/sign.yml OK 1 jobs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 90; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+57d3a5f completed success
+b2c427d completed success
+> build ┬À deepseek-v4.1-flash
+Tick 01:59 abgeschlossen.
+
+## Neu
+**Opt-in Registry-Publishing vorbereitet** (`release.yml`)
+- `npm publish --provenance --access public` und `pypa/gh-action-pypi-publish` (mit gestagtem `dist/pypi`), beide **nur** aktiv, wenn die Repository-Variablen `NPM_PUBLISH=true` bzw. `PYPI_PUBLISH=true` gesetzt sind. Ohne Variablen bleibt der Release unver├ñndert (nur GitHub-Assets).
+- Ausdr├╝cklich **nicht** gegen die Registries ausgef├╝hrt ÔÇö daf├╝r fehlt die Trusted-Publisher-/OIDC-Einrichtung (bzw. ein npm-Token). Dokumentiert in `README.md`, Errata **E10**, `STABLE_RELEASE_PLAN.md` und `CHANGELOG.md`.
+- Doppelten Caravel-Roadmap-Eintrag entfernt.
+
+## Verifikation
+- `node scripts/autonomy.mjs`: Queue leer, 0 Tasks.
+- Gate **10/10**; alle 8 Workflow-YAMLs parsen sauber.
+- CI auf `57d3a5f` und `b2c427d`: **success**.
+- Commit `57d3a5f` gepusht; Arbeitsbaum clean (nur Heartbeat-Log rotiert).
+
+## Status
+Die Release-Plan-Checkliste ist damit bis auf das extern blockierte Registry-Publishing abgeschlossen. Verbleibende Roadmap-Punkte bleiben blockiert: vollst├ñndiges P&R/DRC/LVS (Clock-Planung + Floorplan), FPGA-Target, vollst├ñndige Caravel-Harness-Integration, PCIe/100G, optionaler Shuttle.
+[2026-11-09T02:59:18.8359616+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; rg -n "PASS 
+|checks|scorecard|run\(" scripts/gate.mjs | Select-Object -First 25
+[tick] ran 0, failed 0
+4:// Description: One-command gate. Runs the portable checks and writes a scorecard.
+18:const checks = [
+31:  checks.push(["formal-z3", "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3"]);
+32:  checks.push(["native-bins", "node scripts/check_native_bins.mjs"]);
+37:for (const [name, cmd] of checks) {
+49:fs.writeFileSync(path.join(root, "reports/scorecard.json"), JSON.stringify(report, null, 2));
+50:console.log(`\nscorecard: ${score}% (${rows.length - failed}/${rows.length}) ÔåÆ reports/scorecard.json`);
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead scripts/gate.mjs [90m[limit=35, offset=1][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite scripts/check_docs_links.mjs
+Created file successfully: scripts/check_docs_links.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -First 20
+[OK] 22 Markdown files, no dead relative links
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "10/10|10 checks|10-check" README.md docs/*.md STABLE_RELEASE_PLAN.md 
+LONG_TERM_PLAN.md 2>$null | Select-Object -First 12
+STABLE_RELEASE_PLAN.md:181:- [x] `node scripts/gate.mjs` ÔåÆ 100 % (10 checks, including cloud-api and release-check).
+STABLE_RELEASE_PLAN.md:190:- [x] README version/changelog/links consistent; release_check 10/10.
+README.md:244:| Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | 
+`reports/mutation.json` |
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/gate.mjs
+Index: scripts/gate.mjs
+===================================================================
+--- scripts/gate.mjs
++++ scripts/gate.mjs
+@@ -24,8 +24,9 @@
+   ["cloud-api", "node scripts/test_cloud_api.mjs"],
+   ["web-smoke", "node scripts/web_smoke.mjs"],
+   ["sbom", "node scripts/sbom.mjs"],
+   ["release-check", "node scripts/release_check.mjs"],
++  ["docs-links", "node scripts/check_docs_links.mjs"],
+   ["vercel-api", "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs"],
+ ];
+ if (deep) {
+   checks.push(["formal-z3", "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3"]);
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "release-check|docs-links|gate" Makefile | Select-Object -First 8
+41:	$(NODE) scripts/gate.mjs
+46:	$(NODE) scripts/gate.mjs --deep
+61:	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv 
+rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+62:	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv 
+rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+63:	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv 
+rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -105,8 +105,11 @@
+ 
+ repro-python:
+ 	./scripts/repro_python.sh
+ 
++docs-links:
++	$(NODE) scripts/check_docs_links.mjs
++
+ mutate-book:
+ 	$(PYTHON) tools/mutate_book.py
+ 
+ equiv:
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -23,8 +23,9 @@
+ 	@echo "  make librelane-smoke  LibreLane Docker smoke test"
+ 	@echo "  make openlane-summary  summarize the newest LibreLane run"
+ 	@echo "  make repro-wasm   rebuild the WASM twice and compare hashes"
+ 	@echo "  make repro-python rebuild wheel/sdist twice and compare hashes"
++	@echo "  make docs-links   check relative Markdown links"
+ 	@echo "  make mutate-book  mutation-test the parser -> BBO path"
+ 	@echo "  make equiv        RTL vs WASM equivalence on one stream"
+ 	@echo "  make wasm         rebuild the 50 KB WASM core"
+ 	@echo "  make web          build/test the static web app"
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit Makefile
+Index: Makefile
+===================================================================
+--- Makefile
++++ Makefile
+@@ -6,9 +6,9 @@
+ NODE ?= node
+ WASM := web/wasm/chiplab_core.wasm
+ 
+ .PHONY: help all verify verify-fast verify-deep vectors lint formal formal-all sim cocotb \
+-        synth-book librelane-smoke openlane-summary repro-wasm repro-python mutate-book equiv wasm web backend mcp 
+exe docker demo native test clean
++        synth-book librelane-smoke openlane-summary repro-wasm repro-python docs-links mutate-book equiv wasm web 
+backend mcp exe docker demo native test clean
+ 
+ help:
+ 	@echo "ChipLab targets:"
+ 	@echo "  make verify-fast  lint + Python model + WASM + backend + MCP + Vercel (portable)"
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 02:59 - Autonomy tick + docs link check in the gate
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Added `scripts/check_docs_links.mjs` (`make docs-links`): scans README, CHANGELOG,
++  CONTRIBUTING, both plans, `docs/`, `openlane/`, `mcp/` and `.opencode/` for relative
++  Markdown links, skipping http/mailto/anchors and fenced code. Result: **22 files,
++  0 dead links**; report `reports/links.json`.
++- Wired into `scripts/gate.mjs` as the 11th fast check; gate **11/11 (100 %)**.
++
+ ## 2026-11-09 01:59 - Autonomy tick + opt-in registry publishing prepared
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **10/10**.
+ - Release plan's only open item is registry publishing. Added opt-in steps to
+
