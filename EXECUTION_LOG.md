@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 19:59 - Autonomy tick + deep gate 13/13
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Ran `node scripts/gate.mjs --deep` on this machine: **13/13 (100 %)** — the 11 fast
+  checks plus the Z3 formal proof (≈90 s) and the native-bin cross-check. This
+  re-verifies the complete portable gate on the current tree, not just in CI.
+- `reports/scorecard.json` now records the deep run (`deep: true`).
+- No code changes; roadmap blockers unchanged.
+
 ## 2026-11-09 18:59 - Autonomy tick + formal re-verification on main
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
