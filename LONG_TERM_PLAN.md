@@ -158,6 +158,9 @@ MDN PWA best practices, GitHub Actions docs.
       output, 400-event + 100 back-to-back tests.
 - [x] Risk checks: per-order share limit and price collar vs. the last trade, with a
       reject counter (`cfg_max_shares`, `cfg_collar`); 3-test book suite covers both.
+- [x] Book snapshot integration (`itch_book_snapshot_top`): parser → top-of-book →
+  per-locate snapshot, with the book's top-4 depth wired through. Test: locate 1/2
+  snapshot equals the last BBO event for every field, locate 3 is a miss.
 - [x] Host book-snapshot block (`rtl/itch_book_snapshot.sv`): per-locate top-of-book,
       last trade, volume and top-4 depth, one-cycle registered read port with a hit flag
       and an update counter; test reads two locates, a miss, stability and a re-read.

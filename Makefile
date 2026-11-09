@@ -62,6 +62,7 @@ lint:
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_caravel_wrap.sv rtl/itch_wishbone_wrap.sv rtl/itch_host_wrap.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
+	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/itch_book_snapshot_top.sv rtl/itch_book_snapshot.sv rtl/itch_top_book.sv rtl/itch_metrics.sv rtl/itch_top_of_book.sv rtl/itch_top.sv rtl/itch_parser_core.sv rtl/itch_drop_gate.sv rtl/itch_shifter.sv
 	verilator --lint-only -Wall -Wno-DECLFILENAME -Irtl rtl/axis_skid_buffer.sv
 
 sim:
@@ -90,6 +91,7 @@ cocotb:
 	$(PYTHON) tb/run_wishbone_cocotb.py
 	$(PYTHON) tb/run_wishbone32_cocotb.py
 	$(PYTHON) tb/run_caravel_cocotb.py
+	$(PYTHON) tb/run_book_snapshot_cocotb.py
 	$(PYTHON) tb/run_skid_cocotb.py
 
 synth-book:

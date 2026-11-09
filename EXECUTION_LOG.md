@@ -259,6 +259,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-09 04:59 - Autonomy tick + book snapshot integration
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
+- Added `rtl/itch_book_snapshot_top.sv` (parser + BBO + snapshot, top-4 depth wired)
+  and `tb/test_book_snapshot.py`: locate 1/2 snapshot equals the last BBO event for
+  every field (price/shares/last/volume/depth), locate 3 reads as a miss → **PASS**.
+- Lint clean; wired into `make lint`, `make cocotb` and CI.
+
 ## 2026-11-09 03:59 - Autonomy tick + register/port map documentation
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.

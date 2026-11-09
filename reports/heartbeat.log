@@ -2312,3 +2312,202 @@ Index: mcp/server.mjs
        },
        additionalProperties: false,
 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit mcp/server.mjs
+Index: mcp/server.mjs
+===================================================================
+--- mcp/server.mjs
++++ mcp/server.mjs
+@@ -133,8 +133,9 @@
+ const DOCS = {
+   "architecture": "docs/architecture.md",
+   "benchmarks": "docs/benchmarks.md",
+   "datasheet": "docs/datasheet.md",
++  "register-map": "docs/register-map.md",
+   "integration-guide": "docs/integration-guide.md",
+   "errata": "docs/errata.md",
+   "api": "docs/api.md",
+   "long-term-plan": "LONG_TERM_PLAN.md",
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit mcp/SECURITY.md
+Index: mcp/SECURITY.md
+===================================================================
+--- mcp/SECURITY.md
++++ mcp/SECURITY.md
+@@ -23,9 +23,9 @@
+ | `chiplab.synth_status` | none | parses `reports/synth_*.log` |
+ | `chiplab.docs` | doc (fixed enum) | reads one catalogued doc |
+ 
+ There is **no shell, filesystem write, network, environment or arbitrary file tool**.
+-`chiplab.docs` accepts only twelve fixed keys; any other string is rejected.
++`chiplab.docs` accepts only thirteen fixed keys; any other string is rejected.
+ Counts are capped at 2,000,000; seeds/chips/modes are range-checked; unknown arguments
+ are rejected.
+ 
+ ## Tool poisoning / prompt injection
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/api.md
+Index: docs/api.md
+===================================================================
+--- docs/api.md
++++ docs/api.md
+@@ -101,11 +101,11 @@
+ | `chiplab.synth_status` | ÔÇö | last cell count per width |
+ | `chiplab.docs` | `doc` (enum) | one documentation file |
+ 
+ `chiplab.docs` serves a fixed catalog ÔÇö never an arbitrary path:
+-`architecture`, `benchmarks`, `datasheet`, `integration-guide`, `errata`, `api`,
+-`long-term-plan`, `release-plan`, `mold-backpressure`, `mcp-security`, `readme`,
+-`changelog`.
++`architecture`, `benchmarks`, `datasheet`, `register-map`, `integration-guide`,
++`errata`, `api`, `long-term-plan`, `release-plan`, `mold-backpressure`,
++`mcp-security`, `readme`, `changelog`.
+ 
+ ---
+ 
+ ## 3. npm package
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -481,8 +481,9 @@
+ 
+ ## Zero-to-hero guides
+ 
+ - [Datasheet](docs/datasheet.md) ÔÇö ports, timing targets, area estimate, evidence
++- [Register map](docs/register-map.md) ÔÇö host, Wishbone, Caravel, snapshot and counter registers
+ - [Integration guide](docs/integration-guide.md) ÔÇö instantiate, drive, poll counters
+ - [API reference](docs/api.md) ÔÇö HTTP, MCP, npm, Python
+ - [Errata](docs/errata.md) ÔÇö what is deliberately out of scope
+ - [English](docs/guides/en/zero-to-hero.md)
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "12-key|fixed 12|12 fixed" llms-full.txt README.md docs/*.md mcp/*.md 
+STABLE_RELEASE_PLAN.md | Select-Object -First 8
+rg: docs/*.md: Die Syntax f├╝r den Dateinamen, Verzeichnisnamen oder die Datentr├ñgerbezeichnung ist falsch. (os error 
+123)
+rg: mcp/*.md: Die Syntax f├╝r den Dateinamen, Verzeichnisnamen oder die Datentr├ñgerbezeichnung ist falsch. (os error 
+123)
+STABLE_RELEASE_PLAN.md:151:- [x] Strict schemas; `chiplab.docs` accepts a fixed 12-key catalog; no arbitrary paths.
+llms-full.txt:54:  `chiplab.docs` (fixed 12-key catalog).
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; (Get-Content llms-full.txt) -replace "fixed 12-key catalog", "fixed 13-key catalog" | 
+Set-Content llms-full.txt; (Get-Content STABLE_RELEASE_PLAN.md) -replace "fixed 12-key catalog", "fixed 13-key 
+catalog" | Set-Content STABLE_RELEASE_PLAN.md; Select-String -Path llms-full.txt,STABLE_RELEASE_PLAN.md -Pattern 
+"13-key" | Select-Object LineNumber,Line
+[32;1mLineNumber[0m[32;1m Line[0m
+[32;1m----------[0m [32;1m----[0m
+        54   `chiplab.docs` (fixed 13-key catalog).
+       151 - [x] Strict schemas; `chiplab.docs` accepts a fixed 13-key catalog; no arbitrary paths.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite C:/Users/hcsme/AppData/Local/Temp/opencode/map_check.mjs
+Created file successfully: C:/Users/hcsme/AppData/Local/Temp/opencode/map_check.mjs
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node "$env:TEMP\opencode\map_check.mjs" 2>&1 | Select-Object -Last 4; node 
+scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 2
+[31;1mChipLab MCP ready ┬À 8 chips ┬À AMD Ryzen 7 7735HS with Radeon Graphics[0m
+OK 4607 bytes
+traversal REJECTED
+[OK] 23 Markdown files, no dead relative links
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-09 03:59 - Autonomy tick + register/port map documentation
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
++- Added `docs/register-map.md`: host register file word map (0ÔÇô10), Wishbone mapping
++  (`wbs_adr_i[6:2]`, 1-cycle ACK, writes ignored), Caravel `io_in/io_out/io_oeb` map,
++  snapshot read port semantics, performance counters and Mold/arbiter status signals.
++- Added it to the MCP `chiplab.docs` catalog (now **13 fixed keys**), README docs list
++  and API reference; `chiplab.docs` returns it (4,607 bytes) and still rejects
++  `../README.md`. Docs link check: **23 files, 0 dead links**.
++
+ ## 2026-11-09 02:59 - Autonomy tick + docs link check in the gate
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Added `scripts/check_docs_links.mjs` (`make docs-links`): scans README, CHANGELOG,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -90,8 +90,12 @@
+ - **Caravel Wishbone wrapper** (`rtl/itch_wishbone_wrap.sv`): exposes the host register
+   file through a classic Wishbone slave (1-cycle ACK, read-only; writes ACK but are
+   ignored) with the AXI4-Stream ingress unchanged. Test: two messages, Wishbone reads
+   of msg count/type/locate/shares/ref, write ignored ÔåÆ PASS. First step toward Caravel.
++- **Register/port map** (`docs/register-map.md`): host register file (words 0ÔÇô10),
++  Wishbone (`wbs_adr_i[6:2]`, one-cycle ACK, writes ignored), Caravel
++  `io_in`/`io_out`/`io_oeb` mapping, snapshot read port, performance counters and
++  Mold/arbiter status. Added as the 13th `chiplab.docs` key.
+ - **Docs link check**: `scripts/check_docs_links.mjs` (`make docs-links`, also the
+   11th fast gate check) scans all repository Markdown for relative links, skips
+   http/mailto/anchors and code fences, and fails on a missing target. Current result:
+   22 files, 0 dead links (`reports/links.json`).
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 3; git add -A; git commit -m "docs: 
+register/port map for host, Wishbone, Caravel, snapshot and counters" 2>&1 | Select-Object -Last 1; git push origin 
+main 2>&1 | Select-Object -Last 1
+PASS vercel-api (185 ms)
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'STABLE_RELEASE_PLAN.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 docs/register-map.md
+[31;1m   5601125..5812e5f  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 2 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+5812e5f completed success
+5601125 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 03:59 abgeschlossen.
+
+## Neu und verifiziert
+**Register-/Port-Map dokumentiert** (`docs/register-map.md`)
+- Host-Registerfile (`itch_host_wrap`), W├Ârter 0ÔÇô10: `msg_count`, `corrupt_count`, `last_id` (Typ/Locate), Preis, Shares hi/lo, Ref hi/lo, Flags (`last_valid`/`last_corrupt`), Byte-Z├ñhler, `updates`.
+- Wishbone (`wbs_adr_i[6:2]`, 1-Cycle-ACK, Writes werden ignoriert), Caravel-Mapping (`io_in[31:0]` Daten, `[35:32]` Keep, `[36]` Valid, `[37]` Last; `io_out[0]` Ready; `io_oeb`), Snapshot-Leseport-Semantik, Performance-Counter und Mold/Arbiter-Status.
+- Als **13. Key** in den MCP-`chiplab.docs`-Katalog aufgenommen (Enum + DOCS-Map), README-Doku-Liste und API-Referenz erg├ñnzt.
+
+## Verifikation
+- `chiplab.docs` liefert `register-map` (4.607 Bytes) und lehnt `../README.md` weiterhin ab.
+- Docs-Link-Check: **23 Dateien, 0 tote relative Links**.
+- Gate **11/11 (100 %)**, CI auf `5812e5f` **success**.
+- Commit `5812e5f` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Release-Plan bis auf das extern blockierte Registry-Publishing abgeschlossen. Verbleibende Roadmap-Punkte bleiben blockiert: vollst├ñndiges P&R/DRC/LVS (Clock-Planung + Floorplan), FPGA-Target, vollst├ñndige Caravel-Harness-Integration, PCIe/100G, optionaler Shuttle.
+[2026-11-09T04:59:18.8617405+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite rtl/itch_book_snapshot_top.sv
+Created file successfully: rtl/itch_book_snapshot_top.sv
