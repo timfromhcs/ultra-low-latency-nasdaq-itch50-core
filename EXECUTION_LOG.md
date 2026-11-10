@@ -281,8 +281,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Control experiment started with that setup: the known-good `sky130_metrics.json`
   block runs natively (`--run-tag native-metrics2`) to prove the environment still
   yields 0 DRC / 0 LVS before blaming the wrapper netlist. Result next tick.
-- Next diagnostic: the met1/met2 short signature points at wide internal buses
-  (`raw_payload`) and/or pin access, not at standard-cell density. The next run should
+- **Control result**: the `itch_metrics` block completed the entire native flow —
+  **Magic DRC 0, KLayout DRC 0, LVS 0**, setup WNS **+0.123 ns**, hold WNS
+  **+0.107 ns** at 10 ns, 6,776 standard cells (42,127 µm²) on the 500 µm die, routing
+  DRC cleared (10 → 0). So the toolchain/PDK/environment is healthy; the wrapper's
+  171,735 met1/met2 shorts are design-specific.
+- A fresh wide-wrapper run (`native-wide2`) was started detached through
+  `Start-Process wsl.exe` so it will not depend on this session; it is still in
+  synthesis and is the basis for the per-net short analysis. The next run should
   check the DRT violation distribution per net before another full-flow attempt.
 
 ## 2026-11-10 20:59 - Autonomy tick + DRT on the 1400 µm die abandoned, wide die launched

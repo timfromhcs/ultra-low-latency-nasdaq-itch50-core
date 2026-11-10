@@ -67,8 +67,9 @@ $BIN --pdk-root /opt/ciel --run-tag <tag> \
 
 Parity is verified: the native STA run of `sky130_wrap32_fitted.json` reproduced the
 container numbers exactly (setup WNS **+0.3537 ns**, **19,660** max-slew violations).
-Do **not** run `wsl --shutdown` while a flow is active; `docker` restarts no longer
-matter. Copy the finished `final/metrics.json` (or the summary JSON) back into
+The native path is also complete: `sky130_metrics.json` finished the whole flow with
+**Magic DRC 0, KLayout DRC 0, LVS 0** and setup/hold WNS **+0.123 / +0.107 ns**.
+Do **not** run `wsl --shutdown` while a flow is active. Copy the finished `final/metrics.json` (or the summary JSON) back into
 `reports/`.
 
 **Keep a WSL client attached.** Docker Desktop's distro and Ubuntu share one WSL2
