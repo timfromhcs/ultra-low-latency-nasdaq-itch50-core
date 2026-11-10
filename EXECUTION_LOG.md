@@ -259,6 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 22:59 - Autonomy tick + wrapper DRT re-run is non-deterministic but still failing
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `22d7b91` **success**.
+- Re-ran the wide wrapper (`--run-tag native-wide2`) with a detached `Start-Process
+  wsl.exe` launcher, so it survives session restarts. DRT this time went
+  **43,316 → 26,809 → ~24,712** violations (the first run ended at 171,735), i.e. the
+  failure is reproducible in kind but the count is highly non-deterministic and still
+  orders of magnitude away from closure.
+- Launched a controlled routing test (`openlane/sky130_wrap32_routetest.json`):
+  same RTL and floorplan, but 50 ns clock and AREA synthesis (`SYNTH_ABC_BUFFERING: 0`,
+  no sizing). If that netlist routes cleanly, the short storm is a property of the
+  10 ns buffer-heavy netlist rather than of the wrapper structure.
+- Both runs are in flight; memory in the 6 GB WSL VM is tight (≈2 GB available), so the
+  routing test may be stopped if pressure rises. **No sign-off result.**
+
 ## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce`/`c570f5e` green.
