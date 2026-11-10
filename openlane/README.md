@@ -94,6 +94,12 @@ first pass and **264,817** in optimisation iteration 1 (10–20 %, ≈14 min/ite
 the run was abandoned instead of burning hours. `sky130_wrap32_wide.json` (1800 µm,
 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off) is the follow-up attempt.
 
+The wide die fixed global routing — **1 overflow node, 45.9 % usage, no NDR retries** —
+but detailed routing still ended at **171,735 violations**, dominated by **met1 shorts
+(82,017)** and **met2 shorts (65,698)**; the 1400 µm run had the same short signature
+(264,817). Die size is therefore not the remaining blocker; the next investigation is
+the per-net distribution of those shorts (wide internal buses / pin access).
+
 Two container kills (`exit 255`) happened while GlobalRouting ran; each coincided with a
 Docker Desktop VM restart (init logs at ≈45 min intervals). `.wslconfig` was capped at
 `memory=6GB`/`processors=6`; raising it to 10 GB/8 CPUs (same swap) gave the container

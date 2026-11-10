@@ -70,6 +70,12 @@ Do **not** run `wsl --shutdown` while a flow is active; `docker` restarts no lon
 matter. Copy the finished `final/metrics.json` (or the summary JSON) back into
 `reports/`.
 
+**Stop Docker Desktop first.** Docker Desktop's distro and Ubuntu share one WSL2
+utility VM, so Docker Desktop's periodic VM restarts also kill native Ubuntu
+processes. Observed on 2026-11-10: a native DRT run died at 21:51 with NUL-padded logs
+and `dmesg` showing an unclean VM shutdown, at the same ≈45 min cadence as the earlier
+container kills. With Docker Desktop stopped, WSL stays up and the run continues.
+
 ## 3. Full flow and the knobs that matter
 
 ```powershell

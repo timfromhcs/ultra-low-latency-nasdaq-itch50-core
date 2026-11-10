@@ -259,6 +259,26 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce`/`c570f5e` green.
+- The 1800 µm / 15 % run (`--run-tag native-wide`) answered the congestion question:
+  global routing finished in **one pass with 1 overflow node** (45.9 % usage; met1 49.4 %,
+  met2 54.0 %, met3 34.4 %, met4 42.6 %, met5 19.6 %) and **zero NDR retries**
+  (`CTS_APPLY_NDR: "none"`). Compare 25,661 overflowed nodes at 1400 µm — the die size
+  was the congestion lever.
+- Detailed routing then failed structurally: first pass **159,175 violations**, final
+  **171,735**, dominated by **met1 shorts 82,017 and met2 shorts 65,698** (plus ~9k
+  spacing and ~12k recheck). Same signature on the 1400 µm run (264,817, met1/met2
+  shorts dominating), so it is not a density artefact — the wide die does not fix it.
+- The WSL VM restarted at ≈21:51 (dmesg: unclean shutdown) and killed the native flow
+  mid-iteration. Docker Desktop runs in the **same WSL2 utility VM**, so its periodic
+  VM restarts also kill Ubuntu processes — the instability is not Docker-container
+  specific. Docker Desktop was stopped afterwards and WSL stayed up.
+- Next diagnostic: the met1/met2 short signature points at wide internal buses
+  (`raw_payload`) and/or pin access, not at standard-cell density. The next run should
+  check the DRT violation distribution per net before another full-flow attempt.
+
 ## 2026-11-10 20:59 - Autonomy tick + DRT on the 1400 µm die abandoned, wide die launched
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce` **success**.
