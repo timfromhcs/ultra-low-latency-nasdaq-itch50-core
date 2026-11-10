@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 05:59 - Autonomy tick + end-user artifacts re-verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Rebuilt and probed the shipped artifacts on the current tree:
+  - **EXE**: `npm run build:exe` → `--probe --no-open` exit 0 (WASM 50,322 B, version
+    0x301, 8 chips); rebuild hash `67d05b22…` is byte-identical to the recorded
+    reproducible build.
+  - **npm**: `npm pack` + clean install in a temp project (0 vulnerabilities), CLI
+    parses 2,000 records at 41.28 Gbps.
+  - **PyPI**: wheel built, installed into a fresh venv, `chiplab-itch selfcheck` →
+    10,000 records, 22 opcodes.
+- README evidence rows for EXE/npm/PyPI updated; no source changes.
+
 ## 2026-11-10 04:59 - Autonomy tick + browser UI re-verified after WASM rebuild
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

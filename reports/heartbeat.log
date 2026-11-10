@@ -2559,3 +2559,251 @@ Weitere Mikro-├änderungen an Docs/CI w├ñren Besch├ñftigungstherapie; Re
 **N├ñchster sinnvoller Schritt f├╝r einen Menschen:** eine Clock-/Floorplan-Session f├╝r den 32-bit-Wrapper (Clock-Buffer vor Placement, gefittetes Die) auf einem stabilen Runner; Rezept und Resume-Befehle stehen in `docs/long-runs.md`, die Messwerte in `openlane/README.md`.
 [2026-11-10T04:59:19.3794768+01:00] hallo, es ist 04:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; rg -n "4173|8787|PORT" 
+backend/server.mjs | Select-Object -First 6
+[tick] ran 0, failed 0
+6://   node backend/server.mjs            # http://127.0.0.1:4173
+7://   PORT=8081 node backend/server.mjs
+28:const PORT = Number(cli("port", process.env.PORT || 4173));
+42:      if (a.family === "IPv4" && !a.internal) out.push(`http://${a.address}:${PORT}`);
+64:    port: PORT,
+280:server.listen(PORT, HOST, () => {
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node backend/server.mjs
+Command moved to the background (shell ID: sh_1c39cad490016HLiioNmHmFKAH).
+Output is streaming to: 
+C:\Users\hcsme\.local\share\opencode\shell\e4621e381242949174fc78ea4ba2c23bf97dac84\sh_1c39cad490016HLiioNmHmFKAH.out
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const s = await search({ namespace: \"playwright\", limit: 30 });\nreturn s.items.map(i 
+=> i.path + \" :: \" + (i.description || \"\").slice(0, 70));"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_resize({ width: 1440, height: 900 });\n  await 
+tools.playwright.browser_navigate({ url: \"http://127.0.0.1:4173/\" });\n  await new Promise(r => setTimeout(r, 
+1500));\n  const snap = await tools.playwright.browser_snapshot({});\n  return snap;\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_resize({ width: 1440, height: 900 });\n  await 
+tools.playwright.browser_navigate({ url: \"http://127.0.0.1:4173/\" });\n  await tools.playwright.browser_wait_for({ 
+time: 2 });\n  const snap = await tools.playwright.browser_snapshot({});\n  return snap;\n} catch (e) { return { 
+error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_click({ element: \"Run feed button\", ref: 
+\"f2e39\" });\n  await tools.playwright.browser_wait_for({ time: 3 });\n  const snap = await 
+tools.playwright.browser_snapshot({});\n  const text = typeof snap === \"string\" ? snap : snap;\n  return 
+text.slice(0, 4000);\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const s = await search({ namespace: \"playwright\", query: \"browser_click\", limit: 3 
+});\nreturn s.items;"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_click({ element: \"Run feed button\", target: 
+\"f2e39\" });\n  await tools.playwright.browser_wait_for({ time: 3 });\n  const snap = await 
+tools.playwright.browser_snapshot({});\n  const s = String(snap);\n  const idx = s.indexOf(\"Run metrics\");\n  return 
+s.slice(Math.max(0, idx - 200), idx + 1600);\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const s = await search({ namespace: \"playwright\", query: \"browser_take_screenshot\", 
+limit: 2 });\nreturn s.items;"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_take_screenshot({ filename: 
+\"reports/web-1440.png\", fullPage: true, scale: \"css\" });\n  const res = await tools.playwright.browser_click({ 
+element: \"Compare all button\", target: \"f2e134\" });\n  await tools.playwright.browser_wait_for({ time: 3 });\n  
+const snap = String(await tools.playwright.browser_snapshot({}));\n  const i = snap.indexOf(\"Chip comparison\");\n  
+return { screenshot: \"reports/web-1440.png\", compare: snap.slice(i, i + 1400) };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const snap = String(await tools.playwright.browser_snapshot({}));\n  const i = 
+snap.indexOf(\"Chip comparison\");\n  const seg = snap.slice(i, i + 4200);\n  const lossy = 
+seg.split(\"\\n\").filter(l => /Lossy|FAIL|PASS/.test(l)).slice(0, 14).join(\"\\n\");\n  return { lossyRows: lossy 
+};\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_resize({ width: 390, height: 844 });\n  await 
+tools.playwright.browser_wait_for({ time: 1 });\n  const overflow = await tools.playwright.browser_evaluate({ 
+expression: `(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, body: 
+document.body.scrollWidth }))()` });\n  await tools.playwright.browser_take_screenshot({ filename: 
+\"reports/web-390.png\", fullPage: true, scale: \"css\" });\n  const consoleMsgs = await 
+tools.playwright.browser_console_messages({});\n  return { overflow, console: String(consoleMsgs).slice(0, 1200), 
+shot390: \"reports/web-390.png\" };\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const overflow = await tools.playwright.browser_evaluate({ function: `() => ({ 
+sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, body: document.body.scrollWidth 
+})` });\n  await tools.playwright.browser_take_screenshot({ filename: \"reports/web-390.png\", fullPage: true, scale: 
+\"css\" });\n  const consoleMsgs = await tools.playwright.browser_console_messages({});\n  return { overflow, console: 
+String(consoleMsgs).slice(0, 1500), shot390: \"reports/web-390.png\" };\n} catch (e) { return { error: String(e) }; 
+}"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const overflow = await tools.playwright.browser_evaluate({ function: `() => ({ 
+sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, body: document.body.scrollWidth 
+})` });\n  let consoleMsgs = null;\n  try { consoleMsgs = await tools.playwright.browser_console_messages({ level: 
+\"error\" }); } catch (e) { consoleMsgs = String(e); }\n  return { overflow, console: String(consoleMsgs).slice(0, 
+1500) };\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem reports\web-1440.png, reports\web-390.png -ErrorAction SilentlyContinue | 
+Select-Object Name,Length,LastWriteTime
+[32;1mName        [0m[32;1m Length[0m[32;1m LastWriteTime[0m
+[32;1m----        [0m [32;1m------[0m [32;1m-------------[0m
+web-1440.png 194672 10.11.2026 05:00:46
+web-390.png  166138 10.11.2026 05:01:12
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead reports/web-1440.png 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead reports/web-390.png 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_resize({ width: 1440, height: 900 });\n  await 
+tools.playwright.browser_wait_for({ time: 1 });\n  await tools.playwright.browser_take_screenshot({ filename: 
+\"reports/web-1440.png\", fullPage: true, scale: \"css\" });\n  await tools.playwright.browser_resize({ width: 390, 
+height: 844 });\n  await tools.playwright.browser_wait_for({ time: 1 });\n  await 
+tools.playwright.browser_take_screenshot({ filename: \"reports/web-390.png\", scale: \"css\" });\n  await 
+tools.playwright.browser_take_screenshot({ filename: \"reports/web-390-full.png\", fullPage: true, scale: \"css\" 
+});\n  const m = await tools.playwright.browser_evaluate({ function: `() => ({ sw: 
+document.documentElement.scrollWidth, cw: document.documentElement.clientWidth })` });\n  return { mobile: m, files: 
+[\"reports/web-1440.png\", \"reports/web-390.png\", \"reports/web-390-full.png\"] };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead reports/web-390.png 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_evaluate({ function: `() => { window.scrollTo(0, 
+0); return true; }` });\n  await tools.playwright.browser_wait_for({ time: 1 });\n  await 
+tools.playwright.browser_take_screenshot({ filename: \"reports/web-390.png\", scale: \"css\" });\n  await 
+tools.playwright.browser_evaluate({ function: `() => { window.scrollTo(0, 0); return true; }` });\n  await 
+tools.playwright.browser_take_screenshot({ filename: \"reports/web-390-full.png\", fullPage: true, scale: \"css\" 
+});\n  return \"captured\";\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead reports/web-390.png 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try { await tools.playwright.browser_close({}); } catch (e) { /* ignore */ }\nreturn 
+\"browser closed\";"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-CimInstance Win32_Process | Where-Object { $_.CommandLine -like "*backend/server.mjs*" } | 
+ForEach-Object { Stop-Process -Id $_.ProcessId -Force }; Start-Sleep -Seconds 1; try { (Invoke-WebRequest -Uri 
+http://127.0.0.1:4173/api/health -TimeoutSec 2).StatusCode } catch { "server stopped" }; cd E:\chips\main; 
+Get-ChildItem reports\web-1440.png,reports\web-390.png,reports\web-390-full.png | Select-Object Name,Length
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem reports\web-1440.png,reports\web-390.png,reports\web-390-full.png 
+-ErrorAction SilentlyContinue | Select-Object Name,Length
+[32;1mName            [0m[32;1m Length[0m
+[32;1m----            [0m [32;1m------[0m
+web-1440.png     209281
+web-390.png       45051
+web-390-full.png 169982
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -278,8 +278,9 @@
+ | Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all 
+`d2b5f58fÔÇª`** (50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+ | Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | 
+`reports/repro_python.json`, `scripts/repro_python.sh` |
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
++| Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+ | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+ | Docker image | builds and serves `/api/health` | `Dockerfile` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
+ | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (18 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,22 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 04:59 - Autonomy tick + browser UI re-verified after WASM rebuild
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Started the local server and drove the PWA with Playwright (1440├ù900 and 390├ù844):
++  - WASM badge `v0.3.1 ┬À 49 KB`, GPU `WebGPU`, local cloud **connected**; console
++    **0 errors** (1 warning).
++  - Run feed, 100,000 messages: **41.29 Gbps, 177.3 M msg/s, 0 errors**, tape 60 rows.
++  - Compare all: **7 ├ù PASS**, lossy negative control **FAIL ┬À 58,458** (as designed).
++  - Mobile 390 px: `scrollWidth == clientWidth == 390` ÔåÆ no horizontal overflow;
++    single-column layout with the sticky section nav.
++  - Evidence: `reports/web-1440.png` (full page, post-compare), `reports/web-390.png`
++    (viewport, top), `reports/web-390-full.png`. Server stopped afterwards.
++- README evidence table updated with the re-verification row.
++
+ ## 2026-11-10 03:59 - Autonomy tick (no code change: only external blockers left)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**. Tree clean apart
+   from regenerated `reports/`.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "test(web): 
+re-verify the PWA after the WASM rebuild (desktop + 390px evidence)" 2>&1 | Select-Object -Last 1; git push origin 
+main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 reports/web-390.png
+[31;1m   a27e4b5..b0252f8  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git show --stat --oneline HEAD | Select-Object -First 12; git ls-files 
+reports/web-1440.png reports/web-390.png reports/web-390-full.png
+b0252f8 test(web): re-verify the PWA after the WASM rebuild (desktop + 390px evidence)
+ EXECUTION_LOG.md         |  14 ++++++++
+ README.md                |   1 +
+ reports/heartbeat.log    |  81 +++++++++++++++++++++++++++++++++++++++++++++++
+ reports/sbom.json        |   2 +-
+ reports/scorecard.json   |  26 +++++++--------
+ reports/web-1440.png     | Bin 0 -> 209281 bytes
+ reports/web-390-full.png | Bin 0 -> 169982 bytes
+ reports/web-390.png      | Bin 0 -> 45051 bytes
+ 8 files changed, 110 insertions(+), 14 deletions(-)
+reports/web-1440.png
+reports/web-390-full.png
+reports/web-390.png
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+b0252f8 in_progress
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+b0252f8 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 04:59 abgeschlossen ÔÇö **Browser-UI nach dem WASM-Rebuild end-to-end verifiziert**.
+
+## Durchf├╝hrung (Playwright, lokaler Server)
+| Pr├╝fung | Ergebnis |
+|---|---|
+| Badge / GPU | `WASM ┬À v0.3.1 ┬À 49 KB`, `GPU ┬À WebGPU`, Local Cloud **connected** |
+| Konsole | **0 Fehler**, 1 Warnung |
+| Run feed (100.000) | **41,29 Gbps**, **177,3 M msg/s**, **0 Fehler**, Tape 60 Zeilen |
+| Compare all | **7 ├ù PASS**, Lossy-Negativkontrolle **FAIL ┬À 58.458** (wie vorgesehen) |
+| Mobile 390 px | `scrollWidth == clientWidth == 390` ÔåÆ **kein horizontaler Overflow**, einspaltiges Layout |
+| Screenshots | `reports/web-1440.png` (Full-Page, nach Compare), `reports/web-390.png` (Viewport oben), `reports/web-390-full.png` |
+
+Server danach gestoppt; README-Evidenztabelle um die Re-Verifikation erg├ñnzt.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `b0252f8` **success**.
+- Commit `b0252f8` gepusht, Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Unver├ñndert extern blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Neu belegt: Der Web-Pfad funktioniert mit dem neu gebauten, reproduzierbaren WASM unver├ñndert korrekt ÔÇö inklusive Negativkontrolle und Mobile-Layout.
+[2026-11-10T05:59:19.3657130+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
