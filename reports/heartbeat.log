@@ -586,3 +586,178 @@ Tick 10:59 abgeschlossen ÔÇö **Native-GPU und Nightly-Pfad verifiziert**.
 Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-10T12:00:09.2394030+01:00] hallo, es ist 12:00
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; Get-Content docker-compose.yml
+[tick] ran 0, failed 0
+services:
+  chiplab:
+    build: .
+    image: chiplab:0.3.1
+    ports:
+      - "4173:4173"
+    environment:
+      PORT: "4173"
+      HOST: "0.0.0.0"
+      # Writes arrive from a non-loopback bridge, so set a token to enable them:
+      #   CHIPLAB_TOKEN=long-token docker compose up --build
+      CHIPLAB_TOKEN: "${CHIPLAB_TOKEN:-}"
+      CHIPLAB_DATA_DIR: /app/.data
+    volumes:
+      - chiplab-data:/app/.data
+    restart: unless-stopped
+
+volumes:
+  chiplab-data:
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; $env:CHIPLAB_TOKEN="compose-token"; docker compose up -d --build 2>&1 | Select-Object 
+-Last 3; Start-Sleep -Seconds 5; try { $h=Invoke-RestMethod http://127.0.0.1:4173/api/health -TimeoutSec 5; "health 
+ok=$($h.ok) v=$($h.version)" } catch { "health FAIL: $($_.Exception.Message)" }; try { 
+$b='{"data":{"compose":true},"expectedRevision":null}'; $r=Invoke-RestMethod http://127.0.0.1:4173/api/store/default 
+-Method Put -Headers @{Authorization="Bearer compose-token"} -ContentType application/json -Body $b -TimeoutSec 5; 
+"put revision=$($r.revision)" } catch { "put FAIL: $($_.Exception.Message)" }; docker compose restart 2>&1 | 
+Select-Object -Last 1; Start-Sleep -Seconds 4; try { $g=Invoke-RestMethod http://127.0.0.1:4173/api/store/default 
+-Headers @{Authorization="Bearer compose-token"} -TimeoutSec 5; "after restart revision=$($g.revision) 
+data=$($g.data.compose)" } catch { "get FAIL: $($_.Exception.Message)" }
+[31;1munable to get image 'chiplab:0.3.1': failed to connect to the docker API at 
+npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open 
+//./pipe/dockerDesktopLinuxEngine: Das System kann die angegebene Datei nicht finden.[0m
+health FAIL: Es konnte keine Verbindung hergestellt werden, da der Zielcomputer die Verbindung verweigerte. 
+(127.0.0.1:4173)
+put FAIL: Es konnte keine Verbindung hergestellt werden, da der Zielcomputer die Verbindung verweigerte. 
+(127.0.0.1:4173)
+[31;1mfailed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct 
+and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: Das System kann die angegebene Datei nicht 
+finden.[0m
+get FAIL: Es konnte keine Verbindung hergestellt werden, da der Zielcomputer die Verbindung verweigerte. 
+(127.0.0.1:4173)
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try { const r = await tools.gamedev.docker_start(); return r; } catch (e) { return { 
+error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker info 2>&1 | Select-String "Server Version" | Select-Object -First 1
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue; Start-Sleep 
+-Seconds 100; docker info 2>&1 | Select-String "Server Version" | Select-Object -First 1
+[7mServer Version[0m: 29.6.1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; $env:CHIPLAB_TOKEN="compose-token"; docker compose up -d --build 2>&1 | Select-Object 
+-Last 3; Start-Sleep -Seconds 6; try { $h=Invoke-RestMethod http://127.0.0.1:4173/api/health -TimeoutSec 5; "health 
+ok=$($h.ok) v=$($h.version)" } catch { "health FAIL: $($_.Exception.Message)" }; try { 
+$b='{"data":{"compose":true},"expectedRevision":null}'; $r=Invoke-RestMethod http://127.0.0.1:4173/api/store/default 
+-Method Put -Headers @{Authorization="Bearer compose-token"} -ContentType application/json -Body $b -TimeoutSec 5; 
+"put revision=$($r.revision)" } catch { "put FAIL: $($_.Exception.Message)" }; docker compose restart 2>&1 | 
+Select-Object -Last 1; Start-Sleep -Seconds 5; try { $g=Invoke-RestMethod http://127.0.0.1:4173/api/store/default 
+-Headers @{Authorization="Bearer compose-token"} -TimeoutSec 5; "after restart revision=$($g.revision) 
+composeFlag=$($g.data.compose)" } catch { "get FAIL: $($_.Exception.Message)" }
+[31;1m Container main-chiplab-1 Created [0m
+[31;1m Container main-chiplab-1 Starting [0m
+[31;1m Container main-chiplab-1 Started [0m
+health ok=True v=0.3.1
+put revision=1
+[31;1m Container main-chiplab-1 Started [0m
+after restart revision=1 composeFlag=True
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; $env:CHIPLAB_TOKEN="compose-token"; docker compose down -v 2>&1 | Select-Object -Last 2; 
+docker rm -f chiplab-verify 2>$null | Out-Null; "cleaned"
+[31;1m Volume main_chiplab-data Removed [0m
+[31;1m Network main_default Removed [0m
+cleaned
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -281,9 +281,9 @@
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+ | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22ÔÇª` unchanged | 
+`dist/chiplab.exe` |
+-| Docker image | builds; `/api/health` ÔåÆ v0.3.1, WASM 50,322 B; store **401 without token**, revision 1 with token 
+| `Dockerfile` |
++| Docker | image + `docker compose`: `/api/health` v0.3.1, token PUT ÔåÆ revision 1, data **survives `compose 
+restart`** (named volume) | `Dockerfile`, `docker-compose.yml` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | 
+`reports/web-vercel.png` |
+ | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (19 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+ | npm package | `npm pack` + clean install (0 vulnerabilities) parses 2,000 records at 41.28 Gbps | `packages/npm/` |
+ | PyPI package | wheel installs in a clean venv; `selfcheck` = 10,000 records, 22 opcodes | `packages/python/` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 12:00 - Autonomy tick + docker compose verified
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Docker Desktop was down after a host restart; started it, then tested the compose
++  path: `CHIPLAB_TOKEN=compose-token docker compose up -d --build` ÔåÆ
++  `/api/health` ok **v0.3.1**; authenticated PUT ÔåÆ **revision 1**; after
++  `docker compose restart` the same revision and data came back from the named volume.
++  `docker compose down -v` removed container, network and volume.
++- README Docker evidence row updated to cover the compose path and persistence.
++
+ ## 2026-11-10 10:59 - Autonomy tick + native Vulkan re-verified, nightly dispatched
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - **Native Vulkan** (`native/target/release/chiplab-native.exe`, Radeon 680M):
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"test(docker): verify the compose path, token auth and volume persistence" 2>&1 | Select-Object -Last 1; git push 
+origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 57 insertions(+), 16 deletions(-)
+[31;1m   a188cc3..d38df8a  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+d38df8a completed success
+> build ┬À deepseek-v4.1-flash
+Tick 12:00 abgeschlossen ÔÇö **Docker-Compose-Pfad verifiziert**.
+
+## Ergebnisse
+| Pr├╝fung | Ergebnis |
+|---|---|
+| `docker compose up -d --build` (mit `CHIPLAB_TOKEN`) | Container gebaut/gestartet |
+| `/api/health` | **ok, v0.3.1** |
+| Store-PUT mit Bearer-Token | **revision 1** |
+| `docker compose restart` ÔåÆ GET | **revision 1**, Daten aus dem Named Volume **persistiert** |
+| `docker compose down -v` | Container, Netzwerk und Volume sauber entfernt |
+
+(Docker Desktop war nach einem Host-Neustart aus; neu gestartet und der Compose-Pfad danach vollst├ñndig getestet.) README-Evidenzzeile f├╝r Docker nennt jetzt Compose + Persistenz.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `d38df8a` **success**.
+- Commit `d38df8a` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-10T12:59:20.5615790+01:00] hallo, es ist 12:59
+[tick] ran 0, failed 0

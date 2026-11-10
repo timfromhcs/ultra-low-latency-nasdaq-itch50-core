@@ -281,6 +281,7 @@ Reports live in [`reports/`](reports/).
 | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22…`, 87,785,472 B, Node 22.23.1); weekly Windows CI job | `reports/repro_exe.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS×7 + lossy FAIL (58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+| Local-cloud UI round-trip | **Test → connected; Sync → revision 2 (runs/lastRun); Pull → "Pulled 2 runs from revision 2"** | `.data/default.json` |
 | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22…` unchanged | `dist/chiplab.exe` |
 | Docker | image + `docker compose`: `/api/health` v0.3.1, token PUT → revision 1, data **survives `compose restart`** (named volume) | `Dockerfile`, `docker-compose.yml` |
 | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | `reports/web-vercel.png` |

@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 12:59 - Autonomy tick + local-cloud UI round-trip verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Drove the Local cloud panel with Playwright against the running server:
+  - **Test** → "Connected to chiplab-local-cloud v0.3.1 · .data · 56s uptime."
+  - Run feed (100k) then **Sync** → server store reaches **revision 2** with
+    `runs`/`lastRun` keys.
+  - **Pull** → "Pulled 2 runs from revision 2." in the panel.
+- README evidence table gained a Local-cloud UI round-trip row. Server and browser
+  stopped afterwards. (The `.data` store on this machine now holds this test run's
+  history; it is git-ignored.)
+
 ## 2026-11-10 12:00 - Autonomy tick + docker compose verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
