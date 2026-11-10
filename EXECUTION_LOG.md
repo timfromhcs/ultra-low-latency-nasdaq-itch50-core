@@ -274,7 +274,13 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - The WSL VM restarted at ≈21:51 (dmesg: unclean shutdown) and killed the native flow
   mid-iteration. Docker Desktop runs in the **same WSL2 utility VM**, so its periodic
   VM restarts also kill Ubuntu processes — the instability is not Docker-container
-  specific. Docker Desktop was stopped afterwards and WSL stayed up.
+  specific. Boot history showed further 1–3 min sessions after Docker was stopped: with
+  no `wsl.exe` client attached, WSL terminates the distro ≈15 s after the launching
+  command returns, so a `setsid nohup` flow cannot outlive its launcher. Long flows now
+  run in a **persistent shell** (background terminal) that stays attached.
+- Control experiment started with that setup: the known-good `sky130_metrics.json`
+  block runs natively (`--run-tag native-metrics2`) to prove the environment still
+  yields 0 DRC / 0 LVS before blaming the wrapper netlist. Result next tick.
 - Next diagnostic: the met1/met2 short signature points at wide internal buses
   (`raw_payload`) and/or pin access, not at standard-cell density. The next run should
   check the DRT violation distribution per net before another full-flow attempt.

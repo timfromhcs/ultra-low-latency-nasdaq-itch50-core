@@ -59,9 +59,10 @@ BIN=/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane
 mkdir -p ~/chiplab-native && cp -r /mnt/e/chips/main/rtl ~/chiplab-native/
 cp /mnt/e/chips/main/openlane/<config>.json ~/chiplab-native/openlane/
 cd ~/chiplab-native
-setsid nohup $BIN --pdk-root /opt/ciel --run-tag <tag> \
+# run it in a terminal that stays open until the flow ends (not detached)
+$BIN --pdk-root /opt/ciel --run-tag <tag> \
   --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT \
-  openlane/<config>.json > ~/chiplab-native/full.log 2>&1 < /dev/null &
+  openlane/<config>.json | tee ~/chiplab-native/full.log
 ```
 
 Parity is verified: the native STA run of `sky130_wrap32_fitted.json` reproduced the
@@ -70,11 +71,15 @@ Do **not** run `wsl --shutdown` while a flow is active; `docker` restarts no lon
 matter. Copy the finished `final/metrics.json` (or the summary JSON) back into
 `reports/`.
 
-**Stop Docker Desktop first.** Docker Desktop's distro and Ubuntu share one WSL2
+**Keep a WSL client attached.** Docker Desktop's distro and Ubuntu share one WSL2
 utility VM, so Docker Desktop's periodic VM restarts also kill native Ubuntu
-processes. Observed on 2026-11-10: a native DRT run died at 21:51 with NUL-padded logs
-and `dmesg` showing an unclean VM shutdown, at the same ≈45 min cadence as the earlier
-container kills. With Docker Desktop stopped, WSL stays up and the run continues.
+processes. With Docker Desktop stopped, WSL instead terminates the distro shortly
+after the last `wsl.exe` client disconnects (observed 2026-11-10: a `setsid nohup`
+flow died ≈16 s after its launching `wsl` call returned; boot history showed 1–3 min
+sessions). Run long flows from a **persistent shell** (e.g. a background terminal that
+stays open until the flow ends) instead of detaching them, or keep Docker Desktop
+running and accept its restarts. Verify with `uptime`/`journalctl --list-boots` before
+trusting a long run.
 
 ## 3. Full flow and the knobs that matter
 

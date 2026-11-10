@@ -3660,3 +3660,219 @@ Tue Nov 10 21:15:38 CET 2026
 > build ┬À deepseek-v4.1-flash
 [2026-11-10T21:59:19.1731526+01:00] hallo, es ist 21:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'd=/home/tim/chiplab-native/openlane/runs/native-wide; ls $d/42-openroad-stamidpnr-3 
+| head; f=$d/42-openroad-stamidpnr-3/itch_wishbone_wrap.def; [ -f $f ] && grep -A 200 "^SPECIALNETS" $f | grep -c 
+"met1" ; [ -f $f ] && grep -c "^COMPONENTS" $f'
+ls: cannot access '/42-openroad-stamidpnr-3': No such file or directory
+0
+0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-wide | tail -5; ls 
+/home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-stamidpnr-3 | head -8'
+error.log
+flow.log
+resolved.json
+tmp
+warning.log
+ls: cannot access '/home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-stamidpnr-3': No such file or 
+directory
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-wide | head -20'
+01-verilator-lint
+02-checker-linttimingconstructs
+03-checker-linterrors
+04-checker-lintwarnings
+05-yosys-jsonheader
+06-yosys-synthesis
+07-checker-yosysunmappedcells
+08-checker-yosyssynthchecks
+09-checker-netlistassignstatements
+10-openroad-checksdcfiles
+11-openroad-checkmacroinstances
+12-openroad-staprepnr
+13-openroad-floorplan
+14-openroad-dumprcvalues
+15-odb-checkmacroantennaproperties
+16-odb-setpowerconnections
+17-odb-manualmacroplacement
+18-openroad-cutrows
+19-openroad-tapendcapinsertion
+20-odb-addpdnobstructions
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls -d /home/tim/chiplab-native/openlane/runs/native-wide/*openroad-detailedrouting 
+2>/dev/null | head -2; ls /home/tim/chiplab-native/openlane/runs/native-wide/4* -d 2>/dev/null | head -6'
+/home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-detailedrouting
+/home/tim/chiplab-native/openlane/runs/native-wide/40-odb-diodesonports
+/home/tim/chiplab-native/openlane/runs/native-wide/41-openroad-stamidpnr-3
+/home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-detailedrouting
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-wide/41-openroad-stamidpnr-3 | head 
+-6; grep -c "met1" /home/tim/chiplab-native/openlane/runs/native-wide/41-openroad-stamidpnr-3/itch_wishbone_wrap.def 
+2>/dev/null'
+COMMANDS
+_env.tcl
+checks.rpt
+clock.rpt
+config.json
+max.rpt
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-wide/40-odb-diodesonports | head; 
+grep -m 5 -n "met1.*STRIPE\|met4.*STRIPE\|met5.*STRIPE" 
+/home/tim/chiplab-native/openlane/runs/native-wide/40-odb-diodesonports/itch_wishbone_wrap.def 2>/dev/null | cut 
+-c1-120'
+config.json
+runtime.txt
+state_in.json
+state_out.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,28 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce`/`c570f5e` green.
++- The 1800 ┬Ám / 15 % run (`--run-tag native-wide`) answered the congestion question:
++  global routing finished in **one pass with 1 overflow node** (45.9 % usage; met1 49.4 %,
++  met2 54.0 %, met3 34.4 %, met4 42.6 %, met5 19.6 %) and **zero NDR retries**
++  (`CTS_APPLY_NDR: "none"`). Compare 25,661 overflowed nodes at 1400 ┬Ám ÔÇö the die size
++  was the congestion lever.
++- Detailed routing then failed structurally: first pass **159,175 violations**, final
++  **171,735**, dominated by **met1 shorts 82,017 and met2 shorts 65,698** (plus ~9k
++  spacing and ~12k recheck). Same signature on the 1400 ┬Ám run (264,817, met1/met2
++  shorts dominating), so it is not a density artefact ÔÇö the wide die does not fix it.
++- The WSL VM restarted at Ôëê21:51 (dmesg: unclean shutdown) and killed the native flow
++  mid-iteration. Docker Desktop runs in the **same WSL2 utility VM**, so its periodic
++  VM restarts also kill Ubuntu processes ÔÇö the instability is not Docker-container
++  specific. Docker Desktop was stopped afterwards and WSL stayed up.
++- Next diagnostic: the met1/met2 short signature points at wide internal buses
++  (`raw_payload`) and/or pin access, not at standard-cell density. The next run should
++  check the DRT violation distribution per net before another full-flow attempt.
++
+ ## 2026-11-10 20:59 - Autonomy tick + DRT on the 1400 ┬Ám die abandoned, wide die launched
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce` **success**.
+ - Detailed routing on the 1400 ┬Ám/25 % result confirmed the congestion measurement:
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -93,8 +93,14 @@
+ first pass and **264,817** in optimisation iteration 1 (10ÔÇô20 %, Ôëê14 min/iteration), so
+ the run was abandoned instead of burning hours. `sky130_wrap32_wide.json` (1800 ┬Ám,
+ 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off) is the follow-up attempt.
+ 
++The wide die fixed global routing ÔÇö **1 overflow node, 45.9 % usage, no NDR retries** ÔÇö
++but detailed routing still ended at **171,735 violations**, dominated by **met1 shorts
++(82,017)** and **met2 shorts (65,698)**; the 1400 ┬Ám run had the same short signature
++(264,817). Die size is therefore not the remaining blocker; the next investigation is
++the per-net distribution of those shorts (wide internal buses / pin access).
++
+ Two container kills (`exit 255`) happened while GlobalRouting ran; each coincided with a
+ Docker Desktop VM restart (init logs at Ôëê45 min intervals). `.wslconfig` was capped at
+ `memory=6GB`/`processors=6`; raising it to 10 GB/8 CPUs (same swap) gave the container
+ 9.7 GiB instead of 5.8 GiB, but a third VM restart still killed the run with the
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -126,11 +126,15 @@
+       (1400 ┬Ám/25 %, 10 ns): pre-PnR setup **+0.354 ns** but 19,660 slew violations,
+       54,569 instances post-CTS; global routing finishes at **81.3 % usage with 25,661
+       overflowed nodes** after six clock-NDR passes (native WSL run, Ôëê55 min), so the
+       die is still too small for this netlist. AREA synth variant is 133,125 ┬Ám┬▓ but
+-      **ÔêÆ83.06 ns** setup. Next: larger die (~1800 ┬Ám, lower density) or a narrower
+-      netlist; the Docker-free path (`docs/long-runs.md` ┬º2b) removes the restart
+-      blocker.
++      **ÔêÆ83.06 ns** setup. 1800 ┬Ám/15 % die: global routing **clean (1 overflow node,
++      45.9 % usage, no NDR retries)** but detailed routing still **171,735 violations**
++      (met1 shorts 82,017, met2 65,698) ÔÇö same signature as the 1400 ┬Ám run, so die
++      size is not the remaining cause. Next: per-net short analysis (wide internal
++      buses / pin access). The Docker-free path (`docs/long-runs.md` ┬º2b) removes the
++      container-restart blocker, but Docker Desktop's VM restarts also kill WSL
++      distros, so stop Docker Desktop for long native runs.
+ - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
+       250 MHz ÔåÆ **WNS ÔêÆ8.27 ns**, 322 MHz ÔåÆ **WNS ÔêÆ9.14 ns**, both ss/100C/1.60 V;
+       Fmax estimate **Ôëê81.5 MHz**, worst path `_35427_` ÔåÆ `raw_payload[0]`.
+       Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/long-runs.md
+Index: docs/long-runs.md
+===================================================================
+--- docs/long-runs.md
++++ docs/long-runs.md
+@@ -69,8 +69,14 @@
+ Do **not** run `wsl --shutdown` while a flow is active; `docker` restarts no longer
+ matter. Copy the finished `final/metrics.json` (or the summary JSON) back into
+ `reports/`.
+ 
++**Stop Docker Desktop first.** Docker Desktop's distro and Ubuntu share one WSL2
++utility VM, so Docker Desktop's periodic VM restarts also kill native Ubuntu
++processes. Observed on 2026-11-10: a native DRT run died at 21:51 with NUL-padded logs
++and `dmesg` showing an unclean VM shutdown, at the same Ôëê45 min cadence as the earlier
++container kills. With Docker Desktop stopped, WSL stays up and the run continues.
++
+ ## 3. Full flow and the knobs that matter
+ 
+ ```powershell
+ ... librelane --run-tag <tag>-full `
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(openlane): wide die fixes GRT, DRT shorts remain; stop Docker 
+for native runs" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 7 files changed, 56 insertions(+), 18 deletions(-)
+[31;1m   c570f5e..0acd4ed  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/openlane/sky130_metrics.json /home/tim/chiplab-native/openlane/ 
+&& cd /home/tim/chiplab-native && setsid nohup 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane --pdk-root /opt/ciel --run-tag 
+native-metrics openlane/sky130_metrics.json > /home/tim/chiplab-native/metrics.log 2>&1 < /dev/null & sleep 30; tail 
+-2 /home/tim/chiplab-native/metrics.log; date'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+                     'openlane/runs/native-metrics/35-openroad-cts/o             
+                    penroad-cts.log'ÔÇª                                           
+Tue Nov 10 22:02:14 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/metrics.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-metrics/final 2>/dev/null | head -5; date'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ 0.1499999999999999944488848768742172978818416595458984375                       
+[INFO] Setting timing derate to: 5.0%                                           
++ repair_antennas sky130_fd_sc_hd__diode_2 -iterations 3 -ratio_margin 10       
+Tue Nov 10 22:13:09 CET 2026
+> build ┬À deepseek-v4.1-flash
