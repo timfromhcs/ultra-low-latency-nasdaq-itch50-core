@@ -82,6 +82,12 @@ stays open until the flow ends) instead of detaching them, or keep Docker Deskto
 running and accept its restarts. Verify with `uptime`/`journalctl --list-boots` before
 trusting a long run.
 
+**This host is shared.** On 2026-11-10 the same Ubuntu distro was simultaneously used
+by another session building `hscl-*` packages (`/home/tim/hscl1-src`, sudo installs at
+22:31/22:38), and the VM restarted at 22:13, 22:20, 22:29 and 23:19, killing every
+running flow. Check `journalctl -b -1 | grep -i hscl` and the boot list before a
+multi-hour run; on a busy host, prefer bounded runs and `--last-run` resumes.
+
 ## 3. Full flow and the knobs that matter
 
 ```powershell

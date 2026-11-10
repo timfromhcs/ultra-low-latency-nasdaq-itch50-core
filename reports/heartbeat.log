@@ -3878,3 +3878,207 @@ Tue Nov 10 22:13:09 CET 2026
 > build ┬À deepseek-v4.1-flash
 [2026-11-10T22:59:19.3738571+01:00] hallo, es ist 22:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/wide2.log; grep -a -c "Number of violations" 
+/home/tim/chiplab-native/wide2.log; date; uptime'
+elapsed time = 00:00:39, memory = 1706.52 (MB).                                                                     
+    Completing 30% with 10794 violations.                                                                              
+ 
+    elapsed time = 00:00:57, memory = 1989.50 (MB).                                                                    
+ 
+0
+Tue Nov 10 22:59:25 CET 2026
+ 22:59:25 up 30 min,  1 user,  load average: 7.67, 5.40, 3.79
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+22d7b91 completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-wide2/openlane 2>/dev/null; ls 
+/home/tim/chiplab-native/openlane/runs/native-metrics2/final/def'
+itch_metrics.def
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'find /home/tim/chiplab-native/openlane/runs/native-wide 
+/home/tim/chiplab-native/openlane/runs/native-wide2 -name "*.def" 2>/dev/null | head -8'
+/home/tim/chiplab-native/openlane/runs/native-wide/21-openroad-generatepdn/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/38-openroad-globalrouting/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/19-openroad-tapendcapinsertion/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/24-openroad-globalplacementskipio/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/16-odb-setpowerconnections/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/18-openroad-cutrows/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/32-openroad-repairdesignpostgpl/itch_wishbone_wrap.def
+/home/tim/chiplab-native/openlane/runs/native-wide/25-openroad-ioplacement/itch_wishbone_wrap.def
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'echo WIDE; grep "SHAPE STRIPE" 
+/home/tim/chiplab-native/openlane/runs/native-wide/38-openroad-globalrouting/itch_wishbone_wrap.def | grep -oE 
+"met[0-9]" | sort | uniq -c; echo METRICS; grep "SHAPE STRIPE" 
+/home/tim/chiplab-native/openlane/runs/native-metrics2/final/def/itch_metrics.def | grep -oE "met[0-9]" | sort | uniq 
+-c'
+WIDE
+   7764 met1
+   7764 met2
+   7764 met3
+    312 met4
+     24 met5
+METRICS
+    619 met1
+    619 met2
+    619 met3
+     32 met4
+      7 met5
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls -l 
+/home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-detailedrouting/drt-run-*/*.drc 2>/dev/null | head; wc 
+-l /home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-detailedrouting/drt-run-*/*.drc 2>/dev/null | tail 
+-3'
+-rw-r--r-- 1 tim tim 0 Nov 10 21:37 
+/home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-detailedrouting/drt-run-0/itch_wishbone_wrap.drc
+0 /home/tim/chiplab-native/openlane/runs/native-wide/42-openroad-detailedrouting/drt-run-0/itch_wishbone_wrap.drc
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'for d in 24-openroad-globalplacementskipio 32-openroad-repairdesignpostgpl 
+33-openroad-detailedplacement 34-openroad-cts; do echo $d; grep -oE 
+"\"(design__instance__displacement__max|design__instance__displacement__mean|design__instance__utilization)\": 
+?[^,}]*" /home/tim/chiplab-native/openlane/runs/native-wide/$d/or_metrics_out.json 2>/dev/null; done'
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-wide | grep -E "^[0-9]" | sed -n 
+"20,40p"'
+20-odb-addpdnobstructions
+21-openroad-generatepdn
+22-odb-removepdnobstructions
+23-odb-addroutingobstructions
+24-openroad-globalplacementskipio
+25-openroad-ioplacement
+26-odb-customioplacement
+27-odb-applydeftemplate
+28-openroad-globalplacement
+29-odb-writeverilogheader
+30-checker-powergridviolations
+31-openroad-stamidpnr
+32-openroad-repairdesignpostgpl
+33-odb-manualglobalplacement
+34-openroad-detailedplacement
+35-openroad-cts
+36-openroad-stamidpnr-1
+37-openroad-stamidpnr-2
+38-openroad-globalrouting
+39-openroad-checkantennas
+40-odb-diodesonports
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -oE "\"(design__instance__displacement__max|design__instance__displacement__mean
+|design__instance__utilization|design__instance__count)\": ?[^,}]*" 
+/home/tim/chiplab-native/openlane/runs/native-wide/34-openroad-detailedplacement/or_metrics_out.json; echo ---; grep 
+-oE "\"(design__instance__displacement__max|design__instance__utilization)\": ?[^,}]*" 
+/home/tim/chiplab-native/openlane/runs/native-wide/35-openroad-cts/or_metrics_out.json'
+"design__instance__displacement__mean": 0
+"design__instance__displacement__max": 0
+"design__instance__count": 71374
+"design__instance__utilization": 0.121826
+"design__instance__count": 72666
+"design__instance__count": 71374
+"design__instance__utilization": 0.121826
+---
+"design__instance__utilization": 0.123987
+"design__instance__displacement__max": 6.362
+"design__instance__utilization": 0.123987
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_wrap32_routetest.json
+Created file successfully: openlane/sky130_wrap32_routetest.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =|Optimization iteration" 
+/home/tim/chiplab-native/wide2.log | tail -5; date'
+[INFO DRT-0199]   Number of violations = 43316.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 26809.                                                                        
+ 
+Tue Nov 10 23:09:32 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -n -E "Optimization iteration|Number of violations =" 
+/home/tim/chiplab-native/wide2.log | tail -8; tail -3 /home/tim/chiplab-native/wide2.log; date'
+11968:[INFO DRT-0199]   Number of violations = 43316.                                                                  
+       
+12018:[INFO DRT-0199]   Number of violations = 26809.                                                                  
+       
+    elapsed time = 00:02:34, memory = 2364.16 (MB).                                                                    
+ 
+    Completing 80% with 24712 violations.                                                                              
+ 
+    elapsed time = 00:02:55, memory = 2361.37 (MB).                                                                    
+ 
+Tue Nov 10 23:09:40 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_routetest.sh
+Created file successfully: reports/run_routetest.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_routetest.sh 
+/home/tim/chiplab-native/run_routetest.sh && chmod +x /home/tim/chiplab-native/run_routetest.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_routetest.sh'; 
+Start-Sleep -Seconds 30; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/routetest.log; free -g | head -2; 
+date'
+copied
+                                                                                                                       
+ 
+143.1. Extracting gate netlist of module `\itch_wishbone_wrap' to `<abc-temp-dir>/input.blif'..                        
+ 
+               total        used        free      shared  buff/cache   available
+Mem:               5           3           0           0           2           2
+Tue Nov 10 23:10:24 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_routetest.sh,reports\run_wide2.sh -ErrorAction SilentlyContinue; 
+git status --porcelain
+M reports/heartbeat.log
+?? openlane/sky130_wrap32_routetest.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,23 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 22:59 - Autonomy tick + wrapper DRT re-run is non-deterministic but still failing
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `22d7b91` **success**.
++- Re-ran the wide wrapper (`--run-tag native-wide2`) with a detached `Start-Process
++  wsl.exe` launcher, so it survives session restarts. DRT this time went
++  **43,316 ÔåÆ 26,809 ÔåÆ ~24,712** violations (the first run ended at 171,735), i.e. the
++  failure is reproducible in kind but the count is highly non-deterministic and still
++  orders of magnitude away from closure.
++- Launched a controlled routing test (`openlane/sky130_wrap32_routetest.json`):
++  same RTL and floorplan, but 50 ns clock and AREA synthesis (`SYNTH_ABC_BUFFERING: 0`,
++  no sizing). If that netlist routes cleanly, the short storm is a property of the
++  10 ns buffer-heavy netlist rather than of the wrapper structure.
++- Both runs are in flight; memory in the 6 GB WSL VM is tight (Ôëê2 GB available), so the
++  routing test may be stopped if pressure rises. **No sign-off result.**
++
+ ## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce`/`c570f5e` green.
+ - The 1800 ┬Ám / 15 % run (`--run-tag native-wide`) answered the congestion question:
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"feat(openlane): routing-test config (50 ns, AREA synth) for the wrapper short storm" 2>&1 | Select-Object -Last 1; 
+git push origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_routetest.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 openlane/sky130_wrap32_routetest.json
+[31;1m   22d7b91..f14e27d  main -> main[0m

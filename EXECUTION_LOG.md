@@ -271,8 +271,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   same RTL and floorplan, but 50 ns clock and AREA synthesis (`SYNTH_ABC_BUFFERING: 0`,
   no sizing). If that netlist routes cleanly, the short storm is a property of the
   10 ns buffer-heavy netlist rather than of the wrapper structure.
-- Both runs are in flight; memory in the 6 GB WSL VM is tight (≈2 GB available), so the
-  routing test may be stopped if pressure rises. **No sign-off result.**
+- Both runs were killed at ≈23:19 when the WSL VM restarted. `journalctl -b -1` shows a
+  **second session working in the same Ubuntu distro** (`/home/tim/hscl1-src`,
+  `hscl1-build`, installing `hscl-*`/`earlyoom` debs via sudo at 22:31 and 22:38), so the
+  VM restarts are external interference, not this project's flows. Boot history for the
+  evening: 22:13 → 22:20 → 22:29 → 23:19.
+- Consequence: multi-hour physical runs are not reliably possible on this shared host
+  right now. The wrapper P&R stays open with a fully characterised blocker (GRT clean at
+  1800 µm, DRT short storm, non-deterministic counts).
 
 ## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
 
