@@ -81,7 +81,7 @@ blocker. Numbers below are measured; **there is still no completed P&R for the p
 |---|---|
 | Pre-PnR STA (ss/100 °C/1.60 V) | setup **+0.354 ns** (clean), hold clean, **19,660 max-slew violations** |
 | Post-CTS | 54,569 instances (15,779 combinational, 1,565 FFs, 6,236 timing-repair buffers, 435 clock buffers, 26,302 tap cells), 19.2 % utilization |
-| Global routing | 33 of the allowed 200 overflow iterations in ≈1 h; `clk` NDR disabled to reduce congestion; no routing result |
+| Global routing | 33 of the allowed 200 overflow iterations in ≈1 h in Docker; native build does 6 clock-NDR passes in ≈55 min. **Final congestion: 81.26 % total usage, 25,661 overflowed nodes** (met1 85.0 %, met2 90.6 %, met3 73.2 %, met4 69.8 %, met5 53.0 %) |
 
 The AREA-synthesis variant (`sky130_wrap32_fitted_area.json`, 133,125 µm² chip area)
 routes much more easily but is **not timing-viable**: setup WNS **−83.06 ns** at 10 ns

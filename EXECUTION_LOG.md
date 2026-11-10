@@ -259,6 +259,22 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 19:59 - Autonomy tick + global routing completed natively (congestion measured)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `2df2dd5` **success**.
+- The native flow (started 19:28) reached and finished **OpenROAD.GlobalRouting** in
+  ≈55 min: six passes, each disabling NDR on one clock net (`clk`, `clknet_0_clk`,
+  `clknet_2_0_0`, `2_2_0`, `2_3_0`) after 30 overflow iterations.
+- Measured final congestion at 1400 µm / 25 %: **81.26 % total usage, 25,661 overflowed
+  nodes** (met1 85.0 %, met2 90.6 %, met3 73.2 %, met4 69.8 %, met5 53.0 %), wirelength
+  10.8 mm. So this die is still too small — the congestion blocker is now quantified
+  instead of inferred.
+- The flow continued into antenna repair / diode insertion
+  (`41-openroad-repairantennas`). **Detailed routing is still running** — no DRC/LVS
+  result yet.
+- `openlane/README.md` fitted-attempt table, `LONG_TERM_PLAN.md` and this log updated
+  with the measured congestion numbers.
+
 ## 2026-11-10 18:59 - Autonomy tick + native (Docker-free) LibreLane path
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate stays green; CI on `0c392a4`

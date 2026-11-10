@@ -124,10 +124,12 @@ MDN PWA best practices, GitHub Actions docs.
       did not converge; the 100 MHz relaxed runs either failed in DiodeInsertion
       (GRT-0183) or were aborted by Docker/host restarts. 2026-11-10 fitted attempt
       (1400 µm/25 %, 10 ns): pre-PnR setup **+0.354 ns** but 19,660 slew violations,
-      54,569 instances post-CTS; GRT ran 33/200 overflow iterations in ≈1 h and was
-      killed by Docker VM restarts (3×, not an OOM). AREA synth variant is 133,125 µm²
-      but **−83.06 ns** setup. Still needs a congestion fix on the netlist and a stable
-      multi-hour runner; `docs/long-runs.md` records the knobs.
+      54,569 instances post-CTS; global routing finishes at **81.3 % usage with 25,661
+      overflowed nodes** after six clock-NDR passes (native WSL run, ≈55 min), so the
+      die is still too small for this netlist. AREA synth variant is 133,125 µm² but
+      **−83.06 ns** setup. Next: larger die (~1800 µm, lower density) or a narrower
+      netlist; the Docker-free path (`docs/long-runs.md` §2b) removes the restart
+      blocker.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
