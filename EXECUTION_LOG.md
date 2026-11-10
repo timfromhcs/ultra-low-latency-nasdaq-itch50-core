@@ -259,6 +259,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 00:59 - Autonomy tick + project skills corrected
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+- The three `.opencode` project skills had stale claims:
+  - `chiplab-verify` said "~10 checks" (now 11 fast / 13 deep) and listed
+    multi-frame Mold back-pressure as open — it is done. It now points at `make cocotb`
+    (19 suites) and states the real physical status (pre-PnR STA ≠ sign-off; only
+    `itch_metrics` completed a full flow).
+  - `chiplab-release` still gated `v1.0.0` on multi-frame/BBO (both done) and said not to
+    claim reproducible builds (WASM/Python/EXE are reproducible). Updated, including
+    the cosign bundles in the asset list.
+  - `chiplab-local-cloud` now mentions the SLSA attestation next to the SHA-256 check.
+- Docs links: 25 files, 0 dead.
+
 ## 2026-11-10 00:05 - Autonomy tick + long-run operations guide
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.

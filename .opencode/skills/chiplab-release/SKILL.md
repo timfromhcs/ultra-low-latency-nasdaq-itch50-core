@@ -55,12 +55,14 @@ git push origin vX.Y.Z
 ```
 
 The `Release` workflow runs: verify → Windows EXE → npm/PyPI packages → SBOM →
-`SHA256SUMS.txt` → GitHub Release. Confirm all jobs are green and the release has
-all six assets.
+`SHA256SUMS.txt` → cosign blob signatures → GitHub Release. Confirm all jobs are green
+and the release has the six assets plus the `*.sigstore.json` bundles.
 
 ## 6. After the release
 
 - Verify Vercel production is READY for the commit.
-- Keep `v1.0.0` blocked until multi-frame Mold back-pressure, RTL top-of-book and
-  LibreLane/OpenSTA sign-off exist.
-- Never claim signed EXE, registry publishing or reproducible builds unless done.
+- Keep `v1.0.0` blocked until parser P&R/DRC/LVS sign-off exists (multi-frame
+  back-pressure, A/B recovery and the RTL top-of-book are done).
+- The EXE is not Authenticode-signed (SLSA attestation only). npm/PyPI registry
+  publishing is opt-in and has not been run. WASM/Python/EXE builds are reproducible:
+  `make repro-wasm`, `make repro-python`, `node scripts/repro_exe.mjs`.

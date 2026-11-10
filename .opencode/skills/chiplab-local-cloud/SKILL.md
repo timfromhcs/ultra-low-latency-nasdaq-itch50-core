@@ -57,4 +57,5 @@ node scripts/test_cloud_api.mjs
 
 - Do not cache `/api/*` in the service worker (stale 404s).
 - A LAN URL is only reachable if the host firewall allows the port.
-- The EXE is unsigned; verify the release SHA-256.
+- The EXE is unsigned (no Authenticode); verify the release SHA-256 and the SLSA
+  attestation (`gh attestation verify chiplab.exe --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core`).

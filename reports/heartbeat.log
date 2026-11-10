@@ -1521,3 +1521,117 @@ Tick 22:59 abgeschlossen.
 Der Caravel-Drop-in samt Rezept ist fertig; der echte Harness-Lauf bleibt offen (Caravel-Repo + PDK/sim-Environment, `make setup`). Unver├ñndert extern blockiert: Parser-P&R (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, PCIe/100G, Registry-OIDC, optionaler Shuttle.
 [2026-11-09T23:59:19.3044620+01:00] hallo, es ist 23:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite docs/long-runs.md
+Created file successfully: docs/long-runs.md
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -1,9 +1,10 @@
+ # OpenLane / LibreLane targets
+ 
+ These are **flow-ready** configurations, not sign-off results. Only the pre-PnR STA
+ runs and the small-block validation are measured; the parser has no completed P&R, so
+-no parser Fmax, slack or die-area claim is made.
++no parser Fmax, slack or die-area claim is made. Operating notes (resume, knobs,
++failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
+ 
+ | File | Target | PDK | Clock |
+ |---|---|---|---|
+ | `config.json` | parser (legacy baseline) | Sky130 | 3.10 ns |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -490,8 +490,9 @@
+ - [Register map](docs/register-map.md) ÔÇö host, Wishbone, Caravel, snapshot and counter registers
+ - [Integration guide](docs/integration-guide.md) ÔÇö instantiate, drive, poll counters
+ - [API reference](docs/api.md) ÔÇö HTTP, MCP, npm, Python
+ - [Errata](docs/errata.md) ÔÇö what is deliberately out of scope
++- [Long LibreLane runs](docs/long-runs.md) ÔÇö resume, knobs, failure modes, cleanup
+ - [English](docs/guides/en/zero-to-hero.md)
+ - [Deutsch](docs/guides/de/zero-to-hero.md)
+ - [Fran├ºais](docs/guides/fr/zero-to-hero.md)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 2; node scripts\gate.mjs 2>&1 
+| Select-Object -Last 2
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,20 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 00:05 - Autonomy tick + long-run operations guide
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
++- Wrote `docs/long-runs.md` from the actual run history: Docker/PDN volume setup
++  (`/root/.ciel`), bounded pre-PnR first, the knobs that matter (resizer skips,
++  `GRT_ALLOW_CONGESTION`, antenna repair removing `OpenROAD.DiodeInsertion`), resuming
++  with `--last-run` **plus the config** and repeated skip flags, the observed failure
++  modes (GRT-0116, GPL-0305, DPL-0036, GRT-0183, container EOF), cleanup and the
++  reporting rule (a block-level flow is not a parser sign-off).
++- Linked from the openlane README and the main docs list; link check **25 files,
++  0 dead links**.
++
+ ## 2026-11-09 22:59 - Autonomy tick + Caravel integration recipe
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate was 11/11.
+ - Wrote `caravel/README.md`: exact port mapping, what is verified here (lint + cocotb
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: long LibreLane runs (resume, knobs, failure modes, 
+cleanup)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 docs/long-runs.md
+[31;1m   d31accb..6d81c89  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+6d81c89 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 23:59 abgeschlossen (jetzt 10.11.).
+
+## Neu und verifiziert
+**Betriebsleitfaden f├╝r lange LibreLane-L├ñufe** (`docs/long-runs.md`)
+- Docker-/PDK-Volume-Setup (`/root/.ciel`), zuerst begrenzte Pre-PnR-L├ñufe.
+- Die entscheidenden Stellschrauben: Resizer-Skips, `GRT_ALLOW_CONGESTION`, `RUN_ANTENNA_REPAIR=false` (entfernt `OpenROAD.DiodeInsertion` aus dem Flow ÔÇö ein `--skip` darauf schl├ñgt dann fehl), `--last-run` **mit Config** und wiederholten Skip-Flags.
+- Beobachtete Fehlermodi mit Sofortma├ƒnahmen: `GRT-0116`, `GPL-0305`, `DPL-0036`, `GRT-0183`, Container-`unexpected EOF` nach Host-Neustart.
+- Aufr├ñumregeln (Run-Verzeichnisse GB-gro├ƒ, nur referenzierte behalten) und die Berichtsregel: ein Block-Flow ist kein Parser-Sign-off.
+
+## Verifikation
+- Autonomy: 0 Tasks; Docs-Link-Check **25 Dateien, 0 tote Links**; Gate **11/11**.
+- CI auf `6d81c89` **success**; Commit `6d81c89` gepusht, Arbeitsbaum clean.
+
+## Status
+Unver├ñndert: Parser-P&R (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, echter Caravel-Harness-Lauf (Repo/PDK), PCIe/100G, Registry-OIDC und Shuttle bleiben extern blockiert. Der Drop-in, das Rezept und die Betriebsnotizen sind jetzt so vollst├ñndig, dass ein Mensch mit passender Umgebung die L├ñufe reproduzieren und fortsetzen kann.
+[2026-11-10T00:59:20.0199385+01:00] hallo, es ist 00:59
+[tick] ran 0, failed 0
