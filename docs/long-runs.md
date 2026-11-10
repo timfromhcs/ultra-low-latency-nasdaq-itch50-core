@@ -33,6 +33,43 @@ node scripts/openlane_summary.mjs openlane/runs/<tag>-sta
 The summary tolerates LibreLane's `Infinity`/`NaN` metrics and prints WNS/TNS,
 instances/area, DRC/LVS and an Fmax estimate.
 
+## 2b. Native LibreLane in WSL (survives Docker VM restarts)
+
+Docker Desktop on this host restarts its VM every ~40–50 min and kills running
+containers (`exit 255`), which makes multi-hour routing runs impossible. The same
+LibreLane build can be run natively inside WSL Ubuntu, without Docker:
+
+```bash
+# one-time: unpack the image's Nix closure and the Sky130 PDK
+docker create --name lbl-export ghcr.io/librelane/librelane:3.0.17 /bin/true
+docker export lbl-export -o E:\librelane-image.tar
+wsl -d Ubuntu bash -lc 'sudo tar -xf /mnt/e/librelane-image.tar -C / nix'
+# PDK (from the named volume) into a user-readable root
+docker run --rm -v chiplab-librelane-ciel:/ciel -v "E:\:/out" \
+  --entrypoint bash ghcr.io/librelane/librelane:3.0.17 \
+  -lc "tar -czf /out/ciel-sky130.tar.gz -C /ciel ciel/sky130"
+wsl -d Ubuntu bash -lc 'sudo mkdir -p /opt/ciel && sudo tar -xzf /mnt/e/ciel-sky130.tar.gz -C /opt/ciel --strip-components=1 && sudo chown -R $(id -u):$(id -g) /opt/ciel'
+```
+
+Then run from a copy of `rtl/` + `openlane/` on the WSL filesystem (the 9P mount is
+slow and its `openlane/runs` may be root-owned):
+
+```bash
+BIN=/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane
+mkdir -p ~/chiplab-native && cp -r /mnt/e/chips/main/rtl ~/chiplab-native/
+cp /mnt/e/chips/main/openlane/<config>.json ~/chiplab-native/openlane/
+cd ~/chiplab-native
+setsid nohup $BIN --pdk-root /opt/ciel --run-tag <tag> \
+  --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT \
+  openlane/<config>.json > ~/chiplab-native/full.log 2>&1 < /dev/null &
+```
+
+Parity is verified: the native STA run of `sky130_wrap32_fitted.json` reproduced the
+container numbers exactly (setup WNS **+0.3537 ns**, **19,660** max-slew violations).
+Do **not** run `wsl --shutdown` while a flow is active; `docker` restarts no longer
+matter. Copy the finished `final/metrics.json` (or the summary JSON) back into
+`reports/`.
+
 ## 3. Full flow and the knobs that matter
 
 ```powershell

@@ -259,6 +259,24 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 18:59 - Autonomy tick + native (Docker-free) LibreLane path
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate stays green; CI on `0c392a4`
+  **success**.
+- The Docker Desktop VM restarts (`exit 255`) made multi-hour flows impossible, so the
+  LibreLane image was exported and run **natively inside WSL Ubuntu**:
+  `docker export` → `/nix` closure (472 store paths), Sky130 PDK (2.2 GB) from the
+  `chiplab-librelane-ciel` volume → `/opt/ciel`, then
+  `/nix/store/…-python3-3.13.9-env/bin/librelane --pdk-root /opt/ciel`.
+- **Parity check**: native STA of `sky130_wrap32_fitted.json` reproduced the container
+  result exactly — setup WNS **+0.3537 ns**, **19,660** max-slew violations, same
+  utilization. So the native path is a valid substitute, not a different toolchain.
+- Launched the full fitted flow natively (`--run-tag native-full`, 10 ns, 1400 µm,
+  30 GRT iterations, post-CTS/post-GRT resizer skipped) with `setsid nohup`; it was at
+  `28-openroad-globalplacement` after ~5 min with no Docker involvement.
+- `docs/long-runs.md` §2b and `openlane/README.md` now document the recipe and the
+  parity evidence. **No routing/DRC/LVS result yet** — the flow is still running.
+
 ## 2026-11-10 14:59 (cont.) - Parser wrapper full-flow attempt: WSL memory cap raised
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Fast gate **11/11**.

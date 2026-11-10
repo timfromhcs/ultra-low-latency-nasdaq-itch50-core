@@ -42,6 +42,13 @@ python3 -m pip install --break-system-packages librelane
 python3 -m librelane --dockerized --smoke-test     # or: make librelane-smoke
 ```
 
+**Native WSL path (2026-11-10):** the image's Nix closure is unpacked into `/nix` and
+the Sky130 PDK into `/opt/ciel`, so `librelane --pdk-root /opt/ciel` runs without
+Docker and survives the Docker Desktop VM restarts that kill containers. Parity checked:
+the native STA of `sky130_wrap32_fitted.json` reproduced the container result exactly
+(setup WNS **+0.3537 ns**, **19,660** max-slew violations). Recipe:
+[`../docs/long-runs.md`](../docs/long-runs.md) §2b.
+
 ## Measured pre-PnR STA (2026-11-03)
 
 `OpenROAD.STAPrePNR`, sky130_fd_sc_hd, ss/100C/1.60 V, 19,936 instances
