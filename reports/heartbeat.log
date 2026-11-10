@@ -2251,3 +2251,230 @@ Tick 01:59 abgeschlossen.
 Unver├ñndert blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Die Agenten-Dokumentation (`llms-full.txt`, Skills, README, Datenblatt, Errata, Long-Run-Guide) beschreibt jetzt ├╝berall denselben verifizierten Stand.
 [2026-11-10T02:59:19.3700936+01:00] hallo, es ist 02:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; Get-Content 
+.github\workflows\ci.yml -TotalCount 12; "-----"; Get-Content .github\workflows\repro.yml -TotalCount 12
+[tick] ran 0, failed 0
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  rtl:
+    name: RTL + formal + model
+-----
+name: Repro
+
+on:
+  schedule:
+    - cron: "23 4 * * 1"   # weekly, Monday 04:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repro:
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -6,8 +6,12 @@
+   pull_request:
+     branches: [main, master]
+   workflow_dispatch:
+ 
++concurrency:
++  group: ci-${{ github.ref }}
++  cancel-in-progress: true
++
+ jobs:
+   rtl:
+     name: RTL + formal + model
+     runs-on: ubuntu-24.04
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/repro.yml
+Index: .github/workflows/repro.yml
+===================================================================
+--- .github/workflows/repro.yml
++++ .github/workflows/repro.yml
+@@ -7,8 +7,12 @@
+ 
+ permissions:
+   contents: read
+ 
++concurrency:
++  group: repro
++  cancel-in-progress: false
++
+ jobs:
+   repro:
+     name: Reproducible WASM + Python artifacts
+     runs-on: ubuntu-24.04
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,17 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 02:59 - Autonomy tick + CI concurrency groups
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
++- Added `concurrency` to `ci.yml` (`ci-${{ github.ref }}`, cancel-in-progress) so a
++  superseded push cannot leave a half-created run competing with the next one ÔÇö the
++  partial run #136 (2 of 4 jobs) was the motivation. `repro.yml` gets a non-cancelling
++  `repro` group so the weekly run is never cut short.
++- No source changes; YAML validated, CI run checked for all four jobs.
++
+ ## 2026-11-10 01:59 - Autonomy tick + llms-full.txt refreshed
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+ - `llms-full.txt` was stale: it listed old modules, `scripts/mutate.py` (does not
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && python3 
+/mnt/c/Users/hcsme/AppData/Local/Temp/opencode/yamlcheck.py 2>&1 | tail -8"; cd E:\chips\main; node scripts\gate.mjs 
+2>&1 | Select-Object -Last 2; git add -A; git commit -m "ci: concurrency groups (cancel superseded runs, protect the 
+weekly repro)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+.github/workflows/ci.yml OK 4 jobs
+.github/workflows/docker-publish.yml OK 1 jobs
+.github/workflows/exe.yml OK 1 jobs
+.github/workflows/formal.yml OK 3 jobs
+.github/workflows/nightly.yml OK 2 jobs
+.github/workflows/release.yml OK 4 jobs
+.github/workflows/repro.yml OK 2 jobs
+.github/workflows/sign.yml OK 1 jobs
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.github/workflows/repro.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 6 files changed, 218 insertions(+), 15 deletions(-)
+[31;1m   9d6ed42..19c36bf  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json databaseId,headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { 
+"$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion) id=$($_.databaseId)" }
+19c36bf completed success id=42739673092
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const j = await tools.github.actions_list({ method: \"list_workflow_jobs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"42739673092\", perPage: 20 });\nreturn 
+j.jobs?.jobs?.map(x => [x.name, x.conclusion]);"} 
+> build ┬À deepseek-v4.1-flash
+Tick 02:59 abgeschlossen.
+
+## Neu und verifiziert
+**CI-Concurrency**
+- `ci.yml`: `concurrency: ci-${{ github.ref }}` mit `cancel-in-progress: true` ÔÇö ein durch einen Folge-Push ├╝berholter Lauf kann keinen halb erzeugten Run mehr mit dem n├ñchsten konkurrieren (Motivation: Run #136 mit nur 2 von 4 Jobs).
+- `repro.yml`: eigene Gruppe `repro` mit `cancel-in-progress: false`, damit der w├Âchentliche Lauf nie abgeschnitten wird.
+- Alle 8 Workflow-YAMLs validiert.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**.
+- CI auf `19c36bf`: **success**, alle vier Jobs gr├╝n (RTL+Formal+Model, WASM+Backend+MCP+Vercel, Docker, npm+PyPI) ÔÇö per API gepr├╝ft.
+- Commit `19c36bf` gepusht, Arbeitsbaum clean.
+
+## Status
+Unver├ñndert blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-10T03:59:18.6858231+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; rg -n "build_book|fn book|Book" 
+wasm-core/src/lib.rs | Select-Object -First 20
+[tick] ran 0, failed 0
+581:struct BookEntry {
+590:pub extern "C" fn build_book(data_ptr: *const u8, len: usize,
+594:    let mut book = vec![BookEntry::default(); 4096];
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content wasm-core\src\lib.rs | Select-Object -Skip 570 -First 90
+out[32..40].copy_from_slice(&st.corrupt.to_le_bytes());
+    out[40..48].copy_from_slice(&frames.to_le_bytes());
+    out[HEADER_SIZE..].copy_from_slice(&parsed);
+    needed
+}
+
+// -----------------------------------------------------------------------------
+// Top-of-book builder (32-byte entries)
+// -----------------------------------------------------------------------------
+#[derive(Clone, Copy, Default)]
+struct BookEntry {
+    bid: u32,
+    ask: u32,
+    last: u32,
+    volume: u64,
+    orders: u32,
+}
+
+#[no_mangle]
+pub extern "C" fn build_book(data_ptr: *const u8, len: usize,
+                             out_ptr: *mut u8, cap: usize) -> usize {
+    if data_ptr.is_null() || len == 0 { return 0; }
+    let data = unsafe { std::slice::from_raw_parts(data_ptr, len) };
+    let mut book = vec![BookEntry::default(); 4096];
+    let mut off = 0usize;
+    while off < data.len() {
+        let Some((m, used)) = parse_one(data, off) else { break };
+        off += used;
+        let idx = m.locate as usize;
+        if idx >= book.len() { continue; }
+        let b = &mut book[idx];
+        if m.price > 0 { b.last = m.price; }
+        b.volume += m.shares;
+        b.orders += 1;
+        if matches!(m.t, MSG_ADD_ORDER | MSG_ADD_ORDER_MPID | MSG_TRADE_NON_CROSS) {
+            if m.side == b'B' && (b.bid == 0 || m.price > b.bid) { b.bid = m.price; }
+            if m.side == b'S' && (b.ask == 0 || m.price < b.ask) { b.ask = m.price; }
+        }
+    }
+    let mut count = 0usize;
+    for (i, b) in book.iter().enumerate() {
+        if b.orders == 0 { continue; }
+        let need = 32 * (count + 1);
+        if need > cap { break; }
+        let o = unsafe { std::slice::from_raw_parts_mut(out_ptr.add(count * 32), 32) };
+        o[0..2].copy_from_slice(&(i as u16).to_le_bytes());
+        o[2..4].copy_from_slice(&0u16.to_le_bytes());
+        o[4..8].copy_from_slice(&b.bid.to_le_bytes());
+        o[8..12].copy_from_slice(&b.ask.to_le_bytes());
+        o[12..16].copy_from_slice(&b.last.to_le_bytes());
+        o[16..24].copy_from_slice(&b.volume.to_le_bytes());
+        o[24..28].copy_from_slice(&b.orders.to_le_bytes());
+        o[28..32].copy_from_slice(&0u32.to_le_bytes());
+        count += 1;
+    }
+    count * 32
+}

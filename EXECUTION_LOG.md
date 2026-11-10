@@ -259,6 +259,23 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 03:59 - Autonomy tick (no code change: only external blockers left)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**. Tree clean apart
+  from regenerated `reports/`.
+- Re-audited every unchecked roadmap item; each needs a prerequisite this repository
+  cannot supply:
+  - parser P&R/DRC/LVS: clock planning + fitted floorplan + a stable multi-hour run
+    environment (five failure modes documented in `openlane/README.md`);
+  - FPGA target: hardware and vendor toolchain;
+  - full Caravel harness: Caravel SoC repo + PDK sim environment (`caravel/README.md`);
+  - PCIe/DMA or 100G MAC: large integration without simulation models;
+  - npm/PyPI registry publishing: trusted-publisher/OIDC setup;
+  - optional shuttle: external programme.
+- Deliberately no further micro-edits: the docs, skills, guides and CI are already at
+  the verified state. The next actionable step for a human is a clock/floorplan session
+  and a stable runner for the parser flow.
+
 ## 2026-11-10 02:59 - Autonomy tick + CI concurrency groups
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
