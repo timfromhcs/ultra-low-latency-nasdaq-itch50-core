@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 12:00 - Autonomy tick + docker compose verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Docker Desktop was down after a host restart; started it, then tested the compose
+  path: `CHIPLAB_TOKEN=compose-token docker compose up -d --build` →
+  `/api/health` ok **v0.3.1**; authenticated PUT → **revision 1**; after
+  `docker compose restart` the same revision and data came back from the named volume.
+  `docker compose down -v` removed container, network and volume.
+- README Docker evidence row updated to cover the compose path and persistence.
+
 ## 2026-11-10 10:59 - Autonomy tick + native Vulkan re-verified, nightly dispatched
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

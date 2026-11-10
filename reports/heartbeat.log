@@ -555,3 +555,34 @@ Index: EXECUTION_LOG.md
  
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: nightly dispatch (200k) verified green" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+ 2 files changed, 229 insertions(+), 2 deletions(-)
+[31;1m   599f12b..a188cc3  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+a188cc3 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 10:59 abgeschlossen ÔÇö **Native-GPU und Nightly-Pfad verifiziert**.
+
+## Ergebnisse
+**Native Vulkan (Radeon 680M)**
+- `--probe`: 3/3 L├ñufe Exit 0, Vulkan-Adapter erkannt (AMD Radeon, `backend=Vulkan`).
+- 200.000 Records: **46,49 ms**, GPU-Bins vs. CPU **0 Mismatches**, Checksumme 254251.
+- Die dokumentierten 7,85 ms waren veraltet; README und `docs/benchmarks.md` tragen jetzt den 2026-11-10-Messwert.
+
+**Nightly-Workflow (Dispatch mit `count=200000`)**
+- **success**: 200k Full-Field-Regression, Deep-Z3-Beweis, Mutation und RTLÔåöWASM-Equivalence ÔÇö alle vier Jobs gr├╝n auf `ccea710`. Damit ist auch der Nightly-Pfad selbst end-to-end belegt, nicht nur lokal.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `a188cc3` **success**.
+- Commits `599f12b` (Native-Messwerte), `a188cc3` (Nightly-Ergebnis); Arbeitsbaum clean.
+
+## Status
+Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-10T12:00:09.2394030+01:00] hallo, es ist 12:00
+[tick] ran 0, failed 0
