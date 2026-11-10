@@ -29,7 +29,11 @@ const checks = [
   ["vercel-api", "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs"],
 ];
 if (deep) {
-  checks.push(["formal-z3", "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3"]);
+  // Inside WSL/Linux run the script directly; on Windows host use the WSL bridge.
+  const formal = process.platform === "win32"
+    ? "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3"
+    : "./formal/run_formal.sh z3";
+  checks.push(["formal-z3", formal]);
   checks.push(["native-bins", "node scripts/check_native_bins.mjs"]);
 }
 

@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 09:59 - Autonomy tick + `make verify-deep` fixed (gate bug)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Re-ran `make verify-deep` from WSL. The 1M regression passed (0 mismatches) but the
+  deep gate reported **FAIL formal-z3 (125 ms)**: `scripts/gate.mjs` hardcoded
+  `wsl -d Ubuntu /mnt/e/chips/main/...` for the formal check, which does not exist when
+  the gate already runs inside WSL/Linux.
+- Fixed: the deep checks now choose the command by platform (`./formal/run_formal.sh z3`
+  on Linux/WSL, the `wsl …` bridge on Windows). Re-ran `make verify-deep` end to end:
+  fast gate **11/11**, 1,000,000 records **0 mismatches**, deep gate **13/13**
+  (formal 96.7 s).
+- `reports/scorecard.json` now records the deep 13/13 run.
+
 ## 2026-11-10 08:59 - Autonomy tick + synthesis numbers refreshed, Boolector re-checked
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
