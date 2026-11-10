@@ -16,6 +16,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32.json` | `itch_wishbone_wrap` (32-bit) | Sky130 | 3.10 ns |
 | `sky130_wrap32_big.json` | 32-bit wrapper, congestion allowed | Sky130 | 3.10 ns |
 | `sky130_wrap32_100mhz.json` | 32-bit wrapper at 100 MHz, relaxed flow | Sky130 | 10.0 ns |
+| `sky130_wrap32_fitted.json` | 32-bit wrapper, 1400 µm die at 25 % density, antenna-diode step off, 10 ns | Sky130 | 10.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)

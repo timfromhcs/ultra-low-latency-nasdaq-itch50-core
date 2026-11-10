@@ -1075,3 +1075,196 @@ README-Evidenztabelle um die PWA-Offline-Zeile erg├ñnzt; Browser und Server g
 Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-10T14:59:20.4324970+01:00] hallo, es ist 14:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && ./scripts/synth_book.sh > /tmp/synth_book.log 2>&1; echo RC=$?; grep -E 'Number of cells|wires' 
+reports/synth_book.json 2>/dev/null; tail -3 /tmp/synth_book.log"
+[tick] ran 0, failed 0
+RC=True
+  "wires": 115792,
+rc=0 -> reports/synth_book_32_4_4.log
+cells=70715 wires=115792 bits=127638 memories=0 -> reports/synth_book.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "62,017|98,322" README.md docs llms-full.txt LONG_TERM_PLAN.md openlane 2>$null | 
+Select-Object -First 12; Get-Content reports\synth_book.json
+README.md:264:| BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | 
+`reports/synth_book.json` |
+LONG_TERM_PLAN.md:104:- [x] Yosys area estimate for the BBO: 62,017 cells at 32/4/4 (not optimized,
+llms-full.txt:55:  2,228 DFFs; book 62,017 cells at 32/4/4.
+docs\datasheet.md:67:mapping, **62,017 cells / 98,322 wires** (`reports/synth_book.json`). This is an
+{
+  "generatedAt": "2026-11-10T14:02:12Z",
+  "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+  "config": { "ORDERS": 32, "LOCATES": 4, "LEVELS": 4 },
+  "cells": 70715,
+  "wires": 115792,
+  "wireBits": 127638,
+  "memories": 0,
+  "note": "Area estimate only; no timing/DRC/LVS sign-off. Full log: reports/synth_book_32_4_4.log"
+}
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -260,9 +260,9 @@
+ | IHP SG13G2 pre-PnR STA | **322 MHz WNS ÔêÆ3.08 ns ┬À Fmax Ôëê 161.9 MHz**; hold WNS ÔêÆ0.052 ns; worst path FF ÔåÆ 
+FF (slow/125 ┬░C, pre-PnR) | `reports/openlane_ihp-sta.json` |
+ | Wrapper pre-PnR STA | **322 MHz WNS ÔêÆ8.62 ns ┬À Fmax Ôëê 85.3 MHz**; worst path FF ÔåÆ FF, no debug bus (ss, 
+pre-PnR) | `reports/openlane_wrap-sta.json` |
+ | Small-block full flow | **`itch_metrics` 6,776 cells: 0 DRC, 0 LVS, timing closed at 10 ns (Fmax Ôëê 101 MHz)** | 
+`reports/openlane_metrics-full3.json` |
+ | 32-bit wrapper STA | **322 MHz WNS ÔêÆ6.55 ns ┬À Fmax Ôëê 103.7 MHz**; worst path FF ÔåÆ FF (ss, pre-PnR) | 
+`reports/openlane_wrap32-sta.json` |
+-| BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
++| BBO area estimate | **70,715 cells, 115,792 wires** (Yosys 0.52, reduced 32/4/4 config, includes top-4 depth + risk 
+checks; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+ | Optional ingress skid | **INGRESS_SKID=1: identical 152-message BBO and counters under input gaps** | 
+`tb/run_book_top_skid_cocotb.py` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -100,9 +100,9 @@
+ 
+ **Gate:** multi-frame 0 mismatches Ô£à; BBO 0 mismatches Ô£à; lint/formal still green.
+ 
+ ### Phase 2 ÔÇö Physical (2 ÔåÆ 4 months)
+-- [x] Yosys area estimate for the BBO: 62,017 cells at 32/4/4 (not optimized,
++- [x] Yosys area estimate for the BBO: 70,715 cells at 32/4/4 (not optimized,
+       no timing claim) ÔÇö `scripts/synth_book.sh`, `reports/synth_book.json`.
+ - [x] LibreLane toolchain: **3.0.17 smoke test passed** (Classic flow 80/80, DRC Ô£à,
+       LVS Ô£à, RC 0) via Docker Desktop + `ghcr.io/librelane/librelane:3.0.17` with a
+       cached PDK volume; see `openlane/README.md`.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit llms-full.txt
+Index: llms-full.txt
+===================================================================
+--- llms-full.txt
++++ llms-full.txt
+@@ -51,9 +51,9 @@
+ - Mutation: 9/9 parserÔåÆBBO mutants killed (`tools/mutate_book.py`).
+ - RTLÔåöWASM equivalence: 100,000 records, every field equal (weekly job).
+ - Gate: 11 fast checks, 13 with `--deep` (adds Z3 formal + native bins).
+ - Yosys 0.52 cells (re-run 2026-11-10): 22,710 (128), 25,324 (256), 29,568 (512),
+-  2,228 DFFs; book 62,017 cells at 32/4/4.
++  2,228 DFFs; book 70,715 cells at 32/4/4 (with depth + risk checks).
+ 
+ ## 5. Web/WASM
+ - `web/worker.js` owns the WASM memory; `web/core.js` decodes records.
+ - `web/gpu.js`: WebGPU compute bins + render; Canvas2D fallback.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -63,9 +63,10 @@
+ 
+ ## 4. Area estimate
+ 
+ Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+-mapping, **62,017 cells / 98,322 wires** (`reports/synth_book.json`). This is an
++mapping, **70,715 cells / 115,792 wires** (`reports/synth_book.json`; includes the
++top-4 depth and risk-check logic). This is an
+ estimate for relative sizing only ÔÇö no standard-cell library, no timing closure.
+ 
+ ## 5. Interface ÔÇö parser (`ultra_low_latency_nasdaq_itch50_cutthrough`)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content docs\datasheet.md | Select-Object -Skip 62 -First 8
+## 4. Area estimate
+
+Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+mapping, **70,715 cells / 115,792 wires** (`reports/synth_book.json`; includes the
+top-4 depth and risk-check logic). This is an
+estimate for relative sizing only - no standard-cell library, no timing closure.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -64,10 +64,10 @@
+ ## 4. Area estimate
+ 
+ Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+ mapping, **70,715 cells / 115,792 wires** (`reports/synth_book.json`; includes the
+-top-4 depth and risk-check logic). This is an
+-estimate for relative sizing only ÔÇö no standard-cell library, no timing closure.
++top-4 depth and risk-check logic). This is an estimate for relative sizing only ÔÇö no
++standard-cell library, no timing closure.
+ 
+ ## 5. Interface ÔÇö parser (`ultra_low_latency_nasdaq_itch50_cutthrough`)
+ 
+ ### Clock and reset
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,16 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 14:59 - Autonomy tick + BBO area estimate refreshed
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Re-ran `scripts/synth_book.sh` (Yosys 0.52, 32/4/4): **70,715 cells / 115,792 wires**
++  ÔÇö the documented 62,017 / 98,322 predates the top-4 depth and risk-check logic.
++  `reports/synth_book.json` is refreshed and the number is corrected in README,
++  datasheet, llms-full and the roadmap. Area estimate only, no timing/DRC/LVS claim.
++
+ ## 2026-11-10 13:59 - Autonomy tick + PWA offline verified
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Service worker check: `navigator.serviceWorker.ready` ÔåÆ active, scope `/`, cache
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 2; node scripts\gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs: refresh the BBO area estimate (70,715 cells incl. depth + 
+risk logic)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'llms-full.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/synth_book.json', LF will be replaced by CRLF the next time Git touches it
+ 9 files changed, 169 insertions(+), 23 deletions(-)
+[31;1m   b687e47..5fc3b4f  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 180; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+5fc3b4f in_progress
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+5fc3b4f in_progress

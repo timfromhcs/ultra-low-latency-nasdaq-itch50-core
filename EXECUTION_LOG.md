@@ -259,6 +259,29 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 14:59 (cont.) - Parser wrapper full-flow attempt: WSL memory cap raised
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Fast gate **11/11**.
+- New config `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 µm die at
+  25 % target density, `GRT_ALLOW_CONGESTION`, 200 overflow iterations,
+  `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns). The obsolete `CTS_BALANCE_LEVELS`
+  key was included by mistake and is ignored by 3.0.17 (`CTS-0132`); `docs/long-runs.md`
+  now names the effective CTS knobs and the real step mapping
+  (`RUN_HEURISTIC_DIODE_INSERTION` → `Odb.HeuristicDiodeInsertion`).
+- First full run reached **GlobalRouting in ~7 min**, then the container died
+  (`exit 255`) when the Docker VM restarted. Resumed with `--last-run`: it replayed the
+  flow from synthesis (steps 44+) rather than resuming at routing; documented.
+- Measured on the way (evidence for this configuration only):
+  - pre-PnR at 10 ns, ss/100 °C/1.60 V: setup **WNS +0.354 ns**, hold clean,
+    but **19,660 max-slew violations** — setup "closure" here is buffer-driven.
+  - post-CTS: 54,569 instances (15,779 combinational, 1,565 FFs, 6,236
+    timing-repair buffers, 435 clock buffers, 26,302 tap cells), 19.2 % utilization.
+- Root cause of the two VM restarts is a **6 GB WSL cap** (`.wslconfig`:
+  `memory=6GB, processors=6`), while the container reported a 5.789 GiB limit.
+  Raised to 10 GB / 8 CPUs (original saved as `~/.wslconfig.bak-chiplab`), restarted
+  Docker, resumed; container now reports 9.715 GiB and GRT is running at ~1.2 GiB.
+- **The flow is still running** — no routing/DRC/LVS result is claimed yet.
+
 ## 2026-11-10 14:59 - Autonomy tick + BBO area estimate refreshed
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

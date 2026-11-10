@@ -45,10 +45,16 @@ instances/area, DRC/LVS and an Fmax estimate.
   you routing/DRC/LVS evidence instead of a timing number.
 - `GRT_ALLOW_CONGESTION: 1` turns the GRT-0116 abort into a warning so the flow can
   reach detailed routing.
-- `RUN_ANTENNA_REPAIR: false` removes the antenna steps (and **removes
-  `OpenROAD.DiodeInsertion` from the flow** — passing `--skip OpenROAD.DiodeInsertion`
-  then fails with "no step(s) with ID").
-- Antenna repair off is not sign-off clean: report antenna/DRC findings honestly.
+- `RUN_HEURISTIC_DIODE_INSERTION: false` drops `Odb.HeuristicDiodeInsertion` — the
+  step that hit `GRT-0183` (heap underflow) on the congested wrapper run. In 3.0.17 the
+  switch is `RUN_HEURISTIC_DIODE_INSERTION`; `RUN_ANTENNA_REPAIR` gates
+  `OpenROAD.RepairAntennas` (checked in the installed package, not guessed). Passing
+  `--skip` for a step that a switch already removed fails with "no step(s) with ID".
+- `RUN_ANTENNA_REPAIR: false` removes the repair step too, but then the design is not
+  antenna-clean: report antenna/DRC findings honestly.
+- `CTS_BALANCE_LEVELS` is **obsolete** in 3.0.17 (CTS-0132, ignored); do not use it as
+  the clock-planning knob. `CTS_SINK_CLUSTERING_ENABLE`, `CTS_CLK_BUFFER_LIST`,
+  `CTS_MAX_CAP` and `CTS_MAX_SLEW` are the effective ones.
 
 ## 4. Resuming a killed run
 
@@ -62,6 +68,12 @@ LibreLane can continue an existing run tag, but the CLI still requires a config:
 `--last-run` picks the newest run directory under `openlane/runs`. Repeat the same
 `--skip` flags: skipped steps are not recorded as completed, so omitting them re-runs
 those steps.
+
+Observed on 2026-11-10: Docker Desktop restarted while `OpenROAD.GlobalRouting` was
+running (container exit 255). The `--last-run` resume re-ran the flow from synthesis
+(new step directories from `44-yosys-synthesis` upward) instead of continuing at the
+failed routing step, so budget the replay time. Check `flow.log` for the current step
+number instead of assuming an exact resume point.
 
 A host/Docker restart kills the container (`unexpected EOF`); check `docker ps`, start
 Docker Desktop, then resume. Long runs (many hours) are not reliable on a machine that
