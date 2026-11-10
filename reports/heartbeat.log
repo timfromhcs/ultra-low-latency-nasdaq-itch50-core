@@ -1635,3 +1635,433 @@ Tick 23:59 abgeschlossen (jetzt 10.11.).
 Unver├ñndert: Parser-P&R (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, echter Caravel-Harness-Lauf (Repo/PDK), PCIe/100G, Registry-OIDC und Shuttle bleiben extern blockiert. Der Drop-in, das Rezept und die Betriebsnotizen sind jetzt so vollst├ñndig, dass ein Mensch mit passender Umgebung die L├ñufe reproduzieren und fortsetzen kann.
 [2026-11-10T00:59:20.0199385+01:00] hallo, es ist 00:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; Get-ChildItem .opencode\skills 
+-Recurse -File | Select-Object FullName; rg -n "10/10|10 checks|12 tools|8-key|12-key|0\.3\.0" .opencode/skills 
+llms-full.txt 2>$null | Select-Object -First 15
+[tick] ran 0, failed 0
+
+[32;1mFullName[0m
+[32;1m--------[0m
+E:\chips\main\.opencode\skills\chiplab-local-cloud\SKILL.md
+E:\chips\main\.opencode\skills\chiplab-release\SKILL.md
+E:\chips\main\.opencode\skills\chiplab-verify\SKILL.md
+.opencode/skills\chiplab-verify\SKILL.md:11:node scripts/gate.mjs          # portable, ~10 checks
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content .opencode\skills\chiplab-verify\SKILL.md; "=====RELEASE====="; Get-Content 
+.opencode\skills\chiplab-release\SKILL.md | Select-Object -First 40
+---
+name: chiplab-verify
+description: Verify the ChipLab repository end to end (lint, RTL regression, model, cocotb, WASM cross-check, MCP, 
+local cloud, Vercel API) and report a scorecard. Use when asked to prove the repo is green or to diagnose a failing 
+gate.
+---
+
+# Verify ChipLab
+
+## Quick gate
+
+```bash
+node scripts/gate.mjs          # portable, ~10 checks
+node scripts/gate.mjs --deep   # + Z3 formal + native bins (WSL on Windows)
+```
+
+The gate writes `reports/scorecard.json` and prints `scorecard: N% (n/m)`.
+Never weaken a test to make the gate pass; fix the cause or record the limit.
+
+## RTL and formal (Linux/WSL)
+
+```bash
+make lint
+python tb/itch_model.py --count 100000 --out tb/vectors
+make sim VECTORS=tb/vectors
+make formal
+./formal/solver_matrix.sh
+python -m pytest -q tb/test_model.py
+python tb/run_cocotb.py
+python tb/run_pipeline_cocotb.py
+python tb/run_skid_cocotb.py
+```
+
+Expected: 0 lint warnings, 50k/1M records with 0 mismatches, Z3 PASS,
+cocotb pipeline and skid tests PASS. Ubuntu runners use Icarus for cocotb
+(Verilator/cocotb ABI mismatch); local WSL can use Verilator.
+
+## WASM / web / API / MCP
+
+```bash
+node scripts/wasm_smoke.mjs && python scripts/check_wasm_fixture.py
+node backend/run.mjs --compare --count 100000
+node mcp/client_smoke.mjs
+node scripts/test_cloud_api.mjs
+node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs
+node scripts/release_check.mjs
+```
+
+## Rules
+
+- No claim without a command and a report under `reports/`.
+- Multi-frame MoldUDP64 back-pressure is still open (R1): do not report it as fixed.
+- No Fmax/tapeout claim without LibreLane/OpenSTA output.
+=====RELEASE=====
+---
+name: chiplab-release
+description: Cut a ChipLab release correctly - bump one version, rebuild artifacts, run the gate, update 
+CHANGELOG/README, create a tag and let the Release workflow publish EXE/npm/PyPI/SBOM/checksums. Use when asked to 
+release, bump the version, tag, or prepare GitHub assets.
+---
+
+# Cut a ChipLab release
+
+## 1. Bump the one version
+
+```bash
+node scripts/version.mjs --set 0.4.0
+```
+
+This updates `package.json`, `packages/npm/package.json`, `native/Cargo.toml`,
+`wasm-core/Cargo.toml`, `packages/python/pyproject.toml`, the WASM ABI version,
+`mcp/server.mjs`, `api/_core.mjs` and `scripts/sbom.mjs`.
+
+## 2. Rebuild the WASM (ABI + web + npm copies)
+
+```bash
+npm run build:wasm
+cp wasm-core/target/wasm32-unknown-unknown/release/chiplab_core.wasm web/wasm/
+cp web/wasm/chiplab_core.wasm packages/npm/wasm/
+```
+
+`version()` is `(major<<16)|(minor<<8)|patch`; the UI prints all three parts.
+
+## 3. Update docs, then gate
+
+- `CHANGELOG.md`: new `## X.Y.Z - date` section (Keep a Changelog). This becomes the
+  GitHub release notes.
+- `README.md`: version references and any changed behavior.
+- `reports/sbom.json`: `node scripts/sbom.mjs` (regenerate).
+
+```bash
+node scripts/gate.mjs --deep      # must be 100%
+node scripts/release_check.mjs    # version/changelog/README/SBOM/artifacts
+```
+
+## 4. Build the artifacts locally (optional pre-check)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const p=require('./package.json'); 
+console.log(Object.keys(p.scripts).join('\n'))"; "-----"; Get-Content .opencode\skills\chiplab-release\SKILL.md | 
+Select-Object -Skip 40
+demo
+mcp
+test:wasm
+test:backend
+test:mcp
+test:web
+build:wasm
+build:exe
+build:vercel
+verify
+test:cloud
+release:check
+release:checksums
+release:sbom
+-----
+
+```bash
+npm run build:exe
+cd packages/npm && npm pack
+cd packages/python && python -m build
+```
+
+## 5. Tag and publish
+
+```bash
+git add -A && git commit -m "release: vX.Y.Z"
+git tag -a vX.Y.Z -m "ChipLab vX.Y.Z"
+git push origin main
+git push origin vX.Y.Z
+```
+
+The `Release` workflow runs: verify  Windows EXE  npm/PyPI packages  SBOM 
+`SHA256SUMS.txt`  GitHub Release. Confirm all jobs are green and the release has
+all six assets.
+
+## 6. After the release
+
+- Verify Vercel production is READY for the commit.
+- Keep `v1.0.0` blocked until multi-frame Mold back-pressure, RTL top-of-book and
+  LibreLane/OpenSTA sign-off exist.
+- Never claim signed EXE, registry publishing or reproducible builds unless done.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content .opencode\skills\chiplab-local-cloud\SKILL.md; "-----"; rg -n "12 
+tools|v0.3.0|10 checks|8-key|12-key" .opencode/skills -g "*.md"
+---
+name: chiplab-local-cloud
+description: Run, connect, secure and test the ChipLab local cloud (LAN service, local JSON store, bearer token, web 
+Test/Sync/Pull panel) on a laptop, phone or Docker. Use when asked about local cloud, LAN access, the `.data` store or 
+the EXE service.
+---
+
+# ChipLab local cloud
+
+## Start
+
+```bash
+# loopback only (default): writes allowed from this machine
+node backend/server.mjs
+
+# LAN: phone/tablet on the same network; token required for non-loopback writes
+node backend/server.mjs --host 0.0.0.0 --token "long-random-token"
+
+# single EXE
+dist\chiplab.exe --host 0.0.0.0 --port 4173 --token "long-random-token"
+```
+
+Flags/env: `--host/--port/--token/--data-dir` and `HOST`, `PORT`, `CHIPLAB_TOKEN`,
+`CHIPLAB_DATA_DIR`. The startup log prints every LAN URL.
+
+## Connect from the browser
+
+Open the LAN URL, use the **Local cloud** panel: paste the token, press **Test**, then
+**Sync** (push browser history) or **Pull** (replace local history with the service's).
+Auto-connect only happens when the page is served by `chiplab-local-cloud`; the Vercel
+deployment has no cloud endpoint.
+
+## API
+
+| Endpoint | Method | Auth |
+|---|---|---|
+| `/api/cloud/info` | GET | none |
+| `/api/store` | GET | token if set, else loopback |
+| `/api/store/:namespace` | GET/PUT/DELETE | same |
+
+PUT body: `{ "data": <json>, "expectedRevision": <n> }`. Conflicts return 409,
+payloads over 1 MB return 413, invalid namespaces and traversal return 400.
+
+## Security
+
+- Loopback by default; `0.0.0.0` is an explicit opt-in.
+- With `--token`, every store call needs `Authorization: Bearer <token>`.
+- Data stays in `.data/` (git-ignored, mode `0o600`, atomic temp+rename).
+- Docker: requests arrive from a non-loopback bridge, so set `CHIPLAB_TOKEN`.
+
+## Test
+
+```bash
+node scripts/test_cloud_api.mjs
+# CLOUD API PASS (auth, revisions, 409, 400, 413, list, delete)
+```
+
+## Pitfalls
+
+- Do not cache `/api/*` in the service worker (stale 404s).
+- A LAN URL is only reachable if the host firewall allows the port.
+- The EXE is unsigned; verify the release SHA-256.
+-----
+.opencode/skills\chiplab-verify\SKILL.md:11:node scripts/gate.mjs          # portable, ~10 checks
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .opencode/skills/chiplab-verify/SKILL.md
+Index: .opencode/skills/chiplab-verify/SKILL.md
+===================================================================
+--- .opencode/skills/chiplab-verify/SKILL.md
++++ .opencode/skills/chiplab-verify/SKILL.md
+@@ -7,12 +7,16 @@
+ 
+ ## Quick gate
+ 
+ ```bash
+-node scripts/gate.mjs          # portable, ~10 checks
+-node scripts/gate.mjs --deep   # + Z3 formal + native bins (WSL on Windows)
++node scripts/gate.mjs          # portable, 11 checks
++node scripts/gate.mjs --deep   # 13 checks: + Z3 formal + native bins (WSL on Windows)
+ ```
+ 
++The gate includes: model tests, WASM smoke, WASM fixture cross-check, backend
++compare, MCP smoke, cloud API, web smoke, SBOM, release check, docs links, Vercel API;
++`--deep` adds the Z3 formal proof and native-bin check.
++
+ The gate writes `reports/scorecard.json` and prints `scorecard: N% (n/m)`.
+ Never weaken a test to make the gate pass; fix the cause or record the limit.
+ 
+ ## RTL and formal (Linux/WSL)
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .opencode/skills/chiplab-verify/SKILL.md
+Index: .opencode/skills/chiplab-verify/SKILL.md
+===================================================================
+--- .opencode/skills/chiplab-verify/SKILL.md
++++ .opencode/skills/chiplab-verify/SKILL.md
+@@ -27,16 +27,16 @@
+ make sim VECTORS=tb/vectors
+ make formal
+ ./formal/solver_matrix.sh
+ python -m pytest -q tb/test_model.py
+-python tb/run_cocotb.py
+-python tb/run_pipeline_cocotb.py
+-python tb/run_skid_cocotb.py
++make cocotb                     # 19 suites: parser, Mold, pipeline, multi-frame,
++                               # book, book+snapshot, arbiter, A/B system, recovery,
++                               # skid, metrics, host/wishbone/Caravel wrappers
+ ```
+ 
+-Expected: 0 lint warnings, 50k/1M records with 0 mismatches, Z3 PASS,
+-cocotb pipeline and skid tests PASS. Ubuntu runners use Icarus for cocotb
+-(Verilator/cocotb ABI mismatch); local WSL can use Verilator.
++Expected: 0 lint warnings, 50k/1M records with 0 mismatches, Z3 PASS, all cocotb
++suites PASS. Ubuntu runners use Icarus for cocotb (Verilator/cocotb ABI mismatch);
++local WSL can use Verilator.
+ 
+ ## WASM / web / API / MCP
+ 
+ ```bash
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .opencode/skills/chiplab-verify/SKILL.md
+Index: .opencode/skills/chiplab-verify/SKILL.md
+===================================================================
+--- .opencode/skills/chiplab-verify/SKILL.md
++++ .opencode/skills/chiplab-verify/SKILL.md
+@@ -50,6 +50,10 @@
+ 
+ ## Rules
+ 
+ - No claim without a command and a report under `reports/`.
+-- Multi-frame MoldUDP64 back-pressure is still open (R1): do not report it as fixed.
+-- No Fmax/tapeout claim without LibreLane/OpenSTA output.
++- Multi-frame MoldUDP64 back-pressure, the A/B arbiter recovery and the RTL top-of-book
++  are **done**; do not describe them as open.
++- Parser P&R/DRC/LVS is still blocked (clock planning + fitted floorplan); the published
++  Sky130 pre-PnR STA is WNS ÔêÆ9.14 ns at 3.10 ns (Ôëê81 MHz) and is **not** a sign-off.
++  The small `itch_metrics` block did complete the full flow (0 DRC, 0 LVS, 10 ns).
++- No Fmax/tapeout claim without LibreLane/OpenSTA output for the block in question.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .opencode/skills/chiplab-release/SKILL.md
+Index: .opencode/skills/chiplab-release/SKILL.md
+===================================================================
+--- .opencode/skills/chiplab-release/SKILL.md
++++ .opencode/skills/chiplab-release/SKILL.md
+@@ -54,10 +54,10 @@
+ git push origin vX.Y.Z
+ ```
+ 
+ The `Release` workflow runs: verify ÔåÆ Windows EXE ÔåÆ npm/PyPI packages ÔåÆ SBOM ÔåÆ
+-`SHA256SUMS.txt` ÔåÆ GitHub Release. Confirm all jobs are green and the release has
+-all six assets.
++`SHA256SUMS.txt` ÔåÆ cosign blob signatures ÔåÆ GitHub Release. Confirm all jobs are green
++and the release has the six assets plus the `*.sigstore.json` bundles.
+ 
+ ## 6. After the release
+ 
+ - Verify Vercel production is READY for the commit.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .opencode/skills/chiplab-release/SKILL.md
+Index: .opencode/skills/chiplab-release/SKILL.md
+===================================================================
+--- .opencode/skills/chiplab-release/SKILL.md
++++ .opencode/skills/chiplab-release/SKILL.md
+@@ -60,7 +60,9 @@
+ 
+ ## 6. After the release
+ 
+ - Verify Vercel production is READY for the commit.
+-- Keep `v1.0.0` blocked until multi-frame Mold back-pressure, RTL top-of-book and
+-  LibreLane/OpenSTA sign-off exist.
+-- Never claim signed EXE, registry publishing or reproducible builds unless done.
++- Keep `v1.0.0` blocked until parser P&R/DRC/LVS sign-off exists (multi-frame
++  back-pressure, A/B recovery and the RTL top-of-book are done).
++- The EXE is not Authenticode-signed (SLSA attestation only). npm/PyPI registry
++  publishing is opt-in and has not been run. WASM/Python/EXE builds are reproducible:
++  `make repro-wasm`, `make repro-python`, `node scripts/repro_exe.mjs`.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .opencode/skills/chiplab-local-cloud/SKILL.md
+Index: .opencode/skills/chiplab-local-cloud/SKILL.md
+===================================================================
+--- .opencode/skills/chiplab-local-cloud/SKILL.md
++++ .opencode/skills/chiplab-local-cloud/SKILL.md
+@@ -56,5 +56,6 @@
+ ## Pitfalls
+ 
+ - Do not cache `/api/*` in the service worker (stale 404s).
+ - A LAN URL is only reachable if the host firewall allows the port.
+-- The EXE is unsigned; verify the release SHA-256.
++- The EXE is unsigned (no Authenticode); verify the release SHA-256 and the SLSA
++  attestation (`gh attestation verify chiplab.exe --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core`).
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\check_docs_links.mjs 2>&1 | Select-Object -Last 2; node scripts\gate.mjs 2>&1 
+| Select-Object -Last 2
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,22 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 00:59 - Autonomy tick + project skills corrected
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
++- The three `.opencode` project skills had stale claims:
++  - `chiplab-verify` said "~10 checks" (now 11 fast / 13 deep) and listed
++    multi-frame Mold back-pressure as open ÔÇö it is done. It now points at `make cocotb`
++    (19 suites) and states the real physical status (pre-PnR STA Ôëá sign-off; only
++    `itch_metrics` completed a full flow).
++  - `chiplab-release` still gated `v1.0.0` on multi-frame/BBO (both done) and said not to
++    claim reproducible builds (WASM/Python/EXE are reproducible). Updated, including
++    the cosign bundles in the asset list.
++  - `chiplab-local-cloud` now mentions the SLSA attestation next to the SHA-256 check.
++- Docs links: 25 files, 0 dead.
++
+ ## 2026-11-10 00:05 - Autonomy tick + long-run operations guide
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+ - Wrote `docs/long-runs.md` from the actual run history: Docker/PDN volume setup
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs(skills): correct gate counts, closed items and 
+reproducibility claims" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 7 files changed, 170 insertions(+), 31 deletions(-)
+[31;1m   6d81c89..ad5bf6b  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+ad5bf6b completed success
+> build ┬À deepseek-v4.1-flash
+Tick 00:59 abgeschlossen.
+
+## Neu und verifiziert
+**Projekt-Skills korrigiert** (`.opencode/skills/`)
+- **`chiplab-verify`**: ÔÇ×~10 checks" ÔåÆ **11 (fast) / 13 (deep)**; die Behauptung, Multi-Frame-Mold-Backpressure sei offen, entfernt (ist erledigt); Cocotb-Verweis auf `make cocotb` (**19 Suiten**) umgestellt; Regeln pr├ñzisiert: Pre-PnR-STA ist **kein** Sign-off, nur `itch_metrics` hat einen vollst├ñndigen Flow (0 DRC/LVS), Parser-P&R bleibt blockiert.
+- **`chiplab-release`**: `v1.0.0`-Gate auf den echten offenen Punkt reduziert (Parser-P&R/DRC/LVS; Multi-Frame/A-B-Recovery/RTL-BBO sind fertig); Aussage ÔÇ×keine reproduzierbaren Builds behaupten" korrigiert (WASM/Python/EXE sind reproduzierbar, inkl. `repro-*`-Befehlen); Release-Assets nennen jetzt die `*.sigstore.json`-Bundles.
+- **`chiplab-local-cloud`**: EXE-Pr├╝fung um die SLSA-Attestation erg├ñnzt.
+
+## Verifikation
+- Autonomy: 0 Tasks; Docs-Links **25 Dateien, 0 tot**; Gate **11/11**.
+- CI auf `ad5bf6b` **success**; Commit `ad5bf6b` gepusht, Arbeitsbaum clean.
+
+## Status
+Unver├ñndert blockiert: Parser-P&R/DRC/LVS (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Die Dokumentation (inkl. Skills) beschreibt jetzt ├╝berall denselben, verifizierten Stand.
+[2026-11-10T01:59:19.5066016+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0

@@ -1,6 +1,6 @@
-# ChipLab — full specification
+# ChipLab - full specification
 # Local-first ITCH-50 silicon lab: RTL + WebAssembly + WebGPU + MCP + EXE + Docker + Vercel
-# Version: 0.3.1 "Local Cloud"
+# Version: 0.3.1 "Local Cloud"; state as of 2026-11-10
 
 ## 1. What it is
 ChipLab is a pre-silicon lab around a NASDAQ TotalView-ITCH 5.0 parser. The RTL
@@ -8,19 +8,29 @@ ChipLab is a pre-silicon lab around a NASDAQ TotalView-ITCH 5.0 parser. The RTL
 executable twin used by the browser, Node, MCP, npm, PyPI and the single EXE.
 
 ## 2. RTL
-- Top: `ultra_low_latency_nasdaq_itch50_cutthrough`, parameters DATA_WIDTH 128/256/512.
+- Parser top: `ultra_low_latency_nasdaq_itch50_cutthrough` (DATA_WIDTH 32/128/256/512;
+  128 default, 32 verified).
 - `itch_shifter.sv`: tkeep-aware, cleared append window, 512-bit sliding window.
 - `itch_parser_core.sv`: all 22 official opcodes, full 512-bit payload, 64-bit shares.
 - `itch_top.sv`: tkeep/tlast, registered egress, async bypass, counters.
-- `moldudp64_frontend.sv`: Ethernet/IPv4/UDP filter, Mold header, seq/gap.
-- `moldudp64_depacketizer.sv`: strips per-message 2-byte length prefixes.
-- `moldudp64_pipeline.sv`: multi-frame end-to-end (5 frames, gap + drop) PASS.
+- `itch_top_book.sv` + `itch_top_of_book.sv`: parser + per-locate book, 16 locates,
+  16 levels/side, 256 orders, top-4 depth, last trade/volume, risk checks.
+- `itch_metrics.sv`: msg/byte/gap/drop/cycle counters, max occupancy, 8-bin gap histogram.
+- `itch_host_wrap.sv`: narrow 32-bit host register file; `itch_wishbone_wrap.sv`:
+  classic Wishbone slave; `itch_caravel_wrap.sv` + `caravel/user_project_wrapper.v`:
+  Caravel-shaped boundary (io_in stream + Wishbone).
+- `itch_book_snapshot.sv` + `itch_book_snapshot_top.sv`: per-locate snapshot table with
+  a one-cycle read port (top-of-book, last, volume, top-4 depth).
+- Mold: `moldudp64_frontend.sv`, `moldudp64_depacketizer.sv`, `moldudp64_pipeline.sv`
+  (multi-frame, downstream back-pressure), `mold_feed_arbiter.sv` (A/B selection +
+  retransmit request/replay/timeout), `mold_recovery.sv`, `mold_ab_system.sv`,
+  `axis_skid_buffer.sv`.
 
 Latency (honest):
 - s_axis_tdata -> window register: 1 clock.
 - window -> registered output: 1 clock.
-- wire-to-registered-output: 2 clocks (6.20 ns at 322.26 MHz).
-- async bypass: same cycle as window, not zero from the wire.
+- wire-to-registered-output: 2 clocks (6.20 ns at 322.26 MHz model clock).
+- async bypass: same cycle as the window, not zero from the wire.
 
 ## 3. Protocol coverage
 S 12, R 39, H 25, Y 20, L 26, V 35, W 12, K 28, J 35, h 21, A 36, F 40, E 31,
@@ -28,13 +38,18 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 
 ## 4. Verification
 - `tb/itch_model.py`: independent reference, 80-byte canonical record.
-- `tb/sim_main.cpp`: full-field Verilator regression.
-- 1,000,000 records, 0 mismatches, 31,383,973 bytes, 1,961,516 cycles, 41.290 Gbps.
-- `formal/itch_formal.sv`: pre-trigger gating, class exclusivity, legal lengths,
-  register equivalence, flow control. Z3 PASS, CVC5 PASS, Boolector 1.5 unsupported.
-- `formal/solver_matrix.sh`, `scripts/mutate.py`, `scripts/synth_matrix.sh`.
-- Yosys cells: 22,629 (128), 25,201 (256), 29,628 (512); 2,228 DFFs.
-- OpenLane configs are flow-ready; no P&R/Fmax sign-off is claimed.
+- `tb/sim_main.cpp`: full-field Verilator regression — 1,000,000 records, 0 mismatches,
+  31,383,973 bytes, 1,961,516 cycles, 41.290 Gbps model.
+- Nightly default: 10,000,000 records, 0 mismatches (3m06s simulation); `.github/workflows/nightly.yml`.
+- Cocotb: 19 suites / 26 tests — parser, Mold, pipeline, multi-frame, book, book+snapshot,
+  arbiter (selection/recovery/multi-gap), A/B system, recovery, skid, metrics,
+  host/wishbone/Caravel wrappers, 128/32-bit ingress, burst.
+- Formal: pre-trigger gating, class exclusivity, legal lengths, register equivalence,
+  flow control; Z3 PASS, CVC5 PASS in the matrix.
+- Mutation: 9/9 parser→BBO mutants killed (`tools/mutate_book.py`).
+- RTL↔WASM equivalence: 100,000 records, every field equal (weekly job).
+- Gate: 11 fast checks, 13 with `--deep` (adds Z3 formal + native bins).
+- Yosys cells: 22,629 (128), 25,201 (256), 29,628 (512); book 62,017 cells at 32/4/4.
 
 ## 5. Web/WASM
 - `web/worker.js` owns the WASM memory; `web/core.js` decodes records.
@@ -56,8 +71,11 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 
 ## 6b. Release (v0.3.1)
 - One version across npm, Cargo, PyPI, MCP, SBOM and the Vercel health endpoint.
-- `Release` workflow on tag `v*`: verify → EXE → npm/PyPI packages → SBOM →
-  `SHA256SUMS.txt` → GitHub Release.
+- `Release` workflow on tag `v*`: verify -> EXE -> npm/PyPI packages -> SBOM ->
+  `SHA256SUMS.txt` -> keyless cosign blob signatures -> GitHub Release (six assets plus
+  `*.sigstore.json` bundles).
+- Registry publishing is opt-in (`NPM_PUBLISH`/`PYPI_PUBLISH` repository variables) and
+  has not been run (needs trusted-publisher/OIDC setup).
 - `scripts/release_check.mjs` gates version/changelog/artifacts; `scripts/checksums.mjs`
   writes the manifest.
 
@@ -68,9 +86,27 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 - npm `@chiplab/core`; PyPI `chiplab-itch`.
 - Native `chiplab-native` (wgpu Vulkan/DX12, `--probe`, `--boost`).
 
-## 8. Honest limits
-Pre-silicon, synthetic feed, no tapeout, no Fmax sign-off, multi-frame Mold flow control
-open, WebGPU f32 only for visual heights. Not investment advice.
+## 8. Physical evidence (Sky130 unless noted, pre-PnR for the parser)
+- Parser pre-PnR STA: WNS -9.14 ns at 3.10 ns (~81.5 MHz), -8.27 ns at 4.00 ns (ss).
+- 128-bit wrapper: -8.62 ns (~85.3 MHz); 32-bit wrapper: -6.55 ns (~103.7 MHz).
+- GF180: -19.87 ns (~43.5 MHz); IHP SG13G2: -3.08 ns (~161.9 MHz), small hold violation.
+- Full flow, `itch_metrics` at 10 ns: 0 routing/Magic/KLayout DRC, 0 LVS errors, timing
+  closed (WNS +0.12 ns, Fmax ~101 MHz), 6,776 cells, 42,127 um2 on a 500 um die.
+- Parser full P&R is blocked: GRT-0116 congestion, GPL-0305 divergence, DPL-0036 pin
+  density, GRT-0183 diode insertion, container restarts. No parser sign-off exists.
+  See `openlane/README.md` and `docs/long-runs.md`.
 
-## 9. Licence
-PolyForm Small Business 1.0.0. Attribution string required under $100k annual revenue.
+## 9. Reproducibility and supply chain
+- WASM: rustc pinned 1.98.1; two clean builds and the shipped binary are identical.
+- Python: wheel reproducible with SOURCE_DATE_EPOCH; sdist after container normalization.
+- EXE: two SEA builds byte-identical (same Node 22 toolchain).
+- Weekly `Repro` workflow checks all three on Linux and Windows.
+- SLSA build provenance for EXE/npm/wheel; Docker `provenance: mode=max` + SBOM + keyless
+  cosign signature; npm/PyPI `*.sigstore.json` blob signatures.
+
+## 10. Honest limits
+- No fabricated silicon, no tapeout, no bitstream.
+- No parser P&R/DRC/LVS result; pre-PnR STA is not a sign-off.
+- No 100G MAC, PCIe/DMA or FPGA target integration.
+- No full Caravel harness run (the drop-in wrapper and Wishbone path are tested).
+- npm/PyPI registry publishing has not been executed.

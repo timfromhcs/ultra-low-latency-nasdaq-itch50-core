@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 01:59 - Autonomy tick + llms-full.txt refreshed
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+- `llms-full.txt` was stale: it listed old modules, `scripts/mutate.py` (does not
+  exist), no metrics/book/snapshot/host/wishbone/Caravel blocks, no 10M/nightly, no
+  reproducibility/SLSA/cosign and no pre-PnR or small-block physical results.
+- Rewrote it against the current tree: all RTL blocks, 19 cocotb suites, 10M nightly,
+  gate 11/13, release/signing flow, measured pre-PnR STA for parser/wrappers/GF180/IHP,
+  the completed `itch_metrics` full flow, reproducibility and the honest limits.
+- No source changes; docs links unchanged (25 files, 0 dead).
+
 ## 2026-11-10 00:59 - Autonomy tick + project skills corrected
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
