@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: repro
+  cancel-in-progress: false
+
 jobs:
   repro:
     name: Reproducible WASM + Python artifacts

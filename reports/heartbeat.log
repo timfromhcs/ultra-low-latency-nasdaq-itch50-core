@@ -2065,3 +2065,189 @@ Tick 00:59 abgeschlossen.
 Unver├ñndert blockiert: Parser-P&R/DRC/LVS (Clock-Planung/Floorplan + stabile Langlauf-Umgebung), FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Die Dokumentation (inkl. Skills) beschreibt jetzt ├╝berall denselben, verifizierten Stand.
 [2026-11-10T01:59:19.5066016+01:00] hallo, es ist 01:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; rg -n "six assets|six-asset|12 
+tools|twelve|12-key|13-key|eight fixed" README.md docs STABLE_RELEASE_PLAN.md CHANGELOG.md mcp .opencode/skills 
+2>$null | Select-Object -First 20
+[tick] ran 0, failed 0
+.opencode/skills\chiplab-release\SKILL.md:59:and the release has the six assets plus the `*.sigstore.json` bundles.
+STABLE_RELEASE_PLAN.md:151:- [x] Strict schemas; `chiplab.docs` accepts a fixed 13-key catalog; no arbitrary paths.
+STABLE_RELEASE_PLAN.md:164:- [x] Tag `v0.3.0` pushed; `Release` run 41594730252 published the six assets (see ┬º8).
+STABLE_RELEASE_PLAN.md:185:- [x] MCP: 12 tools, invalid args and `.docs` traversal rejected, audit entries, smoke pass.
+STABLE_RELEASE_PLAN.md:232:- Tag `v0.3.1` publishes the same six-asset set through the `Release` workflow.
+docs\guides\en\zero-to-hero.md:102:node mcp/client_smoke.mjs                    # MCP handshake + 12 tools
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Item llms-full.txt | Select-Object Length; Get-Content llms-full.txt -TotalCount 70
+[32;1mLength[0m
+[32;1m------[0m
+  4100
+# ChipLab - full specification
+# Local-first ITCH-50 silicon lab: RTL + WebAssembly + WebGPU + MCP + EXE + Docker + Vercel
+# Version: 0.3.1 "Local Cloud"
+
+## 1. What it is
+ChipLab is a pre-silicon lab around a NASDAQ TotalView-ITCH 5.0 parser. The RTL
+(`rtl/`) is the hardware specification; the Rust/WASM core (`wasm-core/`) is the
+executable twin used by the browser, Node, MCP, npm, PyPI and the single EXE.
+
+## 2. RTL
+- Top: `ultra_low_latency_nasdaq_itch50_cutthrough`, parameters DATA_WIDTH 128/256/512.
+- `itch_shifter.sv`: tkeep-aware, cleared append window, 512-bit sliding window.
+- `itch_parser_core.sv`: all 22 official opcodes, full 512-bit payload, 64-bit shares.
+- `itch_top.sv`: tkeep/tlast, registered egress, async bypass, counters.
+- `moldudp64_frontend.sv`: Ethernet/IPv4/UDP filter, Mold header, seq/gap.
+- `moldudp64_depacketizer.sv`: strips per-message 2-byte length prefixes.
+- `moldudp64_pipeline.sv`: multi-frame end-to-end (5 frames, gap + drop) PASS.
+
+Latency (honest):
+- s_axis_tdata -> window register: 1 clock.
+- window -> registered output: 1 clock.
+- wire-to-registered-output: 2 clocks (6.20 ns at 322.26 MHz).
+- async bypass: same cycle as window, not zero from the wire.
+
+## 3. Protocol coverage
+S 12, R 39, H 25, Y 20, L 26, V 35, W 12, K 28, J 35, h 21, A 36, F 40, E 31,
+C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
+
+## 4. Verification
+- `tb/itch_model.py`: independent reference, 80-byte canonical record.
+- `tb/sim_main.cpp`: full-field Verilator regression.
+- 1,000,000 records, 0 mismatches, 31,383,973 bytes, 1,961,516 cycles, 41.290 Gbps.
+- `formal/itch_formal.sv`: pre-trigger gating, class exclusivity, legal lengths,
+  register equivalence, flow control. Z3 PASS, CVC5 PASS, Boolector 1.5 unsupported.
+- `formal/solver_matrix.sh`, `scripts/mutate.py`, `scripts/synth_matrix.sh`.
+- Yosys cells: 22,629 (128), 25,201 (256), 29,628 (512); 2,228 DFFs.
+- OpenLane configs are flow-ready; no P&R/Fmax sign-off is claimed.
+
+## 5. Web/WASM
+- `web/worker.js` owns the WASM memory; `web/core.js` decodes records.
+- `web/gpu.js`: WebGPU compute bins + render; Canvas2D fallback.
+- `web/app.js`: responsive dense-tool UI, Worker, OPFS history, PWA.
+- 1M messages in 664 ms wall on the test host, 0 errors.
+
+## 6. Backend/MCP/API
+- `backend/server.mjs`: `/api/health`, `/api/chips`, `/api/run`, `/api/compare`, `/api/book`,
+  `/api/cloud/info`, `/api/store[/:namespace]`.
+- Local cloud: atomic JSON store under `.data/`, 1 MB cap, revision conflicts, optional
+  bearer token; loopback-only writes without a token. Flags: `--host --port --token --data-dir`.
+- `backend/run.mjs`: CLI.
+- `mcp/server.mjs` (12 read-only tools): `chiplab.chips`, `chiplab.run`, `chiplab.compare`,
+  `chiplab.book`, `chiplab.formal_status`, `chiplab.health`, `chiplab.cloud_info`,
+  `chiplab.history`, `chiplab.release_status`, `chiplab.sbom`, `chiplab.synth_status`,
+  `chiplab.docs` (fixed 13-key catalog).
+- `api/*.mjs`: Vercel serverless wrappers; static-first, user data stays in the browser.
+
+## 6b. Release (v0.3.1)
+- One version across npm, Cargo, PyPI, MCP, SBOM and the Vercel health endpoint.
+- `Release` workflow on tag `v*`: verify  EXE  npm/PyPI packages  SBOM 
+  `SHA256SUMS.txt`  GitHub Release.
+- `scripts/release_check.mjs` gates version/changelog/artifacts; `scripts/checksums.mjs`
+  writes the manifest.
+
+## 7. Distribution
+- `npm run build:exe` -> `dist/chiplab.exe` (Node SEA, embedded web + WASM + local cloud).
+- `Dockerfile` -> non-root Node 22 alpine, healthcheck; set `CHIPLAB_TOKEN` for writes.
+- `vercel.json` + `scripts/build_vercel.mjs` -> `public/` + `api/`.
+- npm `@chiplab/core`; PyPI `chiplab-itch`.
+- Native `chiplab-native` (wgpu Vulkan/DX12, `--probe`, `--boost`).
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Test-Path scripts\mutate.py; Test-Path tools\mutate_book.py; Test-Path 
+scripts\synth_matrix.sh; Get-ChildItem rtl -Filter *.sv | Select-Object Name
+False
+True
+True
+
+[32;1mName[0m
+[32;1m----[0m
+axis_skid_buffer.sv
+itch_book_snapshot_top.sv
+itch_book_snapshot.sv
+itch_caravel_wrap.sv
+itch_drop_gate.sv
+itch_host_wrap.sv
+itch_metrics.sv
+itch_parser_core.sv
+itch_pkg.sv
+itch_shifter.sv
+itch_top_book.sv
+itch_top_of_book.sv
+itch_top.sv
+itch_wishbone_wrap.sv
+mold_ab_system.sv
+mold_feed_arbiter.sv
+mold_recovery.sv
+moldudp64_depacketizer.sv
+moldudp64_frontend.sv
+moldudp64_pipeline.sv
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite llms-full.txt
+Wrote file successfully: llms-full.txt
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,19 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 01:59 - Autonomy tick + llms-full.txt refreshed
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
++- `llms-full.txt` was stale: it listed old modules, `scripts/mutate.py` (does not
++  exist), no metrics/book/snapshot/host/wishbone/Caravel blocks, no 10M/nightly, no
++  reproducibility/SLSA/cosign and no pre-PnR or small-block physical results.
++- Rewrote it against the current tree: all RTL blocks, 19 cocotb suites, 10M nightly,
++  gate 11/13, release/signing flow, measured pre-PnR STA for parser/wrappers/GF180/IHP,
++  the completed `itch_metrics` full flow, reproducibility and the honest limits.
++- No source changes; docs links unchanged (25 files, 0 dead).
++
+ ## 2026-11-10 00:59 - Autonomy tick + project skills corrected
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+ - The three `.opencode` project skills had stale claims:
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "docs: 
+refresh llms-full.txt to the current verified state" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'llms-full.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 514 insertions(+), 37 deletions(-)
+[31;1m   ad5bf6b..9d6ed42  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+9d6ed42 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 01:59 abgeschlossen.
+
+## Neu und verifiziert
+**`llms-full.txt` auf den aktuellen Stand gebracht**
+- Vorher veraltet: alte Modulliste, Verweis auf nicht existierendes `scripts/mutate.py`, keine Metriken-/Book-/Snapshot-/Host-/Wishbone-/Caravel-Bl├Âcke, kein 10M-Nightly, keine Reproduzierbarkeit/SLSA/cosign, keine physikalischen Ergebnisse.
+- Jetzt: alle RTL-Bl├Âcke, **19 Cocotb-Suiten / 26 Tests**, 10M-Nightly (0 Mismatches), Gate 11/13, Release-/Signing-Kette (inkl. `*.sigstore.json`, opt-in Registry-Publish), gemessene Pre-PnR-STA (Parser 322/250 MHz, 128/32-bit-Wrapper, GF180, IHP), der vollst├ñndige `itch_metrics`-Flow (0 DRC/LVS, 10 ns), Reproduzierbarkeit (WASM/Python/EXE) und die ehrlichen Grenzen.
+
+## Verifikation
+- Autonomy: 0 Tasks; Docs-Links 25 Dateien/0 tot; Gate **11/11**.
+- CI auf `9d6ed42` **success**; Commit gepusht, Arbeitsbaum clean.
+
+## Status
+Unver├ñndert blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Die Agenten-Dokumentation (`llms-full.txt`, Skills, README, Datenblatt, Errata, Long-Run-Guide) beschreibt jetzt ├╝berall denselben verifizierten Stand.
+[2026-11-10T02:59:19.3700936+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0

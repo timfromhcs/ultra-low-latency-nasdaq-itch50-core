@@ -259,6 +259,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 02:59 - Autonomy tick + CI concurrency groups
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
+- Added `concurrency` to `ci.yml` (`ci-${{ github.ref }}`, cancel-in-progress) so a
+  superseded push cannot leave a half-created run competing with the next one — the
+  partial run #136 (2 of 4 jobs) was the motivation. `repro.yml` gets a non-cancelling
+  `repro` group so the weekly run is never cut short.
+- No source changes; YAML validated, CI run checked for all four jobs.
+
 ## 2026-11-10 01:59 - Autonomy tick + llms-full.txt refreshed
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**.
