@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 06:59 - Autonomy tick + Docker and live Vercel re-verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- **Docker** (`docker build -t chiplab:verify .`, run on 4199 with `CHIPLAB_TOKEN`):
+  `/api/health` → ok, **v0.3.1**, WASM **50,322 B**; unauthenticated store GET →
+  **401**; authenticated PUT → **revision 1**. Container stopped afterwards.
+- **Vercel production**: `/api/health` → ok, v0.3.1; page 200 (13,797 bytes), title
+  `ChipLab - ITCH-50 silicon lab`.
+- README evidence rows for Docker and Vercel updated; no source changes.
+
 ## 2026-11-10 05:59 - Autonomy tick + end-user artifacts re-verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

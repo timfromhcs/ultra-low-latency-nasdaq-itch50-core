@@ -281,8 +281,8 @@ Reports live in [`reports/`](reports/).
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
 | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS×7 + lossy FAIL (58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
 | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22…` unchanged | `dist/chiplab.exe` |
-| Docker image | builds and serves `/api/health` | `Dockerfile` |
-| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
+| Docker image | builds; `/api/health` → v0.3.1, WASM 50,322 B; store **401 without token**, revision 1 with token | `Dockerfile` |
+| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | `reports/web-vercel.png` |
 | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (19 suites), Docker, packages | [Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
 | npm package | `npm pack` + clean install (0 vulnerabilities) parses 2,000 records at 41.28 Gbps | `packages/npm/` |
 | PyPI package | wheel installs in a clean venv; `selfcheck` = 10,000 records, 22 opcodes | `packages/python/` |

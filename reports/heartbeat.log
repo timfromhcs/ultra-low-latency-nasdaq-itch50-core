@@ -2807,3 +2807,204 @@ Server danach gestoppt; README-Evidenztabelle um die Re-Verifikation erg├ñnzt
 Unver├ñndert extern blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Neu belegt: Der Web-Pfad funktioniert mit dem neu gebauten, reproduzierbaren WASM unver├ñndert korrekt ÔÇö inklusive Negativkontrolle und Mobile-Layout.
 [2026-11-10T05:59:19.3657130+01:00] hallo, es ist 05:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; npm run build:exe 2>&1 | 
+Select-Object -Last 2; dist\chiplab.exe --probe --no-open 2>&1 | Select-Object -Last 8; "EXE_EXIT=$LASTEXITCODE"
+[tick] ran 0, failed 0
+[32m­ƒÆë Injection done![0m
+[exe] built E:\chips\main\dist\chiplab.exe (83.7 MB)
+    "hostname": "WIN-UT58NNIMA2L"
+  },
+  "wasm": {
+    "bytes": 50322,
+    "version": 769
+  },
+  "chips": 8
+}
+EXE_EXIT=0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main\packages\npm; npm pack 2>&1 | Select-Object -Last 2; $tgz = (Get-ChildItem *.tgz | 
+Sort-Object LastWriteTime | Select-Object -Last 1).FullName; "TGZ=$tgz"; $dir = "$env:TEMP\opencode\npm-smoke"; 
+Remove-Item -Recurse -Force $dir -ErrorAction SilentlyContinue; New-Item -ItemType Directory -Force $dir | Out-Null; 
+cd $dir; npm init -y 2>&1 | Out-Null; npm install $tgz 2>&1 | Select-Object -Last 3; node 
+node_modules\@chiplab\core\bin\chiplab.mjs --count 2000 --chip 1 2>&1 | Select-Object -First 8; 
+"NPM_EXIT=$LASTEXITCODE"
+[31;1mnpm notice[0m
+chiplab-core-0.3.1.tgz
+TGZ=E:\chips\main\packages\npm\chiplab-core-0.3.1.tgz
+added 1 package, and audited 2 packages in 820ms
+
+found 0 vulnerabilities
+ITCH-50 v2: 2000 messages, 3610 cycles, 41.28 Gbps
+  N META price=0 shares=0
+  J AMZN price=0 shares=0
+  B loc:5288 price=0 shares=0
+  D loc:6703 price=0 shares=0
+  F GOOGL price=1227436 shares=628662
+NPM_EXIT=0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main/packages/python && rm -rf /tmp/pywheel /tmp/pyvenv && python3 
+-m build --wheel --outdir /tmp/pywheel >/tmp/pyb.log 2>&1 && python3 -m venv /tmp/pyvenv && /tmp/pyvenv/bin/pip 
+install -q /tmp/pywheel/*.whl && /tmp/pyvenv/bin/chiplab-itch selfcheck 2>&1 | tail -5"
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ selfcheck OK: 10000 records, 22 opcodes, 314201 bytes
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; $h=(Get-FileHash dist\chiplab.exe -Algorithm SHA256).Hash.ToLower(); "EXE_SHA=$h"; 
+(Get-Content reports\repro_exe.json | ConvertFrom-Json).buildA
+EXE_SHA=67d05b221d937dbdec8ea80489b5f8a2e0d833ba359f9d6c9ab5371b68601dfa
+67d05b221d937dbdec8ea80489b5f8a2e0d833ba359f9d6c9ab5371b68601dfa
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content README.md | Select-Object -Skip 275 -First 20
+| Performance counters | **9-message histogram** `[1,2,1,1,1,1,1,1]`; **152 messages / 4800 bytes** in the parserBBO 
+integration | `tb/test_metrics.py`, `tb/test_book_top.py` |
+| Supply chain | 163-component SBOM; **SLSA provenance** for EXE/npm/wheel via Artifact Attestations; Docker 
+provenance `mode=max` + SBOM + **keyless cosign signature**; npm/PyPI **cosign blob signatures** | 
+`reports/sbom.json`, `release.yml`, `sign.yml`, `docker-publish.yml` |
+| Reproducible WASM | **toolchain pinned (rustc 1.98.1); two clean builds and the shipped artifact all `d2b5f58f.`** 
+(50,322 B) | `reports/repro_wasm.json`, `wasm-core/rust-toolchain.toml` |
+| Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | 
+`reports/repro_python.json`, `scripts/repro_python.sh` |
+| Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22.`, 87,785,472 B, Node 22.23.1); weekly Windows 
+CI job | `reports/repro_exe.json` |
+| Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+| Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS´┐¢7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+| Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
+| Docker image | builds and serves `/api/health` | `Dockerfile` |
+| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
+| GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (18 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+| npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
+| PyPI package | wheel builds and `selfcheck` covers all 22 opcodes | `packages/python/` |
+
+**Throughput model.** 128-bit @ 322.26 MHz = 41.25 Gbps line rate. The parser consumes
+at most one message per cycle; ITCH average message size (~30 B) means the useful
+message rate is ~177 M msg/s in the model, not a blanket 165 Gbps at 512-bit. The
+512-bit variant removes input-side byte starvation but does not multiply parser slots.
+
+**Latency model.** 1 clock from window to registered output; 2 clocks from
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -279,9 +279,9 @@
+ | Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | 
+`reports/repro_python.json`, `scripts/repro_python.sh` |
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+-| Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
++| Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22ÔÇª` unchanged | 
+`dist/chiplab.exe` |
+ | Docker image | builds and serves `/api/health` | `Dockerfile` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
+ | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (18 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+ | npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -282,11 +282,11 @@
+ | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+ | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22ÔÇª` unchanged | 
+`dist/chiplab.exe` |
+ | Docker image | builds and serves `/api/health` | `Dockerfile` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
+-| GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (18 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+-| npm package | `npm pack` + clean install parses 1,000 records | `packages/npm/` |
+-| PyPI package | wheel builds and `selfcheck` covers all 22 opcodes | `packages/python/` |
++| GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (19 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
++| npm package | `npm pack` + clean install (0 vulnerabilities) parses 2,000 records at 41.28 Gbps | `packages/npm/` |
++| PyPI package | wheel installs in a clean venv; `selfcheck` = 10,000 records, 22 opcodes | `packages/python/` |
+ 
+ **Throughput model.** 128-bit @ 322.26 MHz = 41.25 Gbps line rate. The parser consumes
+ at most one message per cycle; ITCH average message size (~30 B) means the useful
+ message rate is ~177 M msg/s in the model, not a blanket 165 Gbps at 512-bit. The
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 05:59 - Autonomy tick + end-user artifacts re-verified
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Rebuilt and probed the shipped artifacts on the current tree:
++  - **EXE**: `npm run build:exe` ÔåÆ `--probe --no-open` exit 0 (WASM 50,322 B, version
++    0x301, 8 chips); rebuild hash `67d05b22ÔÇª` is byte-identical to the recorded
++    reproducible build.
++  - **npm**: `npm pack` + clean install in a temp project (0 vulnerabilities), CLI
++    parses 2,000 records at 41.28 Gbps.
++  - **PyPI**: wheel built, installed into a fresh venv, `chiplab-itch selfcheck` ÔåÆ
++    10,000 records, 22 opcodes.
++- README evidence rows for EXE/npm/PyPI updated; no source changes.
++
+ ## 2026-11-10 04:59 - Autonomy tick + browser UI re-verified after WASM rebuild
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Started the local server and drove the PWA with Playwright (1440├ù900 and 390├ù844):
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item -Recurse -Force "$env:TEMP\opencode\npm-smoke" -ErrorAction SilentlyContinue; 
+node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "test(release): re-verify EXE probe, npm 
+clean install and wheel selfcheck" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 280 insertions(+), 19 deletions(-)
+[31;1m   b0252f8..a8c8c73  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+a8c8c73 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 05:59 abgeschlossen ÔÇö **Endnutzer-Artefakte erneut verifiziert**.
+
+## Ergebnisse
+| Artefakt | Pr├╝fung | Ergebnis |
+|---|---|---|
+| **EXE** | `npm run build:exe` + `--probe --no-open` | Exit 0; WASM **50.322 B**, Version **0x301**, **8 Chips**; Rebuild-Hash `67d05b22ÔÇª` **byte-identisch** zum dokumentierten reproduzierbaren Build |
+| **npm** | `npm pack` + Clean-Install in Temp-Projekt | **0 Vulnerabilities**; CLI parst 2.000 Records mit **41,28 Gbps** |
+| **PyPI** | Wheel-Build + frisches venv + `chiplab-itch selfcheck` | **OK: 10.000 Records, 22 Opcodes** |
+
+README-Evidenztabelle (EXE, npm, PyPI, Cocotb-Suite-Zahl 19) aktualisiert.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `a8c8c73` **success**.
+- Commit `a8c8c73` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Unver├ñndert extern blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Der Auslieferungspfad (EXE/npm/PyPI) ist mit dem neuen WASM erneut end-to-end gepr├╝ft.
+[2026-11-10T06:59:19.6201601+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
