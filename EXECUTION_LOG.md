@@ -279,6 +279,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Consequence: multi-hour physical runs are not reliably possible on this shared host
   right now. The wrapper P&R stays open with a fully characterised blocker (GRT clean at
   1800 µm, DRT short storm, non-deterministic counts).
+- **Breakthrough diagnostic after the restart**: the routing test (`50 ns`, AREA synth,
+  no sizing/buffering) completed detailed routing with **10 → 7 → 0 violations**
+  (routing DRC clear) on the same 1800 µm die and went on to post-route STA, Magic DRC
+  and LVS. So the met1/met2 short storm belongs to the **10 ns buffer-heavy netlist**,
+  not to the wrapper RTL or the floorplan. Next tick: sweep 25/20 ns to find the fastest
+  routable configuration.
+- `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+  **0 mismatches**, deep **13/13**.
 
 ## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
 

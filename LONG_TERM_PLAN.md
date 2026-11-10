@@ -129,11 +129,14 @@ MDN PWA best practices, GitHub Actions docs.
       die is still too small for this netlist. AREA synth variant is 133,125 µm² but
       **−83.06 ns** setup. 1800 µm/15 % die: global routing **clean (1 overflow node,
       45.9 % usage, no NDR retries)** but detailed routing still **171,735 violations**
-      (met1 shorts 82,017, met2 65,698) — same signature as the 1400 µm run, so die
-      size is not the remaining cause. Next: per-net short analysis (wide internal
-      buses / pin access). The Docker-free path (`docs/long-runs.md` §2b) removes the
-      container-restart blocker, but Docker Desktop's VM restarts also kill WSL
-      distros, so stop Docker Desktop for long native runs.
+      (met1 shorts 82,017, met2 65,698). **Control:** the same RTL at 50 ns with AREA
+      synthesis (no sizing/buffering) **routes clean** (10 → 0 violations, routing DRC
+      clear) and completes post-route STA/DRC/LVS on the same die — so the short storm is
+      a property of the 10 ns buffer-heavy netlist. Next: sweep 25/20 ns for the fastest
+      routable configuration, then reduce 10 ns buffering. The Docker-free path
+      (`docs/long-runs.md` §2b) removes the container-restart blocker, but this host is
+      shared and its WSL VM restarted every ~10–50 min on 2026-11-10 (external `hscl-*`
+      work in the same distro), so runs must stay resumable.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.

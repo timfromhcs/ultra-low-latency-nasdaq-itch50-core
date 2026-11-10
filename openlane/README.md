@@ -19,6 +19,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32_fitted.json` | 32-bit wrapper, 1400 µm die at 25 % density, antenna-diode step off, 10 ns | Sky130 | 10.0 ns |
 | `sky130_wrap32_fitted_area.json` | 32-bit wrapper, AREA synthesis variant (routing experiments only) | Sky130 | 10.0 ns |
 | `sky130_wrap32_wide.json` | 32-bit wrapper, 1800 µm die at 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off | Sky130 | 10.0 ns |
+| `sky130_wrap32_routetest.json` | routing test: same wrapper, 50 ns, AREA synthesis, no sizing/buffering | Sky130 | 50.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
@@ -99,6 +100,14 @@ but detailed routing still ended at **171,735 violations**, dominated by **met1 
 (82,017)** and **met2 shorts (65,698)**; the 1400 µm run had the same short signature
 (264,817). Die size is therefore not the remaining blocker; the next investigation is
 the per-net distribution of those shorts (wide internal buses / pin access).
+
+The controlled routing test answers the netlist question: the **same wrapper RTL**,
+synthesised for 50 ns with AREA mapping (no sizing/buffering), **routes clean** —
+detailed routing 10 → 7 → **0 violations**, routing DRC clear, and the flow proceeds
+through post-route STA / Magic DRC / LVS on the same 1800 µm die. So the short storm is
+a property of the 10 ns buffer-heavy netlist (54 k cells), not of the wrapper structure.
+Next step is a frequency sweep (50 → 25 → 20 ns) to find the fastest configuration that
+still routes, and then to attack the 10 ns buffering itself.
 
 Two container kills (`exit 255`) happened while GlobalRouting ran; each coincided with a
 Docker Desktop VM restart (init logs at ≈45 min intervals). `.wslconfig` was capped at

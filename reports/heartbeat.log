@@ -4082,3 +4082,206 @@ warning: in the working copy of 'openlane/sky130_wrap32_routetest.json', LF will
 touches it
  create mode 100644 openlane/sky130_wrap32_routetest.json
 [31;1m   22d7b91..f14e27d  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'echo WIDE2; grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/wide2.log | tail -3; echo ROUTETEST; tail -2 /home/tim/chiplab-native/routetest.log; free -g 
+| sed -n 2p; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ WIDE2
+[INFO DRT-0199]   Number of violations = 644.                                                                          
+ 
+[INFO DRT-0199]   Number of violations = 129.                                                                          
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+ROUTETEST
+    Completing 10% with 3752 violations.                                                                               
+ 
+    elapsed time = 00:00:00, memory = 1226.02 (MB).                                                                    
+ 
+Mem:               5           0           4           0           1           5
+Tue Nov 10 23:21:56 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -6 /home/tim/chiplab-native/wide2.log; ls -d 
+/home/tim/chiplab-native/openlane/runs/native-wide2/*/ | tail -3; pgrep -c openroad; date'
+[INFO DRT-0024]   Complete met3.                                                                                       
+ 
+[INFO DRT-0024]   Complete via3.                                                                                       
+ 
+[INFO DRT-0024]   Complete met4.                                                                                       
+ 
+[INFO DRT-0024]   Complete via4.                                                                                       
+ 
+[INFO DRT-0024]   Complete met5.                                                                                       
+ 
+[INFO DRT-0165] Start pin access.                                                                                      
+ 
+/home/tim/chiplab-native/openlane/runs/native-wide2/41-openroad-stamidpnr-3/
+/home/tim/chiplab-native/openlane/runs/native-wide2/42-openroad-detailedrouting/
+/home/tim/chiplab-native/openlane/runs/native-wide2/tmp/
+0
+Tue Nov 10 23:22:02 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -af librelane | grep -v bash | head -2; ls -l --time-style=+%H:%M 
+/home/tim/chiplab-native/wide2.log; tail -c 1200 /home/tim/chiplab-native/wide2.log | tr -d "\000" | tail -6; uptime'
+-rw-r--r-- 1 tim tim 1518275 23:19 /home/tim/chiplab-native/wide2.log
+[INFO DRT-0024]   Complete met3.                                                                                       
+ 
+[INFO DRT-0024]   Complete via3.                                                                                       
+ 
+[INFO DRT-0024]   Complete met4.                                                                                       
+ 
+[INFO DRT-0024]   Complete via4.                                                                                       
+ 
+[INFO DRT-0024]   Complete met5.                                                                                       
+ 
+[INFO DRT-0165] Start pin access.                                                                                      
+ 
+ 23:22:08 up 0 min,  1 user,  load average: 0.12, 0.03, 0.01
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'journalctl -b -1 -p 3 --no-pager 2>/dev/null | tail -8; echo ---; journalctl -b -1 
+--no-pager 2>/dev/null | grep -iE "out of memory|oom|killed process|panic" | tail -5; echo ---; journalctl 
+--list-boots --no-pager | tail -3'
+Nov 10 23:03:34 WIN-UT58NNIMA2L unknown: WSL (21573 - Relay) ERROR: UtilAcceptVsock:281: accept4 failed 110
+Nov 10 23:06:56 WIN-UT58NNIMA2L unknown: WSL (21621 - Relay) ERROR: UtilAcceptVsock:281: accept4 failed 110
+Nov 10 23:07:45 WIN-UT58NNIMA2L unknown: WSL (21670 - Relay) ERROR: UtilAcceptVsock:281: accept4 failed 110
+Nov 10 23:08:16 WIN-UT58NNIMA2L unknown: WSL (21692 - Relay) ERROR: UtilAcceptVsock:281: accept4 failed 110
+Nov 10 23:08:51 WIN-UT58NNIMA2L unknown: WSL (21718 - Relay) ERROR: UtilAcceptVsock:281: accept4 failed 110
+Nov 10 23:12:40 WIN-UT58NNIMA2L unknown: WSL (22118 - Relay) ERROR: UtilAcceptVsock:281: accept4 failed 110
+Nov 10 23:19:04 WIN-UT58NNIMA2L systemd[1]: Failed unmounting init.mount - /init.
+Nov 10 23:19:04 WIN-UT58NNIMA2L systemd[1]: Failed unmounting tmp-.X11\x2dunix.mount - /tmp/.X11-unix.
+---
+Nov 10 22:29:19 WIN-UT58NNIMA2L kernel: Command line: initrd=\initrd.img WSL_ROOT_INIT=1 panic=-1 nr_cpus=6 
+hv_utils.timesync_implicit=1 printk.devkmsg=on page_reporting.page_reporting_order=5 
+hv_storvsc.storvsc_max_hw_queues=4 console=hvc0 debug pty.legacy_count=0
+Nov 10 22:29:19 WIN-UT58NNIMA2L kernel: Kernel command line: initrd=\initrd.img WSL_ROOT_INIT=1 panic=-1 nr_cpus=6 
+hv_utils.timesync_implicit=1 printk.devkmsg=on page_reporting.page_reporting_order=5 
+hv_storvsc.storvsc_max_hw_queues=4 console=hvc0 debug pty.legacy_count=0
+Nov 10 22:31:51 WIN-UT58NNIMA2L sudo[3264]: tim : TTY=/dev/pts/0 ; PWD=/home/tim/hscl1-src ; USER=root ; 
+COMMAND=/usr/bin/install -m 0644 /home/tim/hscl1-build/work/debs/earlyoom_1.9.0-1_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-base_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-branding_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-control-center_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-cqhecs_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-desktop_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-handbook_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-memory_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-security_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-workshop_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/systemd-zram-generator_1.2.1-2_amd64.deb 
+/home/tim/hscl1-build/work/overlay/merged/tmp/hscl-debs/
+Nov 10 22:38:48 WIN-UT58NNIMA2L sudo[13378]: tim : TTY=/dev/pts/0 ; PWD=/home/tim/hscl1-src ; USER=root ; 
+COMMAND=/usr/bin/install -m 0644 /home/tim/hscl1-build/work/debs/earlyoom_1.9.0-1_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-base_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-branding_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-control-center_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-cqhecs_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-desktop_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-handbook_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-memory_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-security_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/hscl-workshop_0.1.5~alpha.0_amd64.deb 
+/home/tim/hscl1-build/work/debs/systemd-zram-generator_1.2.1-2_amd64.deb 
+/home/tim/hscl1-build/work/overlay/merged/tmp/hscl-debs/
+---
+ -2 c945435bb0e54274892ee5e9ca651a45 Tue 2026-11-10 22:20:06 CET Tue 2026-11-10 22:28:33 CET
+ -1 a7e196c4183a4104b0e1d293d8231327 Tue 2026-11-10 22:29:19 CET Tue 2026-11-10 23:19:04 CET
+  0 25907b4423dd490b949521b0b47ff9b5 Tue 2026-11-10 23:21:52 CET Tue 2026-11-10 23:22:09 CET
+[0m$ [0mGet-CimInstance Win32_OperatingSystem | Select-Object @{n='FreeGB';e={[math]::Round($_.FreePhysicalMemory/1MB
+,1)}},@{n='TotalGB';e={[math]::Round($_.TotalVisibleMemorySize/1MB,1)}}; Get-Process vmmemWSL -ErrorAction 
+SilentlyContinue | Select-Object Name,@{n='GB';e={[math]::Round($_.WorkingSet64/1GB,2)}}
+[32;1mFreeGB[0m[32;1m TotalGB[0m
+[32;1m------[0m [32;1m-------[0m
+  5,30   19,80
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -oE 
+"\"(design__instance__count|design__instance__count__stdcell|design__instance__area__stdcell)\": ?[^,}]*" 
+/home/tim/chiplab-native/openlane/runs/native-wide/12-openroad-staprepnr/or_metrics_out.json 2>/dev/null; grep -oE 
+"Number of cells: *[0-9]+" /home/tim/chiplab-native/openlane/runs/native-wide/06-yosys-synthesis/yosys-synthesis.log | 
+tail -2'
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit EXECUTION_LOG.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\EXECUTION_LOG.md. It must match exactly, including 
+whitespace and indentation.
+
+The closest lines in the file:
+270: - Launched a controlled routing test (`openlane/sky130_wrap32_routetest.json`):
+271:   same RTL and floorplan, but 50 ns clock and AREA synthesis (`SYNTH_ABC_BUFFERING: 0`,
+272:   no sizing). If that netlist routes cleanly, the short storm is a property of the
+273:   10 ns buffer-heavy netlist rather than of the wrapper structure.
+274: - Both runs are in flight; memory in the 6 GB WSL VM is tight (Ôëê2 GB available), so the
+275:   routing test may be stopped if pressure rises. **No sign-off result.**
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead EXECUTION_LOG.md [90m[limit=24, offset=255][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,10 +270,16 @@
+ - Launched a controlled routing test (`openlane/sky130_wrap32_routetest.json`):
+   same RTL and floorplan, but 50 ns clock and AREA synthesis (`SYNTH_ABC_BUFFERING: 0`,
+   no sizing). If that netlist routes cleanly, the short storm is a property of the
+   10 ns buffer-heavy netlist rather than of the wrapper structure.
+-- Both runs are in flight; memory in the 6 GB WSL VM is tight (Ôëê2 GB available), so the
+-  routing test may be stopped if pressure rises. **No sign-off result.**
++- Both runs were killed at Ôëê23:19 when the WSL VM restarted. `journalctl -b -1` shows a
++  **second session working in the same Ubuntu distro** (`/home/tim/hscl1-src`,
++  `hscl1-build`, installing `hscl-*`/`earlyoom` debs via sudo at 22:31 and 22:38), so the
++  VM restarts are external interference, not this project's flows. Boot history for the
++  evening: 22:13 ÔåÆ 22:20 ÔåÆ 22:29 ÔåÆ 23:19.
++- Consequence: multi-hour physical runs are not reliably possible on this shared host
++  right now. The wrapper P&R stays open with a fully characterised blocker (GRT clean at
++  1800 ┬Ám, DRT short storm, non-deterministic counts).
+ 
+ ## 2026-11-10 21:59 - Autonomy tick + wide die: global routing clean, detailed routing not
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce`/`c570f5e` green.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/long-runs.md
+Index: docs/long-runs.md
+===================================================================
+--- docs/long-runs.md
++++ docs/long-runs.md
+@@ -81,8 +81,14 @@
+ stays open until the flow ends) instead of detaching them, or keep Docker Desktop
+ running and accept its restarts. Verify with `uptime`/`journalctl --list-boots` before
+ trusting a long run.
+ 
++**This host is shared.** On 2026-11-10 the same Ubuntu distro was simultaneously used
++by another session building `hscl-*` packages (`/home/tim/hscl1-src`, sudo installs at
++22:31/22:38), and the VM restarted at 22:13, 22:20, 22:29 and 23:19, killing every
++running flow. Check `journalctl -b -1 | grep -i hscl` and the boot list before a
++multi-hour run; on a busy host, prefer bounded runs and `--last-run` resumes.
++
+ ## 3. Full flow and the knobs that matter
+ 
+ ```powershell
+ ... librelane --run-tag <tag>-full `
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && make verify-deep > /tmp/verify_deep3.log 2>&1; echo RC=$?; 
+grep -E "Full-field mismatches|scorecard" /tmp/verify_deep3.log | tail -4'
+RC=0
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+ Full-field mismatches   : 0
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; git add -A; git commit -m 
+"docs(openlane): shared-host WSL restarts kill long flows; deep verify 13/13" 2>&1 | Select-Object -Last 1; git push 
+origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 251 insertions(+), 21 deletions(-)
+[31;1m   f14e27d..7e919da  main -> main[0m
