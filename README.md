@@ -244,9 +244,9 @@ Reports live in [`reports/`](reports/).
 | Formal | **Z3 PASS** (BMC + k-induction + covers); CVC5 1.3.2 re-run: BMC + k-induction PASS at depth 8, covers not completed (needs depth 20; slow on this host). The committed CVC5 pass is from 2026-11-03 | `reports/formal.json`, `reports/formal_cvc5.log` |
 | Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | `reports/mutation.json` |
 | Mutation (BBO) | **9/9 parser→BBO mutants killed** (side, hash slot, cancel, max/min, volume, last) | `reports/mutation_book.json` |
-| Synthesis 128-bit | 22,629 cells, 2,228 DFFs | `reports/synth_128.log` |
-| Synthesis 256-bit | 25,201 cells | `reports/synth_256.log` |
-| Synthesis 512-bit | 29,628 cells | `reports/synth_512.log` |
+| Synthesis 128-bit | 22,710 cells, 2,228 DFFs | `reports/synth_128.log` |
+| Synthesis 256-bit | 25,324 cells | `reports/synth_256.log` |
+| Synthesis 512-bit | 29,568 cells | `reports/synth_512.log` |
 | Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
 | Local cloud | token required for non-loopback writes, revision conflict → 409, traversal → 400 | `backend/store.mjs` |
 | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |

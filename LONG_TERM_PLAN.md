@@ -18,7 +18,7 @@
 | Full-field regression | **1,000,000 records, 0 mismatches**, 41.290 Gbps model | `reports/sim_1m.txt` |
 | Formal | Z3 PASS (BMC + k-induction + covers); CVC5 BMC/induction PASS at depth 8, covers not rerun | `reports/formal.json` |
 | Mutation | **19/19** mutants killed (10 parser + 9 BBO) | `reports/mutation*.json` |
-| Synthesis | 22,629 / 25,201 / 29,628 cells; 2,228 DFFs | `reports/synth_*.log` |
+| Synthesis | 22,710 / 25,324 / 29,568 cells; 2,228 DFFs (Yosys 0.52, 2026-11-10) | `reports/synth_*.log` |
 | MoldUDP64 | **5 frames back-to-back PASS** (4 valid + 1 gap + 1 drop) | `tb/test_mold_multi.py` |
 | WASM/web | WebGPU compute/render, Canvas2D fallback, OPFS, PWA, 390/1440 | `reports/web-*.png` |
 | Backend/MCP | REST + stdio MCP, **12 tools**, local cloud JSON store | `mcp/`, `backend/` |

@@ -79,11 +79,11 @@ Removed 1 unused modules.
 Cleaned up 0 empty switches.
 
 7.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
-Marked 1 switch rules as full_case in process $proc$rtl/itch_top.sv:218$107 in module ultra_low_latency_nasdaq_itch50_cutthrough.
-Marked 1 switch rules as full_case in process $proc$rtl/itch_top.sv:279$109 in module ultra_low_latency_nasdaq_itch50_cutthrough.
-Marked 64 switch rules as full_case in process $proc$rtl/itch_shifter.sv:0$149 in module $paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.
-Marked 1 switch rules as full_case in process $proc$rtl/itch_shifter.sv:129$144 in module $paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.
-Marked 3 switch rules as full_case in process $proc$rtl/itch_parser_core.sv:137$14 in module itch_parser_core.
+Marked 1 switch rules as full_case in process $proc$rtl/itch_top.sv:218$109 in module ultra_low_latency_nasdaq_itch50_cutthrough.
+Marked 1 switch rules as full_case in process $proc$rtl/itch_top.sv:279$111 in module ultra_low_latency_nasdaq_itch50_cutthrough.
+Marked 64 switch rules as full_case in process $proc$rtl/itch_shifter.sv:0$151 in module $paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.
+Marked 1 switch rules as full_case in process $proc$rtl/itch_shifter.sv:129$146 in module $paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.
+Marked 3 switch rules as full_case in process $proc$rtl/itch_parser_core.sv:138$16 in module itch_parser_core.
 Marked 2 switch rules as full_case in process $proc$rtl/itch_drop_gate.sv:34$1 in module itch_drop_gate.
 Removed a total of 0 dead cases.
 
@@ -100,7 +100,7 @@ Converted 0 switches.
 <suppressed ~76 debug messages>
 
 7.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
-Creating decoders for process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating decoders for process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
      1/22: $0\m_ref_value[31:0]
      2/22: $0\m_event_code[7:0]
      3/22: $0\m_msg_len[7:0]
@@ -123,83 +123,83 @@ Creating decoders for process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc
     20/22: $0\m_stock_locate[15:0]
     21/22: $0\m_order_type[7:0]
     22/22: $0\m_axis_order_valid[0:0]
-Creating decoders for process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$109'.
+Creating decoders for process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$111'.
      1/3: $0\corrupt_count_q[31:0]
      2/3: $0\byte_count_q[31:0]
      3/3: $0\msg_count_q[31:0]
-Creating decoders for process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$282'.
-Creating decoders for process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-     1/64: $64\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$280
-     2/64: $63\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$278
-     3/64: $62\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$276
-     4/64: $61\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$274
-     5/64: $60\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$272
-     6/64: $59\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$270
-     7/64: $58\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$268
-     8/64: $57\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$266
-     9/64: $56\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$264
-    10/64: $55\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$262
-    11/64: $54\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$260
-    12/64: $53\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$258
-    13/64: $52\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$256
-    14/64: $51\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$254
-    15/64: $50\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$252
-    16/64: $49\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$250
-    17/64: $48\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$248
-    18/64: $47\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$246
-    19/64: $46\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$244
-    20/64: $45\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$242
-    21/64: $44\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$240
-    22/64: $43\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$238
-    23/64: $42\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$236
-    24/64: $41\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$234
-    25/64: $40\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$232
-    26/64: $39\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$230
-    27/64: $38\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$228
-    28/64: $37\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$226
-    29/64: $36\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$224
-    30/64: $35\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$222
-    31/64: $34\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$220
-    32/64: $33\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$218
-    33/64: $32\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$216
-    34/64: $31\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$214
-    35/64: $30\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$212
-    36/64: $29\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$210
-    37/64: $28\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$208
-    38/64: $27\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$206
-    39/64: $26\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$204
-    40/64: $25\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$202
-    41/64: $24\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$200
-    42/64: $23\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$198
-    43/64: $22\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$196
-    44/64: $21\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$194
-    45/64: $20\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$192
-    46/64: $19\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$190
-    47/64: $18\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$188
-    48/64: $17\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$186
-    49/64: $16\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$184
-    50/64: $15\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$182
-    51/64: $14\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$180
-    52/64: $13\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$178
-    53/64: $12\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$176
-    54/64: $11\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$174
-    55/64: $10\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$172
-    56/64: $9\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$170
-    57/64: $8\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$168
-    58/64: $7\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$166
-    59/64: $6\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$164
-    60/64: $5\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$162
-    61/64: $4\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$160
-    62/64: $3\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$158
-    63/64: $2\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$156
-    64/64: $1\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$154
-Creating decoders for process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
+Creating decoders for process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$284'.
+Creating decoders for process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+     1/64: $64\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$282
+     2/64: $63\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$280
+     3/64: $62\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$278
+     4/64: $61\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$276
+     5/64: $60\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$274
+     6/64: $59\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$272
+     7/64: $58\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$270
+     8/64: $57\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$268
+     9/64: $56\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$266
+    10/64: $55\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$264
+    11/64: $54\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$262
+    12/64: $53\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$260
+    13/64: $52\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$258
+    14/64: $51\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$256
+    15/64: $50\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$254
+    16/64: $49\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$252
+    17/64: $48\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$250
+    18/64: $47\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$248
+    19/64: $46\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$246
+    20/64: $45\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$244
+    21/64: $44\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$242
+    22/64: $43\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$240
+    23/64: $42\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$238
+    24/64: $41\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$236
+    25/64: $40\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$234
+    26/64: $39\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$232
+    27/64: $38\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$230
+    28/64: $37\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$228
+    29/64: $36\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$226
+    30/64: $35\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$224
+    31/64: $34\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$222
+    32/64: $33\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$220
+    33/64: $32\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$218
+    34/64: $31\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$216
+    35/64: $30\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$214
+    36/64: $29\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$212
+    37/64: $28\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$210
+    38/64: $27\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$208
+    39/64: $26\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$206
+    40/64: $25\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$204
+    41/64: $24\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$202
+    42/64: $23\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$200
+    43/64: $22\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$198
+    44/64: $21\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$196
+    45/64: $20\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$194
+    46/64: $19\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$192
+    47/64: $18\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$190
+    48/64: $17\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$188
+    49/64: $16\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$186
+    50/64: $15\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$184
+    51/64: $14\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$182
+    52/64: $13\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$180
+    53/64: $12\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$178
+    54/64: $11\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$176
+    55/64: $10\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$174
+    56/64: $9\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$172
+    57/64: $8\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$170
+    58/64: $7\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$168
+    59/64: $6\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$166
+    60/64: $5\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$164
+    61/64: $4\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$162
+    62/64: $3\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$160
+    63/64: $2\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$158
+    64/64: $1\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$156
+Creating decoders for process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
      1/5: $0\last_pulse[0:0]
      2/5: $0\buf_data[1023:0]
      3/5: $0\buf_count[7:0]
      4/5: $0\frame_count[31:0]
      5/5: $0\beat_count[31:0]
-Creating decoders for process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
+Creating decoders for process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
      1/38: $2\parsed_timestamp[47:0]
      2/38: $2\parsed_tracking_number[15:0]
      3/38: $2\parsed_stock_locate[15:0]
@@ -253,34 +253,34 @@ Creating decoders for process `\itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'
     12/12: $1\is_trade_order[0:0]
 
 7.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$117.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$282'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$117.i' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$282'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$115.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$282'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$117.keep' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$282'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.i' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.keep' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$114.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-No latch inferred for signal `\itch_parser_core.\parsed_msg_type' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_stock_locate' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_tracking_number' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_timestamp' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_order_ref_num' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_new_order_ref_num' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_side' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_shares' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_stock' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_price' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_match_number' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_mpid' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_printable' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_is_trade' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_is_reference' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_error_corrupt' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_payload' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_msg_length' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_event_code' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-No latch inferred for signal `\itch_parser_core.\parsed_ref_value' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$119.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$284'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$119.i' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$284'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$117.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$284'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_mask$func$rtl/itch_shifter.sv:119$119.keep' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$284'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.i' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.keep' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+No latch inferred for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result' from process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+No latch inferred for signal `\itch_parser_core.\parsed_msg_type' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_stock_locate' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_tracking_number' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_timestamp' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_order_ref_num' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_new_order_ref_num' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_side' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_shares' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_stock' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_price' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_match_number' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_mpid' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_printable' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_is_trade' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_is_reference' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_error_corrupt' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_payload' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_msg_length' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_event_code' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+No latch inferred for signal `\itch_parser_core.\parsed_ref_value' from process `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
 No latch inferred for signal `\itch_drop_gate.\is_trade_order' from process `\itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'.
 No latch inferred for signal `\itch_drop_gate.\is_reference' from process `\itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'.
 No latch inferred for signal `\itch_drop_gate.\is_corrupt' from process `\itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'.
@@ -289,81 +289,81 @@ No latch inferred for signal `\itch_drop_gate.\msg_length' from process `\itch_d
 No latch inferred for signal `\itch_drop_gate.\gate_enable' from process `\itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'.
 
 7.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_axis_order_valid' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
-  created $dff cell `$procdff$1148' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_order_type' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
-  created $dff cell `$procdff$1149' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_stock_locate' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_axis_order_valid' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1150' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_tracking_number' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_order_type' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1151' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_timestamp' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_stock_locate' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1152' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_order_ref_num' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_tracking_number' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1153' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_new_order_ref_num' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_timestamp' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1154' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_side' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_order_ref_num' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1155' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_shares' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_new_order_ref_num' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1156' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_stock' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_side' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1157' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_price' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_shares' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1158' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_match_number' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_stock' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1159' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_mpid' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_price' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1160' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_printable' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_match_number' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1161' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_is_trade' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_mpid' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1162' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_is_reference' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_printable' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1163' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_is_drop' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_is_trade' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1164' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_error_corrupt' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_is_reference' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1165' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_payload' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_is_drop' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1166' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_msg_len' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_error_corrupt' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1167' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_event_code' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_payload' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1168' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_ref_value' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_msg_len' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1169' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\msg_count_q' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$109'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_event_code' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1170' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\byte_count_q' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$109'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\m_ref_value' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
   created $dff cell `$procdff$1171' with positive edge clock.
-Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\corrupt_count_q' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$109'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\msg_count_q' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$111'.
   created $dff cell `$procdff$1172' with positive edge clock.
-Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\last_pulse' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\byte_count_q' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$111'.
   created $dff cell `$procdff$1173' with positive edge clock.
-Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\beat_count' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
+Creating register for signal `\ultra_low_latency_nasdaq_itch50_cutthrough.\corrupt_count_q' using process `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$111'.
   created $dff cell `$procdff$1174' with positive edge clock.
-Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\frame_count' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
+Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\last_pulse' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
   created $dff cell `$procdff$1175' with positive edge clock.
-Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\buf_data' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
+Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\beat_count' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
   created $dff cell `$procdff$1176' with positive edge clock.
-Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\buf_count' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
+Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\frame_count' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
   created $dff cell `$procdff$1177' with positive edge clock.
+Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\buf_data' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
+  created $dff cell `$procdff$1178' with positive edge clock.
+Creating register for signal `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.\buf_count' using process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
+  created $dff cell `$procdff$1179' with positive edge clock.
 
 7.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
 
 7.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
-Found and cleaned up 1 empty switch in `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
-Removing empty process `ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$107'.
-Found and cleaned up 3 empty switches in `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$109'.
-Removing empty process `ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$109'.
-Removing empty process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$282'.
-Found and cleaned up 64 empty switches in `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-Removing empty process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$149'.
-Found and cleaned up 3 empty switches in `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
-Removing empty process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$144'.
-Found and cleaned up 3 empty switches in `\itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
-Removing empty process `itch_parser_core.$proc$rtl/itch_parser_core.sv:137$14'.
+Found and cleaned up 1 empty switch in `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
+Removing empty process `ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:218$109'.
+Found and cleaned up 3 empty switches in `\ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$111'.
+Removing empty process `ultra_low_latency_nasdaq_itch50_cutthrough.$proc$rtl/itch_top.sv:279$111'.
+Removing empty process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$284'.
+Found and cleaned up 64 empty switches in `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+Removing empty process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:0$151'.
+Found and cleaned up 3 empty switches in `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
+Removing empty process `$paramod$d60840a724150e933fa5f26216312b52e5d5ab9c\itch_shifter.$proc$rtl/itch_shifter.sv:129$146'.
+Found and cleaned up 3 empty switches in `\itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
+Removing empty process `itch_parser_core.$proc$rtl/itch_parser_core.sv:138$16'.
 Found and cleaned up 2 empty switches in `\itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'.
 Removing empty process `itch_drop_gate.$proc$rtl/itch_drop_gate.sv:34$1'.
 Cleaned up 76 empty switches.
@@ -411,48 +411,48 @@ Running muxtree optimizer on module \ultra_low_latency_nasdaq_itch50_cutthrough.
   Creating internal representation of mux trees.
   Evaluating internal representation of mux trees.
   Analyzing evaluation results.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$676.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$894.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$915.
-    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1002.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$587.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$593.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$703.
-    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1029.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$599.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$717.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$735.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$623.
-    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1110.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$816.
-    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1128.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$641.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$762.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$843.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$667.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$867.
-    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$882.
-    dead port 2/2 on $mux $flatten\u_shifter.$ternary$rtl/itch_shifter.sv:83$119.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$669.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$896.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$917.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$678.
+    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1004.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$589.
+    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1031.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$705.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$595.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$719.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$601.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$737.
+    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1112.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$625.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$818.
+    dead port 2/2 on $mux $flatten\u_parser_core.\u_drop_gate.$procmux$1130.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$643.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$764.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$845.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$869.
+    dead port 1/2 on $mux $flatten\u_parser_core.$procmux$884.
+    dead port 2/2 on $mux $flatten\u_shifter.$ternary$rtl/itch_shifter.sv:83$121.
 Removed 22 multiplexer ports.
 <suppressed ~120 debug messages>
 
 7.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$693: $auto$opt_reduce.cc:137:opt_pmux$1182
-    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$1018: $auto$opt_reduce.cc:137:opt_pmux$1184
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$712: { $auto$opt_reduce.cc:137:opt_pmux$1186 $flatten\u_parser_core.$procmux$713_CMP }
-    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$1086: $auto$opt_reduce.cc:137:opt_pmux$1188
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$792: $auto$opt_reduce.cc:137:opt_pmux$1190
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$724: { $flatten\u_parser_core.$procmux$616_CMP $flatten\u_parser_core.$procmux$632_CMP $flatten\u_parser_core.$procmux$631_CMP $auto$opt_reduce.cc:137:opt_pmux$1194 $auto$opt_reduce.cc:137:opt_pmux$1192 }
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$615: { $flatten\u_parser_core.$procmux$618_CMP $auto$opt_reduce.cc:137:opt_pmux$1196 $flatten\u_parser_core.$procmux$616_CMP }
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$738: $auto$opt_reduce.cc:137:opt_pmux$1198
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$626: { $auto$opt_reduce.cc:137:opt_pmux$1202 $flatten\u_parser_core.$procmux$616_CMP $flatten\u_parser_core.$procmux$632_CMP $auto$opt_reduce.cc:137:opt_pmux$1200 }
-    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$1113: $auto$opt_reduce.cc:137:opt_pmux$1204
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$819: $auto$opt_reduce.cc:137:opt_pmux$1206
-    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$978: { $flatten\u_parser_core.$procmux$663_CMP $auto$opt_reduce.cc:137:opt_pmux$1218 $flatten\u_parser_core.$procmux$661_CMP $flatten\u_parser_core.$procmux$617_CMP $auto$opt_reduce.cc:137:opt_pmux$1216 $flatten\u_parser_core.$procmux$635_CMP $flatten\u_parser_core.$procmux$634_CMP $flatten\u_parser_core.$procmux$632_CMP $auto$opt_reduce.cc:137:opt_pmux$1214 $flatten\u_parser_core.$procmux$630_CMP $auto$opt_reduce.cc:137:opt_pmux$1212 $flatten\u_parser_core.$procmux$631_CMP $auto$opt_reduce.cc:137:opt_pmux$1210 $flatten\u_parser_core.$procmux$628_CMP $auto$opt_reduce.cc:137:opt_pmux$1208 }
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$657: { $auto$opt_reduce.cc:137:opt_pmux$1222 $flatten\u_parser_core.$procmux$618_CMP $auto$opt_reduce.cc:137:opt_pmux$1220 $flatten\u_parser_core.$procmux$616_CMP }
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$765: $auto$opt_reduce.cc:137:opt_pmux$1224
-    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$670: $auto$opt_reduce.cc:137:opt_pmux$1226
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$672: $auto$opt_reduce.cc:137:opt_pmux$1184
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$695: $auto$opt_reduce.cc:137:opt_pmux$1186
+    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$1020: $auto$opt_reduce.cc:137:opt_pmux$1188
+    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$1088: $auto$opt_reduce.cc:137:opt_pmux$1190
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$794: $auto$opt_reduce.cc:137:opt_pmux$1192
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$714: { $auto$opt_reduce.cc:137:opt_pmux$1194 $flatten\u_parser_core.$procmux$715_CMP }
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$726: { $flatten\u_parser_core.$procmux$618_CMP $flatten\u_parser_core.$procmux$634_CMP $flatten\u_parser_core.$procmux$633_CMP $auto$opt_reduce.cc:137:opt_pmux$1198 $auto$opt_reduce.cc:137:opt_pmux$1196 }
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$617: { $flatten\u_parser_core.$procmux$620_CMP $auto$opt_reduce.cc:137:opt_pmux$1200 $flatten\u_parser_core.$procmux$618_CMP }
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$740: $auto$opt_reduce.cc:137:opt_pmux$1202
+    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$1115: $auto$opt_reduce.cc:137:opt_pmux$1204
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$821: $auto$opt_reduce.cc:137:opt_pmux$1206
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$628: { $auto$opt_reduce.cc:137:opt_pmux$1210 $flatten\u_parser_core.$procmux$618_CMP $flatten\u_parser_core.$procmux$634_CMP $auto$opt_reduce.cc:137:opt_pmux$1208 }
+    New ctrl vector for $pmux cell $flatten\u_parser_core.\u_drop_gate.$procmux$980: { $flatten\u_parser_core.$procmux$665_CMP $auto$opt_reduce.cc:137:opt_pmux$1222 $flatten\u_parser_core.$procmux$663_CMP $flatten\u_parser_core.$procmux$619_CMP $auto$opt_reduce.cc:137:opt_pmux$1220 $flatten\u_parser_core.$procmux$637_CMP $flatten\u_parser_core.$procmux$636_CMP $flatten\u_parser_core.$procmux$634_CMP $auto$opt_reduce.cc:137:opt_pmux$1218 $flatten\u_parser_core.$procmux$632_CMP $auto$opt_reduce.cc:137:opt_pmux$1216 $flatten\u_parser_core.$procmux$633_CMP $auto$opt_reduce.cc:137:opt_pmux$1214 $flatten\u_parser_core.$procmux$630_CMP $auto$opt_reduce.cc:137:opt_pmux$1212 }
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$659: { $auto$opt_reduce.cc:137:opt_pmux$1226 $flatten\u_parser_core.$procmux$620_CMP $auto$opt_reduce.cc:137:opt_pmux$1224 $flatten\u_parser_core.$procmux$618_CMP }
+    New ctrl vector for $pmux cell $flatten\u_parser_core.$procmux$767: $auto$opt_reduce.cc:137:opt_pmux$1228
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
 Performed a total of 15 changes.
 
@@ -544,40 +544,40 @@ Finding identical cells in module `\ultra_low_latency_nasdaq_itch50_cutthrough'.
 Removed a total of 0 cells.
 
 7.9.6. Executing OPT_DFF pass (perform DFF optimizations).
-Adding SRST signal on $procdff$1172 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $procmux$355_Y, Q = \corrupt_count_q, rval = 0).
-Adding EN signal on $auto$ff.cc:266:slice$1227 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $add$rtl/itch_top.sv:288$113_Y, Q = \corrupt_count_q).
-Adding SRST signal on $procdff$1171 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $procmux$360_Y, Q = \byte_count_q, rval = 0).
-Adding EN signal on $auto$ff.cc:266:slice$1231 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $add$rtl/itch_top.sv:286$112_Y, Q = \byte_count_q).
-Adding SRST signal on $procdff$1170 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $procmux$365_Y, Q = \msg_count_q, rval = 0).
-Adding EN signal on $auto$ff.cc:266:slice$1233 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $add$rtl/itch_top.sv:285$111_Y, Q = \msg_count_q).
-Adding SRST signal on $procdff$1169 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_parser_core.$2\parsed_ref_value[31:0], Q = \m_ref_value, rval = 0).
-Adding SRST signal on $procdff$1168 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_parser_core.$2\parsed_event_code[7:0], Q = \m_event_code, rval = 8'00000000).
-Adding SRST signal on $procdff$1167 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_gate_len, Q = \m_msg_len, rval = 8'00000000).
-Adding SRST signal on $procdff$1166 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_payload, Q = \m_payload, rval = 512'00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1165 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_error_corrupt, Q = \m_error_corrupt, rval = 1'0).
-Adding SRST signal on $procdff$1163 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_is_drop, Q = \m_is_reference, rval = 1'0).
-Adding SRST signal on $procdff$1162 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_is_trade, Q = \m_is_trade, rval = 1'0).
-Adding SRST signal on $procdff$1161 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_printable, Q = \m_printable, rval = 1'0).
-Adding SRST signal on $procdff$1160 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_mpid, Q = \m_mpid, rval = 0).
-Adding SRST signal on $procdff$1159 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_match_number, Q = \m_match_number, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1158 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_price, Q = \m_price, rval = 0).
-Adding SRST signal on $procdff$1157 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_stock, Q = \m_stock, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1156 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_shares, Q = \m_shares, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1155 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_side, Q = \m_side, rval = 8'00000000).
-Adding SRST signal on $procdff$1154 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_new_order_ref_num, Q = \m_new_order_ref_num, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1153 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_order_ref_num, Q = \m_order_ref_num, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1152 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_timestamp, Q = \m_timestamp, rval = 48'000000000000000000000000000000000000000000000000).
-Adding SRST signal on $procdff$1151 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_tracking_number, Q = \m_tracking_number, rval = 16'0000000000000000).
-Adding SRST signal on $procdff$1150 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_stock_locate, Q = \m_stock_locate, rval = 16'0000000000000000).
-Adding SRST signal on $procdff$1149 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_msg_type, Q = \m_order_type, rval = 8'00000000).
-Adding SRST signal on $procdff$1148 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_msg_valid, Q = \m_axis_order_valid, rval = 1'0).
-Adding SRST signal on $flatten\u_shifter.$procdff$1177 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \u_shifter.next_count, Q = \u_shifter.buf_count, rval = 8'00000000).
-Adding SRST signal on $flatten\u_shifter.$procdff$1176 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \u_shifter.next_data, Q = \u_shifter.buf_data, rval = 1024'0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000).
-Adding SRST signal on $flatten\u_shifter.$procdff$1175 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$procmux$573_Y, Q = \u_shifter.frame_count, rval = 0).
-Adding EN signal on $auto$ff.cc:266:slice$1272 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$148_Y, Q = \u_shifter.frame_count).
-Adding SRST signal on $flatten\u_shifter.$procdff$1174 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$procmux$578_Y, Q = \u_shifter.beat_count, rval = 0).
-Adding EN signal on $auto$ff.cc:266:slice$1276 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$147_Y, Q = \u_shifter.beat_count).
-Adding SRST signal on $flatten\u_shifter.$procdff$1173 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$logic_and$rtl/itch_shifter.sv:140$146_Y, Q = \u_shifter.last_pulse, rval = 1'0).
+Adding SRST signal on $procdff$1174 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $procmux$357_Y, Q = \corrupt_count_q, rval = 0).
+Adding EN signal on $auto$ff.cc:266:slice$1229 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $add$rtl/itch_top.sv:288$115_Y, Q = \corrupt_count_q).
+Adding SRST signal on $procdff$1173 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $procmux$362_Y, Q = \byte_count_q, rval = 0).
+Adding EN signal on $auto$ff.cc:266:slice$1233 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $add$rtl/itch_top.sv:286$114_Y, Q = \byte_count_q).
+Adding SRST signal on $procdff$1172 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $procmux$367_Y, Q = \msg_count_q, rval = 0).
+Adding EN signal on $auto$ff.cc:266:slice$1235 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $add$rtl/itch_top.sv:285$113_Y, Q = \msg_count_q).
+Adding SRST signal on $procdff$1171 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_parser_core.$2\parsed_ref_value[31:0], Q = \m_ref_value, rval = 0).
+Adding SRST signal on $procdff$1170 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_parser_core.$2\parsed_event_code[7:0], Q = \m_event_code, rval = 8'00000000).
+Adding SRST signal on $procdff$1169 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_gate_len, Q = \m_msg_len, rval = 8'00000000).
+Adding SRST signal on $procdff$1168 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_payload, Q = \m_payload, rval = 512'00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1167 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_error_corrupt, Q = \m_error_corrupt, rval = 1'0).
+Adding SRST signal on $procdff$1165 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_is_drop, Q = \m_is_reference, rval = 1'0).
+Adding SRST signal on $procdff$1164 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_is_trade, Q = \m_is_trade, rval = 1'0).
+Adding SRST signal on $procdff$1163 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_printable, Q = \m_printable, rval = 1'0).
+Adding SRST signal on $procdff$1162 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_mpid, Q = \m_mpid, rval = 0).
+Adding SRST signal on $procdff$1161 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_match_number, Q = \m_match_number, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1160 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_price, Q = \m_price, rval = 0).
+Adding SRST signal on $procdff$1159 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_stock, Q = \m_stock, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1158 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_shares, Q = \m_shares, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1157 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_side, Q = \m_side, rval = 8'00000000).
+Adding SRST signal on $procdff$1156 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_new_order_ref_num, Q = \m_new_order_ref_num, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1155 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_order_ref_num, Q = \m_order_ref_num, rval = 64'0000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1154 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_timestamp, Q = \m_timestamp, rval = 48'000000000000000000000000000000000000000000000000).
+Adding SRST signal on $procdff$1153 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_tracking_number, Q = \m_tracking_number, rval = 16'0000000000000000).
+Adding SRST signal on $procdff$1152 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_stock_locate, Q = \m_stock_locate, rval = 16'0000000000000000).
+Adding SRST signal on $procdff$1151 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_msg_type, Q = \m_order_type, rval = 8'00000000).
+Adding SRST signal on $procdff$1150 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \core_msg_valid, Q = \m_axis_order_valid, rval = 1'0).
+Adding SRST signal on $flatten\u_shifter.$procdff$1179 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \u_shifter.next_count, Q = \u_shifter.buf_count, rval = 8'00000000).
+Adding SRST signal on $flatten\u_shifter.$procdff$1178 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = \u_shifter.next_data, Q = \u_shifter.buf_data, rval = 1024'0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000).
+Adding SRST signal on $flatten\u_shifter.$procdff$1177 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$procmux$575_Y, Q = \u_shifter.frame_count, rval = 0).
+Adding EN signal on $auto$ff.cc:266:slice$1274 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$150_Y, Q = \u_shifter.frame_count).
+Adding SRST signal on $flatten\u_shifter.$procdff$1176 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$procmux$580_Y, Q = \u_shifter.beat_count, rval = 0).
+Adding EN signal on $auto$ff.cc:266:slice$1278 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$149_Y, Q = \u_shifter.beat_count).
+Adding SRST signal on $flatten\u_shifter.$procdff$1175 ($dff) from module ultra_low_latency_nasdaq_itch50_cutthrough (D = $flatten\u_shifter.$logic_and$rtl/itch_shifter.sv:140$148_Y, Q = \u_shifter.last_pulse, rval = 1'0).
 
 7.9.7. Executing OPT_CLEAN pass (remove unused cells and wires).
 Finding unused cells or wires in module \ultra_low_latency_nasdaq_itch50_cutthrough..
@@ -645,18 +645,20 @@ Optimizing module ultra_low_latency_nasdaq_itch50_cutthrough.
 7.9.23. Finished OPT passes. (There is nothing left to do.)
 
 7.10. Executing WREDUCE pass (reducing word size of cells).
-Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$add$rtl/itch_top.sv:285$111 ($add).
-Removed top 24 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$add$rtl/itch_top.sv:286$112 ($add).
-Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$add$rtl/itch_top.sv:288$113 ($add).
-Removed top 2 bits (of 8) from mux cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.\u_drop_gate.$procmux$978 ($pmux).
-Removed top 2 bits (of 8) from mux cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.\u_drop_gate.$procmux$1134 ($mux).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$741_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$732_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$726_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$713_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$696_CMP0 ($eq).
+Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$add$rtl/itch_top.sv:285$113 ($add).
+Removed top 24 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$add$rtl/itch_top.sv:286$114 ($add).
+Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$add$rtl/itch_top.sv:288$115 ($add).
+Removed top 2 bits (of 8) from mux cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.\u_drop_gate.$procmux$980 ($pmux).
+Removed top 2 bits (of 8) from mux cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.\u_drop_gate.$procmux$1136 ($mux).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$743_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$734_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$728_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$715_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$698_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$665_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$663_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$661_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$637_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$636_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$635_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$634_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$633_CMP0 ($eq).
@@ -664,21 +666,20 @@ Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cu
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$631_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$630_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$629_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$628_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$627_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$623_CMP0 ($eq).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$622_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$621_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$620_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$619_CMP0 ($eq).
 Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$618_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$617_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$procmux$616_CMP0 ($eq).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$eq$rtl/itch_parser_core.sv:210$18 ($eq).
-Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:105$10 ($ge).
-Removed top 2 bits (of 8) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:102$8 ($gt).
-Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:102$8 ($gt).
-Removed top 2 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:102$7 ($ge).
-Removed top 6 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:69$3 ($ge).
-Removed top 7 bits (of 8) from mux cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$procmux$560 ($mux).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$eq$rtl/itch_parser_core.sv:211$20 ($eq).
+Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:106$12 ($ge).
+Removed top 2 bits (of 8) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:103$10 ($gt).
+Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:103$10 ($gt).
+Removed top 2 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:103$9 ($ge).
+Removed top 6 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:70$3 ($ge).
+Removed top 7 bits (of 8) from mux cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$procmux$562 ($mux).
+Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$283 ($add).
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$281 ($add).
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$279 ($add).
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$277 ($add).
@@ -740,25 +741,24 @@ Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cu
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165 ($add).
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163 ($add).
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161 ($add).
+Removed top 7 bits (of 8) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159 ($add).
 Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159 ($add).
-Removed top 7 bits (of 8) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157 ($add).
-Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157 ($add).
-Removed top 6 bits (of 8) from port Y of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157 ($add).
-Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:143$148 ($add).
-Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:142$147 ($add).
-Removed top 512 bits (of 1024) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:120$139 ($shl).
-Removed top 21 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:120$139 ($shl).
-Removed top 21 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shr$rtl/itch_shifter.sv:116$135 ($shr).
-Removed top 1023 bits (of 1024) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:115$131 ($shl).
-Removed top 21 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:115$131 ($shl).
-Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$gt$rtl/itch_shifter.sv:109$127 ($gt).
-Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$gt$rtl/itch_shifter.sv:95$124 ($gt).
-Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$122 ($ge).
-Removed top 24 bits (of 32) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$le$rtl/itch_shifter.sv:87$121 ($le).
-Removed top 25 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$le$rtl/itch_shifter.sv:87$121 ($le).
+Removed top 6 bits (of 8) from port Y of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159 ($add).
+Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:143$150 ($add).
+Removed top 31 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:142$149 ($add).
+Removed top 512 bits (of 1024) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:120$141 ($shl).
+Removed top 21 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:120$141 ($shl).
+Removed top 21 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shr$rtl/itch_shifter.sv:116$137 ($shr).
+Removed top 1023 bits (of 1024) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:115$133 ($shl).
+Removed top 21 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$shl$rtl/itch_shifter.sv:115$133 ($shl).
+Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$gt$rtl/itch_shifter.sv:109$129 ($gt).
+Removed top 7 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$gt$rtl/itch_shifter.sv:95$126 ($gt).
+Removed top 1 bits (of 8) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$124 ($ge).
+Removed top 24 bits (of 32) from port A of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$le$rtl/itch_shifter.sv:87$123 ($le).
+Removed top 25 bits (of 32) from port B of cell ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$le$rtl/itch_shifter.sv:87$123 ($le).
 Removed top 2 bits (of 8) from wire ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_parser_core.\u_drop_gate.$2\msg_length[7:0].
-Removed top 7 bits (of 8) from wire ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$1\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$154.
-Removed top 6 bits (of 8) from wire ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157_Y.
+Removed top 7 bits (of 8) from wire ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$1\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$156.
+Removed top 6 bits (of 8) from wire ultra_low_latency_nasdaq_itch50_cutthrough.$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159_Y.
 Removed top 2 bits (of 8) from wire ultra_low_latency_nasdaq_itch50_cutthrough.core_gate_len.
 
 7.11. Executing PEEPOPT pass (run peephole optimizers).
@@ -770,13 +770,12 @@ Removed 0 unused cells and 4 unused wires.
 
 7.13. Executing ALUMACC pass (create $alu and $macc cells).
 Extracting $alu and $macc cells in module ultra_low_latency_nasdaq_itch50_cutthrough:
-  creating $macc model for $add$rtl/itch_top.sv:285$111 ($add).
-  creating $macc model for $add$rtl/itch_top.sv:286$112 ($add).
-  creating $macc model for $add$rtl/itch_top.sv:288$113 ($add).
-  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:124$143 ($add).
-  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$147 ($add).
-  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$148 ($add).
-  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157 ($add).
+  creating $macc model for $add$rtl/itch_top.sv:285$113 ($add).
+  creating $macc model for $add$rtl/itch_top.sv:286$114 ($add).
+  creating $macc model for $add$rtl/itch_top.sv:288$115 ($add).
+  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:124$145 ($add).
+  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$149 ($add).
+  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$150 ($add).
   creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159 ($add).
   creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161 ($add).
   creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163 ($add).
@@ -839,8 +838,10 @@ Extracting $alu and $macc cells in module ultra_low_latency_nasdaq_itch50_cutthr
   creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$277 ($add).
   creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$279 ($add).
   creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$281 ($add).
-  creating $macc model for $flatten\u_shifter.$sub$rtl/itch_shifter.sv:117$136 ($sub).
-  creating $alu model for $macc $flatten\u_shifter.$sub$rtl/itch_shifter.sv:117$136.
+  creating $macc model for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$283 ($add).
+  creating $macc model for $flatten\u_shifter.$sub$rtl/itch_shifter.sv:117$138 ($sub).
+  creating $alu model for $macc $flatten\u_shifter.$sub$rtl/itch_shifter.sv:117$138.
+  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$283.
   creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$281.
   creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$279.
   creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$277.
@@ -903,100 +904,99 @@ Extracting $alu and $macc cells in module ultra_low_latency_nasdaq_itch50_cutthr
   creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163.
   creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161.
   creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159.
-  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157.
-  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$148.
-  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$147.
-  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:124$143.
-  creating $alu model for $macc $add$rtl/itch_top.sv:288$113.
-  creating $alu model for $macc $add$rtl/itch_top.sv:286$112.
-  creating $alu model for $macc $add$rtl/itch_top.sv:285$111.
-  creating $alu model for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:102$7 ($ge): new $alu
-  creating $alu model for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:105$10 ($ge): new $alu
-  creating $alu model for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:69$3 ($ge): new $alu
-  creating $alu model for $flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:102$8 ($gt): new $alu
-  creating $alu model for $flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$122 ($ge): new $alu
-  creating $alu model for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:109$127 ($gt): new $alu
-  creating $alu model for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:95$124 ($gt): new $alu
-  creating $alu model for $flatten\u_shifter.$le$rtl/itch_shifter.sv:109$125 ($le): new $alu
-  creating $alu model for $flatten\u_shifter.$le$rtl/itch_shifter.sv:87$121 ($le): merged with $flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$122.
-  creating $alu cell for $flatten\u_shifter.$le$rtl/itch_shifter.sv:109$125: $auto$alumacc.cc:495:replace_alu$1291
-  creating $alu cell for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:95$124: $auto$alumacc.cc:495:replace_alu$1300
-  creating $alu cell for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:109$127: $auto$alumacc.cc:495:replace_alu$1311
-  creating $alu cell for $flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$122, $flatten\u_shifter.$le$rtl/itch_shifter.sv:87$121: $auto$alumacc.cc:495:replace_alu$1322
-  creating $alu cell for $flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:102$8: $auto$alumacc.cc:495:replace_alu$1337
-  creating $alu cell for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:69$3: $auto$alumacc.cc:495:replace_alu$1348
-  creating $alu cell for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:105$10: $auto$alumacc.cc:495:replace_alu$1361
-  creating $alu cell for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:102$7: $auto$alumacc.cc:495:replace_alu$1374
-  creating $alu cell for $add$rtl/itch_top.sv:285$111: $auto$alumacc.cc:495:replace_alu$1387
-  creating $alu cell for $add$rtl/itch_top.sv:286$112: $auto$alumacc.cc:495:replace_alu$1390
-  creating $alu cell for $add$rtl/itch_top.sv:288$113: $auto$alumacc.cc:495:replace_alu$1393
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:124$143: $auto$alumacc.cc:495:replace_alu$1396
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$147: $auto$alumacc.cc:495:replace_alu$1399
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$148: $auto$alumacc.cc:495:replace_alu$1402
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$157: $auto$alumacc.cc:495:replace_alu$1405
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159: $auto$alumacc.cc:495:replace_alu$1408
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161: $auto$alumacc.cc:495:replace_alu$1411
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163: $auto$alumacc.cc:495:replace_alu$1414
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165: $auto$alumacc.cc:495:replace_alu$1417
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$167: $auto$alumacc.cc:495:replace_alu$1420
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$169: $auto$alumacc.cc:495:replace_alu$1423
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$171: $auto$alumacc.cc:495:replace_alu$1426
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$173: $auto$alumacc.cc:495:replace_alu$1429
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$175: $auto$alumacc.cc:495:replace_alu$1432
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$177: $auto$alumacc.cc:495:replace_alu$1435
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$179: $auto$alumacc.cc:495:replace_alu$1438
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$181: $auto$alumacc.cc:495:replace_alu$1441
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$183: $auto$alumacc.cc:495:replace_alu$1444
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$185: $auto$alumacc.cc:495:replace_alu$1447
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$187: $auto$alumacc.cc:495:replace_alu$1450
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$189: $auto$alumacc.cc:495:replace_alu$1453
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$191: $auto$alumacc.cc:495:replace_alu$1456
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$193: $auto$alumacc.cc:495:replace_alu$1459
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$195: $auto$alumacc.cc:495:replace_alu$1462
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$197: $auto$alumacc.cc:495:replace_alu$1465
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$199: $auto$alumacc.cc:495:replace_alu$1468
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$201: $auto$alumacc.cc:495:replace_alu$1471
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$203: $auto$alumacc.cc:495:replace_alu$1474
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$205: $auto$alumacc.cc:495:replace_alu$1477
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$207: $auto$alumacc.cc:495:replace_alu$1480
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$209: $auto$alumacc.cc:495:replace_alu$1483
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$211: $auto$alumacc.cc:495:replace_alu$1486
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$213: $auto$alumacc.cc:495:replace_alu$1489
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$215: $auto$alumacc.cc:495:replace_alu$1492
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$217: $auto$alumacc.cc:495:replace_alu$1495
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$219: $auto$alumacc.cc:495:replace_alu$1498
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$221: $auto$alumacc.cc:495:replace_alu$1501
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$223: $auto$alumacc.cc:495:replace_alu$1504
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$225: $auto$alumacc.cc:495:replace_alu$1507
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$227: $auto$alumacc.cc:495:replace_alu$1510
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$229: $auto$alumacc.cc:495:replace_alu$1513
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$231: $auto$alumacc.cc:495:replace_alu$1516
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$233: $auto$alumacc.cc:495:replace_alu$1519
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$235: $auto$alumacc.cc:495:replace_alu$1522
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$237: $auto$alumacc.cc:495:replace_alu$1525
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$239: $auto$alumacc.cc:495:replace_alu$1528
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$241: $auto$alumacc.cc:495:replace_alu$1531
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$243: $auto$alumacc.cc:495:replace_alu$1534
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$245: $auto$alumacc.cc:495:replace_alu$1537
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$247: $auto$alumacc.cc:495:replace_alu$1540
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$249: $auto$alumacc.cc:495:replace_alu$1543
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$251: $auto$alumacc.cc:495:replace_alu$1546
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$253: $auto$alumacc.cc:495:replace_alu$1549
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$255: $auto$alumacc.cc:495:replace_alu$1552
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$257: $auto$alumacc.cc:495:replace_alu$1555
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$259: $auto$alumacc.cc:495:replace_alu$1558
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$261: $auto$alumacc.cc:495:replace_alu$1561
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$263: $auto$alumacc.cc:495:replace_alu$1564
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$265: $auto$alumacc.cc:495:replace_alu$1567
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$267: $auto$alumacc.cc:495:replace_alu$1570
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$269: $auto$alumacc.cc:495:replace_alu$1573
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$271: $auto$alumacc.cc:495:replace_alu$1576
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$273: $auto$alumacc.cc:495:replace_alu$1579
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$275: $auto$alumacc.cc:495:replace_alu$1582
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$277: $auto$alumacc.cc:495:replace_alu$1585
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$279: $auto$alumacc.cc:495:replace_alu$1588
-  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$281: $auto$alumacc.cc:495:replace_alu$1591
-  creating $alu cell for $flatten\u_shifter.$sub$rtl/itch_shifter.sv:117$136: $auto$alumacc.cc:495:replace_alu$1594
+  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$150.
+  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$149.
+  creating $alu model for $macc $flatten\u_shifter.$add$rtl/itch_shifter.sv:124$145.
+  creating $alu model for $macc $add$rtl/itch_top.sv:288$115.
+  creating $alu model for $macc $add$rtl/itch_top.sv:286$114.
+  creating $alu model for $macc $add$rtl/itch_top.sv:285$113.
+  creating $alu model for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:103$9 ($ge): new $alu
+  creating $alu model for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:106$12 ($ge): new $alu
+  creating $alu model for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:70$3 ($ge): new $alu
+  creating $alu model for $flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:103$10 ($gt): new $alu
+  creating $alu model for $flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$124 ($ge): new $alu
+  creating $alu model for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:109$129 ($gt): new $alu
+  creating $alu model for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:95$126 ($gt): new $alu
+  creating $alu model for $flatten\u_shifter.$le$rtl/itch_shifter.sv:109$127 ($le): new $alu
+  creating $alu model for $flatten\u_shifter.$le$rtl/itch_shifter.sv:87$123 ($le): merged with $flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$124.
+  creating $alu cell for $flatten\u_shifter.$le$rtl/itch_shifter.sv:109$127: $auto$alumacc.cc:495:replace_alu$1293
+  creating $alu cell for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:95$126: $auto$alumacc.cc:495:replace_alu$1302
+  creating $alu cell for $flatten\u_shifter.$gt$rtl/itch_shifter.sv:109$129: $auto$alumacc.cc:495:replace_alu$1313
+  creating $alu cell for $flatten\u_shifter.$ge$rtl/itch_shifter.sv:94$124, $flatten\u_shifter.$le$rtl/itch_shifter.sv:87$123: $auto$alumacc.cc:495:replace_alu$1324
+  creating $alu cell for $flatten\u_parser_core.$gt$rtl/itch_parser_core.sv:103$10: $auto$alumacc.cc:495:replace_alu$1339
+  creating $alu cell for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:70$3: $auto$alumacc.cc:495:replace_alu$1350
+  creating $alu cell for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:106$12: $auto$alumacc.cc:495:replace_alu$1363
+  creating $alu cell for $flatten\u_parser_core.$ge$rtl/itch_parser_core.sv:103$9: $auto$alumacc.cc:495:replace_alu$1376
+  creating $alu cell for $add$rtl/itch_top.sv:285$113: $auto$alumacc.cc:495:replace_alu$1389
+  creating $alu cell for $add$rtl/itch_top.sv:286$114: $auto$alumacc.cc:495:replace_alu$1392
+  creating $alu cell for $add$rtl/itch_top.sv:288$115: $auto$alumacc.cc:495:replace_alu$1395
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:124$145: $auto$alumacc.cc:495:replace_alu$1398
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:142$149: $auto$alumacc.cc:495:replace_alu$1401
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:143$150: $auto$alumacc.cc:495:replace_alu$1404
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159: $auto$alumacc.cc:495:replace_alu$1407
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161: $auto$alumacc.cc:495:replace_alu$1410
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163: $auto$alumacc.cc:495:replace_alu$1413
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165: $auto$alumacc.cc:495:replace_alu$1416
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$167: $auto$alumacc.cc:495:replace_alu$1419
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$169: $auto$alumacc.cc:495:replace_alu$1422
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$171: $auto$alumacc.cc:495:replace_alu$1425
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$173: $auto$alumacc.cc:495:replace_alu$1428
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$175: $auto$alumacc.cc:495:replace_alu$1431
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$177: $auto$alumacc.cc:495:replace_alu$1434
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$179: $auto$alumacc.cc:495:replace_alu$1437
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$181: $auto$alumacc.cc:495:replace_alu$1440
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$183: $auto$alumacc.cc:495:replace_alu$1443
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$185: $auto$alumacc.cc:495:replace_alu$1446
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$187: $auto$alumacc.cc:495:replace_alu$1449
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$189: $auto$alumacc.cc:495:replace_alu$1452
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$191: $auto$alumacc.cc:495:replace_alu$1455
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$193: $auto$alumacc.cc:495:replace_alu$1458
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$195: $auto$alumacc.cc:495:replace_alu$1461
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$197: $auto$alumacc.cc:495:replace_alu$1464
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$199: $auto$alumacc.cc:495:replace_alu$1467
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$201: $auto$alumacc.cc:495:replace_alu$1470
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$203: $auto$alumacc.cc:495:replace_alu$1473
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$205: $auto$alumacc.cc:495:replace_alu$1476
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$207: $auto$alumacc.cc:495:replace_alu$1479
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$209: $auto$alumacc.cc:495:replace_alu$1482
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$211: $auto$alumacc.cc:495:replace_alu$1485
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$213: $auto$alumacc.cc:495:replace_alu$1488
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$215: $auto$alumacc.cc:495:replace_alu$1491
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$217: $auto$alumacc.cc:495:replace_alu$1494
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$219: $auto$alumacc.cc:495:replace_alu$1497
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$221: $auto$alumacc.cc:495:replace_alu$1500
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$223: $auto$alumacc.cc:495:replace_alu$1503
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$225: $auto$alumacc.cc:495:replace_alu$1506
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$227: $auto$alumacc.cc:495:replace_alu$1509
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$229: $auto$alumacc.cc:495:replace_alu$1512
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$231: $auto$alumacc.cc:495:replace_alu$1515
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$233: $auto$alumacc.cc:495:replace_alu$1518
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$235: $auto$alumacc.cc:495:replace_alu$1521
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$237: $auto$alumacc.cc:495:replace_alu$1524
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$239: $auto$alumacc.cc:495:replace_alu$1527
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$241: $auto$alumacc.cc:495:replace_alu$1530
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$243: $auto$alumacc.cc:495:replace_alu$1533
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$245: $auto$alumacc.cc:495:replace_alu$1536
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$247: $auto$alumacc.cc:495:replace_alu$1539
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$249: $auto$alumacc.cc:495:replace_alu$1542
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$251: $auto$alumacc.cc:495:replace_alu$1545
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$253: $auto$alumacc.cc:495:replace_alu$1548
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$255: $auto$alumacc.cc:495:replace_alu$1551
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$257: $auto$alumacc.cc:495:replace_alu$1554
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$259: $auto$alumacc.cc:495:replace_alu$1557
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$261: $auto$alumacc.cc:495:replace_alu$1560
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$263: $auto$alumacc.cc:495:replace_alu$1563
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$265: $auto$alumacc.cc:495:replace_alu$1566
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$267: $auto$alumacc.cc:495:replace_alu$1569
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$269: $auto$alumacc.cc:495:replace_alu$1572
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$271: $auto$alumacc.cc:495:replace_alu$1575
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$273: $auto$alumacc.cc:495:replace_alu$1578
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$275: $auto$alumacc.cc:495:replace_alu$1581
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$277: $auto$alumacc.cc:495:replace_alu$1584
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$279: $auto$alumacc.cc:495:replace_alu$1587
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$281: $auto$alumacc.cc:495:replace_alu$1590
+  creating $alu cell for $flatten\u_shifter.$add$rtl/itch_shifter.sv:65$283: $auto$alumacc.cc:495:replace_alu$1593
+  creating $alu cell for $flatten\u_shifter.$sub$rtl/itch_shifter.sv:117$138: $auto$alumacc.cc:495:replace_alu$1596
   created 78 $alu and 0 $macc cells.
 
 7.14. Executing SHARE pass (SAT-based resource sharing).
@@ -1028,8 +1028,8 @@ Finding identical cells in module `\ultra_low_latency_nasdaq_itch50_cutthrough'.
 Removed a total of 0 cells.
 
 7.15.6. Executing OPT_DFF pass (perform DFF optimizations).
-Setting constant 0-bit at position 6 on $auto$ff.cc:266:slice$1245 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough.
-Setting constant 0-bit at position 7 on $auto$ff.cc:266:slice$1245 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough.
+Setting constant 0-bit at position 6 on $auto$ff.cc:266:slice$1247 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough.
+Setting constant 0-bit at position 7 on $auto$ff.cc:266:slice$1247 ($sdff) from module ultra_low_latency_nasdaq_itch50_cutthrough.
 
 7.15.7. Executing OPT_CLEAN pass (remove unused cells and wires).
 Finding unused cells or wires in module \ultra_low_latency_nasdaq_itch50_cutthrough..
@@ -1138,16 +1138,16 @@ Removed 0 multiplexer ports.
 
 7.20.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$557:
-      Old ports: A={ 7'0000000 \s_axis_tkeep [0] }, B={ 6'000000 $auto$wreduce.cc:514:run$1281 [1:0] }, Y=$flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$156
-      New ports: A={ 1'0 \s_axis_tkeep [0] }, B=$auto$wreduce.cc:514:run$1281 [1:0], Y=$flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$156 [1:0]
-      New connections: $flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$156 [7:2] = 6'000000
-    Consolidated identical input bits for $mux cell $ternary$rtl/itch_top.sv:196$106:
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$559:
+      Old ports: A={ 7'0000000 \s_axis_tkeep [0] }, B={ 6'000000 $auto$wreduce.cc:514:run$1283 [1:0] }, Y=$flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$158
+      New ports: A={ 1'0 \s_axis_tkeep [0] }, B=$auto$wreduce.cc:514:run$1283 [1:0], Y=$flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$158 [1:0]
+      New connections: $flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$158 [7:2] = 6'000000
+    Consolidated identical input bits for $mux cell $ternary$rtl/itch_top.sv:196$108:
       Old ports: A={ 2'00 \core_gate_len }, B=8'00000001, Y=\core_consume_bytes
       New ports: A=\core_gate_len, B=6'000001, Y=\core_consume_bytes [5:0]
       New connections: \core_consume_bytes [7:6] = 2'00
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$ternary$rtl/itch_shifter.sv:109$129:
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$ternary$rtl/itch_shifter.sv:109$131:
       Old ports: A=8'00000000, B=\core_consume_bytes, Y=\u_shifter.eff_consume
       New ports: A=6'000000, B=\core_consume_bytes [5:0], Y=\u_shifter.eff_consume [5:0]
       New connections: \u_shifter.eff_consume [7:6] = 2'00
@@ -1181,10 +1181,10 @@ Removed 0 multiplexer ports.
 
 7.20.12. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$554:
-      Old ports: A={ 6'000000 $flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$156 [1:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159_Y, Y=$flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$158
-      New ports: A={ 1'0 $flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$156 [1:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$159_Y [2:0], Y=$flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$158 [2:0]
-      New connections: $flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$158 [7:3] = 5'00000
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$556:
+      Old ports: A={ 6'000000 $flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$158 [1:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161_Y, Y=$flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$160
+      New ports: A={ 1'0 $flatten\u_shifter.$2\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$158 [1:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161_Y [2:0], Y=$flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$160 [2:0]
+      New connections: $flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$160 [7:3] = 5'00000
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
 Performed a total of 1 changes.
 
@@ -1217,10 +1217,10 @@ Removed 0 multiplexer ports.
 
 7.20.20. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$551:
-      Old ports: A={ 5'00000 $flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$158 [2:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161_Y, Y=$flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$160
-      New ports: A={ 1'0 $flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$158 [2:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$161_Y [3:0], Y=$flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$160 [3:0]
-      New connections: $flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$160 [7:4] = 4'0000
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$553:
+      Old ports: A={ 5'00000 $flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$160 [2:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163_Y, Y=$flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$162
+      New ports: A={ 1'0 $flatten\u_shifter.$3\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$160 [2:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163_Y [3:0], Y=$flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$162 [3:0]
+      New connections: $flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$162 [7:4] = 4'0000
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
 Performed a total of 1 changes.
 
@@ -1253,10 +1253,10 @@ Removed 0 multiplexer ports.
 
 7.20.28. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$548:
-      Old ports: A={ 4'0000 $flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$160 [3:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163_Y, Y=$flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$162
-      New ports: A={ 1'0 $flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$160 [3:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$163_Y [4:0], Y=$flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$162 [4:0]
-      New connections: $flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$162 [7:5] = 3'000
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$550:
+      Old ports: A={ 4'0000 $flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$162 [3:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165_Y, Y=$flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$164
+      New ports: A={ 1'0 $flatten\u_shifter.$4\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$162 [3:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165_Y [4:0], Y=$flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$164 [4:0]
+      New connections: $flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$164 [7:5] = 3'000
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
 Performed a total of 1 changes.
 
@@ -1289,10 +1289,10 @@ Removed 0 multiplexer ports.
 
 7.20.36. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$545:
-      Old ports: A={ 3'000 $flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$162 [4:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165_Y, Y=$flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$164
-      New ports: A={ 1'0 $flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$162 [4:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$165_Y [5:0], Y=$flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$164 [5:0]
-      New connections: $flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$164 [7:6] = 2'00
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$547:
+      Old ports: A={ 3'000 $flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$164 [4:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$167_Y, Y=$flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$166
+      New ports: A={ 1'0 $flatten\u_shifter.$5\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$164 [4:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$167_Y [5:0], Y=$flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$166 [5:0]
+      New connections: $flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$166 [7:6] = 2'00
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
 Performed a total of 1 changes.
 
@@ -1325,10 +1325,10 @@ Removed 0 multiplexer ports.
 
 7.20.44. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
-    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$542:
-      Old ports: A={ 2'00 $flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$164 [5:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$167_Y, Y=$flatten\u_shifter.$7\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$166
-      New ports: A={ 1'0 $flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$164 [5:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$167_Y [6:0], Y=$flatten\u_shifter.$7\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$166 [6:0]
-      New connections: $flatten\u_shifter.$7\keep_to_bytes$func$rtl/itch_shifter.sv:83$116.$result[7:0]$166 [7] = 1'0
+    Consolidated identical input bits for $mux cell $flatten\u_shifter.$procmux$544:
+      Old ports: A={ 2'00 $flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$166 [5:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$169_Y, Y=$flatten\u_shifter.$7\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$168
+      New ports: A={ 1'0 $flatten\u_shifter.$6\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$166 [5:0] }, B=$flatten\u_shifter.$add$rtl/itch_shifter.sv:65$169_Y [6:0], Y=$flatten\u_shifter.$7\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$168 [6:0]
+      New connections: $flatten\u_shifter.$7\keep_to_bytes$func$rtl/itch_shifter.sv:83$118.$result[7:0]$168 [7] = 1'0
   Optimizing cells in module \ultra_low_latency_nasdaq_itch50_cutthrough.
 Performed a total of 1 changes.
 
@@ -1447,21 +1447,21 @@ Using template $paramod$ba698a254f9a5947e85cbe7beae6b161eefc5386\_90_alu for cel
 Using extmapper simplemap for cells of type $xor.
 Using extmapper simplemap for cells of type $pos.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000111 for cells of type $lcu.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000011 for cells of type $lcu.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000001000 for cells of type $lcu.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000101 for cells of type $lcu.
-Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000011 for cells of type $lcu.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000100000 for cells of type $lcu.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000110 for cells of type $lcu.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000100 for cells of type $lcu.
 Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000010 for cells of type $lcu.
 No more expansions possible.
-<suppressed ~71906 debug messages>
+<suppressed ~71908 debug messages>
 
 7.22. Executing OPT pass (performing simple optimizations).
 
 7.22.1. Executing OPT_EXPR pass (perform const folding).
 Optimizing module ultra_low_latency_nasdaq_itch50_cutthrough.
-<suppressed ~6543 debug messages>
+<suppressed ~6544 debug messages>
 
 7.22.2. Executing OPT_MERGE pass (detect identical cells).
 Finding identical cells in module `\ultra_low_latency_nasdaq_itch50_cutthrough'.
@@ -1472,39 +1472,39 @@ Removed a total of 363 cells.
 
 7.22.4. Executing OPT_CLEAN pass (remove unused cells and wires).
 Finding unused cells or wires in module \ultra_low_latency_nasdaq_itch50_cutthrough..
-Removed 847 unused cells and 4779 unused wires.
-<suppressed ~848 debug messages>
+Removed 846 unused cells and 4778 unused wires.
+<suppressed ~847 debug messages>
 
 7.22.5. Finished fast OPT passes.
 
 7.23. Executing ABC pass (technology mapping using ABC).
 
 7.23.1. Extracting gate netlist of module `\ultra_low_latency_nasdaq_itch50_cutthrough' to `<abc-temp-dir>/input.blif'..
-Extracted 21009 gates and 22782 wires to a netlist network with 1771 inputs and 2237 outputs.
+Extracted 21011 gates and 22784 wires to a netlist network with 1771 inputs and 2237 outputs.
 
 7.23.1.1. Executing ABC.
 Running ABC command: "<yosys-exe-dir>/yosys-abc" -s -f <abc-temp-dir>/abc.script 2>&1
 ABC: ABC command line: "source <abc-temp-dir>/abc.script".
-ABC:
-ABC: + read_blif <abc-temp-dir>/input.blif
-ABC: + read_library <abc-temp-dir>/stdcells.genlib
-ABC: + strash
-ABC: + dretime
-ABC: + map
-ABC: + write_blif <abc-temp-dir>/output.blif
+ABC: 
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + dretime 
+ABC: + map 
+ABC: + write_blif <abc-temp-dir>/output.blif 
 
 7.23.1.2. Re-integrating ABC results.
 ABC RESULTS:               AND cells:      658
-ABC RESULTS:            ANDNOT cells:     3560
+ABC RESULTS:            ANDNOT cells:     3559
 ABC RESULTS:               MUX cells:     9643
 ABC RESULTS:              NAND cells:      624
-ABC RESULTS:               NOR cells:      535
+ABC RESULTS:               NOR cells:      537
 ABC RESULTS:               NOT cells:      164
-ABC RESULTS:                OR cells:     4453
-ABC RESULTS:             ORNOT cells:      602
+ABC RESULTS:                OR cells:     4456
+ABC RESULTS:             ORNOT cells:      599
 ABC RESULTS:              XNOR cells:       22
 ABC RESULTS:               XOR cells:      715
-ABC RESULTS:        internal signals:    18774
+ABC RESULTS:        internal signals:    18776
 ABC RESULTS:           input signals:     1771
 ABC RESULTS:          output signals:     2237
 Removing temp directory.
@@ -1524,7 +1524,7 @@ Removed a total of 4 cells.
 
 7.24.4. Executing OPT_CLEAN pass (remove unused cells and wires).
 Finding unused cells or wires in module \ultra_low_latency_nasdaq_itch50_cutthrough..
-Removed 57 unused cells and 5151 unused wires.
+Removed 57 unused cells and 5154 unused wires.
 <suppressed ~71 debug messages>
 
 7.24.5. Finished fast OPT passes.
@@ -1543,8 +1543,8 @@ Removed 0 unused modules.
 
 === ultra_low_latency_nasdaq_itch50_cutthrough ===
 
-   Number of wires:              18851
-   Number of wire bits:          30149
+   Number of wires:              18852
+   Number of wire bits:          30150
    Number of public wires:         157
    Number of public wire bits:   11107
    Number of ports:                 46
@@ -1552,15 +1552,15 @@ Removed 0 unused modules.
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:              23146
-     $_ANDNOT_                    3560
+   Number of cells:              23147
+     $_ANDNOT_                    3559
      $_AND_                        658
      $_MUX_                       9643
      $_NAND_                       624
-     $_NOR_                        533
+     $_NOR_                        535
      $_NOT_                        107
-     $_ORNOT_                      602
-     $_OR_                        4451
+     $_ORNOT_                      599
+     $_OR_                        4454
      $_SDFFE_PN0P_                 160
      $_SDFF_PN0_                  2022
      $_SDFF_PP0_                    46
@@ -1575,38 +1575,38 @@ Found and reported 0 problems.
 8. Executing ABC pass (technology mapping using ABC).
 
 8.1. Extracting gate netlist of module `\ultra_low_latency_nasdaq_itch50_cutthrough' to `<abc-temp-dir>/input.blif'..
-Extracted 20915 gates and 22686 wires to a netlist network with 1771 inputs and 2237 outputs.
+Extracted 20916 gates and 22687 wires to a netlist network with 1771 inputs and 2237 outputs.
 
 8.1.1. Executing ABC.
 Running ABC command: "<yosys-exe-dir>/yosys-abc" -s -f <abc-temp-dir>/abc.script 2>&1
 ABC: ABC command line: "source <abc-temp-dir>/abc.script".
-ABC:
-ABC: + read_blif <abc-temp-dir>/input.blif
-ABC: + read_library <abc-temp-dir>/stdcells.genlib
-ABC: + strash
-ABC: + &get -n
-ABC: + &fraig -x
-ABC: + &put
-ABC: + scorr
+ABC: 
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
 ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
-ABC: + dc2
-ABC: + dretime
-ABC: + strash
-ABC: + &get -n
-ABC: + &dch -f
-ABC: + &nf
-ABC: + &put
-ABC: + write_blif <abc-temp-dir>/output.blif
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
 
 8.1.2. Re-integrating ABC results.
-ABC RESULTS:              AOI3 cells:     4882
-ABC RESULTS:              AOI4 cells:      330
-ABC RESULTS:              NAND cells:     8010
-ABC RESULTS:               NOR cells:     6916
-ABC RESULTS:               NOT cells:     2080
-ABC RESULTS:              OAI3 cells:     4874
-ABC RESULTS:              OAI4 cells:      305
-ABC RESULTS:        internal signals:    18678
+ABC RESULTS:              AOI3 cells:     4928
+ABC RESULTS:              AOI4 cells:      331
+ABC RESULTS:              NAND cells:     8283
+ABC RESULTS:               NOR cells:     6601
+ABC RESULTS:               NOT cells:     2055
+ABC RESULTS:              OAI3 cells:     4842
+ABC RESULTS:              OAI4 cells:      297
+ABC RESULTS:        internal signals:    18679
 ABC RESULTS:           input signals:     1771
 ABC RESULTS:          output signals:     2237
 Removing temp directory.
@@ -1615,8 +1615,8 @@ Removing temp directory.
 
 === ultra_low_latency_nasdaq_itch50_cutthrough ===
 
-   Number of wires:              48019
-   Number of wire bits:          59317
+   Number of wires:              47960
+   Number of wire bits:          59258
    Number of public wires:         157
    Number of public wire bits:   11107
    Number of ports:                 46
@@ -1624,20 +1624,20 @@ Removing temp directory.
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:              29628
-     $_AOI3_                      4882
-     $_AOI4_                       330
-     $_NAND_                      8010
-     $_NOR_                       6916
-     $_NOT_                       2080
-     $_OAI3_                      4874
-     $_OAI4_                       305
+   Number of cells:              29568
+     $_AOI3_                      4928
+     $_AOI4_                       331
+     $_NAND_                      8283
+     $_NOR_                       6601
+     $_NOT_                       2055
+     $_OAI3_                      4842
+     $_OAI4_                       297
      $_SDFFE_PN0P_                 160
      $_SDFF_PN0_                  2022
      $_SDFF_PP0_                    46
      $scopeinfo                      3
 
 Warnings: 1 unique messages, 1 total
-End of script. Logfile hash: 80112eb53a, CPU: user 7.13s system 0.15s, MEM: 216.00 MB peak
+End of script. Logfile hash: fadb10c3d9, CPU: user 7.00s system 0.24s, MEM: 215.75 MB peak
 Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)
 Time spent: 40% 2x abc (4 sec), 15% 31x opt_clean (1 sec), ...

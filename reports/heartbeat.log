@@ -3214,3 +3214,44 @@ boolector bitwuzla yices 2>/dev/null; echo ---; cvc5 --version 2>/dev/null | hea
 This is cvc5 version 1.3.2
 compiled with GCC version 15.2.0
 > build ┬À deepseek-v4.1-flash
+[2026-11-10T08:59:18.9566725+01:00] hallo, es ist 08:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && FORMAL_DEPTH=8 ./formal/run_formal.sh boolector > /tmp/boolector_d8.log 2>&1; echo RC=$?; grep -E 
+'\[FORMAL\]|PASSED|FAILED|error|unsupported|Error' /tmp/boolector_d8.log | tail -10"
+[tick] ran 0, failed 0
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ RC=True
+[FORMAL] solver=boolector
+[FORMAL] BMC
+BrokenPipeError: [Errno 32] Broken pipe
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && ./scripts/synth_matrix.sh > /tmp/synth_matrix.log 2>&1; echo 
+RC=$?; grep -E 'width|cells|DFF|=====|WIDTH' /tmp/synth_matrix.log | tail -20"
+RC=True
+=== DATA_WIDTH=128 ===
+   Number of cells:              22710
+     $_SDFFE_PN0P_                 160
+     $_SDFF_PN0_                  2022
+     $_SDFF_PP0_                    46
+=== DATA_WIDTH=256 ===
+   Number of cells:              25324
+     $_SDFFE_PN0P_                 160
+     $_SDFF_PN0_                  2022
+     $_SDFF_PP0_                    46
+=== DATA_WIDTH=512 ===
+   Number of cells:              29568
+     $_SDFFE_PN0P_                 160
+     $_SDFF_PN0_                  2022
+     $_SDFF_PP0_                    46

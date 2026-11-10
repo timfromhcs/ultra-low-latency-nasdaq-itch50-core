@@ -10,8 +10,8 @@
 >   BMC (depth 8, 47 s) + k-induction (2 s) PASS; the cover checks need depth 20 and did
 >   not complete on this host. The CVC5 PASS stored in `reports/formal.json` is the
 >   2026-11-03 oss-cad-suite run, not a current re-run. Boolector 1.5 unsupported.
-> - Synthesis (Yosys/ABC cmos4): 22,629 / 25,201 / 29,628 cells for 128/256/512-bit,
->   2,228 DFFs.
+> - Synthesis (Yosys 0.52 / ABC cmos4, re-run 2026-11-10): **22,710 / 25,324 / 29,568
+>   cells** for 128/256/512-bit, 2,228 DFFs.
 > - Browser: 1,000,000 messages in 664 ms wall, WebGPU compute, 0 errors.
 > - Native Vulkan (Radeon 680M): 200,000 records in 7.85 ms, bins match CPU.
 > - Honest latency: **2 clocks from `s_axis_tdata` to registered output** at the

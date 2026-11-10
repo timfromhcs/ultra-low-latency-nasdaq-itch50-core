@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 08:59 - Autonomy tick + synthesis numbers refreshed, Boolector re-checked
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Re-ran `scripts/synth_matrix.sh` (Yosys 0.52, ABC cmos4): **22,710 / 25,324 / 29,568
+  cells** for 128/256/512-bit, **2,228 DFFs** — the documented 22,629 / 25,201 / 29,628
+  were from an older Yosys and are now updated in README, benchmarks, llms-full and the
+  roadmap; the tracked `reports/synth_*.log` files were refreshed.
+- Re-checked Boolector at depth 8: BMC aborts with `BrokenPipeError`, so the documented
+  "Boolector 1.5 unsupported" stands.
+- No test changes.
+
 ## 2026-11-10 07:59 - Autonomy tick + CVC5 formal claim corrected
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
