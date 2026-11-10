@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T13:00:51.493Z",
+  "generatedAt": "2026-11-10T14:03:30.692Z",
   "deep": false,
   "score": 100,
   "rows": [
@@ -7,8 +7,8 @@
       "name": "model-tests",
       "cmd": "python -m pytest -q tb/test_model.py",
       "status": "PASS",
-      "ms": 1757,
-      "tail": "........                                                                 [100%]\r\n8 passed in 0.36s"
+      "ms": 4243,
+      "tail": "........                                                                 [100%]\r\n8 passed in 0.63s"
     },
     {
       "name": "wasm-smoke",
@@ -21,63 +21,63 @@
       "name": "wasm-crosscheck",
       "cmd": "python scripts/check_wasm_fixture.py",
       "status": "PASS",
-      "ms": 184,
+      "ms": 278,
       "tail": "wasm_vs_python: 10000 records, 0 mismatches"
     },
     {
       "name": "backend-compare",
       "cmd": "node backend/run.mjs --compare --count 20000",
       "status": "PASS",
-      "ms": 217,
+      "ms": 240,
       "tail": "es     Gbps    Msg/s   lat(ns)   errors  status\n--------------------------------------------------------------------------------------\nScalar reference        20000      36513    41.29   176.69      0.0        0  PASS\nITCH-50 v2 (RTL twin)    20000      36514    41.29   176.69      3.1        0  PASS\nITCH-50 safe (2c)       20000      36515    41.29   176.68      6.2        0  PASS\nEnyx-class (3c)         20000      36516    41.29   176.68      9.3        0  PASS\nNovaSparks-class (2c)    20000      36515    41.29   176.68      6.2        0  PASS\nLossy admin-drop         8368      36514    41.29    73.93      3.1    11632  FAIL\nMoldUDP64 front-end     20000      36516    41.29   176.68      9.3        0  PASS\nParser + top-of-book    20000      36515    41.29   176.68      6.2        0  PASS"
     },
     {
       "name": "mcp",
       "cmd": "node mcp/client_smoke.mjs",
       "status": "PASS",
-      "ms": 692,
+      "ms": 686,
       "tail": "initialize: { name: 'chiplab', version: '0.3.1' }\ntools: chiplab.chips, chiplab.run, chiplab.compare, chiplab.book, chiplab.formal_status, chiplab.health, chiplab.cloud_info, chiplab.history, chiplab.release_status, chiplab.sbom, chiplab.synth_status, chiplab.docs\nchips: 8\ncompare: scalar:PASS rtl-1c:PASS rtl-2c-safe:PASS rival-3c:PASS rival-2c:PASS lossy:FAIL mold-128:PASS book-128:PASS\nrun: 5000 41.29 Gbps 24 sample records\nchiplab.health: ok\nchiplab.cloud_info: ok\nchiplab.history: ok\nchiplab.release_status: ok\nchiplab.sbom: ok\nchiplab.synth_status: ok\nchiplab.docs: ok\nMCP SMOKE PASS"
     },
     {
       "name": "cloud-api",
       "cmd": "node scripts/test_cloud_api.mjs",
       "status": "PASS",
-      "ms": 400,
-      "tail": "CLOUD API PASS (port 4570, auth, revisions, 409, 400, 413, list, delete)"
+      "ms": 446,
+      "tail": "CLOUD API PASS (port 4465, auth, revisions, 409, 400, 413, list, delete)"
     },
     {
       "name": "web-smoke",
       "cmd": "node scripts/web_smoke.mjs",
       "status": "PASS",
-      "ms": 318,
+      "ms": 408,
       "tail": "web smoke: 13758 B html, 50322 B wasm, 1000 messages, 41.26 Gbps PASS"
     },
     {
       "name": "sbom",
       "cmd": "node scripts/sbom.mjs",
       "status": "PASS",
-      "ms": 107,
+      "ms": 132,
       "tail": "SBOM: 163 components → reports/sbom.json"
     },
     {
       "name": "release-check",
       "cmd": "node scripts/release_check.mjs",
       "status": "PASS",
-      "ms": 1977,
+      "ms": 2008,
       "tail": "rsion — 000301 vs 000301\nPASS changelog has version — ## 0.3.1\nPASS README mentions version — 0.3.1\nPASS vercel health version — 0.3.1\nPASS python __version__ — 0.3.1\nPASS runtime VERSION — 0.3.1\nPASS package-lock version — 0.3.1\nPASS artifact web/wasm/chiplab_core.wasm\nPASS artifact reports/sbom.json\nPASS sbom metadata version — 0.3.1\nHASH dist/chiplab.exe 67d05b221d937dbdec8ea80489b5f8a2e0d833ba359f9d6c9ab5371b68601dfa\nHASH packages/npm/chiplab-core-0.3.1.tgz 2ac6a21c5ec1780ea60f169c8130e7adc3d24f555de37f8999608e71c37da1e3\nHASH packages/python/dist/chiplab_itch-0.3.1-py3-none-any.whl e9c43d826516414baa4307dbf6e382b36f6b97c9debde0aa88dbb2cb9f840f7b\nHASH packages/python/dist/chiplab_itch-0.3.1.tar.gz 9f13dd9cdcde8f2a090f564a319ad459a66b2a44f1f718c0b2563c2ec40ea9c3\nrelease_check: 14/14 PASS"
     },
     {
       "name": "docs-links",
       "cmd": "node scripts/check_docs_links.mjs",
       "status": "PASS",
-      "ms": 945,
+      "ms": 135,
       "tail": "[OK] 25 Markdown files, no dead relative links"
     },
     {
       "name": "vercel-api",
       "cmd": "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs",
       "status": "PASS",
-      "ms": 364,
+      "ms": 565,
       "tail": "[vercel] wrote E:\\chips\\main\\public (15 top-level entries)\nhealth: chiplab-vercel 8 chips\nrun: 5000 41.29 Gbps\ncompare: scalar:PASS rtl-1c:PASS rtl-2c-safe:PASS rival-3c:PASS rival-2c:PASS lossy:FAIL mold-128:PASS book-128:PASS\nVERCEL API SMOKE PASS"
     }
   ]

@@ -261,7 +261,7 @@ Reports live in [`reports/`](reports/).
 | Wrapper pre-PnR STA | **322 MHz WNS −8.62 ns · Fmax ≈ 85.3 MHz**; worst path FF → FF, no debug bus (ss, pre-PnR) | `reports/openlane_wrap-sta.json` |
 | Small-block full flow | **`itch_metrics` 6,776 cells: 0 DRC, 0 LVS, timing closed at 10 ns (Fmax ≈ 101 MHz)** | `reports/openlane_metrics-full3.json` |
 | 32-bit wrapper STA | **322 MHz WNS −6.55 ns · Fmax ≈ 103.7 MHz**; worst path FF → FF (ss, pre-PnR) | `reports/openlane_wrap32-sta.json` |
-| BBO area estimate | **62,017 cells** (Yosys, reduced 32/4/4 config; not optimized) | `reports/synth_book.json` |
+| BBO area estimate | **70,715 cells, 115,792 wires** (Yosys 0.52, reduced 32/4/4 config, includes top-4 depth + risk checks; not optimized) | `reports/synth_book.json` |
 | Parser → BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
 | A/B feed arbiter | **selection + recovery: request→replay, multi-gap [1..8], abandon on timeout** | `tb/test_arbiter.py` |
 | A/B system | **2 Ethernet feeds → arbiter → 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |

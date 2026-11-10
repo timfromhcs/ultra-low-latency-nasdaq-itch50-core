@@ -101,7 +101,7 @@ MDN PWA best practices, GitHub Actions docs.
 **Gate:** multi-frame 0 mismatches ✅; BBO 0 mismatches ✅; lint/formal still green.
 
 ### Phase 2 — Physical (2 → 4 months)
-- [x] Yosys area estimate for the BBO: 62,017 cells at 32/4/4 (not optimized,
+- [x] Yosys area estimate for the BBO: 70,715 cells at 32/4/4 (not optimized,
       no timing claim) — `scripts/synth_book.sh`, `reports/synth_book.json`.
 - [x] LibreLane toolchain: **3.0.17 smoke test passed** (Classic flow 80/80, DRC ✅,
       LVS ✅, RC 0) via Docker Desktop + `ghcr.io/librelane/librelane:3.0.17` with a

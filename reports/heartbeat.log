@@ -938,3 +938,140 @@ Damit ist der komplette Cloud-Pfad (Test ÔåÆ Sync ÔåÆ Pull) nicht nur ├�
 Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-10T13:59:19.6845810+01:00] hallo, es ist 13:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const s = await search({ namespace: \"playwright\", query: \"browser_run_code_unsafe\", 
+limit: 2 });\nreturn s.items;"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node backend/server.mjs
+Command moved to the background (shell ID: sh_1c58aea66001njADlQyjjFAIs7).
+Output is streaming to: 
+C:\Users\hcsme\.local\share\opencode\shell\e4621e381242949174fc78ea4ba2c23bf97dac84\sh_1c58aea66001njADlQyjjFAIs7.out
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_navigate({ url: \"http://127.0.0.1:4173/\" });\n  
+await tools.playwright.browser_wait_for({ time: 3 });\n  const info = await tools.playwright.browser_evaluate({ 
+function: `async () => {\n    const reg = await navigator.serviceWorker.ready;\n    const keys = await 
+caches.keys();\n    return { sw: !!reg.active, scope: reg.scope, caches: keys };\n  }` });\n  return info;\n} catch 
+(e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const r = await tools.playwright.browser_run_code_unsafe({ code: `async (page) 
+=> {\n    await page.context().setOffline(true);\n    let title = null, heading = null, error = null;\n    try {\n     
+ await page.reload({ waitUntil: \"domcontentloaded\", timeout: 20000 });\n      await page.waitForTimeout(1500);\n     
+ title = await page.title();\n      heading = await page.locator(\"h1\").first().innerText().catch(() => null);\n    } 
+catch (e) { error = String(e).slice(0, 200); }\n    await page.context().setOffline(false);\n    return { title, 
+heading, error };\n  }` });\n  return r;\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content .playwright-mcp\console-2026-11-10T12-59-44-951Z.log -ErrorAction 
+SilentlyContinue | Select-Object -First 8
+[     273ms] [WARNING] The powerPreference option is currently ignored when calling requestAdapter() on Windows. See 
+https://crbug.com/369219127 @ http://127.0.0.1:4173/gpu.js:57
+[     278ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ 
+http://127.0.0.1:4173/:0
+[   11778ms] [WARNING] The powerPreference option is currently ignored when calling requestAdapter() on Windows. See 
+https://crbug.com/369219127 @ http://127.0.0.1:4173/gpu.js:57
+[   11781ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ 
+http://127.0.0.1:4173/:0
+[   11889ms] [ERROR] Failed to load resource: net::ERR_INTERNET_DISCONNECTED @ http://127.0.0.1:4173/api/health:0
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try { await tools.playwright.browser_close({}); } catch (e) { /* ignore */ }\nreturn 
+\"closed\";"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-CimInstance Win32_Process | Where-Object { $_.CommandLine -like "*backend/server.mjs*" } | 
+ForEach-Object { Stop-Process -Id $_.ProcessId -Force }; "server stopped"
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -281,8 +281,9 @@
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+ | Local-cloud UI round-trip | **Test ÔåÆ connected; Sync ÔåÆ revision 2 (runs/lastRun); Pull ÔåÆ "Pulled 2 runs from 
+revision 2"** | `.data/default.json` |
++| PWA offline | service worker **`chiplab-v4`** active; offline reload renders title + hero from cache; only 
+`/api/health` fails (expected offline) | Playwright offline run |
+ | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22ÔÇª` unchanged | 
+`dist/chiplab.exe` |
+ | Docker | image + `docker compose`: `/api/health` v0.3.1, token PUT ÔåÆ revision 1, data **survives `compose 
+restart`** (named volume) | `Dockerfile`, `docker-compose.yml` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | 
+`reports/web-vercel.png` |
+ | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (19 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,19 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 13:59 - Autonomy tick + PWA offline verified
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Service worker check: `navigator.serviceWorker.ready` ÔåÆ active, scope `/`, cache
++  **`chiplab-v4`**.
++- Playwright offline reload (`context.setOffline(true)`): the app still renders
++  (`ChipLab ÔÇö ITCH-50 silicon lab`, hero "Run the feed. See the silicon.") from the SW
++  cache; the only console error is `/api/health` ÔåÆ `ERR_INTERNET_DISCONNECTED`, which is
++  expected while offline.
++- README evidence table gained a PWA-offline row; browser and server stopped.
++
+ ## 2026-11-10 12:59 - Autonomy tick + local-cloud UI round-trip verified
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Drove the Local cloud panel with Playwright against the running server:
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "test(web): 
+PWA offline reload served from the service-worker cache" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 204 insertions(+), 15 deletions(-)
+[31;1m   0a28ede..b687e47  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 180; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+b687e47 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 13:59 abgeschlossen ÔÇö **PWA-Offline-Modus verifiziert**.
+
+## Ergebnisse
+| Pr├╝fung | Ergebnis |
+|---|---|
+| Service Worker | `navigator.serviceWorker.ready` ÔåÆ **aktiv**, Scope `/`, Cache **`chiplab-v4`** |
+| Offline-Reload (`context.setOffline(true)`) | App rendert weiter: Titel `ChipLab ÔÇö ITCH-50 silicon lab`, Hero ÔÇ×Run the feed. See the silicon." |
+| Konsole offline | nur `/api/health` ÔåÆ `ERR_INTERNET_DISCONNECTED` (erwartbar ohne Netz), App bleibt nutzbar |
+
+README-Evidenztabelle um die PWA-Offline-Zeile erg├ñnzt; Browser und Server gestoppt.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `b687e47` **success**.
+- Commit `b687e47` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+## Status
+Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-10T14:59:20.4324970+01:00] hallo, es ist 14:59
+[tick] ran 0, failed 0

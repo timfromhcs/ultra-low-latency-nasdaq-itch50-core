@@ -64,8 +64,9 @@ Two egress paths exist:
 ## 4. Area estimate
 
 Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
-mapping, **62,017 cells / 98,322 wires** (`reports/synth_book.json`). This is an
-estimate for relative sizing only — no standard-cell library, no timing closure.
+mapping, **70,715 cells / 115,792 wires** (`reports/synth_book.json`; includes the
+top-4 depth and risk-check logic). This is an estimate for relative sizing only — no
+standard-cell library, no timing closure.
 
 ## 5. Interface — parser (`ultra_low_latency_nasdaq_itch50_cutthrough`)
 

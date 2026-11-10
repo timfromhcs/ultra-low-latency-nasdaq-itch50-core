@@ -259,6 +259,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 14:59 - Autonomy tick + BBO area estimate refreshed
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Re-ran `scripts/synth_book.sh` (Yosys 0.52, 32/4/4): **70,715 cells / 115,792 wires**
+  — the documented 62,017 / 98,322 predates the top-4 depth and risk-check logic.
+  `reports/synth_book.json` is refreshed and the number is corrected in README,
+  datasheet, llms-full and the roadmap. Area estimate only, no timing/DRC/LVS claim.
+
 ## 2026-11-10 13:59 - Autonomy tick + PWA offline verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
