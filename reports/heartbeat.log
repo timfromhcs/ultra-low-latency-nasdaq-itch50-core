@@ -761,3 +761,180 @@ Tick 12:00 abgeschlossen ÔÇö **Docker-Compose-Pfad verifiziert**.
 Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-10T12:59:20.5615790+01:00] hallo, es ist 12:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node backend/server.mjs
+Command moved to the background (shell ID: sh_1c553ef260017n8g2Er134gDGJ).
+Output is streaming to: 
+C:\Users\hcsme\.local\share\opencode\shell\e4621e381242949174fc78ea4ba2c23bf97dac84\sh_1c553ef260017n8g2Er134gDGJ.out
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_resize({ width: 1440, height: 900 });\n  await 
+tools.playwright.browser_navigate({ url: \"http://127.0.0.1:4173/\" });\n  await tools.playwright.browser_wait_for({ 
+time: 2 });\n  const snap = String(await tools.playwright.browser_snapshot({}));\n  const i = snap.indexOf(\"Local 
+cloud\");\n  return snap.slice(i, i + 1800);\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const snap = String(await tools.playwright.browser_snapshot({}));\n  const ref = 
+(label) => {\n    const m = snap.match(new RegExp(`button \"${label}\" \\\\[ref=(e\\\\d+)\\\\]`));\n    return m ? 
+m[1] : null;\n  };\n  const runRef = ref(\"Run feed\");\n  const syncRef = ref(\"Sync\");\n  const pullRef = 
+ref(\"Pull\");\n  if (!runRef || !syncRef || !pullRef) return { error: \"refs missing\", runRef, syncRef, pullRef };\n 
+ await tools.playwright.browser_click({ element: \"Run feed\", target: runRef });\n  await 
+tools.playwright.browser_wait_for({ time: 3 });\n  await tools.playwright.browser_click({ element: \"Sync\", target: 
+syncRef });\n  await tools.playwright.browser_wait_for({ time: 2 });\n  const afterSync = String(await 
+tools.playwright.browser_snapshot({}));\n  const statusSync = afterSync.match(/status \\[ref=e\\d+\\]: (.*)/)?.[1] || 
+\"?\";\n  await tools.playwright.browser_click({ element: \"Pull\", target: pullRef });\n  await 
+tools.playwright.browser_wait_for({ time: 2 });\n  const afterPull = String(await 
+tools.playwright.browser_snapshot({}));\n  const statusPull = afterPull.match(/status \\[ref=e\\d+\\]: (.*)/)?.[1] || 
+\"?\";\n  return { statusSync, statusPull };\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; try { $s = Invoke-RestMethod http://127.0.0.1:4173/api/store/default -TimeoutSec 5; "store 
+revision=$($s.revision) keys=$($s.data.PSObject.Properties.Name -join ',')" } catch { "store GET failed: 
+$($_.Exception.Message)" }
+store revision=2 keys=runs,lastRun
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  const snap = String(await tools.playwright.browser_snapshot({}));\n  const 
+statuses = [...snap.matchAll(/status \\[ref=e\\d+\\]: ([^\\n]+)/g)].map(m => m[1]);\n  const i = snap.indexOf(\"Local 
+cloud\");\n  const cloud = snap.slice(i, i + 900);\n  return { statuses, cloud };\n} catch (e) { return { error: 
+String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try {\n  await tools.playwright.browser_click({ element: \"Test\", target: \"e215\" });\n 
+ await tools.playwright.browser_wait_for({ time: 2 });\n  const snap = String(await 
+tools.playwright.browser_snapshot({}));\n  const statuses = [...snap.matchAll(/status \\[ref=e\\d+\\]: 
+([^\\n]+)/g)].map(m => m[1]);\n  return { statuses };\n} catch (e) { return { error: String(e) }; }"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"try { await tools.playwright.browser_close({}); } catch (e) { /* ignore */ }\nreturn 
+\"browser closed\";"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-CimInstance Win32_Process | Where-Object { $_.CommandLine -like "*backend/server.mjs*" } | 
+ForEach-Object { Stop-Process -Id $_.ProcessId -Force }; "server stopped"; cd E:\chips\main; rg -n "Browser re-verify" 
+README.md
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -280,8 +280,9 @@
+ | Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | 
+`reports/repro_python.json`, `scripts/repro_python.sh` |
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
++| Local-cloud UI round-trip | **Test ÔåÆ connected; Sync ÔåÆ revision 2 (runs/lastRun); Pull ÔåÆ "Pulled 2 runs from 
+revision 2"** | `.data/default.json` |
+ | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22ÔÇª` unchanged | 
+`dist/chiplab.exe` |
+ | Docker | image + `docker compose`: `/api/health` v0.3.1, token PUT ÔåÆ revision 1, data **survives `compose 
+restart`** (named volume) | `Dockerfile`, `docker-compose.yml` |
+ | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | 
+`reports/web-vercel.png` |
+ | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (19 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,20 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 12:59 - Autonomy tick + local-cloud UI round-trip verified
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Drove the Local cloud panel with Playwright against the running server:
++  - **Test** ÔåÆ "Connected to chiplab-local-cloud v0.3.1 ┬À .data ┬À 56s uptime."
++  - Run feed (100k) then **Sync** ÔåÆ server store reaches **revision 2** with
++    `runs`/`lastRun` keys.
++  - **Pull** ÔåÆ "Pulled 2 runs from revision 2." in the panel.
++- README evidence table gained a Local-cloud UI round-trip row. Server and browser
++  stopped afterwards. (The `.data` store on this machine now holds this test run's
++  history; it is git-ignored.)
++
+ ## 2026-11-10 12:00 - Autonomy tick + docker compose verified
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Docker Desktop was down after a host restart; started it, then tested the compose
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "test(web): 
+local-cloud Test/Sync/Pull round-trip verified" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | 
+Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 203 insertions(+), 15 deletions(-)
+[31;1m   d38df8a..0a28ede  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+0a28ede in_progress
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+0a28ede in_progress
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 180; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+0a28ede in_progress
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"0a28ede\"));\nif (!run) return { runs: r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion]) };\nconst j = await tools.github.actions_list({ method: 
+\"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 20 });\nreturn { id: run.id, status: run.status, jobs: j.jobs?.jobs?.map(x => [x.name, 
+x.status, x.conclusion, x.started_at]) };"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+0a28ede in_progress
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const j = await tools.github.actions_list({ method: \"list_workflow_jobs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"42812244378\", perPage: 20 });\nconst 
+rtl = j.jobs?.jobs?.find(x => x.name.startsWith(\"RTL\"));\nreturn rtl?.steps?.map(s => [s.number, s.name, s.status, 
+s.conclusion]);"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 30; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+0a28ede completed success
+> build ┬À deepseek-v4.1-flash
+Tick 12:59 abgeschlossen ÔÇö **Local-Cloud-UI-Roundtrip verifiziert**.
+
+## Ergebnisse (Playwright gegen laufenden Server)
+| Aktion | Ergebnis |
+|---|---|
+| **Test** | ÔÇ×Connected to chiplab-local-cloud v0.3.1 ┬À .data ┬À 56s uptime." |
+| Run feed (100k) + **Sync** | Server-Store erreicht **revision 2** mit Schl├╝sseln `runs`, `lastRun` (per API gepr├╝ft) |
+| **Pull** | Panel: ÔÇ×**Pulled 2 runs from revision 2.**" |
+
+Damit ist der komplette Cloud-Pfad (Test ÔåÆ Sync ÔåÆ Pull) nicht nur ├╝ber die API, sondern auch ├╝ber die echte UI belegt. README-Evidenztabelle um die Zeile erg├ñnzt; Browser und Server danach gestoppt.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `0a28ede` **success** (RTL-Job lief wegen Runner-Last l├ñnger, alle Schritte gr├╝n).
+- Commit `0a28ede` gepusht; Arbeitsbaum clean (nur Heartbeat-Log; `.data` ist git-ignoriert).
+
+## Status
+Externe Blocker unver├ñndert: Parser-P&R/DRC/LVS, FPGA, vollst├ñndiger Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-10T13:59:19.6845810+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0

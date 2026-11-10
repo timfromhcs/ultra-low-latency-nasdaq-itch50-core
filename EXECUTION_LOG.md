@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 13:59 - Autonomy tick + PWA offline verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Service worker check: `navigator.serviceWorker.ready` → active, scope `/`, cache
+  **`chiplab-v4`**.
+- Playwright offline reload (`context.setOffline(true)`): the app still renders
+  (`ChipLab — ITCH-50 silicon lab`, hero "Run the feed. See the silicon.") from the SW
+  cache; the only console error is `/api/health` → `ERR_INTERNET_DISCONNECTED`, which is
+  expected while offline.
+- README evidence table gained a PWA-offline row; browser and server stopped.
+
 ## 2026-11-10 12:59 - Autonomy tick + local-cloud UI round-trip verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
