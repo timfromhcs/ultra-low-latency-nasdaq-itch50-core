@@ -267,8 +267,8 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   **46.49 ms**, GPU bins vs CPU **0 mismatches**, checksum 254251. The documented
   7.85 ms was stale; README and `docs/benchmarks.md` now carry the 2026-11-10 number.
 - Dispatched the `nightly.yml` workflow with `count=200000` to verify the nightly path
-  itself: mutation and RTL↔WASM equivalence **success**; deep Z3 proof and the 200k
-  regression in progress (result next tick).
+  itself: **success** — 200k full-field regression, deep Z3 proof, mutation and
+  RTL↔WASM equivalence all green on `ccea710`.
 
 ## 2026-11-10 09:59 - Autonomy tick + `make verify-deep` fixed (gate bug)
 
