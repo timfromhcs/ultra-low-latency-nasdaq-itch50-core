@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 10:59 - Autonomy tick + native Vulkan re-verified, nightly dispatched
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- **Native Vulkan** (`native/target/release/chiplab-native.exe`, Radeon 680M):
+  `--probe` 3/3 exit 0 (Vulkan adapter selected); 200,000 records processed in
+  **46.49 ms**, GPU bins vs CPU **0 mismatches**, checksum 254251. The documented
+  7.85 ms was stale; README and `docs/benchmarks.md` now carry the 2026-11-10 number.
+- Dispatched the `nightly.yml` workflow with `count=200000` to verify the nightly path
+  itself: mutation and RTL↔WASM equivalence **success**; deep Z3 proof and the 200k
+  regression in progress (result next tick).
+
 ## 2026-11-10 09:59 - Autonomy tick + `make verify-deep` fixed (gate bug)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

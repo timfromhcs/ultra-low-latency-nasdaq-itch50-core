@@ -247,7 +247,7 @@ Reports live in [`reports/`](reports/).
 | Synthesis 128-bit | 22,710 cells, 2,228 DFFs | `reports/synth_128.log` |
 | Synthesis 256-bit | 25,324 cells | `reports/synth_256.log` |
 | Synthesis 512-bit | 29,568 cells | `reports/synth_512.log` |
-| Native Vulkan (Radeon 680M) | 200,000 records in **7.85 ms**, bins match CPU exactly | `reports/native_bins.bin` |
+| Native Vulkan (Radeon 680M) | 200,000 records in **46.49 ms** (re-run 2026-11-10), bins vs CPU **0 mismatches**, checksum 254251 | `reports/native_bins.bin` |
 | Local cloud | token required for non-loopback writes, revision conflict → 409, traversal → 400 | `backend/store.mjs` |
 | AXI4-Stream skid | 200 random beats under random `tready`, **no loss** | `tb/test_skid.py` |
 | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |

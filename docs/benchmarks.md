@@ -13,7 +13,8 @@
 > - Synthesis (Yosys 0.52 / ABC cmos4, re-run 2026-11-10): **22,710 / 25,324 / 29,568
 >   cells** for 128/256/512-bit, 2,228 DFFs.
 > - Browser: 1,000,000 messages in 664 ms wall, WebGPU compute, 0 errors.
-> - Native Vulkan (Radeon 680M): 200,000 records in 7.85 ms, bins match CPU.
+> - Native Vulkan (Radeon 680M, re-run 2026-11-10): 200,000 records in **46.49 ms**;
+>   GPU bins vs CPU **0 mismatches** (checksum 254251).
 > - Honest latency: **2 clocks from `s_axis_tdata` to registered output** at the
 >   322.26 MHz model clock; 1 clock from the window. No Fmax sign-off.
 >

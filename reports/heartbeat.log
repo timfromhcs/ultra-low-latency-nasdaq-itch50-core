@@ -201,3 +201,130 @@ Externe Blocker unver├ñndert (Parser-P&R/DRC/LVS, FPGA, Caravel-Harness, PCIe
 [heartbeat] log rotated at 204856 bytes
 [2026-11-10T09:59:19.3099131+01:00] hallo, es ist 09:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; wsl -d Ubuntu bash -lc "cd 
+/mnt/e/chips/main && make verify-deep > /tmp/verify_deep.log 2>&1; echo RC=$?; grep -E 
+'mismatches|records:|scorecard|PASS formal|FAIL' /tmp/verify_deep.log | tail -10"
+[tick] ran 0, failed 0
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ RC=True
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+[INFO] expected records: 1000000 (limit 1000000)
+ Full-field mismatches   : 0
+FAIL formal-z3 (125 ms)
+scorecard: 92% (12/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead scripts/gate.mjs [90m[limit=12, offset=28][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit scripts/gate.mjs
+Index: scripts/gate.mjs
+===================================================================
+--- scripts/gate.mjs
++++ scripts/gate.mjs
+@@ -28,9 +28,13 @@
+   ["docs-links", "node scripts/check_docs_links.mjs"],
+   ["vercel-api", "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs"],
+ ];
+ if (deep) {
+-  checks.push(["formal-z3", "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3"]);
++  // Inside WSL/Linux run the script directly; on Windows host use the WSL bridge.
++  const formal = process.platform === "win32"
++    ? "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3"
++    : "./formal/run_formal.sh z3";
++  checks.push(["formal-z3", formal]);
+   checks.push(["native-bins", "node scripts/check_native_bins.mjs"]);
+ }
+ 
+ const rows = [];
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && node scripts/gate.mjs --deep > /tmp/deep_fixed.log 2>&1; 
+echo RC=$?; grep -E 'PASS formal-z3|FAIL|scorecard' /tmp/deep_fixed.log | tail -5"
+RC=True
+PASS formal-z3 (96691 ms)
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc "cd /mnt/e/chips/main && make verify-deep > /tmp/verify_deep2.log 2>&1; echo RC=$?; 
+grep -E 'Full-field mismatches|scorecard' /tmp/verify_deep2.log | tail -4"
+RC=True
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+ Full-field mismatches   : 0
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 09:59 - Autonomy tick + `make verify-deep` fixed (gate bug)
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- Re-ran `make verify-deep` from WSL. The 1M regression passed (0 mismatches) but the
++  deep gate reported **FAIL formal-z3 (125 ms)**: `scripts/gate.mjs` hardcoded
++  `wsl -d Ubuntu /mnt/e/chips/main/...` for the formal check, which does not exist when
++  the gate already runs inside WSL/Linux.
++- Fixed: the deep checks now choose the command by platform (`./formal/run_formal.sh z3`
++  on Linux/WSL, the `wsl ÔÇª` bridge on Windows). Re-ran `make verify-deep` end to end:
++  fast gate **11/11**, 1,000,000 records **0 mismatches**, deep gate **13/13**
++  (formal 96.7 s).
++- `reports/scorecard.json` now records the deep 13/13 run.
++
+ ## 2026-11-10 08:59 - Autonomy tick + synthesis numbers refreshed, Boolector re-checked
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Re-ran `scripts/synth_matrix.sh` (Yosys 0.52, ABC cmos4): **22,710 / 25,324 / 29,568
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "fix(gate): 
+platform-aware formal command (--deep works inside WSL/Linux)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 
+| Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 236 insertions(+), 3273 deletions(-)
+[31;1m   e4246b6..ccea710  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+ccea710 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 09:59 abgeschlossen ÔÇö **echten Gate-Bug gefunden und behoben**.
+
+## Befund
+`make verify-deep` (aus WSL) lief in einen Fehler:
+- 1M-Regression: **0 Mismatches** Ô£à
+- Deep Gate: **FAIL formal-z3 (125 ms)** ÔÇö `scripts/gate.mjs` hatte den Formal-Befehl fest als `wsl -d Ubuntu /mnt/e/chips/main/...` verdrahtet, was **innerhalb** von WSL/Linux nicht existiert.
+
+## Fix
+- Die Deep-Checks w├ñhlen den Befehl jetzt plattformabh├ñngig: `./formal/run_formal.sh z3` unter Linux/WSL, `wsl ÔÇª` auf dem Windows-Host.
+- Danach `make verify-deep` **komplett** erneut ausgef├╝hrt:
+  - Fast Gate **11/11**
+  - **1.000.000 Records, 0 Mismatches**
+  - Deep Gate **13/13** (Formal 96,7 s, Native-Bins)
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; CI auf `ccea710` **success**.
+- Commit `ccea710` gepusht; Arbeitsbaum clean (nur Heartbeat-Log).
+
+Damit funktioniert der dokumentierte Deep-Verifikationspfad sowohl unter Windows als auch in WSL/Linux. Unver├ñnderte externe Blocker: Parser-P&R/DRC/LVS, FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-10T10:59:20.0840643+01:00] hallo, es ist 10:59
+[tick] ran 0, failed 0
