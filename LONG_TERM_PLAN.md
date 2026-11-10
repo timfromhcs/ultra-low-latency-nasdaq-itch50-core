@@ -16,7 +16,7 @@
 |---|---|---|
 | RTL protocol | all 22 ITCH opcodes, `tkeep`/`tlast`, 64-bit shares, 128/256/512-bit | `rtl/`, `reports/sim_1m.txt` |
 | Full-field regression | **1,000,000 records, 0 mismatches**, 41.290 Gbps model | `reports/sim_1m.txt` |
-| Formal | Z3 + CVC5 PASS; Boolector 1.5 unsupported | `reports/formal.json` |
+| Formal | Z3 PASS (BMC + k-induction + covers); CVC5 BMC/induction PASS at depth 8, covers not rerun | `reports/formal.json` |
 | Mutation | **19/19** mutants killed (10 parser + 9 BBO) | `reports/mutation*.json` |
 | Synthesis | 22,629 / 25,201 / 29,628 cells; 2,228 DFFs | `reports/synth_*.log` |
 | MoldUDP64 | **5 frames back-to-back PASS** (4 valid + 1 gap + 1 drop) | `tb/test_mold_multi.py` |
@@ -50,7 +50,7 @@ MDN PWA best practices, GitHub Actions docs.
 | Metric | Now | 6 months | 12 months |
 |---|---|---|---|
 | Full-field records | 1M / 0 mismatches | 10M / 0 | 100M / 0 |
-| Formal | Z3 + CVC5 PASS | + Bitwuzla/Yices; cover report | equivalence proof RTL ↔ WASM |
+| Formal | Z3 PASS; CVC5 BMC/induction at depth 8 | + Bitwuzla/Yices; cover report | equivalence proof RTL ↔ WASM |
 | Mutation score | 100% (19) | ≥95% (50+) | ≥98% (150+) |
 | Fmax (Sky130) | not run | OpenSTA slack at 250 MHz | sign-off at 250–322 MHz |
 | Mold back-pressure | single-frame | **4+ frames back-to-back PASS** | 64-frame + loss/gap recovery |

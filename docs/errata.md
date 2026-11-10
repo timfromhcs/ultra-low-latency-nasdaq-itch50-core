@@ -102,6 +102,19 @@ assets works today.
 
 ---
 
+## E11 — CVC5 cover proof not re-verified with cvc5 1.3.2
+
+**Status:** open (tool-version dependent)
+**Impact:** `reports/formal.json` records CVC5 PASS for BMC, k-induction and covers from
+the 2026-11-03 oss-cad-suite run. A 2026-11-10 local re-run with Ubuntu **cvc5 1.3.2**
+passes BMC (depth 8, 47 s) and k-induction (2 s), but the cover checks (which need depth
+20) did not finish within 14 minutes and were killed. The full depth-20 CVC5 run also
+exceeded 30 minutes.
+**Workaround:** Z3 is the gate and passes BMC + k-induction + covers in ≈90 s. Use the
+pinned oss-cad-suite bundle in CI for the opt-in solver matrix.
+
+---
+
 ## Reporting
 
 Open an issue with the RTL revision, the exact simulation command, and the observed

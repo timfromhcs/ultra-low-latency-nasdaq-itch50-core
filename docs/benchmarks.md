@@ -6,7 +6,10 @@
 >   3m06s host simulation time after 2m54s vector generation.
 > - 1,000,000-record full-field Verilator regression: **0 mismatches**, 31,383,973 bytes,
 >   1,961,516 cycles, 41.290 Gbps model, 9,994 corrupt/resync.
-> - Formal: **Z3 PASS + CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported.
+> - Formal: **Z3 PASS** (BMC + k-induction + covers). CVC5 1.3.2 re-run on 2026-11-10:
+>   BMC (depth 8, 47 s) + k-induction (2 s) PASS; the cover checks need depth 20 and did
+>   not complete on this host. The CVC5 PASS stored in `reports/formal.json` is the
+>   2026-11-03 oss-cad-suite run, not a current re-run. Boolector 1.5 unsupported.
 > - Synthesis (Yosys/ABC cmos4): 22,629 / 25,201 / 29,628 cells for 128/256/512-bit,
 >   2,228 DFFs.
 > - Browser: 1,000,000 messages in 664 ms wall, WebGPU compute, 0 errors.

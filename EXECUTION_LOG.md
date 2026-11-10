@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 07:59 - Autonomy tick + CVC5 formal claim corrected
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Audited the "Z3 + CVC5 PASS" claim. Z3 remains verified (deep gate, ≈90 s, BMC +
+  k-induction + covers). **CVC5 1.3.2 on this host does not reproduce the full claim**:
+  - depth 20: BMC exceeded 14 min and was killed;
+  - depth 8: BMC PASSED (47 s), k-induction PASSED (2 s), **covers FAILED** (the cover
+    targets need depth 20).
+  The stored `reports/formal.json` CVC5 PASS is the 2026-11-03 oss-cad-suite run.
+- Corrected the README badge and formal rows, `docs/benchmarks.md`, `llms-full.txt` and
+  the roadmap; added errata **E11** describing the tool-version limitation. No test was
+  weakened.
+
 ## 2026-11-10 06:59 - Autonomy tick + Docker and live Vercel re-verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

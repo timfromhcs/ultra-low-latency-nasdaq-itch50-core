@@ -45,7 +45,9 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
   arbiter (selection/recovery/multi-gap), A/B system, recovery, skid, metrics,
   host/wishbone/Caravel wrappers, 128/32-bit ingress, burst.
 - Formal: pre-trigger gating, class exclusivity, legal lengths, register equivalence,
-  flow control; Z3 PASS, CVC5 PASS in the matrix.
+  flow control; Z3 PASS (BMC + k-induction + covers). CVC5 1.3.2 re-run: BMC and
+  k-induction PASS at depth 8; covers need depth 20 and were too slow. The committed
+  CVC5 pass is the 2026-11-03 oss-cad-suite run.
 - Mutation: 9/9 parser→BBO mutants killed (`tools/mutate_book.py`).
 - RTL↔WASM equivalence: 100,000 records, every field equal (weekly job).
 - Gate: 11 fast checks, 13 with `--deep` (adds Z3 formal + native bins).

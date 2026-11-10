@@ -18,7 +18,7 @@ JSON-LD for search engines and AI indexers
 [![RTL](https://img.shields.io/badge/RTL-SystemVerilog-1f6feb)](rtl/)
 [![WASM](https://img.shields.io/badge/WASM-50%20KB-3ef07a)](web/wasm/chiplab_core.wasm)
 [![WebGPU](https://img.shields.io/badge/WebGPU-compute%20%2B%20render-3ef07a)](web/gpu.js)
-[![Formal](https://img.shields.io/badge/Formal-Z3%20%2B%20CVC5%20PASS-success)](reports/formal.json)
+[![Formal](https://img.shields.io/badge/Formal-Z3%20PASS-success)](reports/formal.json)
 [![Maturity](https://img.shields.io/badge/Maturity-pre--silicon-orange)](#honest-limits)
 
 **Run the feed. See the silicon.** A WebAssembly twin of a NASDAQ TotalView-ITCH 5.0
@@ -45,7 +45,8 @@ single-file local backend. Pre-silicon, reproducible, and honest about what is n
   Docker image / Vercel build** around the same WASM core.
 - A **native Vulkan/DX12 compute runner** (`native/`) using `wgpu`, with an opt-in
   Windows process boost.
-- **Verification evidence**: 1,000,000-message full-field regression, Z3 + CVC5 formal
+- **Verification evidence**: 1,000,000-message full-field regression, Z3 formal (BMC,
+  k-induction, covers), CVC5 recorded pass (2026-11-03; see the formal note),
   proofs, synthesis matrix, mutation tests, browser gates.
 
 ## What this is not
@@ -240,7 +241,7 @@ Reports live in [`reports/`](reports/).
 | Reference model | independent Python, all 22 opcodes | `tb/itch_model.py` |
 | WASM ↔ Python | 10,000 records, 0 mismatches | `scripts/check_wasm_fixture.py` |
 | RTL ↔ WASM | **100,000 records on one stream, every canonical field equal** | `scripts/rtl_wasm_equiv.mjs` |
-| Formal | **Z3 PASS, CVC5 PASS** (BMC + k-induction + covers); Boolector 1.5 unsupported | `reports/formal.json` |
+| Formal | **Z3 PASS** (BMC + k-induction + covers); CVC5 1.3.2 re-run: BMC + k-induction PASS at depth 8, covers not completed (needs depth 20; slow on this host). The committed CVC5 pass is from 2026-11-03 | `reports/formal.json`, `reports/formal_cvc5.log` |
 | Mutation | **10/10 RTL mutants killed** (length, offsets, share width, flags, append, consume) | `reports/mutation.json` |
 | Mutation (BBO) | **9/9 parser→BBO mutants killed** (side, hash slot, cancel, max/min, volume, last) | `reports/mutation_book.json` |
 | Synthesis 128-bit | 22,629 cells, 2,228 DFFs | `reports/synth_128.log` |

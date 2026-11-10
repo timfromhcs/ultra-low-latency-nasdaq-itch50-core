@@ -3008,3 +3008,209 @@ README-Evidenztabelle (EXE, npm, PyPI, Cocotb-Suite-Zahl 19) aktualisiert.
 Unver├ñndert extern blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Der Auslieferungspfad (EXE/npm/PyPI) ist mit dem neuen WASM erneut end-to-end gepr├╝ft.
 [2026-11-10T06:59:19.6201601+01:00] hallo, es ist 06:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; docker build -t chiplab:verify . 
+2>&1 | Select-Object -Last 2
+[tick] ran 0, failed 0
+[31;1m[0m
+[31;1mView build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/qe10if1smbrzwgel4tudqgd4d[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker images chiplab:verify --format "{{.Repository}}:{{.Tag}} {{.Size}}"; docker rm -f chiplab-verify 
+2>$null | Out-Null; docker run -d --rm -p 4199:4173 -e CHIPLAB_TOKEN=verify-token --name chiplab-verify chiplab:verify 
+| Out-Null; Start-Sleep -Seconds 4; try { $h = Invoke-RestMethod http://127.0.0.1:4199/api/health -TimeoutSec 5; 
+"health ok=$($h.ok) version=$($h.version) wasm=$($h.wasm.bytes)" } catch { "health FAIL: $($_.Exception.Message)" }; 
+try { Invoke-RestMethod "http://127.0.0.1:4199/api/store/default" -TimeoutSec 5 | Out-Null; "unauth GET: unexpectedly 
+allowed" } catch { "unauth GET status=$([int]$_.Exception.Response.StatusCode)" }; try { $body = 
+'{"data":{"ok":true},"expectedRevision":null}'; Invoke-RestMethod "http://127.0.0.1:4199/api/store/default" -Method 
+Put -Headers @{Authorization="Bearer verify-token"} -ContentType "application/json" -Body $body -TimeoutSec 5 | 
+Out-Null; "auth PUT ok" } catch { "auth PUT FAIL: $($_.Exception.Message)" }; docker stop chiplab-verify | Out-Null
+Unable to find image 'chiplab:verify' locally
+docker: Error response from daemon: pull access denied for chiplab, repository does not exist or may require 'docker 
+login'
+
+Run 'docker run --help' for more information
+health FAIL: Es konnte keine Verbindung hergestellt werden, da der Zielcomputer die Verbindung verweigerte. 
+(127.0.0.1:4199)
+unauth GET status=0
+auth PUT FAIL: Es konnte keine Verbindung hergestellt werden, da der Zielcomputer die Verbindung verweigerte. 
+(127.0.0.1:4199)
+Error response from daemon: No such container: chiplab-verify
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker images --format "{{.Repository}}:{{.Tag}} {{.Size}}" | Select-String chiplab; cd E:\chips\main; 
+docker build -t chiplab:verify . 2>&1 | Select-Object -Last 12
+[7mchiplab[0m:0.3.0 241MB
+[7mchiplab[0m:0.2.0 240MB
+[31;1m#12 exporting manifest sha256:7b052bd28e2690414b7772bb825a0c41f6e0016b07aa9c5cabbfb1e97b82b0ea 0.0s done[0m
+[31;1m#12 exporting config sha256:1894d8b910247f3db3d5df8efb0771022608141b1957989ca1fd7daf33df6321 0.0s done[0m
+[31;1m#12 exporting attestation manifest sha256:9c7a6eba8b84f62e6981683dd8ea838504353119dd91ac93fa1ecc0113bb4bc2[0m
+[31;1m#12 exporting attestation manifest sha256:9c7a6eba8b84f62e6981683dd8ea838504353119dd91ac93fa1ecc0113bb4bc2 0.1s 
+done[0m
+[31;1m#12 exporting manifest list sha256:ad530ed0fc4fd483610564551fd1cdc5a2c1e63b8d2c7991ba3cd49dc108ae72 0.0s 
+done[0m
+[31;1m#12 naming to docker.io/library/chiplab:verify[0m
+[31;1m#12 naming to docker.io/library/chiplab:verify done[0m
+[31;1m#12 unpacking to docker.io/library/chiplab:verify[0m
+[31;1m#12 unpacking to docker.io/library/chiplab:verify 0.2s done[0m
+[31;1m#12 DONE 1.2s[0m
+[31;1m[0m
+[31;1mView build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/x4ou9e556auodeynpcycqhwom[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker rm -f chiplab-verify 2>$null | Out-Null; docker run -d --rm -p 4199:4173 -e 
+CHIPLAB_TOKEN=verify-token --name chiplab-verify chiplab:verify | Out-Null; Start-Sleep -Seconds 5; try { $h = 
+Invoke-RestMethod http://127.0.0.1:4199/api/health -TimeoutSec 5; "health ok=$($h.ok) version=$($h.version) 
+wasm=$($h.wasm.bytes)" } catch { "health FAIL: $($_.Exception.Message)" }; try { Invoke-RestMethod 
+"http://127.0.0.1:4199/api/store/default" -TimeoutSec 5 | Out-Null; "unauth GET: unexpectedly allowed" } catch { 
+"unauth GET status=$([int]$_.Exception.Response.StatusCode)" }; try { $body = 
+'{"data":{"ok":true},"expectedRevision":null}'; $r = Invoke-RestMethod "http://127.0.0.1:4199/api/store/default" 
+-Method Put -Headers @{Authorization="Bearer verify-token"} -ContentType "application/json" -Body $body -TimeoutSec 5; 
+"auth PUT revision=$($r.revision)" } catch { "auth PUT FAIL: $($_.Exception.Message)" }; docker stop chiplab-verify 
+2>$null | Out-Null
+health ok=True version=0.3.1 wasm=50322
+unauth GET status=401
+auth PUT revision=1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mtry { $h = Invoke-RestMethod "https://chiplab-ten.vercel.app/api/health" -TimeoutSec 15; "vercel health 
+ok=$($h.ok) version=$($h.version) wasm=$($h.wasm.bytes)" } catch { "vercel health FAIL: $($_.Exception.Message)" }; 
+try { $p = Invoke-WebRequest "https://chiplab-ten.vercel.app/" -TimeoutSec 15; "page status=$($p.StatusCode) 
+bytes=$($p.RawContentLength)"; if ($p.Content -match "<title>([^<]+)</title>") { "title=$($matches[1])" } } catch { 
+"page FAIL: $($_.Exception.Message)" }
+vercel health ok=True version=0.3.1 wasm=
+page status=200 bytes=13797
+title=ChipLab - ITCH-50 silicon lab
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -280,10 +280,10 @@
+ | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22ÔÇª`, 87,785,472 B, Node 22.23.1); weekly 
+Windows CI job | `reports/repro_exe.json` |
+ | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+ | Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS├ù7 + lossy FAIL 
+(58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
+ | Single EXE | 83.7 MB; `--probe` OK (WASM 50,322 B, v0x301, 8 chips); rebuild hash `67d05b22ÔÇª` unchanged | 
+`dist/chiplab.exe` |
+-| Docker image | builds and serves `/api/health` | `Dockerfile` |
+-| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |
++| Docker image | builds; `/api/health` ÔåÆ v0.3.1, WASM 50,322 B; store **401 without token**, revision 1 with token 
+| `Dockerfile` |
++| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | 
+`reports/web-vercel.png` |
+ | GitHub CI | **green on `main`**: lint, 50k full-field, cocotb (19 suites), Docker, packages | 
+[Actions](https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core/actions/workflows/ci.yml) |
+ | npm package | `npm pack` + clean install (0 vulnerabilities) parses 2,000 records at 41.28 Gbps | `packages/npm/` |
+ | PyPI package | wheel installs in a clean venv; `selfcheck` = 10,000 records, 22 opcodes | `packages/python/` |
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 06:59 - Autonomy tick + Docker and live Vercel re-verified
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- **Docker** (`docker build -t chiplab:verify .`, run on 4199 with `CHIPLAB_TOKEN`):
++  `/api/health` ÔåÆ ok, **v0.3.1**, WASM **50,322 B**; unauthenticated store GET ÔåÆ
++  **401**; authenticated PUT ÔåÆ **revision 1**. Container stopped afterwards.
++- **Vercel production**: `/api/health` ÔåÆ ok, v0.3.1; page 200 (13,797 bytes), title
++  `ChipLab - ITCH-50 silicon lab`.
++- README evidence rows for Docker and Vercel updated; no source changes.
++
+ ## 2026-11-10 05:59 - Autonomy tick + end-user artifacts re-verified
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Rebuilt and probed the shipped artifacts on the current tree:
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"test(deploy): re-verify Docker runtime and live Vercel health" 2>&1 | Select-Object -Last 1; git push origin main 
+2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 3037 insertions(+), 2826 deletions(-)
+[31;1m   a8c8c73..1188ed9  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 150; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }; docker rmi chiplab:verify 2>$null | Out-Null; "image cleaned"
+1188ed9 in_progress 
+image cleaned
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+1188ed9 in_progress
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 180; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+1188ed9 in_progress
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 2 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"1188ed9\"));\nif (!run) return { runs: r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion]) };\nconst j = await tools.github.actions_list({ method: 
+\"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 10 });\nreturn { id: run.id, status: run.status, created: run.created_at, jobs: 
+j.jobs?.jobs?.map(x => [x.name, x.status, x.conclusion, x.started_at]) };"} 
+> build ┬À deepseek-v4.1-flash
+Tick 06:59 abgeschlossen ÔÇö **Docker-Runtime und Live-Vercel erneut gepr├╝ft**.
+
+## Ergebnisse
+| Ziel | Pr├╝fung | Ergebnis |
+|---|---|---|
+| **Docker** (`chiplab:verify`, Port 4199, Token) | `/api/health` | ok, **v0.3.1**, WASM **50.322 B** |
+| | Store ohne Token | **401** (Token erzwungen) |
+| | Store mit Bearer-Token | PUT ÔåÆ **revision 1** |
+| **Vercel Production** | `/api/health` | ok, **v0.3.1** |
+| | Startseite | **200**, 13.797 Bytes, Titel `ChipLab - ITCH-50 silicon lab` |
+
+Image nach dem Test entfernt; README-Evidenzzeilen f├╝r Docker/Vercel aktualisiert.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**.
+- CI auf `1188ed9`: **alle vier Jobs success** (per API gepr├╝ft; `gh run list` zeigte kurzzeitig noch ÔÇ×in_progress").
+- Commit `1188ed9` gepusht, Arbeitsbaum clean.
+
+## Status
+Unver├ñndert extern blockiert: Parser-P&R/DRC/LVS, FPGA-Hardware, echter Caravel-Harness-Lauf, PCIe/100G, Registry-OIDC, Shuttle. Auslieferung (EXE, npm, PyPI, Docker, Vercel, Browser) ist auf dem aktuellen Stand erneut end-to-end belegt.
+[2026-11-10T07:59:19.7435963+01:00] hallo, es ist 07:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts\autonomy.mjs 2>&1 | Select-Object -Last 3; wsl -d Ubuntu bash -lc "which cvc5 
+boolector bitwuzla yices 2>/dev/null; echo ---; cvc5 --version 2>/dev/null | head -2"
+[tick] ran 0, failed 0
+/usr/bin/cvc5
+/usr/bin/boolector
+---
+This is cvc5 version 1.3.2
+compiled with GCC version 15.2.0
+> build ┬À deepseek-v4.1-flash
