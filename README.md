@@ -279,6 +279,7 @@ Reports live in [`reports/`](reports/).
 | Reproducible Python | **SOURCE_DATE_EPOCH: wheel identical twice; sdist identical after container normalization** | `reports/repro_python.json`, `scripts/repro_python.sh` |
 | Reproducible EXE | **two `build_exe` runs byte-identical** (`67d05b22…`, 87,785,472 B, Node 22.23.1); weekly Windows CI job | `reports/repro_exe.json` |
 | Browser demo | 1,000,000 messages in **664 ms**, 0 errors, WebGPU compute | `reports/web-1440-depth.png` |
+| Browser re-verify (2026-11-10) | **100k: 41.29 Gbps, 177.3 M msg/s, 0 errors**; compare PASS×7 + lossy FAIL (58,458); **390 px no horizontal overflow** | `reports/web-1440.png`, `reports/web-390.png` |
 | Single EXE | 83.7 MB, embedded 15 web files + 50 KB WASM | `dist/chiplab.exe` |
 | Docker image | builds and serves `/api/health` | `Dockerfile` |
 | Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; 100k run, 0 errors | `reports/web-vercel.png` |

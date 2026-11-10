@@ -259,6 +259,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 04:59 - Autonomy tick + browser UI re-verified after WASM rebuild
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- Started the local server and drove the PWA with Playwright (1440×900 and 390×844):
+  - WASM badge `v0.3.1 · 49 KB`, GPU `WebGPU`, local cloud **connected**; console
+    **0 errors** (1 warning).
+  - Run feed, 100,000 messages: **41.29 Gbps, 177.3 M msg/s, 0 errors**, tape 60 rows.
+  - Compare all: **7 × PASS**, lossy negative control **FAIL · 58,458** (as designed).
+  - Mobile 390 px: `scrollWidth == clientWidth == 390` → no horizontal overflow;
+    single-column layout with the sticky section nav.
+  - Evidence: `reports/web-1440.png` (full page, post-compare), `reports/web-390.png`
+    (viewport, top), `reports/web-390-full.png`. Server stopped afterwards.
+- README evidence table updated with the re-verification row.
+
 ## 2026-11-10 03:59 - Autonomy tick (no code change: only external blockers left)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. Gate **11/11**. Tree clean apart
