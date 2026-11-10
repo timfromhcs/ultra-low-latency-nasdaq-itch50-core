@@ -18,6 +18,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32_100mhz.json` | 32-bit wrapper at 100 MHz, relaxed flow | Sky130 | 10.0 ns |
 | `sky130_wrap32_fitted.json` | 32-bit wrapper, 1400 µm die at 25 % density, antenna-diode step off, 10 ns | Sky130 | 10.0 ns |
 | `sky130_wrap32_fitted_area.json` | 32-bit wrapper, AREA synthesis variant (routing experiments only) | Sky130 | 10.0 ns |
+| `sky130_wrap32_wide.json` | 32-bit wrapper, 1800 µm die at 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off | Sky130 | 10.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
@@ -87,6 +88,11 @@ The AREA-synthesis variant (`sky130_wrap32_fitted_area.json`, 133,125 µm² chip
 routes much more easily but is **not timing-viable**: setup WNS **−83.06 ns** at 10 ns
 with 4,286 violations. The 10 ns closure of the DELAY netlist is therefore
 buffer-driven, and its congestion comes from that buffer volume plus the wide buses.
+
+Detailed routing on that die confirmed the congestion: **64,091 violations** after the
+first pass and **264,817** in optimisation iteration 1 (10–20 %, ≈14 min/iteration), so
+the run was abandoned instead of burning hours. `sky130_wrap32_wide.json` (1800 µm,
+15 %, `CTS_APPLY_NDR: "none"`, antenna repair off) is the follow-up attempt.
 
 Two container kills (`exit 255`) happened while GlobalRouting ran; each coincided with a
 Docker Desktop VM restart (init logs at ≈45 min intervals). `.wslconfig` was capped at

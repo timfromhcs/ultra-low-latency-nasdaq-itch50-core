@@ -259,6 +259,23 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-10 20:59 - Autonomy tick + DRT on the 1400 µm die abandoned, wide die launched
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `76fb4ce` **success**.
+- Detailed routing on the 1400 µm/25 % result confirmed the congestion measurement:
+  after the first routing pass it reported **64,091 violations**, then **264,817** in
+  optimisation iteration 1 (10–20 % complete, ≈14 min per iteration). That cannot
+  converge, so the run was stopped rather than allowed to burn hours.
+- New `openlane/sky130_wrap32_wide.json`: **1800 µm** die, 15 % target density,
+  20 overflow iterations, `CTS_APPLY_NDR: "none"` (the option is an enum;
+  `false` is rejected), `RUN_ANTENNA_REPAIR: false` (skips diode insertion), DRC/LVS
+  still on. Rationale: routing usage was 81 % at 1400 µm, so more whitespace is the
+  direct lever.
+- The wide flow started natively at 21:14 (`--run-tag native-wide`); its pre-PnR STA
+  reproduces the same netlist result (setup WNS **+0.3537 ns**, 19,660 slew
+  violations), confirming only the floorplan/PDK settings changed.
+- **No routing/DRC/LVS result yet** — the wide run is at placement/CTS.
+
 ## 2026-11-10 19:59 - Autonomy tick + global routing completed natively (congestion measured)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `2df2dd5` **success**.

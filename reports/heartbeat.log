@@ -3516,3 +3516,145 @@ $($_.conclusion)" }
 [GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_2_2_0_clk
 [GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_clk
 > build ┬À deepseek-v4.1-flash
+[2026-11-10T20:59:19.9721488+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -5 /home/tim/chiplab-native/full.log; grep -cE "Completing 100%" 
+/home/tim/chiplab-native/full.log; date'
+elapsed time = 00:02:10, memory = 1881.98 (MB).                             
+    Completing 30% with 64091 violations.                                       
+    elapsed time = 00:03:32, memory = 2249.43 (MB).                             
+    Completing 40% with 64091 violations.                                       
+    elapsed time = 00:05:04, memory = 2249.43 (MB).                             
+0
+Tue Nov 10 21:00:02 CET 2026
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+76fb4ce completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls -l --time-style=+%H:%M /home/tim/chiplab-native/full.log; pgrep -af "openroad" | 
+head -2; ps -o pid,etime,pcpu,pmem,cmd -C openroad 2>/dev/null | head -4; ls -l --time-style=+%H:%M 
+/home/tim/chiplab-native/openlane/runs/native-full/43-openroad-detailedrouting/ | head'
+-rw-r--r-- 1 tim tim 1203902 20:59 /home/tim/chiplab-native/full.log
+2838 /nix/store/2y36a4sr078y15ick388dncqjdzmlxga-openroad-2026-02-17/bin/openroad -exit -no_splash -metrics 
+/home/tim/chiplab-native/openlane/runs/native-full/43-openroad-detailedrouting/or_metrics_out.json /nix/store/1pkfh3p98
+m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/drt.tcl
+2899 bash -lc ls -l --time-style=+%H:%M /home/tim/chiplab-native/full.log; pgrep -af "openroad" | head -2; ps -o 
+pid,etime,pcpu,pmem,cmd -C openroad 2>/dev/null | head -4; ls -l --time-style=+%H:%M 
+/home/tim/chiplab-native/openlane/runs/native-full/43-openroad-detailedrouting/ | head
+    PID     ELAPSED %CPU %MEM CMD
+total 52
+-rw-r--r-- 1 tim tim  261 20:53 COMMANDS
+-rw-r--r-- 1 tim tim 7592 20:53 _env.tcl
+-rw-r--r-- 1 tim tim 8623 20:53 config.json
+drwxr-xr-x 2 tim tim 4096 20:53 drt-run-0
+-rw-r--r-- 1 tim tim 8240 20:55 openroad-detailedrouting.log
+-rw-r--r-- 1 tim tim 9447 20:53 state_in.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_wrap32_wide.json
+Created file successfully: openlane/sky130_wrap32_wide.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 780; wsl -d Ubuntu bash -lc 'tail -6 /home/tim/chiplab-native/full.log; date'
+[INFO DRT-0195] Start 1st optimization iteration.                               
+    Completing 10% with 264817 violations.                                      
+    elapsed time = 00:01:20, memory = 2794.20 (MB).                             
+    Completing 20% with 264817 violations.                                      
+    elapsed time = 00:02:48, memory = 2806.10 (MB).                             
+Tue Nov 10 21:13:21 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pkill -f "librelane.*native-full"; pkill -f "openroad.*native-full"; sleep 3; pgrep 
+-af "native-full" | head -3; echo killed; cp /mnt/e/chips/main/openlane/sky130_wrap32_wide.json 
+/home/tim/chiplab-native/openlane/; cd /home/tim/chiplab-native && setsid nohup 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane --pdk-root /opt/ciel --run-tag 
+native-wide --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT openlane/sky130_wrap32_wide.json 
+> /home/tim/chiplab-native/wide.log 2>&1 < /dev/null & sleep 20; tail -2 /home/tim/chiplab-native/wide.log'
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -af openroad | head -3; ls /home/tim/chiplab-native/openlane/runs 2>/dev/null; 
+tail -3 /home/tim/chiplab-native/wide.log 2>/dev/null || echo NO_WIDE_LOG'
+2838 /nix/store/2y36a4sr078y15ick388dncqjdzmlxga-openroad-2026-02-17/bin/openroad -exit -no_splash -metrics 
+/home/tim/chiplab-native/openlane/runs/native-full/43-openroad-detailedrouting/or_metrics_out.json /nix/store/1pkfh3p98
+m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/drt.tcl
+2956 bash -lc pgrep -af openroad | head -3; ls /home/tim/chiplab-native/openlane/runs 2>/dev/null; tail -3 
+/home/tim/chiplab-native/wide.log 2>/dev/null || echo NO_WIDE_LOG
+native-full
+native-sta
+NO_WIDE_LOG
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -af "python3.13" | grep -v bash | head -3; pgrep -af "openroad" | grep -v bash 
+| head -3'
+2838 /nix/store/2y36a4sr078y15ick388dncqjdzmlxga-openroad-2026-02-17/bin/openroad -exit -no_splash -metrics 
+/home/tim/chiplab-native/openlane/runs/native-full/43-openroad-detailedrouting/or_metrics_out.json /nix/store/1pkfh3p98
+m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/drt.tcl
+2838 /nix/store/2y36a4sr078y15ick388dncqjdzmlxga-openroad-2026-02-17/bin/openroad -exit -no_splash -metrics 
+/home/tim/chiplab-native/openlane/runs/native-full/43-openroad-detailedrouting/or_metrics_out.json /nix/store/1pkfh3p98
+m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/drt.tcl
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'kill 2838 2>/dev/null; sleep 2; pgrep -f openroad | head -2; echo done'
+2991
+done
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /home/tim/chiplab-native && setsid nohup 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane --pdk-root /opt/ciel --run-tag 
+native-wide --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT openlane/sky130_wrap32_wide.json 
+> /home/tim/chiplab-native/wide.log 2>&1 < /dev/null & sleep 25; tail -3 /home/tim/chiplab-native/wide.log'
+Try 'librelane --help' for help.
+
+Error: Invalid value for '[CONFIG_FILES]...': Path 'openlane/sky130_wrap32_wide.json' does not exist.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/openlane/sky130_wrap32_wide.json 
+/home/tim/chiplab-native/openlane/ && cd /home/tim/chiplab-native && setsid nohup 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane --pdk-root /opt/ciel --run-tag 
+native-wide --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT openlane/sky130_wrap32_wide.json 
+> /home/tim/chiplab-native/wide.log 2>&1 < /dev/null & sleep 30; tail -2 /home/tim/chiplab-native/wide.log; date'
+[21:14:17] ERROR    LibreLane will now quit. Please check your   __main__.py:164
+                    configuration.                                              
+Tue Nov 10 21:14:46 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -B 8 "will now quit" /home/tim/chiplab-native/wide.log | head -20'
+[21:14:17] ERROR    Errors have occurred while loading the       __main__.py:160
+                    design configuration file.                                  
+[21:14:17] ERROR    Value for 'CTS_APPLY_NDR' is invalid for     __main__.py:162
+                    'none'´¢£'root_only'´¢£'half'´¢£'full': 'False'                
+[21:14:17] ERROR    LibreLane will now quit. Please check your   __main__.py:164
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/sky130_wrap32_wide.json
+Index: openlane/sky130_wrap32_wide.json
+===================================================================
+--- openlane/sky130_wrap32_wide.json
++++ openlane/sky130_wrap32_wide.json
+@@ -23,9 +23,9 @@
+   "SYNTH_STRATEGY": "DELAY 0",
+   "MAX_FANOUT_CONSTRAINT": 12,
+   "SYNTH_ABC_BUFFERING": 1,
+   "SYNTH_SIZING": 1,
+-  "CTS_APPLY_NDR": false,
++  "CTS_APPLY_NDR": "none",
+   "CTS_SINK_CLUSTERING_ENABLE": true,
+   "RUN_ANTENNA_REPAIR": false,
+   "RUN_HEURISTIC_DIODE_INSERTION": false,
+   "RUN_KLAYOUT_DRC": true,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/openlane/sky130_wrap32_wide.json 
+/home/tim/chiplab-native/openlane/ && cd /home/tim/chiplab-native && setsid nohup 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane --pdk-root /opt/ciel --run-tag 
+native-wide --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT openlane/sky130_wrap32_wide.json 
+> /home/tim/chiplab-native/wide.log 2>&1 < /dev/null & sleep 40; tail -3 /home/tim/chiplab-native/wide.log; date'
+[21:15:23] VERBOSE  Logging subprocess to                           step.py:1338
+                    'openlane/runs/native-wide/12-openroad-staprepn             
+                    r/nom_ss_100C_1v60/sta.log'ÔÇª                                
+Tue Nov 10 21:15:38 CET 2026
+> build ┬À deepseek-v4.1-flash

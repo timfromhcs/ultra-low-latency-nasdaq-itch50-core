@@ -96,6 +96,11 @@ matter. Copy the finished `final/metrics.json` (or the summary JSON) back into
   (54 k instances, 1400 µm die) 33 iterations took ≈1 h, so the 200 used in the first
   fitted attempt implied a >6 h global-routing phase. Keep evidence runs at 20–30;
   `GRT_ALLOW_CONGESTION: 1` lets the flow continue to detailed routing anyway.
+- When global routing is congested, the flow retries the whole `global_route` pass and
+  disables NDR on one clock net per retry (`GRT-0273`), which costs ≈11 min per pass on
+  this block. `CTS_APPLY_NDR` takes an enum — `"none" | "root_only" | "half" | "full"`,
+  **not** a boolean (`False` is rejected as invalid) — and `"none"` skips that retry
+  cycle when the clock rule is not needed for the experiment.
 
 ## 4. Resuming a killed run
 
