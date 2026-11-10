@@ -55,6 +55,10 @@ instances/area, DRC/LVS and an Fmax estimate.
 - `CTS_BALANCE_LEVELS` is **obsolete** in 3.0.17 (CTS-0132, ignored); do not use it as
   the clock-planning knob. `CTS_SINK_CLUSTERING_ENABLE`, `CTS_CLK_BUFFER_LIST`,
   `CTS_MAX_CAP` and `CTS_MAX_SLEW` are the effective ones.
+- `GRT_OVERFLOW_ITERS` is the run-time switch nobody expects: on the 32-bit wrapper
+  (54 k instances, 1400 µm die) 33 iterations took ≈1 h, so the 200 used in the first
+  fitted attempt implied a >6 h global-routing phase. Keep evidence runs at 20–30;
+  `GRT_ALLOW_CONGESTION: 1` lets the flow continue to detailed routing anyway.
 
 ## 4. Resuming a killed run
 

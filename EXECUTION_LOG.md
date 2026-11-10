@@ -276,11 +276,24 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
     but **19,660 max-slew violations** — setup "closure" here is buffer-driven.
   - post-CTS: 54,569 instances (15,779 combinational, 1,565 FFs, 6,236
     timing-repair buffers, 435 clock buffers, 26,302 tap cells), 19.2 % utilization.
-- Root cause of the two VM restarts is a **6 GB WSL cap** (`.wslconfig`:
-  `memory=6GB, processors=6`), while the container reported a 5.789 GiB limit.
-  Raised to 10 GB / 8 CPUs (original saved as `~/.wslconfig.bak-chiplab`), restarted
-  Docker, resumed; container now reports 9.715 GiB and GRT is running at ~1.2 GiB.
-- **The flow is still running** — no routing/DRC/LVS result is claimed yet.
+- Root cause of the first two kills looked like memory: `.wslconfig` had
+  `memory=6GB, processors=6` while the container reported a 5.789 GiB limit. Raised it
+  to 10 GB / 8 CPUs, restarted Docker and resumed; the container then had 9.715 GiB.
+  A third kill still happened at 1.2 GiB used, so the cap was not the cause; the
+  original `.wslconfig` (6 GB / 6 CPUs) was restored afterwards.
+- The resumed GRT did **33 of 200 overflow iterations in ≈1 h** (≈2 min per pass) and
+  would have needed many hours. The third container kill (`exit 255`) coincided with
+  another Docker Desktop VM restart (init logs at 16:38, 17:24, 18:11) while the
+  container used only 1.2 GiB — so it is not a container OOM. Stopped the run.
+- Added `openlane/sky130_wrap32_fitted_area.json` (AREA synth, 20 % density, 1500 µm,
+  30 overflow iterations). Bounded STA: 133,125 µm² chip area, but setup
+  **−83.06 ns** with 4,286 violations — not timing-viable; the 10 ns DELAY netlist's
+  closure is buffer-driven.
+- Config corrected: `GRT_OVERFLOW_ITERS` 200 → 30 and the obsolete
+  `CTS_BALANCE_LEVELS` removed. `openlane/README.md` and `docs/long-runs.md` now carry
+  the measured numbers, the iteration-time guidance and the step-mapping facts.
+- **No routing/DRC/LVS result is claimed**; the parser P&R remains blocked by
+  congestion plus this host's Docker VM restarts.
 
 ## 2026-11-10 14:59 - Autonomy tick + BBO area estimate refreshed
 

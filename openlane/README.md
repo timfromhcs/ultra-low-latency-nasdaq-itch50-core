@@ -17,6 +17,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32_big.json` | 32-bit wrapper, congestion allowed | Sky130 | 3.10 ns |
 | `sky130_wrap32_100mhz.json` | 32-bit wrapper at 100 MHz, relaxed flow | Sky130 | 10.0 ns |
 | `sky130_wrap32_fitted.json` | 32-bit wrapper, 1400 µm die at 25 % density, antenna-diode step off, 10 ns | Sky130 | 10.0 ns |
+| `sky130_wrap32_fitted_area.json` | 32-bit wrapper, AREA synthesis variant (routing experiments only) | Sky130 | 10.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
@@ -62,6 +63,31 @@ wrapper (`itch_host_wrap`, 32-bit host port instead of the debug bus) removes th
 Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynchronous
 bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
 depth. **Pre-PnR only — no placement/routing, no sign-off.**
+
+## Fitted wrapper attempt (2026-11-10) — measured, incomplete
+
+`openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 µm die, 25 % density,
+`RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns) was run to characterise the congestion
+blocker. Numbers below are measured; **there is still no completed P&R for the parser**.
+
+| Stage | Result |
+|---|---|
+| Pre-PnR STA (ss/100 °C/1.60 V) | setup **+0.354 ns** (clean), hold clean, **19,660 max-slew violations** |
+| Post-CTS | 54,569 instances (15,779 combinational, 1,565 FFs, 6,236 timing-repair buffers, 435 clock buffers, 26,302 tap cells), 19.2 % utilization |
+| Global routing | 33 of the allowed 200 overflow iterations in ≈1 h; `clk` NDR disabled to reduce congestion; no routing result |
+
+The AREA-synthesis variant (`sky130_wrap32_fitted_area.json`, 133,125 µm² chip area)
+routes much more easily but is **not timing-viable**: setup WNS **−83.06 ns** at 10 ns
+with 4,286 violations. The 10 ns closure of the DELAY netlist is therefore
+buffer-driven, and its congestion comes from that buffer volume plus the wide buses.
+
+Two container kills (`exit 255`) happened while GlobalRouting ran; each coincided with a
+Docker Desktop VM restart (init logs at ≈45 min intervals). `.wslconfig` was capped at
+`memory=6GB`/`processors=6`; raising it to 10 GB/8 CPUs (same swap) gave the container
+9.7 GiB instead of 5.8 GiB, but a third VM restart still killed the run with the
+container at only 1.2 GiB — so the restarts are not a container OOM (the original cap
+was restored). Long LibreLane runs
+remain unreliable on this host; see [`../docs/long-runs.md`](../docs/long-runs.md).
 
 Reproduce the 250 MHz STA-only run:
 

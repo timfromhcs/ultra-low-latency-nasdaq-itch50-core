@@ -1268,3 +1268,1407 @@ $($_.status) $($_.conclusion)" }
 ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
 $($_.status) $($_.conclusion)" }
 5fc3b4f in_progress
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"5fc3b4f\"));\nif (!run) return \"run not found\";\nconst j = await 
+tools.github.actions_list({ method: \"list_workflow_jobs\", owner: \"timfromhcs\", repo: 
+\"ultra-low-latency-nasdaq-itch50-core\", resource_id: String(run.id), perPage: 20 });\nreturn { status: run.status, 
+jobs: j.jobs?.jobs?.map(x => [x.name, x.status, x.conclusion]) };"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }
+5fc3b4f completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "^- \[ \]" STABLE_RELEASE_PLAN.md LONG_TERM_PLAN.md | Select-Object -First 40
+LONG_TERM_PLAN.md:91:- [ ] Physical timing sign-off of the level table + reduction (Phase 2).
+LONG_TERM_PLAN.md:109:- [ ] Full LibreLane Sky130 run: **attempted, not achievable with the current pin
+LONG_TERM_PLAN.md:122:- [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 ┬Ám) / GPL-0305 (1400 ┬Ám); 32-bit
+LONG_TERM_PLAN.md:135:- [ ] Post-route STA with the full flow (blocked on the P&R above).
+LONG_TERM_PLAN.md:141:- [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
+LONG_TERM_PLAN.md:160:- [ ] Hardware/upstream retransmit requester (network protocol) ÔÇö out of scope for the
+LONG_TERM_PLAN.md:172:- [ ] PCIe/DMA or 100G MAC integration.
+LONG_TERM_PLAN.md:184:- [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+LONG_TERM_PLAN.md:192:- [ ] Full Caravel harness integration (pad ring, Caravel simulation).
+LONG_TERM_PLAN.md:221:- [ ] Optional shuttle submission; otherwise label "tapeout-ready, not fabricated".
+STABLE_RELEASE_PLAN.md:160:- [ ] npm/PyPI **publishing** (trusted publishing): the release workflow now has
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; git log 
+--oneline -3; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+5fc3b4f docs: refresh the BBO area estimate (70,715 cells incl. depth + risk logic)
+b687e47 test(web): PWA offline reload served from the service-worker cache
+0a28ede test(web): local-cloud Test/Sync/Pull round-trip verified
+5fc3b4f completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead LONG_TERM_PLAN.md [90m[offset=70, limit=140][0m
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane -Filter *.json | Select-Object Name,Length; Get-Content 
+openlane\README.md -TotalCount 60
+[32;1mName                          [0m[32;1m Length[0m
+[32;1m----                          [0m [32;1m------[0m
+config.json                       682
+gf180.json                        564
+ihp-sg13g2.json                   564
+sky130_250mhz.json                634
+sky130_metrics.json               519
+sky130_wrap.json                  673
+sky130_wrap32_100mhz_fast.json    860
+sky130_wrap32_100mhz.json         763
+sky130_wrap32_big.json            761
+sky130_wrap32.json                730
+sky130.json                       635
+# OpenLane / LibreLane targets
+
+These are **flow-ready** configurations, not sign-off results. Only the pre-PnR STA
+runs and the small-block validation are measured; the parser has no completed P&R, so
+no parser Fmax, slack or die-area claim is made. Operating notes (resume, knobs,
+failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
+
+| File | Target | PDK | Clock |
+|---|---|---|---|
+| `config.json` | parser (legacy baseline) | Sky130 | 3.10 ns |
+| `sky130.json` | parser | Sky130 | 3.10 ns |
+| `sky130_250mhz.json` | parser, STA only | Sky130 | 4.00 ns (250 MHz) |
+| `gf180.json` | parser, STA only | GF180MCU | 3.10 ns |
+| `ihp-sg13g2.json` | parser, STA only | IHP SG13G2 | 3.10 ns |
+| `sky130_wrap.json` | `itch_host_wrap` (128-bit) | Sky130 | 3.10 ns |
+| `sky130_wrap32.json` | `itch_wishbone_wrap` (32-bit) | Sky130 | 3.10 ns |
+| `sky130_wrap32_big.json` | 32-bit wrapper, congestion allowed | Sky130 | 3.10 ns |
+| `sky130_wrap32_100mhz.json` | 32-bit wrapper at 100 MHz, relaxed flow | Sky130 | 10.0 ns |
+| `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+
+## Verified toolchain (2026-11-03)
+
+LibreLane **3.0.17** with the `ghcr.io/librelane/librelane:3.0.17` image
+(7.52 GB). The built-in smoke test passed end to end: Classic flow **80/80**,
+**DRC ?**, **LVS ?**, exit code 0.
+
+With Docker Desktop on Windows, run the container directly and keep the PDK in a
+named volume (the WSL `--dockerized` path needs Docker integration enabled in the
+distro):
+
+```powershell
+docker run --rm -v chiplab-librelane-pdk:/root/.volare `
+  ghcr.io/librelane/librelane:3.0.17 librelane --smoke-test
+```
+
+On a host where the WSL distro has Docker integration, the equivalent is:
+
+```bash
+python3 -m pip install --break-system-packages librelane
+python3 -m librelane --dockerized --smoke-test     # or: make librelane-smoke
+```
+
+## Measured pre-PnR STA (2026-11-03)
+
+`OpenROAD.STAPrePNR`, sky130_fd_sc_hd, ss/100C/1.60 V, 19,936 instances
+(199,739 ´┐¢m´┐¢):
+
+| Clock | Setup WNS | Setup TNS | Fmax estimate |
+|---|---|---|---|
+| 4.00 ns (250 MHz) | **-8.27 ns** | -22,463 ns | **81.47 MHz** |
+| 3.10 ns (322 MHz) | **-9.14 ns** | -25,193 ns | ~81.6 MHz |
+| 3.10 ns, GF180 (ss/125 ´┐¢C) | **-19.87 ns** | - | **43.54 MHz** |
+| 3.10 ns, IHP SG13G2 (slow/125 ´┐¢C) | **-3.08 ns** | - | **161.9 MHz** |
+| 3.10 ns, wrapper (ss/100 ´┐¢C) | **-8.62 ns** | - | **85.34 MHz** |
+| 3.10 ns, wrapper 32-bit ingress | **-6.55 ns** | - | **103.67 MHz** |
+
+IHP also shows a small hold violation (WNS -0.052 ns). All values are pre-PnR. The
+wrapper (`itch_host_wrap`, 32-bit host port instead of the debug bus) removes the
+`raw_payload` endpoint from the critical path; the worst path is now FF  FF.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content openlane\sky130_wrap32_big.json; Get-Content 
+openlane\sky130_wrap32_100mhz.json; Get-Content openlane\sky130_metrics.json
+{
+  "DESIGN_NAME": "itch_wishbone_wrap",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_drop_gate.sv",
+    "dir::../rtl/itch_parser_core.sv",
+    "dir::../rtl/itch_shifter.sv",
+    "dir::../rtl/itch_top.sv",
+    "dir::../rtl/itch_host_wrap.sv",
+    "dir::../rtl/itch_wishbone_wrap.sv"
+  ],
+  "SYNTH_PARAMETERS": ["DATA_WIDTH=32"],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 3.10,
+  "PDN_MULTILAYER": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 1000 1000",
+  "CORE_AREA": "20 20 980 980",
+  "PL_TARGET_DENSITY_PCT": 35,
+  "GRT_ALLOW_CONGESTION": 1,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "RUN_KLAYOUT_DRC": true,
+  "RUN_MAGIC_DRC": true,
+  "RUN_LVS": true
+}
+{
+  "DESIGN_NAME": "itch_wishbone_wrap",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_drop_gate.sv",
+    "dir::../rtl/itch_parser_core.sv",
+    "dir::../rtl/itch_shifter.sv",
+    "dir::../rtl/itch_top.sv",
+    "dir::../rtl/itch_host_wrap.sv",
+    "dir::../rtl/itch_wishbone_wrap.sv"
+  ],
+  "SYNTH_PARAMETERS": ["DATA_WIDTH=32"],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 10.0,
+  "PDN_MULTILAYER": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 1500 1500",
+  "CORE_AREA": "20 20 1480 1480",
+  "PL_TARGET_DENSITY_PCT": 25,
+  "GRT_ALLOW_CONGESTION": 1,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "RUN_KLAYOUT_DRC": true,
+  "RUN_MAGIC_DRC": true,
+  "RUN_LVS": true
+}
+{
+  "DESIGN_NAME": "itch_metrics",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_metrics.sv"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 10.0,
+  "PDN_MULTILAYER": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 500 500",
+  "CORE_AREA": "10 10 490 490",
+  "PL_TARGET_DENSITY_PCT": 30,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "RUN_KLAYOUT_DRC": true,
+  "RUN_MAGIC_DRC": true,
+  "RUN_LVS": true
+}
+[0m$ [0mdocker info 2>&1 | Select-String "Server Version" | Select-Object -First 1; docker images 
+ghcr.io/librelane/librelane --format "{{.Repository}}:{{.Tag}} {{.Size}}" 2>&1; docker volume ls --format "{{.Name}}" 
+2>&1 | Select-String librelane
+[31;1mError response from daemon: Docker Desktop is unable to start[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content docs\long-runs.md
+# Long LibreLane runs: resume, diagnose, clean up
+
+Practical notes from the actual runs in this repository. Read `openlane/README.md` for
+the measured results; this page is about operating the flow.
+
+---
+
+## 1. Environment
+
+- LibreLane **3.0.17** image: `ghcr.io/librelane/librelane:3.0.17`.
+- Docker Desktop on Windows; the WSL `--dockerized` mode needs Docker integration in
+  the distro, so run the container directly.
+- Keep the PDK in a named volume and mount it at **`/root/.ciel`** (LibreLane 3 uses
+  CIEL, not `.volare`):
+
+```powershell
+docker run --rm -v ${PWD}:/work -w /work -v chiplab-librelane-ciel:/root/.ciel `
+  ghcr.io/librelane/librelane:3.0.17 `
+  librelane --run-tag <tag> openlane/<config>.json
+```
+
+The first run downloads the PDK into the volume; later runs reuse it.
+
+## 2. Bounded runs first
+
+Before a full flow, run only synthesis + pre-PnR STA (minutes):
+
+```powershell
+... librelane --run-tag <tag>-sta --to OpenROAD.STAPrePNR openlane/<config>.json
+node scripts/openlane_summary.mjs openlane/runs/<tag>-sta
+```
+
+The summary tolerates LibreLane's `Infinity`/`NaN` metrics and prints WNS/TNS,
+instances/area, DRC/LVS and an Fmax estimate.
+
+## 3. Full flow and the knobs that matter
+
+```powershell
+... librelane --run-tag <tag>-full `
+  --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT `
+  openlane/<config>.json
+```
+
+- The resizer can spend hours on a design that is far from closure; skipping it gets
+  you routing/DRC/LVS evidence instead of a timing number.
+- `GRT_ALLOW_CONGESTION: 1` turns the GRT-0116 abort into a warning so the flow can
+  reach detailed routing.
+- `RUN_ANTENNA_REPAIR: false` removes the antenna steps (and **removes
+  `OpenROAD.DiodeInsertion` from the flow** - passing `--skip OpenROAD.DiodeInsertion`
+  then fails with "no step(s) with ID").
+- Antenna repair off is not sign-off clean: report antenna/DRC findings honestly.
+
+## 4. Resuming a killed run
+
+LibreLane can continue an existing run tag, but the CLI still requires a config:
+
+```powershell
+... librelane --last-run openlane/<same-config>.json `
+  --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT
+```
+
+`--last-run` picks the newest run directory under `openlane/runs`. Repeat the same
+`--skip` flags: skipped steps are not recorded as completed, so omitting them re-runs
+those steps.
+
+A host/Docker restart kills the container (`unexpected EOF`); check `docker ps`, start
+Docker Desktop, then resume. Long runs (many hours) are not reliable on a machine that
+reboots; prefer the bounded runs and the small-block validation.
+
+## 5. Known failure modes
+
+| Symptom | Meaning | Action |
+|---|---|---|
+| `GRT-0116` congestion | not routable at this die/density | larger die, lower `PL_TARGET_DENSITY_PCT`, or 
+`GRT_ALLOW_CONGESTION` |
+| `GPL-0305` RePlAce diverged | placement numerics/density | different density, smaller die, fewer pins |
+| `DPL-0036` detailed placement failed | too many pins for the die perimeter | larger die or narrower interface |
+| `GRT-0183` heap underflow in DiodeInsertion | antenna repair on a congested net | disable antenna repair for 
+evidence-only runs |
+| container `unexpected EOF` | host/Docker restart | resume with `--last-run` |
+
+## 6. Clean up
+
+- Run directories are git-ignored (`runs/`, `openlane/runs/`) and can be several GB.
+  Keep the runs referenced by `reports/openlane_*.json`; delete the failed ones.
+- Commit only the small report:
+
+```bash
+node scripts/openlane_summary.mjs openlane/runs/<tag>
+```
+
+## 7. Reporting rule
+
+A completed flow is evidence for **that block and configuration only**. The parser has
+no completed P&R/DRC/LVS; the `itch_metrics` block does. Never turn one into a claim
+about the other, and never call pre-PnR STA a sign-off.
+[0m$ [0mStart-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -ErrorAction SilentlyContinue; Start-Sleep 
+-Seconds 90; docker info 2>&1 | Select-String "Server Version" | Select-Object -First 1
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs -Directory -ErrorAction SilentlyContinue | Select-Object 
+Name,LastWriteTime; "---"; docker info 2>&1 | Select-Object -Last 4
+[32;1mName             [0m[32;1m LastWriteTime[0m
+[32;1m----             [0m [32;1m-------------[0m
+gf180-sta         03.11.2026 23:12:05
+ihp-sta           03.11.2026 23:13:56
+metrics-full3     09.11.2026 07:15:03
+sky130-250mhz-sta 03.11.2026 23:07:06
+wrap-sta          04.11.2026 08:58:37
+wrap32-sta        04.11.2026 12:04:14
+---
+    Path:     C:\Program Files\Docker\cli-plugins\docker-scout.exe
+
+Server:
+[31;1merrors pretty printing info[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker version --format '{{.Server.Version}}' 2>&1; Get-Process -Name "Docker Desktop","com.docker.backend" 
+-ErrorAction SilentlyContinue | Select-Object Name,Id,StartTime
+[31;1mError response from daemon: Docker Desktop is unable to start[0m
+
+[32;1mName              [0m[32;1m    Id[0m[32;1m StartTime[0m
+[32;1m----              [0m [32;1m   --[0m [32;1m---------[0m
+com.docker.backend  2208 10.11.2026 12:02:21
+com.docker.backend 29984 10.11.2026 12:02:57
+Docker Desktop       712 10.11.2026 12:03:41
+Docker Desktop     11164 10.11.2026 12:02:06
+Docker Desktop     13624 10.11.2026 12:03:38
+Docker Desktop     15608 10.11.2026 12:03:45
+Docker Desktop     28156 10.11.2026 12:03:42
+Docker Desktop     28748 10.11.2026 12:16:29
+Docker Desktop     30208 10.11.2026 12:16:29
+Docker Desktop     31200 10.11.2026 12:16:29
+Docker Desktop     32456 10.11.2026 12:16:29
+Docker Desktop     33068 10.11.2026 12:03:21
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-Process -Name "Docker Desktop","com.docker.backend","com.docker.build","docker" -ErrorAction 
+SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 5; wsl --shutdown; Start-Sleep -Seconds 10; Start-Process 
+"C:\Program Files\Docker\Docker\Docker Desktop.exe"; Start-Sleep -Seconds 120; docker version --format 
+'{{.Server.Version}}' 2>&1
+29.6.1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker volume ls --format "{{.Name}}" 2>&1; docker images ghcr.io/librelane/librelane --format 
+"{{.Repository}}:{{.Tag}} {{.Size}}" 2>&1
+1d8f3fe8561c5908c020f80ac3f8a8822dfd5e109e381578a0f5ca0b01ea985d
+58ce87df921f222adbb7d3da044b0fb16e72bc1bc364942f9e402e0ed1d89e8b
+376cead07395c8e045f81bec8a230fe0277b3136e10ef8ac88120e35e0c6d192
+a3a6181e104073ae31f0c579d73e2ee4422bc3f9b4bb59a2cbf2a67e8b3d60f6
+buildx_buildkit_desktop-linux_state
+ccdfc4d958f7df7e94e785270aa089fe66eae0336292a7ac9144e5dc24181d2c
+chiplab-librelane-ciel
+chiplab-librelane-pdk
+d7b9a86a882080c7a187e571b68193edeeeae57f80f0c7ab2693bf9e05afba01
+dc86e3ce9fa3672df1b5abea9e339cb578baa755f8b9dc094c30ad605b9b90a6
+ghcr.io/librelane/librelane:3.0.17 7.52GB
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "grep -rIl 'RUN_ANTENNA_REPAIR' 
+/usr/local/lib/python3*/site-packages/librelane /usr/lib/python3*/site-packages/librelane 2>/dev/null | head -5; grep 
+-rIn 'RUN_ANTENNA_REPAIR' /usr/local/lib/python3*/site-packages/librelane/steps 2>/dev/null | head -5"
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "which librelane; python3 -c 
+'import librelane,os;print(os.path.dirname(librelane.__file__))'"
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/bin/librelane
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "grep -rIn 
+'ANTENNA_REPAIR\|DiodeInsertion' 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane --include=*.py | 
+head -20"
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/common_vari
+ables.py:406:        "GRT_ANTENNA_REPAIR_ITERS",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/common_vari
+ables.py:419:        "GRT_ANTENNA_REPAIR_MARGIN",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/common_vari
+ables.py:427:        "GRT_ANTENNA_REPAIR_JUMPER_ONLY",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/common_vari
+ables.py:429:        "Only use jumpers to fix antenna violations. Cannot be used in conjunction with 
+GRT_ANTENNA_REPAIR_DIODE_ONLY.",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/common_vari
+ables.py:433:        "GRT_ANTENNA_REPAIR_DIODE_ONLY",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/common_vari
+ables.py:435:        "Only use antenna diodes to fix antenna violations. Cannot be used in conjunction with 
+GRT_ANTENNA_REPAIR_JUMPER_ONLY.",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/odb.py:900:
+class HeuristicDiodeInsertion(CompositeStep):
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/odb.py:920:
+    id = "Odb.HeuristicDiodeInsertion"
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1862:class _DiodeInsertion(GlobalRouting):
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1863:    id = "OpenROAD.DiodeInsertion"
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1884:    Steps = [_DiodeInsertion, CheckAntennas]
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1955:                "DRT_ANTENNA_REPAIR_ITERS",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1961:                "DRT_ANTENNA_REPAIR_MARGIN",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1969:                "DRT_ANTENNA_REPAIR_JUMPER_ONLY",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1971:                "Only use jumpers to fix antenna violations. Cannot be used in conjunction with 
+DRT_ANTENNA_REPAIR_DIODE_ONLY.",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1975:                "DRT_ANTENNA_REPAIR_DIODE_ONLY",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py
+:1977:                "Only use antenna diodes to fix antenna violations. Cannot be used in conjunction with 
+DRT_ANTENNA_REPAIR_JUMPER_ONLY.",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.py:
+83:        Odb.HeuristicDiodeInsertion,
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.py:
+168:            "Enables the Odb.HeuristicDiodeInsertion step.",
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.py:
+172:            "RUN_ANTENNA_REPAIR",
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "sed -n '150,200p' 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.py"
+bash: line 1: sed: command not found
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "python3 - <<'EOF'
+p='/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.
+py'
+lines=open(p).read().splitlines()
+print(chr(10).join(lines[148:200]))
+EOF"
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "grep -n -B3 -A8 
+'RUN_ANTENNA_REPAIR' 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.py 
+| head -40"
+169-            default=False,  # For compatibility with OL1
+170-        ),
+171-        Variable(
+172:            "RUN_ANTENNA_REPAIR",
+173-            bool,
+174-            "Enables the OpenROAD.RepairAntennas step.",
+175-            default=True,
+176-            deprecated_names=["GRT_REPAIR_ANTENNAS"],
+177-        ),
+178-        Variable(
+179-            "RUN_DRT",
+180-            bool,
+--
+275-        "OpenROAD.RCX": ["RUN_SPEF_EXTRACTION"],
+276-        "OpenROAD.TapEndcapInsertion": ["RUN_TAP_ENDCAP_INSERTION"],
+277-        "Odb.HeuristicDiodeInsertion": ["RUN_HEURISTIC_DIODE_INSERTION"],
+278:        "OpenROAD.RepairAntennas": ["RUN_ANTENNA_REPAIR"],
+279-        "OpenROAD.DetailedRouting": ["RUN_DRT"],
+280-        "OpenROAD.FillInsertion": ["RUN_FILL_INSERTION"],
+281-        "OpenROAD.STAPostPNR": ["RUN_MCSTA"],
+282-        "OpenROAD.IRDropReport": ["RUN_IRDROP_REPORT"],
+283-        "Magic.StreamOut": ["RUN_MAGIC_STREAMOUT"],
+284-        "KLayout.StreamOut": ["RUN_KLAYOUT_STREAMOUT"],
+285-        "Magic.WriteLEF": ["RUN_MAGIC_WRITE_LEF"],
+286-        "Magic.DRC": ["RUN_MAGIC_DRC"],
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc "grep -rhoE 
+'\"(CTS_[A-Z0-9_]+|PL_RESIZER_[A-Z0-9_]+|SYNTH_BUFFER[A-Z0-9_]*|GRT_[A-Z0-9_]+)\"' 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/*.py | 
+sort -u | head -60"
+[31;1mCTS_[A-Z0-9_]+: [31;1mDer Begriff "CTS_[A-Z0-9_]+" wird nicht als Name eines Cmdlets, einer Funktion, einer 
+Skriptdatei oder eines ausf´┐¢hrbaren Programms erkannt.[0m
+[31;1m[31;1mPr´┐¢fen Sie die Schreibweise des Namens bzw. stellen Sie sicher, dass der Pfad korrekt angegeben wurde, 
+und versuchen Sie es erneut.[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker run --rm --entrypoint bash ghcr.io/librelane/librelane:3.0.17 -lc 'grep -rhoE 
+"\"(CTS|PL_RESIZER|SYNTH_BUFFER|GRT)_[A-Z0-9_]*\"" 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/*.py | 
+sort -u | head -60'
+"CTS_APPLY_NDR"
+"CTS_BALANCE_LEVELS"
+"CTS_CLK_BUFFERS"
+"CTS_CLK_BUFFER_LIST"
+"CTS_CLK_MAX_WIRE_LENGTH"
+"CTS_CORNERS"
+"CTS_DELAY_BUFFER_DERATE_PCT"
+"CTS_DISABLE_POST_PROCESSING"
+"CTS_DISTANCE_BETWEEN_BUFFERS"
+"CTS_MACRO_CLUSTERING_MAX_DIAMETER"
+"CTS_MACRO_CLUSTERING_SIZE"
+"CTS_MAX_CAP"
+"CTS_MAX_SLEW"
+"CTS_OBSTRUCTION_AWARE"
+"CTS_ROOT_BUFFER"
+"CTS_SINK_BUFFER_MAX_CAP_DERATE_PCT"
+"CTS_SINK_CLUSTERING_ENABLE"
+"CTS_SINK_CLUSTERING_MAX_DIAMETER"
+"CTS_SINK_CLUSTERING_SIZE"
+"GRT_ADJUSTMENT"
+"GRT_ALLOW_CONGESTION"
+"GRT_ANTENNA_ITERS"
+"GRT_ANTENNA_MARGIN"
+"GRT_ANTENNA_REPAIR_DIODE_ONLY"
+"GRT_ANTENNA_REPAIR_ITERS"
+"GRT_ANTENNA_REPAIR_JUMPER_ONLY"
+"GRT_ANTENNA_REPAIR_MARGIN"
+"GRT_ANT_ITERS"
+"GRT_ANT_MARGIN"
+"GRT_DESIGN_REPAIR_MAX_CAP_PCT"
+"GRT_DESIGN_REPAIR_MAX_SLEW_PCT"
+"GRT_DESIGN_REPAIR_MAX_WIRE_LENGTH"
+"GRT_DESIGN_REPAIR_RUN_GRT"
+"GRT_LAYER_ADJUSTMENTS"
+"GRT_MACRO_EXTENSION"
+"GRT_OBS"
+"GRT_OVERFLOW_ITERS"
+"GRT_RESIZER_ALLOW_SETUP_VIOS"
+"GRT_RESIZER_FIX_HOLD_FIRST"
+"GRT_RESIZER_GATE_CLONING"
+"GRT_RESIZER_HOLD_MAX_BUFFER_PCT"
+"GRT_RESIZER_HOLD_MAX_UTIL_PCT"
+"GRT_RESIZER_HOLD_REPAIR_TNS_PCT"
+"GRT_RESIZER_HOLD_SLACK_MARGIN"
+"GRT_RESIZER_RUN_GRT"
+"GRT_RESIZER_SETUP_BUFFERING"
+"GRT_RESIZER_SETUP_BUFFER_REMOVAL"
+"GRT_RESIZER_SETUP_GATE_CLONING"
+"GRT_RESIZER_SETUP_MAX_BUFFER_PCT"
+"GRT_RESIZER_SETUP_MAX_UTIL_PCT"
+"GRT_RESIZER_SETUP_REPAIR_TNS_PCT"
+"GRT_RESIZER_SETUP_SLACK_MARGIN"
+"PL_RESIZER_ALLOW_SETUP_VIOS"
+"PL_RESIZER_BUFFER_INPUT_PORTS"
+"PL_RESIZER_BUFFER_OUTPUT_PORTS"
+"PL_RESIZER_FIX_HOLD_FIRST"
+"PL_RESIZER_GATE_CLONING"
+"PL_RESIZER_HOLD_MAX_BUFFER_PCT"
+"PL_RESIZER_HOLD_MAX_BUFFER_PERCENT"
+"PL_RESIZER_HOLD_MAX_UTIL_PCT"
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_wrap32_fitted.json
+Created file successfully: openlane/sky130_wrap32_fitted.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker rm -f chiplab-wrap32-fitted 2>$null | Out-Null; docker run -d --name 
+chiplab-wrap32-fitted -v "E:\chips\main:/work" -w /work -v chiplab-librelane-ciel:/root/.ciel 
+ghcr.io/librelane/librelane:3.0.17 librelane --run-tag wrap32-fitted-full --skip OpenROAD.ResizerTimingPostCTS --skip 
+OpenROAD.ResizerTimingPostGRT openlane/sky130_wrap32_fitted.json; Start-Sleep -Seconds 60; docker ps --filter 
+name=chiplab-wrap32-fitted --format "{{.Status}}"; docker logs --tail 15 chiplab-wrap32-fitted 2>&1
+35df37243a5747e18b64a97e3cd51a05fe8ff8e171c18fed4675ca396f4533bb
+Up About a minute
+Ôöé nom_tt_025C_1v80     Ôöé 0ÔÇª Ôöé 0ÔÇª Ôöé 0ÔÇª Ôöé 0  Ôöé 0  Ôöé ÔÇª Ôöé 5ÔÇª Ôöé ÔÇª Ôöé 0  Ôöé 0 Ôöé 0  Ôöé ÔÇª 
+Ôöé
+Ôöé nom_ss_100C_1v60     Ôöé 0ÔÇª Ôöé 0ÔÇª Ôöé 0ÔÇª Ôöé 0  Ôöé 0  Ôöé ÔÇª Ôöé 0ÔÇª Ôöé ÔÇª Ôöé 0  Ôöé 0 Ôöé 0  Ôöé ÔÇª 
+Ôöé
+Ôöé nom_ff_n40C_1v95     Ôöé 0ÔÇª Ôöé 0ÔÇª Ôöé 0ÔÇª Ôöé 0  Ôöé 0  Ôöé ÔÇª Ôöé 6ÔÇª Ôöé ÔÇª Ôöé 0  Ôöé 0 Ôöé 0  Ôöé 0 
+Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤Ôö
+ÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔ
+öÿ
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Floorplan Initialization 
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+[14:20:58] VERBOSE  Running 'OpenROAD.Floorplan' at                 step.py:1138
+                    'openlane/runs/wrap32-fitted-full/13-openroad-f             
+                    loorplan'ÔÇª                                                  
+[14:20:58] VERBOSE  Logging subprocess to                           step.py:1338
+                    'openlane/runs/wrap32-fitted-full/13-openroad-f             
+                    loorplan/openroad-floorplan.log'ÔÇª                           
+Reading timing models for corner nom_tt_025C_1v80ÔÇª                              
+Reading timing library for the 'nom_tt_025C_1v80' corner at                     
+'/root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky13
+0A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib'ÔÇª
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker logs chiplab-wrap32-fitted 2>&1 | Select-String -Pattern 
+"WARNING|ERROR|invalid|unknown" | Select-Object -First 10; docker logs --tail 6 chiplab-wrap32-fitted 2>&1
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+                       ... For [7mwarning[0m description see                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+%[7mWarning[0m-TIMESCALEMOD:                                                          
+Writing netlist to                                                              
+'/work/openlane/runs/wrap32-fitted-full/13-openroad-floorplan/itch_wishbone_wrap
+.nl.v'ÔÇª                                                                         
+Writing powered netlist to                                                      
+'/work/openlane/runs/wrap32-fitted-full/13-openroad-floorplan/itch_wishbone_wrap
+.pnl.v'ÔÇª
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs 2>&1 | Select-Object -Last 3
+PASS vercel-api (889 ms)
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 420; docker ps --filter name=chiplab-wrap32-fitted --format 
+"{{.Status}}"; docker logs --tail 4 chiplab-wrap32-fitted 2>&1; docker logs chiplab-wrap32-fitted 2>&1 | Select-String 
+-Pattern "^\[.*\] (INFO|WARNING|ERROR).*'" | Select-Object -Last 3
+request returned 500 Internal Server Error for API route and version http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v
+1.55/containers/json?filters=%7B%22name%22%3A%7B%22chiplab-wrap32-fitted%22%3Atrue%7D%7D, check if the server supports 
+the requested API version
+[INFO GRT-0101] Running extra iterations to remove overflow.                    
+[INFO GRT-0102] Start extra iteration 1/200                                     
+[INFO GRT-0102] Start extra iteration 2/200                                     
+[INFO GRT-0102] Start extra iteration 3/200                                     
+
+[7m[14:21:45] INFO     'ROUTING_OBSTRUCTIONS'[0m is not defined. Skipping   odb.py:589
+[7m[14:25:09] INFO     'MANUAL_GLOBAL_PLACEMENTS'[0m not set. Skipping     odb.py:1033
+[7m[14:27:11] INFO     Skipping step '[0mResizer Timing              sequential.py:370
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; docker logs --tail 6 chiplab-wrap32-fitted 2>&1; docker logs 
+chiplab-wrap32-fitted 2>&1 | Select-String -Pattern "GRT-0|Completing|DetailedRouting|violations" | Select-Object 
+-Last 6
+---------------------------------------------------------------                 
+                                                                                
+[INFO GRT-0101] Running extra iterations to remove overflow.                    
+[INFO GRT-0102] Start extra iteration 1/200                                     
+[INFO GRT-0102] Start extra iteration 2/200                                     
+[INFO GRT-0102] Start extra iteration 3/200                                     
+
+[INFO [7mGRT-0[0m002] Maximum degree: 13                                              
+[INFO [7mGRT-0[0m053] Routing resources analysis:                                     
+[INFO [7mGRT-0[0m101] Running extra iterations to remove overflow.                    
+[INFO [7mGRT-0[0m102] Start extra iteration 1/200                                     
+[INFO [7mGRT-0[0m102] Start extra iteration 2/200                                     
+[INFO [7mGRT-0[0m102] Start extra iteration 3/200
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker stats --no-stream --format "{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}}" 
+chiplab-wrap32-fitted 2>&1; Get-ChildItem openlane\runs\wrap32-fitted-full | Select-Object Name,LastWriteTime | 
+Sort-Object LastWriteTime | Select-Object -Last 4
+chiplab-wrap32-fitted CPU=0.00% MEM=0B / 0B
+
+[32;1mName                     [0m[32;1m LastWriteTime[0m
+[32;1m----                     [0m [32;1m-------------[0m
+36-openroad-stamidpnr-1   10.11.2026 15:26:40
+37-openroad-stamidpnr-2   10.11.2026 15:27:11
+38-openroad-globalrouting 10.11.2026 15:27:42
+flow.log                  10.11.2026 15:27:42
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker ps -a --filter name=chiplab-wrap32-fitted --format "{{.Status}} {{.Id}}" 2>&1; 
+Get-Date -Format "HH:mm:ss"; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 20; Get-ChildItem 
+openlane\runs\wrap32-fitted-full\38-openroad-globalrouting | Select-Object Name,Length
+[31;1mfailed to execute template: template: :1:14: executing "" at <.Id>: can't evaluate field Id in type 
+*formatter.ContainerContext[0m
+15:39:33
+Running 'Odb.ManualGlobalPlacement' at 'openlane/runs/wrap32-fitted-full/33-odb-manualglobalplacement'.
+'MANUAL_GLOBAL_PLACEMENTS' not set. Skipping 'Odb.ManualGlobalPlacement'.
+Running 'OpenROAD.DetailedPlacement' at 'openlane/runs/wrap32-fitted-full/34-openroad-detailedplacement'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/34-openroad-detailedplacement/openroad-detailedp
+lacement.log'[/repr.filename].
+Running 'OpenROAD.CTS' at 'openlane/runs/wrap32-fitted-full/35-openroad-cts'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/35-openroad-cts/openroad-cts.log'[/repr.filename].
+[STA-1140] /root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/l
+ib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exists.
+[STA-1140] /root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/l
+ib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exists.
+[STA-1140] /root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/l
+ib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exists.
+[STA-1140] /root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/l
+ib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exists.
+[STA-1140] /root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/l
+ib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exists.
+[STA-1140] /root/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/l
+ib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exists.
+[CTS-0132] -balance_levels is obsolete.
+Running 'OpenROAD.STAMidPNR-1' at 'openlane/runs/wrap32-fitted-full/36-openroad-stamidpnr-1'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/36-openroad-stamidpnr-1/openroad-stamidpnr-1.log'[/repr.filename].
+Skipping step 'Resizer Timing Optimizations (Post-Clock Tree Synthesis)'.
+Running 'OpenROAD.STAMidPNR-2' at 'openlane/runs/wrap32-fitted-full/37-openroad-stamidpnr-2'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/37-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/38-openroad-globalrouting'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/38-openroad-globalrouting/openroad-globalrouting.log'[/repr.filename].
+
+[32;1mName                      [0m[32;1m Length[0m
+[32;1m----                      [0m [32;1m------[0m
+_env.tcl                     7089
+COMMANDS                      247
+config.json                  8445
+openroad-globalrouting.log      0
+state_in.json                8791
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker ps --format "{{.Names}} {{.Status}}"; "---"; docker ps -a --format "{{.Names}} {{.Status}}"; "---"; 
+docker version --format '{{.Server.Version}}' 2>&1
+buildx_buildkit_desktop-linux Up 10 minutes
+---
+chiplab-wrap32-fitted Exited (255) 10 minutes ago
+buildx_buildkit_desktop-linux Up 10 minutes
+hcs-smoke Exited (255) 6 days ago
+gwtest Exited (255) 6 days ago
+---
+29.6.1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker rm -f chiplab-wrap32-fitted 2>$null | Out-Null; docker run -d --name 
+chiplab-wrap32-fitted -v "E:\chips\main:/work" -w /work -v chiplab-librelane-ciel:/root/.ciel 
+ghcr.io/librelane/librelane:3.0.17 librelane --last-run openlane/sky130_wrap32_fitted.json --skip 
+OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT; Start-Sleep -Seconds 90; docker ps --format 
+"{{.Names}} {{.Status}}" | Select-String chiplab; docker logs --tail 8 chiplab-wrap32-fitted 2>&1
+4b3ee4e6329a4dbf575f147c826a58d746f708b9491c7c26695ba4ba2466363b
+
+[7mchiplab[0m-wrap32-fitted Up About a minute
+'/work/openlane/runs/wrap32-fitted-full/51-openroad-floorplan/itch_wishbone_wrap
+.odb'ÔÇª                                                                          
+Writing netlist to                                                              
+'/work/openlane/runs/wrap32-fitted-full/51-openroad-floorplan/itch_wishbone_wrap
+.nl.v'ÔÇª                                                                         
+Writing powered netlist to                                                      
+'/work/openlane/runs/wrap32-fitted-full/51-openroad-floorplan/itch_wishbone_wrap
+.pnl.v'ÔÇª
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\wrap32-fitted-full -Directory | Sort-Object Name | 
+Select-Object -Last 8 | ForEach-Object { $_.Name }; "---"; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 
+12; "---"; Get-ChildItem openlane\runs -Directory | Select-Object Name,LastWriteTime
+50-openroad-staprepnr
+51-openroad-floorplan
+52-openroad-dumprcvalues
+53-odb-checkmacroantennaproperties
+54-odb-setpowerconnections
+55-odb-manualmacroplacement
+56-openroad-cutrows
+tmp
+---
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/51-openroad-floorplan/openroad-floorplan.log'[/repr.filename].
+[IFP-0028] Core area lower left (20.000, 20.000) snapped to (20.240, 21.760).
+Running 'OpenROAD.DumpRCValues' at 'openlane/runs/wrap32-fitted-full/52-openroad-dumprcvalues'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/52-openroad-dumprcvalues/openroad-dumprcvalues.log'[/repr.filename].
+Running 'Odb.CheckMacroAntennaProperties' at 'openlane/runs/wrap32-fitted-full/53-odb-checkmacroantennaproperties'.
+No cells provided, skipping 'Odb.CheckMacroAntennaProperties'.
+Running 'Odb.SetPowerConnections' at 'openlane/runs/wrap32-fitted-full/54-odb-setpowerconnections'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/54-odb-setpowerconnections/odb-setpowerconnectio
+ns.log'[/repr.filename].
+Running 'Odb.ManualMacroPlacement' at 'openlane/runs/wrap32-fitted-full/55-odb-manualmacroplacement'.
+No instances found, skipping 'Odb.ManualMacroPlacement'.
+Running 'OpenROAD.CutRows' at 'openlane/runs/wrap32-fitted-full/56-openroad-cutrows'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/56-openroad-cutrows/openroad-cutrows.log'[/repr.filename].
+---
+
+[32;1mName              [0m[32;1m LastWriteTime[0m
+[32;1m----              [0m [32;1m-------------[0m
+gf180-sta          03.11.2026 23:12:05
+ihp-sta            03.11.2026 23:13:56
+metrics-full3      09.11.2026 07:15:03
+sky130-250mhz-sta  03.11.2026 23:07:06
+wrap-sta           04.11.2026 08:58:37
+wrap32-fitted-full 10.11.2026 15:41:23
+wrap32-sta         04.11.2026 12:04:14
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\wrap32-fitted-full -Directory | Sort-Object { [int]($_.Name 
+-split '-')[0] } | Select-Object -Last 14 | ForEach-Object { $_.Name }
+[31;1mSort-Object: [31;1mDer Wert "tmp" kann nicht in den Typ "System.Int32" konvertiert werden. Fehler: "The input 
+string 'tmp' was not in a correct format."[0m
+44-yosys-synthesis
+45-checker-yosysunmappedcells
+46-checker-yosyssynthchecks
+47-checker-netlistassignstatements
+48-openroad-checksdcfiles
+49-openroad-checkmacroinstances
+50-openroad-staprepnr
+51-openroad-floorplan
+52-openroad-dumprcvalues
+53-odb-checkmacroantennaproperties
+54-odb-setpowerconnections
+55-odb-manualmacroplacement
+56-openroad-cutrows
+57-openroad-tapendcapinsertion
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; docker ps --format "{{.Names}} {{.Status}}" | Select-String 
+chiplab; Get-ChildItem openlane\runs\wrap32-fitted-full -Directory | Where-Object { $_.Name -match '^\d' } | 
+Sort-Object { [int]($_.Name -split '-')[0] } | Select-Object -Last 4 | ForEach-Object { $_.Name }; Get-Content 
+openlane\runs\wrap32-fitted-full\flow.log -Tail 5
+[7mchiplab[0m-wrap32-fitted Up 11 minutes
+73-openroad-cts
+74-openroad-stamidpnr-1
+75-openroad-stamidpnr-2
+76-openroad-globalrouting
+Skipping step 'Resizer Timing Optimizations (Post-Clock Tree Synthesis)'.
+Running 'OpenROAD.STAMidPNR-2' at 'openlane/runs/wrap32-fitted-full/75-openroad-stamidpnr-2'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/75-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting/openroad-globalrouting.log'[/repr.filename].
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 420; Get-ChildItem 
+openlane\runs\wrap32-fitted-full\76-openroad-globalrouting | Select-Object Name,Length,LastWriteTime; Get-Content 
+openlane\runs\wrap32-fitted-full\76-openroad-globalrouting\openroad-globalrouting.log -Tail 12 -ErrorAction 
+SilentlyContinue
+[32;1mName                      [0m[32;1m Length[0m[32;1m LastWriteTime[0m
+[32;1m----                      [0m [32;1m------[0m [32;1m-------------[0m
+_env.tcl                     7089 10.11.2026 15:49:20
+COMMANDS                      247 10.11.2026 15:49:20
+config.json                  8445 10.11.2026 15:49:20
+openroad-globalrouting.log      0 10.11.2026 15:49:20
+state_in.json                8791 10.11.2026 15:49:20
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker stats --no-stream --format "{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}}" chiplab-wrap32-fitted; 
+docker top chiplab-wrap32-fitted 2>&1 | Select-Object -First 6
+chiplab-wrap32-fitted CPU=101.06% MEM=1.2GiB / 5.789GiB
+UID                 PID                 PPID                C                   STIME               TTY                
+ TIME                CMD
+root                622                 597                 2                   14:39               ?                  
+ 00:00:24            /nix/store/jj6jldlw37r8yy9kc1smrax9dhnjm2x4-python3-3.13.9/bin/python3.13 
+/nix/store/abmh7jj4bkf725p7rrrr98r9ax077v6d-python3.13-librelane-3.0.17/bin/.librelane-wrapped --last-run 
+openlane/sky130_wrap32_fitted.json --skip OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT
+root                759                 622                 99                  14:49               ?                  
+ 00:09:25            /nix/store/2y36a4sr078y15ick388dncqjdzmlxga-openroad-2026-02-17/bin/openroad -exit -no_splash 
+-metrics /work/openlane/runs/wrap32-fitted-full/76-openroad-globalrouting/or_metrics_out.json /nix/store/1pkfh3p98m8i3j
+p642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/grt.tcl
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\wrap32-fitted-full -Directory | Where-Object { $_.Name -match 
+'sta|cts|place' } | Sort-Object { [int]($_.Name -split '-')[0] } | ForEach-Object { $m = Join-Path $_.FullName 
+"metrics.json"; if (Test-Path $m) { $j = Get-Content $m -Raw | ConvertFrom-Json; $slack = $j.timing__setup__ws; $fmax 
+= $j.timing__clock__period; "$($_.Name): wns=$slack period=$fmax" } }
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\wrap32-fitted-full -Directory | Where-Object { $_.Name -match 
+'sta|cts' } | ForEach-Object { Get-ChildItem $_.FullName -Filter *.json | Select-Object -First 3 | ForEach-Object { 
+"$($_.FullName.Replace('E:\chips\main\','')) $($_.Length)" } }
+openlane\runs\wrap32-fitted-full\02-checker-linttimingconstructs\config.json 7505
+openlane\runs\wrap32-fitted-full\02-checker-linttimingconstructs\state_in.json 204
+openlane\runs\wrap32-fitted-full\02-checker-linttimingconstructs\state_out.json 204
+openlane\runs\wrap32-fitted-full\09-checker-netlistassignstatements\config.json 7504
+openlane\runs\wrap32-fitted-full\09-checker-netlistassignstatements\state_in.json 580
+openlane\runs\wrap32-fitted-full\09-checker-netlistassignstatements\state_out.json 580
+openlane\runs\wrap32-fitted-full\11-openroad-checkmacroinstances\config.json 7841
+openlane\runs\wrap32-fitted-full\11-openroad-checkmacroinstances\state_in.json 580
+openlane\runs\wrap32-fitted-full\11-openroad-checkmacroinstances\state_out.json 580
+openlane\runs\wrap32-fitted-full\12-openroad-staprepnr\config.json 7954
+openlane\runs\wrap32-fitted-full\12-openroad-staprepnr\state_in.json 580
+openlane\runs\wrap32-fitted-full\12-openroad-staprepnr\state_out.json 5475
+openlane\runs\wrap32-fitted-full\31-openroad-stamidpnr\config.json 7831
+openlane\runs\wrap32-fitted-full\31-openroad-stamidpnr\openroad-stamidpnr.process_stats.json 503
+openlane\runs\wrap32-fitted-full\31-openroad-stamidpnr\or_metrics_out.json 1269
+openlane\runs\wrap32-fitted-full\35-openroad-cts\config.json 8736
+openlane\runs\wrap32-fitted-full\35-openroad-cts\openroad-cts.process_stats.json 503
+openlane\runs\wrap32-fitted-full\35-openroad-cts\or_metrics_out.json 3922
+openlane\runs\wrap32-fitted-full\36-openroad-stamidpnr-1\config.json 7831
+openlane\runs\wrap32-fitted-full\36-openroad-stamidpnr-1\openroad-stamidpnr-1.process_stats.json 504
+openlane\runs\wrap32-fitted-full\36-openroad-stamidpnr-1\or_metrics_out.json 1230
+openlane\runs\wrap32-fitted-full\37-openroad-stamidpnr-2\config.json 7831
+openlane\runs\wrap32-fitted-full\37-openroad-stamidpnr-2\openroad-stamidpnr-2.process_stats.json 504
+openlane\runs\wrap32-fitted-full\37-openroad-stamidpnr-2\or_metrics_out.json 1230
+openlane\runs\wrap32-fitted-full\40-checker-linttimingconstructs\config.json 7505
+openlane\runs\wrap32-fitted-full\40-checker-linttimingconstructs\state_in.json 8791
+openlane\runs\wrap32-fitted-full\40-checker-linttimingconstructs\state_out.json 8791
+openlane\runs\wrap32-fitted-full\47-checker-netlistassignstatements\config.json 7504
+openlane\runs\wrap32-fitted-full\47-checker-netlistassignstatements\state_in.json 8798
+openlane\runs\wrap32-fitted-full\47-checker-netlistassignstatements\state_out.json 8798
+openlane\runs\wrap32-fitted-full\49-openroad-checkmacroinstances\config.json 7841
+openlane\runs\wrap32-fitted-full\49-openroad-checkmacroinstances\state_in.json 8798
+openlane\runs\wrap32-fitted-full\49-openroad-checkmacroinstances\state_out.json 8798
+openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\config.json 7954
+openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\state_in.json 8798
+openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\state_out.json 8932
+openlane\runs\wrap32-fitted-full\69-openroad-stamidpnr\config.json 7831
+openlane\runs\wrap32-fitted-full\69-openroad-stamidpnr\openroad-stamidpnr.process_stats.json 504
+openlane\runs\wrap32-fitted-full\69-openroad-stamidpnr\or_metrics_out.json 1269
+openlane\runs\wrap32-fitted-full\73-openroad-cts\config.json 8736
+openlane\runs\wrap32-fitted-full\73-openroad-cts\openroad-cts.process_stats.json 503
+openlane\runs\wrap32-fitted-full\73-openroad-cts\or_metrics_out.json 3922
+openlane\runs\wrap32-fitted-full\74-openroad-stamidpnr-1\config.json 7831
+openlane\runs\wrap32-fitted-full\74-openroad-stamidpnr-1\openroad-stamidpnr-1.process_stats.json 504
+openlane\runs\wrap32-fitted-full\74-openroad-stamidpnr-1\or_metrics_out.json 1230
+openlane\runs\wrap32-fitted-full\75-openroad-stamidpnr-2\config.json 7831
+openlane\runs\wrap32-fitted-full\75-openroad-stamidpnr-2\openroad-stamidpnr-2.process_stats.json 504
+openlane\runs\wrap32-fitted-full\75-openroad-stamidpnr-2\or_metrics_out.json 1230
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; foreach ($d in 
+@("69-openroad-stamidpnr","73-openroad-cts","74-openroad-stamidpnr-1","50-openroad-staprepnr")) { $p = 
+"openlane\runs\wrap32-fitted-full\$d\or_metrics_out.json"; if (Test-Path $p) { $j = Get-Content $p -Raw | 
+ConvertFrom-Json; $ws = $j.'timing__setup__ws'; $tns = $j.'timing__setup__tns'; $inst = $j.'design__instance__count'; 
+$area = $j.'design__instance__area'; "$d : ws=$ws tns=$tns inst=$inst area=$area" } }
+69-openroad-stamidpnr : ws= tns= inst= area=
+73-openroad-cts : ws= tns= inst=54569 area=358194
+74-openroad-stamidpnr-1 : ws= tns= inst= area=
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; $p="openlane\runs\wrap32-fitted-full\73-openroad-cts\or_metrics_out.json"; (Get-Content $p 
+-Raw | ConvertFrom-Json).PSObject.Properties | Where-Object { $_.Name -match "timing|instance|die|core" } | 
+ForEach-Object { "$($_.Name) = $($_.Value)" }; "--- prePNR ---"; 
+$q="openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\or_metrics_out.json"; if (Test-Path $q) { (Get-Content $q 
+-Raw | ConvertFrom-Json).PSObject.Properties | Where-Object { $_.Name -match "timing|instance|die|core" } | 
+ForEach-Object { "$($_.Name) = $($_.Value)" } } else { Get-ChildItem 
+openlane\runs\wrap32-fitted-full\50-openroad-staprepnr | Select-Object Name }
+design__instance__displacement__total = 1350.17
+design__instance__displacement__mean = 0.024
+design__instance__displacement__max = 8.024
+design__die__area = 1960000
+design__core__area = 1845580
+design__instance__count__stdcell = 53571
+design__instance__area__stdcell = 354447
+design__instance__count__macros = 0
+design__instance__area__macros = 0
+design__instance__count__padcells = 0
+design__instance__area__padcells = 0
+design__instance__count__cover = 0
+design__instance__area__cover = 0
+design__instance__utilization = 0.192053
+design__instance__utilization__stdcell = 0.192053
+design__instance__count__class:fill_cell = 998
+design__instance__area__class:fill_cell = 3746.09
+design__instance__count__class:tap_cell = 26302
+design__instance__area__class:tap_cell = 32909.1
+design__instance__count__class:buffer = 2955
+design__instance__area__class:buffer = 20064.2
+design__instance__count__class:clock_buffer = 435
+design__instance__area__class:clock_buffer = 5839.35
+design__instance__count__class:timing_repair_buffer = 6236
+design__instance__area__class:timing_repair_buffer = 76327
+design__instance__count__class:inverter = 249
+design__instance__area__class:inverter = 938.4
+design__instance__count__class:clock_inverter = 50
+design__instance__area__class:clock_inverter = 519.248
+design__instance__count__class:sequential_cell = 1565
+design__instance__area__class:sequential_cell = 33355.7
+design__instance__count__class:multi_input_combinational_cell = 15779
+design__instance__area__class:multi_input_combinational_cell = 184494
+design__instance__count = 54569
+design__instance__area = 358194
+--- prePNR ---
+
+[32;1mName[0m
+[32;1m----[0m
+nom_ff_n40C_1v95
+nom_ss_100C_1v60
+nom_tt_025C_1v80
+COMMANDS
+config.json
+runtime.txt
+state_in.json
+state_out.json
+summary.rpt
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-ChildItem openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\nom_ss_100C_1v60 | 
+Select-Object Name; "---"; Get-Content openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\summary.rpt -TotalCount 
+25 -ErrorAction SilentlyContinue
+[32;1mName[0m
+[32;1m----[0m
+_env_ThreadPoolExecutor-2_1.tcl
+checks.rpt
+clock.rpt
+itch_wishbone_wrap__nom_ss_100C_1v60.sdf
+max.rpt
+min.rpt
+power.rpt
+skew.max.rpt
+skew.min.rpt
+sta.log
+sta.process_stats.json
+tns.max.rpt
+tns.min.rpt
+unpropagated.rpt
+violator_list.rpt
+wns.max.rpt
+wns.min.rpt
+ws.max.rpt
+ws.min.rpt
+---
+???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+?????????????????????????????????????????
+?                      ? Hold     ? Reg to   ?          ?          ? of which  ? Setup    ?           ?          ?     
+      ? of which ?           ?          ?
+?                      ? Worst    ? Reg      ?          ? Hold Vio ? reg to    ? Worst    ? Reg to    ? Setup    ? 
+Setup Vio ? reg to   ? Max Cap   ? Max Slew ?
+? Corner/Group         ? Slack    ? Paths    ? Hold TNS ? Count    ? reg       ? Slack    ? Reg Paths ? TNS      ? 
+Count     ? reg      ? Violatio. ? Violati. ?
+???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+?????????????????????????????????????????
+´┐¢ Overall              ´┐¢ 0.0311   ´┐¢ 0.0311   ´┐¢ 0.0000   ´┐¢ 0        ´┐¢ 0         ´┐¢ 0.3537   ´┐¢ 0.3537    
+´┐¢ 0.0000   ´┐¢ 0         ´┐¢ 0        ´┐¢ 0         ´┐¢ 19660    ´┐¢
+´┐¢ nom_tt_025C_1v80     ´┐¢ 0.1726   ´┐¢ 0.1726   ´┐¢ 0.0000   ´┐¢ 0        ´┐¢ 0         ´┐¢ 5.0348   ´┐¢ 5.0348    
+´┐¢ 0.0000   ´┐¢ 0         ´┐¢ 0        ´┐¢ 0         ´┐¢ 52       ´┐¢
+´┐¢ nom_ss_100C_1v60     ´┐¢ 0.5745   ´┐¢ 0.5745   ´┐¢ 0.0000   ´┐¢ 0        ´┐¢ 0         ´┐¢ 0.3537   ´┐¢ 0.3537    
+´┐¢ 0.0000   ´┐¢ 0         ´┐¢ 0        ´┐¢ 0         ´┐¢ 19660    ´┐¢
+´┐¢ nom_ff_n40C_1v95     ´┐¢ 0.0311   ´┐¢ 0.0311   ´┐¢ 0.0000   ´┐¢ 0        ´┐¢ 0         ´┐¢ 6.3912   ´┐¢ 6.7638    
+´┐¢ 0.0000   ´┐¢ 0         ´┐¢ 0        ´┐¢ 0         ´┐¢ 0        ´┐¢
+´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐
+¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´
+┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢
+´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐¢´┐
+¢´┐¢
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; foreach ($d in 
+@("69-openroad-stamidpnr","74-openroad-stamidpnr-1","75-openroad-stamidpnr-2")) { 
+$p="openlane\runs\wrap32-fitted-full\$d\summary.rpt"; if (Test-Path $p) { "=== $d ==="; Get-Content $p | Select-Object 
+-Skip 3 -First 6 } }
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; docker ps --format "{{.Names}} {{.Status}}" | Select-String 
+chiplab; Get-ChildItem openlane\runs\wrap32-fitted-full -Directory | Where-Object { $_.Name -match '^\d' } | 
+Sort-Object { [int]($_.Name -split '-')[0] } | Select-Object -Last 3 | ForEach-Object { $_.Name }; Get-Content 
+openlane\runs\wrap32-fitted-full\flow.log -Tail 4
+[7mchiplab[0m-wrap32-fitted Up 29 minutes
+74-openroad-stamidpnr-1
+75-openroad-stamidpnr-2
+76-openroad-globalrouting
+Running 'OpenROAD.STAMidPNR-2' at 'openlane/runs/wrap32-fitted-full/75-openroad-stamidpnr-2'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/75-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting/openroad-globalrouting.log'[/repr.filename].
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead docs/long-runs.md [90m[offset=36, limit=30][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/long-runs.md
+Index: docs/long-runs.md
+===================================================================
+--- docs/long-runs.md
++++ docs/long-runs.md
+@@ -44,12 +44,18 @@
+ - The resizer can spend hours on a design that is far from closure; skipping it gets
+   you routing/DRC/LVS evidence instead of a timing number.
+ - `GRT_ALLOW_CONGESTION: 1` turns the GRT-0116 abort into a warning so the flow can
+   reach detailed routing.
+-- `RUN_ANTENNA_REPAIR: false` removes the antenna steps (and **removes
+-  `OpenROAD.DiodeInsertion` from the flow** ÔÇö passing `--skip OpenROAD.DiodeInsertion`
+-  then fails with "no step(s) with ID").
+-- Antenna repair off is not sign-off clean: report antenna/DRC findings honestly.
++- `RUN_HEURISTIC_DIODE_INSERTION: false` drops `Odb.HeuristicDiodeInsertion` ÔÇö the
++  step that hit `GRT-0183` (heap underflow) on the congested wrapper run. In 3.0.17 the
++  switch is `RUN_HEURISTIC_DIODE_INSERTION`; `RUN_ANTENNA_REPAIR` gates
++  `OpenROAD.RepairAntennas` (checked in the installed package, not guessed). Passing
++  `--skip` for a step that a switch already removed fails with "no step(s) with ID".
++- `RUN_ANTENNA_REPAIR: false` removes the repair step too, but then the design is not
++  antenna-clean: report antenna/DRC findings honestly.
++- `CTS_BALANCE_LEVELS` is **obsolete** in 3.0.17 (CTS-0132, ignored); do not use it as
++  the clock-planning knob. `CTS_SINK_CLUSTERING_ENABLE`, `CTS_CLK_BUFFER_LIST`,
++  `CTS_MAX_CAP` and `CTS_MAX_SLEW` are the effective ones.
+ 
+ ## 4. Resuming a killed run
+ 
+ LibreLane can continue an existing run tag, but the CLI still requires a config:
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/long-runs.md
+Index: docs/long-runs.md
+===================================================================
+--- docs/long-runs.md
++++ docs/long-runs.md
+@@ -68,8 +68,14 @@
+ `--last-run` picks the newest run directory under `openlane/runs`. Repeat the same
+ `--skip` flags: skipped steps are not recorded as completed, so omitting them re-runs
+ those steps.
+ 
++Observed on 2026-11-10: Docker Desktop restarted while `OpenROAD.GlobalRouting` was
++running (container exit 255). The `--last-run` resume re-ran the flow from synthesis
++(new step directories from `44-yosys-synthesis` upward) instead of continuing at the
++failed routing step, so budget the replay time. Check `flow.log` for the current step
++number instead of assuming an exact resume point.
++
+ A host/Docker restart kills the container (`unexpected EOF`); check `docker ps`, start
+ Docker Desktop, then resume. Long runs (many hours) are not reliable on a machine that
+ reboots; prefer the bounded runs and the small-block validation.
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 3; 
+docker ps --format "{{.Names}} {{.Status}}" | Select-String chiplab; docker stats --no-stream --format "{{.CPUPerc}}" 
+chiplab-wrap32-fitted
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/75-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting/openroad-globalrouting.log'[/repr.filename].
+
+[7mchiplab[0m-wrap32-fitted Up 39 minutes
+99.78%
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 3; 
+Get-ChildItem openlane\runs\wrap32-fitted-full\76-openroad-globalrouting | Select-Object Name,Length | Where-Object { 
+$_.Name -match "log|json|rpt" }
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/75-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting/openroad-globalrouting.log'[/repr.filename].
+
+[32;1mName                      [0m[32;1m Length[0m
+[32;1m----                      [0m [32;1m------[0m
+config.json                  8445
+openroad-globalrouting.log      0
+state_in.json                8791
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mGet-Date -Format "HH:mm:ss"; cd E:\chips\main; Start-Sleep -Seconds 420; Get-Content 
+openlane\runs\wrap32-fitted-full\flow.log -Tail 2; docker stats --no-stream --format "{{.CPUPerc}} {{.MemUsage}}" 
+chiplab-wrap32-fitted
+16:30:00
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/76-openroad-globalrouting/openroad-globalrouting.log'[/repr.filename].
+0.00% 0B / 0B
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mdocker ps -a --format "{{.Names}} {{.Status}}"; docker version --format '{{.Server.Version}}' 2>&1; Get-Date 
+-Format "HH:mm:ss"; Get-WinEvent -LogName Application -MaxEvents 40 -ErrorAction SilentlyContinue | Where-Object { 
+$_.Message -match "Docker|vmmem|WSL|memory" } | Select-Object -First 6 
+TimeCreated,ProviderName,@{n='Msg';e={$_.Message.Substring(0,[Math]::Min(160,$_.Message.Length))}}
+chiplab-wrap32-fitted Exited (255) 3 minutes ago
+buildx_buildkit_desktop-linux Up 3 minutes
+hcs-smoke Exited (255) 6 days ago
+gwtest Exited (255) 6 days ago
+29.6.1
+16:37:09
+> build ┬À deepseek-v4.1-flash
+[0m$ [0m$log = "$env:LOCALAPPDATA\Docker\log\vm"; if (Test-Path $log) { Get-ChildItem $log | Sort-Object 
+LastWriteTime | Select-Object -Last 5 Name,LastWriteTime,Length } else { "no vm log dir" }; $h = 
+"$env:APPDATA\Docker\settings-store.json"; if (Test-Path $h) { (Get-Content $h -Raw | ConvertFrom-Json) | 
+Select-Object MemoryMiB,SwapMiB,Cpus,UseResourceSaver,ResourceSaverTimeout }
+[32;1mName                        [0m[32;1m LastWriteTime      [0m[32;1m  Length[0m
+[32;1m----                        [0m [32;1m-------------      [0m [32;1m ------[0m
+init.log.20261110-074927.716 10.11.2026 07:49:27 1048443
+init.log.20261110-084310.152 10.11.2026 08:43:10 1048562
+init.log.20261110-151742.932 10.11.2026 15:17:42 1048472
+init.log.20261110-155631.770 10.11.2026 15:56:30 1048486
+init.log                     10.11.2026 16:33:13  822925
+                                                       1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0m$h = "$env:APPDATA\Docker\settings-store.json"; (Get-Content $h -Raw | ConvertFrom-Json).PSObject.Properties 
+| Select-Object -First 30 Name,Value | Format-Table -AutoSize; "--- init.log tail ---"; Get-Content 
+"$env:LOCALAPPDATA\Docker\log\vm\init.log" -Tail 25
+[32;1mName                                 [0m[32;1m                  Value[0m
+[32;1m----                                 [0m [32;1m                 -----[0m
+AutoStart                                              False
+DesktopTerminalEnabled                                  True
+DisplayedOnboarding                                     True
+EnableDockerAI                                          True
+EnableIntegrationWithDefaultWslDistro                   True
+IntegratedWslDistros                  {Ubuntu, Ubuntu-22.04}
+LastContainerdSnapshotterEnable                   1780858170
+LicenseTermsVersion                                        2
+SettingsVersion                                           45
+UpdateInstallTime                                          0
+UpdatePreviousVersion                                       
+UseContainerdSnapshotter                                True
+WslEngineEnabled                                        True
+
+--- init.log tail ---
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/f9d20a39501994874bf711f756a5a7783bfaf1e7d1ddaef5
+790f1a043cce7784/stats?stream=false","time":"2026-11-10T15:37:13.182975953Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/e3d981f8f8a539a40954134994e3caf36e89ee68f1a06d9e
+80527406b3746b81/stats?stream=false","time":"2026-11-10T15:37:13.183026745Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/e3d981f8f8a539a40954134994e3caf36e89ee68f1a06d9e
+80527406b3746b81/stats?stream=false","time":"2026-11-10T15:37:13.183702548Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/79b8b7d7baa9154f22e91b37388bde77f8da46c1c00597df
+7c43bc583c222271/stats?stream=false","time":"2026-11-10T15:37:13.186173283Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/79b8b7d7baa9154f22e91b37388bde77f8da46c1c00597df
+7c43bc583c222271/stats?stream=false","time":"2026-11-10T15:37:13.186830815Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/4b3ee4e6329a4dbf575f147c826a58d746f708b9491c7c26
+695ba4ba2466363b/stats?stream=false","time":"2026-11-10T15:37:13.188994699Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/4b3ee4e6329a4dbf575f147c826a58d746f708b9491c7c26
+695ba4ba2466363b/stats?stream=false","time":"2026-11-10T15:37:13.189773824Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/f9d20a39501994874bf711f756a5a7783bfaf1e7d1ddaef5
+790f1a043cce7784/stats?stream=false","time":"2026-11-10T15:37:14.190863039Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"Context canceled, closing connection for 
+\"/v1.55/events?filters=%7B%22type%22%3A%7B%22container%22%3Atrue%7D%7D\"","time":"2026-11-10T15:37:14.204065733Z"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/events?filters=%7B%22type%22%3A%7B%22container%22%3Atrue%7D
+%7D","time":"2026-11-10T15:37:14.204510550Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+{"component":"apiproxy","level":"info","msg":">> HEAD 
+/_ping","time":"2026-11-10T15:37:23.153695899Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+{"component":"apiproxy","level":"info","msg":"<< HEAD 
+/_ping","time":"2026-11-10T15:37:23.154296850Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/events?filters=%7B%22type%22%3A%7B%22container%22%3Atrue%7D
+%7D","time":"2026-11-10T15:37:23.156598830Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET 
+/v1.55/containers/json?all=1","time":"2026-11-10T15:37:23.159601785Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET 
+/v1.55/containers/json?all=1","time":"2026-11-10T15:37:23.341524785Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/f9d20a39501994874bf711f756a5a7783bfaf1e7d1ddaef5
+790f1a043cce7784/stats?stream=false","time":"2026-11-10T15:37:23.346840333Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/e3d981f8f8a539a40954134994e3caf36e89ee68f1a06d9e
+80527406b3746b81/stats?stream=false","time":"2026-11-10T15:37:23.346910178Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/e3d981f8f8a539a40954134994e3caf36e89ee68f1a06d9e
+80527406b3746b81/stats?stream=false","time":"2026-11-10T15:37:23.347791807Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/4b3ee4e6329a4dbf575f147c826a58d746f708b9491c7c26
+695ba4ba2466363b/stats?stream=false","time":"2026-11-10T15:37:23.350479780Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/4b3ee4e6329a4dbf575f147c826a58d746f708b9491c7c26
+695ba4ba2466363b/stats?stream=false","time":"2026-11-10T15:37:23.351281658Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":">> GET /v1.55/containers/79b8b7d7baa9154f22e91b37388bde77f8da46c1c00597df
+7c43bc583c222271/stats?stream=false","time":"2026-11-10T15:37:23.353793740Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/79b8b7d7baa9154f22e91b37388bde77f8da46c1c00597df
+7c43bc583c222271/stats?stream=false","time":"2026-11-10T15:37:23.354559438Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/containers/f9d20a39501994874bf711f756a5a7783bfaf1e7d1ddaef5
+790f1a043cce7784/stats?stream=false","time":"2026-11-10T15:37:24.355091281Z","user_agent":"Docker-Client/29.6.1 
+(windows)"}
+{"component":"apiproxy","level":"info","msg":"Context canceled, closing connection for 
+\"/v1.55/events?filters=%7B%22type%22%3A%7B%22container%22%3Atrue%7D%7D\"","time":"2026-11-10T15:37:24.368097678Z"}
+{"component":"apiproxy","level":"info","msg":"<< GET /v1.55/events?filters=%7B%22type%22%3A%7B%22container%22%3Atrue%7D
+%7D","time":"2026-11-10T15:37:24.368593733Z","user_agent":"Docker-Client/29.6.1 (windows)"}
+> build ┬À deepseek-v4.1-flash
+[0m$ [0m$p = "$env:USERPROFILE\.wslconfig"; if (Test-Path $p) { Get-Content $p } else { "no .wslconfig" }; "---"; 
+Get-CimInstance Win32_ComputerSystem | Select-Object @{n='RAM_GB';e={[math]::Round($_.TotalPhysicalMemory/1GB,1)}}; 
+Get-CimInstance Win32_OperatingSystem | Select-Object @{n='Free_GB';e={[math]::Round($_.FreePhysicalMemory/1MB,1)}}
+[wsl2]
+memory=6GB
+processors=6
+swap=8GB
+maxCrashDumpCount=-1
+
+[experimental]
+autoMemoryReclaim=gradual
+sparseVhd=true
+---
+
+[32;1mRAM_GB[0m
+[32;1m------[0m
+ 19,80
+> build ┬À deepseek-v4.1-flash
+[0m$ [0m$p = "$env:USERPROFILE\.wslconfig"; Copy-Item $p "$p.bak-chiplab" -Force; (Get-Content $p) -replace 
+'^memory=6GB$','memory=10GB' -replace '^processors=6$','processors=8' | Set-Content $p -Encoding ASCII; Get-Content 
+$p; "---"; wsl --shutdown; Start-Sleep -Seconds 10; Get-Process -Name "Docker Desktop","com.docker.backend" 
+-ErrorAction SilentlyContinue | Stop-Process -Force; Start-Sleep -Seconds 5; Start-Process "C:\Program 
+Files\Docker\Docker\Docker Desktop.exe"; Start-Sleep -Seconds 120; docker version --format '{{.Server.Version}}' 2>&1
+[wsl2]
+memory=10GB
+processors=8
+swap=8GB
+maxCrashDumpCount=-1
+
+[experimental]
+autoMemoryReclaim=gradual
+sparseVhd=true
+---
+29.6.1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; docker rm -f chiplab-wrap32-fitted 2>$null | Out-Null; docker run -d --name 
+chiplab-wrap32-fitted -v "E:\chips\main:/work" -w /work -v chiplab-librelane-ciel:/root/.ciel 
+ghcr.io/librelane/librelane:3.0.17 librelane --last-run openlane/sky130_wrap32_fitted.json --skip 
+OpenROAD.ResizerTimingPostCTS --skip OpenROAD.ResizerTimingPostGRT; Start-Sleep -Seconds 45; docker ps --format 
+"{{.Names}} {{.Status}}" | Select-String chiplab; docker stats --no-stream --format "MEM={{.MemUsage}}" 
+chiplab-wrap32-fitted
+4fbfd99388faf9c35c74be8a8ee86bcaa1ff62fe2dbd202346aafe27c03c0fb8
+
+[7mchiplab[0m-wrap32-fitted Up 45 seconds
+MEM=418.4MiB / 9.715GiB
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 900; docker stats --no-stream --format "MEM={{.MemUsage}} 
+CPU={{.CPUPerc}}" chiplab-wrap32-fitted; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 2; Get-ChildItem 
+openlane\runs\wrap32-fitted-full -Directory | Where-Object { $_.Name -match '^\d' } | Sort-Object { [int]($_.Name 
+-split '-')[0] } | Select-Object -Last 1 | ForEach-Object { $_.Name }
+MEM=1.199GiB / 9.715GiB CPU=100.80%
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting/openroad-globalroutin
+g.log'[/repr.filename].
+114-openroad-globalrouting
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 900; docker stats --no-stream --format "MEM={{.MemUsage}} 
+CPU={{.CPUPerc}}" chiplab-wrap32-fitted 2>&1; Get-Date -Format "HH:mm:ss"; Get-Content 
+openlane\runs\wrap32-fitted-full\flow.log -Tail 2
+MEM=1.2GiB / 9.715GiB CPU=101.05%
+17:11:18
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting/openroad-globalroutin
+g.log'[/repr.filename].
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mrg -n "wsl --shutdown|wsl.exe --shutdown|Restart-Service|Stop-Service" C:\Users\hcsme\.config\opencode 
+2>$null | Select-Object -First 10; "---"; Get-ScheduledTask -TaskName "OpenCodeLocalStack" -ErrorAction 
+SilentlyContinue | Select-Object TaskName,State
+---
+
+[32;1mTaskName          [0m[32;1m State[0m
+[32;1m--------          [0m [32;1m-----[0m
+OpenCodeLocalStack Ready
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; $d="openlane\runs\wrap32-fitted-full\50-openroad-staprepnr\nom_ss_100C_1v60"; Get-Content 
+"$d\wns.max.rpt" -TotalCount 12; "--- ws ---"; Get-Content "$d\ws.max.rpt" -TotalCount 6; "--- hold ---"; Get-Content 
+"$d\wns.min.rpt" -TotalCount 8
+===========================================================================
+Worst Negative Slack (Setup)
+============================================================================
+nom_ss_100C_1v60: 0.0
+--- ws ---
+
+===========================================================================
+Worst Slack (Setup)
+============================================================================
+nom_ss_100C_1v60: 0.35371173657870775
+--- hold ---
+
+===========================================================================
+Worst Negative Slack (Hold)
+============================================================================
+nom_ss_100C_1v60: 0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; docker stats --no-stream --format "MEM={{.MemUsage}} 
+CPU={{.CPUPerc}}" chiplab-wrap32-fitted 2>&1; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 3; Get-Date 
+-Format "HH:mm:ss"
+MEM=1.208GiB / 9.715GiB CPU=101.18%
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/113-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting/openroad-globalroutin
+g.log'[/repr.filename].
+17:22:07
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -15,8 +15,9 @@
+ | `sky130_wrap.json` | `itch_host_wrap` (128-bit) | Sky130 | 3.10 ns |
+ | `sky130_wrap32.json` | `itch_wishbone_wrap` (32-bit) | Sky130 | 3.10 ns |
+ | `sky130_wrap32_big.json` | 32-bit wrapper, congestion allowed | Sky130 | 3.10 ns |
+ | `sky130_wrap32_100mhz.json` | 32-bit wrapper at 100 MHz, relaxed flow | Sky130 | 10.0 ns |
++| `sky130_wrap32_fitted.json` | 32-bit wrapper, 1400 ┬Ám die at 25 % density, antenna-diode step off, 10 ns | Sky130 
+| 10.0 ns |
+ | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+ 
+ ## Verified toolchain (2026-11-03)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead EXECUTION_LOG.md [90m[limit=12][0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "^## 2026-11-10" EXECUTION_LOG.md | Select-Object -First 5
+262:## 2026-11-10 14:59 - Autonomy tick + BBO area estimate refreshed
+270:## 2026-11-10 13:59 - Autonomy tick + PWA offline verified
+281:## 2026-11-10 12:59 - Autonomy tick + local-cloud UI round-trip verified
+293:## 2026-11-10 12:00 - Autonomy tick + docker compose verified
+303:## 2026-11-10 10:59 - Autonomy tick + native Vulkan re-verified, nightly dispatched
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,31 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-10 14:59 (cont.) - Parser wrapper full-flow attempt: WSL memory cap raised
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. Fast gate **11/11**.
++- New config `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die at
++  25 % target density, `GRT_ALLOW_CONGESTION`, 200 overflow iterations,
++  `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns). The obsolete `CTS_BALANCE_LEVELS`
++  key was included by mistake and is ignored by 3.0.17 (`CTS-0132`); `docs/long-runs.md`
++  now names the effective CTS knobs and the real step mapping
++  (`RUN_HEURISTIC_DIODE_INSERTION` ÔåÆ `Odb.HeuristicDiodeInsertion`).
++- First full run reached **GlobalRouting in ~7 min**, then the container died
++  (`exit 255`) when the Docker VM restarted. Resumed with `--last-run`: it replayed the
++  flow from synthesis (steps 44+) rather than resuming at routing; documented.
++- Measured on the way (evidence for this configuration only):
++  - pre-PnR at 10 ns, ss/100 ┬░C/1.60 V: setup **WNS +0.354 ns**, hold clean,
++    but **19,660 max-slew violations** ÔÇö setup "closure" here is buffer-driven.
++  - post-CTS: 54,569 instances (15,779 combinational, 1,565 FFs, 6,236
++    timing-repair buffers, 435 clock buffers, 26,302 tap cells), 19.2 % utilization.
++- Root cause of the two VM restarts is a **6 GB WSL cap** (`.wslconfig`:
++  `memory=6GB, processors=6`), while the container reported a 5.789 GiB limit.
++  Raised to 10 GB / 8 CPUs (original saved as `~/.wslconfig.bak-chiplab`), restarted
++  Docker, resumed; container now reports 9.715 GiB and GRT is running at ~1.2 GiB.
++- **The flow is still running** ÔÇö no routing/DRC/LVS result is claimed yet.
++
+ ## 2026-11-10 14:59 - Autonomy tick + BBO area estimate refreshed
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - Re-ran `scripts/synth_book.sh` (Yosys 0.52, 32/4/4): **70,715 cells / 115,792 wires**
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 600; docker stats --no-stream --format "MEM={{.MemUsage}} 
+CPU={{.CPUPerc}}" chiplab-wrap32-fitted 2>&1; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 3; Get-Date 
+-Format "HH:mm:ss"
+MEM=1.209GiB / 9.715GiB CPU=101.03%
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/113-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting/openroad-globalroutin
+g.log'[/repr.filename].
+17:32:32
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m 
+"feat(openlane): fitted 32-bit wrapper config; raise WSL memory cap for long flows" 2>&1 | Select-Object -Last 1; git 
+push origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_fitted.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 openlane/sky130_wrap32_fitted.json
+[31;1m   5fc3b4f..c4f5379  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Start-Sleep -Seconds 480; Get-Content openlane\runs\wrap32-fitted-full\flow.log -Tail 4; 
+docker stats --no-stream --format "MEM={{.MemUsage}} CPU={{.CPUPerc}}" chiplab-wrap32-fitted 2>&1; Get-Date -Format 
+"HH:mm:ss"
+Running 'OpenROAD.STAMidPNR-2' at 'openlane/runs/wrap32-fitted-full/113-openroad-stamidpnr-2'.
+Logging subprocess to 
+[repr.filename]'openlane/runs/wrap32-fitted-full/113-openroad-stamidpnr-2/openroad-stamidpnr-2.log'[/repr.filename].
+Running 'OpenROAD.GlobalRouting' at 'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting'.
+Logging subprocess to [repr.filename]'openlane/runs/wrap32-fitted-full/114-openroad-globalrouting/openroad-globalroutin
+g.log'[/repr.filename].
+MEM=1.208GiB / 9.715GiB CPU=100.58%
+17:40:58
