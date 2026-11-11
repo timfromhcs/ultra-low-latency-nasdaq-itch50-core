@@ -273,6 +273,10 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Summary committed as `reports/openlane_areasized-full.json`. Conclusion so far:
   AREA netlists route and sign off but top out at ≈29–31 MHz; the faster DELAY netlists
   are exactly the ones that short-storm.
+- Started the next experiment (`sky130_wrap32_25ns_xl.json`: 25 ns DELAY on a **2200 µm**
+  die at 12 %) to test whether pure area fixes the short storm. The distro restarted at
+  04:49 during detailed-routing data preparation and killed it; **no result** — the
+  config and rationale are committed for a retry in a stable window.
 
 ## 2026-11-11 02:59 - Autonomy tick + 30 ns run loses DRC/LVS to repeated host shutdowns
 
