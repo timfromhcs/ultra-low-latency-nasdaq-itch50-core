@@ -21,6 +21,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32_wide.json` | 32-bit wrapper, 1800 µm die at 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off | Sky130 | 10.0 ns |
 | `sky130_wrap32_routetest.json` | routing test: same wrapper, 50 ns, AREA synthesis, no sizing/buffering | Sky130 | 50.0 ns |
 | `sky130_wrap32_25ns.json` | wrapper at 25 ns on the wide die (frequency step after the 50 ns full flow) | Sky130 | 25.0 ns |
+| `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)

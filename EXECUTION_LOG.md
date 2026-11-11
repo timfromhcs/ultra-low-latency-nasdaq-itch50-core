@@ -259,6 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 01:59 - Autonomy tick + AREA+sizing at 30 ns routes clean
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `8ff0147` **success**.
+- New `openlane/sky130_wrap32_area_sized.json` (AREA synthesis, `SYNTH_SIZING: 1`,
+  30 ns, 1800 µm/15 %) reached detailed routing early and cleared it:
+  **15 → 1 → 1 → 0 → 21 → 0 violations**, routing DRC clear, and went on through RCX,
+  post-route STA and LEF/GDS export (step 58 `magic-writelef`).
+- The distro was then **cleanly shut down at 02:30** (journal: systemd reached
+  `shutdown.target`; boots at 02:24, 02:28, 02:32 — external activity in the shared
+  distro), so Magic DRC / KLayout DRC / LVS did not run.
+- Resumed with `--from Magic.DRC` on the existing run tag (no replay): Magic DRC is
+  running on the already-routed layout. Result next tick.
+- Pattern confirmed: buffered (DELAY) netlists short-storm at 10 and 25 ns, while AREA
+  netlists (50 ns, and now 30 ns with sizing) route cleanly on the 1800 µm die.
+
 ## 2026-11-11 00:59 - Autonomy tick + first completed wrapper P&R (50 ns) with 0 DRC / 0 LVS
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `54c8984` **success**.

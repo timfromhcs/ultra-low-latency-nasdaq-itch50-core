@@ -1014,3 +1014,103 @@ a56b7b6 feat(openlane): first completed wrapper P&R (50 ns, 0 DRC/0 LVS, Fmax 30
  
 Wed Nov 11 01:13:25 CET 2026
 > build ┬À deepseek-v4.1-flash
+[2026-11-11T01:59:19.5285731+01:00] hallo, es ist 01:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+8ff0147 completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_wrap32_area_sized.json
+Created file successfully: openlane/sky130_wrap32_area_sized.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_areasized.sh
+Created file successfully: reports/run_areasized.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_areasized.sh 
+/home/tim/chiplab-native/run_areasized.sh && chmod +x /home/tim/chiplab-native/run_areasized.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_areasized.sh'; 
+Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/areasized.log 2>/dev/null; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+                                                                                                                       
+ 
+157.1. Extracting gate netlist of module `\itch_wishbone_wrap' to `/tmp/yosys-abc-QeT8Zs/input.blif'..                 
+ 
+Wed Nov 11 02:02:15 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -20,8 +20,9 @@
+ | `sky130_wrap32_fitted_area.json` | 32-bit wrapper, AREA synthesis variant (routing experiments only) | Sky130 | 
+10.0 ns |
+ | `sky130_wrap32_wide.json` | 32-bit wrapper, 1800 ┬Ám die at 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off | 
+Sky130 | 10.0 ns |
+ | `sky130_wrap32_routetest.json` | routing test: same wrapper, 50 ns, AREA synthesis, no sizing/buffering | Sky130 | 
+50.0 ns |
+ | `sky130_wrap32_25ns.json` | wrapper at 25 ns on the wide die (frequency step after the 50 ns full flow) | Sky130 | 
+25.0 ns |
++| `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 
+ns |
+ | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+ 
+ ## Verified toolchain (2026-11-03)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/areasized.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-areasized | grep -E "^[0-9]" | tail -2; date'
+[02:12:41] VERBOSE  Logging subprocess to 'openlane/runs/native-areasized/52-openroad-rcx/max/rcx.log'ÔÇª     
+step.py:1338
+[02:12:41] VERBOSE  Logging subprocess to 'openlane/runs/native-areasized/52-openroad-rcx/nom/rcx.log'ÔÇª     
+step.py:1338
+51-odb-cellfrequencytables
+52-openroad-rcx
+Wed Nov 11 02:12:47 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =|Flow complete|EXIT=" 
+/home/tim/chiplab-native/areasized.log | tail -6; tail -2 /home/tim/chiplab-native/areasized.log; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ [INFO DRT-0199]   Number of violations = 15.                                                                          
+  
+[INFO DRT-0199]   Number of violations = 1.                                                                            
+ 
+[INFO DRT-0199]   Number of violations = 1.                                                                            
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+[INFO DRT-0199]   Number of violations = 21.                                                                           
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+Diagnostic:  Write LEF header for cell itch_wishbone_wrap                                                              
+ 
+Diagnostic:  Writing LEF output for cell itch_wishbone_wrap                                                            
+ 
+Wed Nov 11 02:18:50 CET 2026
+> build ┬À deepseek-v4.1-flash
