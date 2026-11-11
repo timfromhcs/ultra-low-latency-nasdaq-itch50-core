@@ -259,6 +259,26 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 17:59 - Autonomy tick + CI chain fixed (apt fallback, iverilog-13 RTL refs)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- CI failure chain on the last push:
+  1. `apt-get update` timed out on every attempt (runner mirrors hang), so the job now
+     falls back to the **pinned oss-cad-suite 2026-11-03** (same as `formal.yml`,
+     cached), with `actions/cache` and a `GITHUB_PATH` entry. Toolchain, pip, lint,
+     vectors, 50k regression and model tests then passed.
+  2. Cocotb then failed because the suite's **iverilog 13 rejects use-before-declaration**
+     (`gate_is_corrupt` in `itch_parser_core.sv`). Moved the declaration above its use.
+  3. The next run failed on `rem_count` in `moldudp64_frontend.sv`; reordered the
+     repacker declarations. A scan found one more real case (`init_done` in
+     `itch_top_of_book.sv`), now also fixed. The other scan hits were substring false
+     positives (`msg_count`, `snap_hit`, `upd_volume`, …).
+- Local regression: `make lint` + gate 11/11; cocotb `run_cocotb`, `run_multi`,
+  `run_book_top`, `run_book_top_skid`, `run_book_snapshot` all pass with the local
+  iverilog 12. CI on `cc48a75` is the iverilog-13 check.
+- The 10 ns XL run reached 19,028 violations before the host restarted; it is queued
+  behind the CI work.
+
 ## 2026-11-11 16:59 - Autonomy tick + 10 ns XL converges; CI Toolchain stall bounded
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

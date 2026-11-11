@@ -704,3 +704,193 @@ warning: in the working copy of 'reports/scorecard.json', LF will be replaced by
 > build ┬À deepseek-v4.1-flash
 [2026-11-11T17:59:19.9218228+01:00] hallo, es ist 17:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/moldudp64_frontend.sv [90m[limit=30, offset=198][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/moldudp64_frontend.sv
+Index: rtl/moldudp64_frontend.sv
+===================================================================
+--- rtl/moldudp64_frontend.sv
++++ rtl/moldudp64_frontend.sv
+@@ -203,16 +203,10 @@
+   wire [DATA_WIDTH-1:0] drain_data = hdr_data >> (drain_ptr*8);
+   /* verilator lint_on WIDTHTRUNC */
+ 
+   // --------------------------------------------------------------------------
+-  // Output repacker
++  // Output repacker (declarations before use; iverilog rejects forward refs)
+   // --------------------------------------------------------------------------
+-  wire [7:0]           feed_bytes = (state == ST_DRAIN) ? drain_n : in_bytes;
+-  wire                 feed_space_ok = ({24'd0, feed_bytes} <= (2*BYTES_PER_WORD - {24'd0, rem_count}));
+-  wire                 feed_valid = ((state == ST_DRAIN && out_ready) ||
+-                                    (state == ST_STREAM && in_accept)) && feed_space_ok;
+-  wire [DATA_WIDTH-1:0] feed_data = (state == ST_DRAIN) ? drain_data : in_masked;
+-
+   wire                 emit_full = (out_count >= 8'(BYTES_PER_WORD));
+   wire                 emit_any  = emit_full || (state == ST_FLUSH && out_count > 8'd0);
+   wire [7:0]           emit_n    = emit_full ? BYTES_PER_WORD[7:0] : out_count;
+   wire                 do_emit   = emit_any && out_ready;
+@@ -220,8 +214,15 @@
+   // would shift the buffer by out_count and silently drop the tail.
+   wire [7:0]           emit_eff  = do_emit ? emit_n : 8'd0;
+   wire [2*DATA_WIDTH-1:0] shifted = out_buf >> (emit_eff*8);
+   wire [7:0]           rem_count = out_count - emit_eff;
++
++  wire [7:0]           feed_bytes = (state == ST_DRAIN) ? drain_n : in_bytes;
++  wire                 feed_space_ok = ({24'd0, feed_bytes} <= (2*BYTES_PER_WORD - {24'd0, rem_count}));
++  wire                 feed_valid = ((state == ST_DRAIN && out_ready) ||
++                                    (state == ST_STREAM && in_accept)) && feed_space_ok;
++  wire [DATA_WIDTH-1:0] feed_data = (state == ST_DRAIN) ? drain_data : in_masked;
++
+   wire [2*DATA_WIDTH-1:0] appended = feed_valid ?
+         ({{(2*DATA_WIDTH-DATA_WIDTH){1'b0}}, feed_data} << (rem_count*8)) : {2*DATA_WIDTH{1'b0}};
+   wire [7:0]           next_out_count = rem_count + (feed_valid ? feed_bytes : 8'd0);
+   // The frame's last byte is emitted in this cycle: either the input tlast was
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/moldudp64_frontend.sv [90m[limit=22, offset=36][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/mold_feed_arbiter.sv [90m[limit=6, offset=20][0m
+[0mÔåÆ [0mRead rtl/moldudp64_depacketizer.sv [90m[limit=8, offset=26][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/itch_top_of_book.sv [90m[limit=22, offset=46][0m
+[0mÔåÆ [0mRead rtl/itch_top.sv [90m[limit=10, offset=126][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/itch_book_snapshot.sv [90m[limit=24, offset=34][0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs 2>&1 | Select-Object -Last 2
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && python3 tb/run_cocotb.py > /tmp/cocotb1.log 2>&1; echo 
+RC1=$?; python3 tb/run_multi_cocotb.py > /tmp/cocotb2.log 2>&1; echo RC2=$?; tail -2 /tmp/cocotb1.log; tail -2 
+/tmp/cocotb2.log'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ RC1=0
+RC2=0
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                        6088.40 
+          0.32      19052.83  **
+                                                        
+***********************************************************************************************
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0                                
+2935.70           0.05      58232.25  **
+                                                        
+*******************************************************************************************************
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead rtl/itch_top_of_book.sv [90m[limit=26, offset=296][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit rtl/itch_top_of_book.sv
+Index: rtl/itch_top_of_book.sv
+===================================================================
+--- rtl/itch_top_of_book.sv
++++ rtl/itch_top_of_book.sv
+@@ -298,13 +298,11 @@
+       end
+     end
+   end
+ 
+-  assign s_ready = init_done;
+-  assign busy    = 1'b0;
+-
+   // --------------------------------------------------------------------------
+-  // Init + event processing
++  // Init + event processing (signals declared before use; iverilog rejects
++  // forward references)
+   // --------------------------------------------------------------------------
+   localparam [1:0] PH_ORD = 2'd0;
+   localparam [1:0] PH_BID = 2'd1;
+   localparam [1:0] PH_ASK = 2'd2;
+@@ -315,8 +313,11 @@
+   reg [LVL_AW-1:0] lvl_i;
+   reg [LOC_AW-1:0] trd_i;
+   reg             init_done;
+ 
++  assign s_ready = init_done;
++  assign busy    = 1'b0;
++
+   always @(posedge clk) begin
+     if (!rst_n) begin
+       init_phase     <= PH_ORD;
+       ord_i          <= {ORD_AW{1'b0}};
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && for t in run_book_top_cocotb run_book_top_skid_cocotb 
+run_book_snapshot_cocotb; do python3 tb/$t.py > /tmp/$t.log 2>&1; echo "$t RC=$?"; tail -1 /tmp/$t.log; done'
+RC=0
+python3: can't open file '/mnt/e/chips/main/tb/.py': [Errno 2] No such file or directory
+ RC=0
+python3: can't open file '/mnt/e/chips/main/tb/.py': [Errno 2] No such file or directory
+ RC=0
+python3: can't open file '/mnt/e/chips/main/tb/.py': [Errno 2] No such file or directory
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && python3 tb/run_book_top_cocotb.py > /tmp/bt.log 2>&1; echo 
+BT=$?; python3 tb/run_book_top_skid_cocotb.py > /tmp/bts.log 2>&1; echo BTS=$?; python3 tb/run_book_snapshot_cocotb.py 
+> /tmp/bs.log 2>&1; echo BS=$?; tail -1 /tmp/bt.log; tail -1 /tmp/bts.log; tail -1 /tmp/bs.log'
+BT=0
+BTS=0
+BS=0
+                                                        
+*****************************************************************************************
+                                                        
+*****************************************************************************************
+                                                        
+***********************************************************************************************
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "rtl: fix 
+remaining use-before-declaration cases (mold frontend, top_of_book)" 2>&1 | Select-Object -Last 1; git push origin 
+main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'rtl/moldudp64_frontend.sv', CRLF will be replaced by LF the next time Git touches it
+ 5 files changed, 30 insertions(+), 26 deletions(-)
+[31;1m   144df32..cc48a75  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,28 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 17:59 - Autonomy tick + CI chain fixed (apt fallback, iverilog-13 RTL refs)
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- CI failure chain on the last push:
++  1. `apt-get update` timed out on every attempt (runner mirrors hang), so the job now
++     falls back to the **pinned oss-cad-suite 2026-11-03** (same as `formal.yml`,
++     cached), with `actions/cache` and a `GITHUB_PATH` entry. Toolchain, pip, lint,
++     vectors, 50k regression and model tests then passed.
++  2. Cocotb then failed because the suite's **iverilog 13 rejects use-before-declaration**
++     (`gate_is_corrupt` in `itch_parser_core.sv`). Moved the declaration above its use.
++  3. The next run failed on `rem_count` in `moldudp64_frontend.sv`; reordered the
++     repacker declarations. A scan found one more real case (`init_done` in
++     `itch_top_of_book.sv`), now also fixed. The other scan hits were substring false
++     positives (`msg_count`, `snap_hit`, `upd_volume`, ÔÇª).
++- Local regression: `make lint` + gate 11/11; cocotb `run_cocotb`, `run_multi`,
++  `run_book_top`, `run_book_top_skid`, `run_book_snapshot` all pass with the local
++  iverilog 12. CI on `cc48a75` is the iverilog-13 check.
++- The 10 ns XL run reached 19,028 violations before the host restarted; it is queued
++  behind the CI work.
++
+ ## 2026-11-11 16:59 - Autonomy tick + 10 ns XL converges; CI Toolchain stall bounded
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+ - **CI was stuck twice** at the RTL job's `Toolchain` step (first run 45+ min at
+
