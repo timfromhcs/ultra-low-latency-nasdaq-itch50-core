@@ -130,6 +130,11 @@ a property of the 10 ns buffer-heavy netlist (54 k cells), not of the wrapper st
 Next step is a frequency sweep (50 → 25 → 20 ns) to find the fastest configuration that
 still routes, and then to attack the 10 ns buffering itself.
 
+The 25 ns DELAY step confirms the trend from the other side: its first detailed-routing
+pass reported **42,342 violations**, so buffered synthesis short-storms at both 10 and
+25 ns. Working rule so far: **AREA netlists route, DELAY netlists do not** (on this
+1800 µm die at 15 % density).
+
 Two container kills (`exit 255`) happened while GlobalRouting ran; each coincided with a
 Docker Desktop VM restart (init logs at ≈45 min intervals). `.wslconfig` was capped at
 `memory=6GB`/`processors=6`; raising it to 10 GB/8 CPUs (same swap) gave the container

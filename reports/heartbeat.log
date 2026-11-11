@@ -976,3 +976,41 @@ A  openlane/sky130_wrap32_25ns.json
 MM reports/heartbeat.log
 A  reports/openlane_routetest-full.json
 0,2 MB staged
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -90,9 +90,10 @@
+ | Detailed routing | 10 ÔåÆ 7 ÔåÆ **0 violations** |
+ 
+ This is the first completed wrapper P&R with DRC/LVS sign-off, but it is **not** a 10 ns
+ result: the fast netlist still shorts. The routing test exists to isolate that (see the
+-fitted-attempt section above).
++fitted-attempt section above). The run directory itself stays git-ignored; the committed
++summary `reports/openlane_routetest-full.json` carries the measured values.
+ 
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "feat(openlane): first completed wrapper P&R (50 ns, 0 DRC/0 
+LVS, Fmax 30.8 MHz)" 2>&1 | Select-Object -Last 1; git push --force-with-lease origin main 2>&1 | Select-Object -Last 
+1; git log --oneline -2
+warning: in the working copy of 'reports/openlane_routetest-full.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 reports/openlane_routetest-full.json
+[31;1m + f589df4...a56b7b6 main -> main (forced update)[0m
+a56b7b6 feat(openlane): first completed wrapper P&R (50 ns, 0 DRC/0 LVS, Fmax 30.8 MHz)
+54c8984 docs(openlane): wrapper routes clean at 50 ns; short storm is 10 ns netlist-specific
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25.log; grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25.log | tail -2; date'
+[INFO GRT-0102] Start extra iteration 2/20                                                                             
+ 
+[INFO GRT-0102] Start extra iteration 3/20                                                                             
+ 
+Wed Nov 11 01:13:25 CET 2026
+> build ┬À deepseek-v4.1-flash

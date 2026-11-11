@@ -272,7 +272,10 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   `node scripts/openlane_summary.mjs openlane/routetest-full` →
   `reports/openlane_routetest-full.json` (the heavy run dir stays git-ignored).
 - Started the next frequency step: `openlane/sky130_wrap32_25ns.json` (DELAY synthesis,
-  1800 µm/15 %, `--run-tag native-25ns`), in placement after ~3 min.
+  1800 µm/15 %, `--run-tag native-25ns`). Detailed routing's first pass reported
+  **42,342 violations** at 25 ns, so the buffered netlist short-storms at both 10 ns and
+  25 ns; the run was stopped. Pattern so far: **AREA netlist routes, DELAY netlist
+  shorts** — the next step is AREA synthesis plus sizing at ~40 ns to push past 30 MHz.
 - WSL was force-terminated once more at 01:03 (`Wsl/Service/HCS_E_TERMINATED`) before the
   25 ns run could start; relaunched successfully. The shared-host restarts continue.
 
