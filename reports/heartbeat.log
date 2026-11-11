@@ -1116,3 +1116,254 @@ Wed Nov 11 02:18:50 CET 2026
 > build ┬À deepseek-v4.1-flash
 [2026-11-11T02:59:19.2360981+01:00] hallo, es ist 02:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+08f197d completed success
+[0m$ [0mwsl -d Ubuntu bash -lc 'journalctl --list-boots --no-pager | tail -4; du -sh 
+/home/tim/chiplab-native/openlane/runs/native-areasized 2>/dev/null'
+-3 40005d09552a47b1a6f532c960effed2 Wed 2026-11-11 02:32:42 CET Wed 2026-11-11 02:56:20 CET
+ -2 198bd1e62bd144e2ae6c1411929602ac Wed 2026-11-11 02:57:31 CET Wed 2026-11-11 03:00:39 CET
+ -1 dd7ba3e16fdf415baca09c575a4b283b Wed 2026-11-11 03:02:55 CET Wed 2026-11-11 03:05:39 CET
+  0 0615c25078414f74b924599b2157e34b Wed 2026-11-11 03:08:42 CET Wed 2026-11-11 03:09:40 CET
+2.8G	/home/tim/chiplab-native/openlane/runs/native-areasized
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/long-runs.md
+Index: docs/long-runs.md
+===================================================================
+--- docs/long-runs.md
++++ docs/long-runs.md
+@@ -132,8 +132,18 @@
+ `--last-run` picks the newest run directory under `openlane/runs`. Repeat the same
+ `--skip` flags: skipped steps are not recorded as completed, so omitting them re-runs
+ those steps.
+ 
++**Fast resume:** if only the tail of the flow is missing (e.g. the run died before
++Magic DRC), use `--from` to start at a later step and reuse the saved state:
++
++```powershell
++... librelane --last-run openlane/<config>.json --from Magic.DRC
++```
++
++Verified 2026-11-11 on `sky130_wrap32_area_sized.json`: `--from Magic.DRC` jumped
++straight to the Magic DRC step instead of replaying synthesis/placement/routing.
++
+ Observed on 2026-11-10: Docker Desktop restarted while `OpenROAD.GlobalRouting` was
+ running (container exit 255). The `--last-run` resume re-ran the flow from synthesis
+ (new step directories from `44-yosys-synthesis` upward) instead of continuing at the
+ failed routing step, so budget the replay time. Check `flow.log` for the current step
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/long-runs.md
+Index: docs/long-runs.md
+===================================================================
+--- docs/long-runs.md
++++ docs/long-runs.md
+@@ -85,10 +85,15 @@
+ **This host is shared.** On 2026-11-10 the same Ubuntu distro was simultaneously used
+ by another session building `hscl-*` packages (`/home/tim/hscl1-src`, sudo installs at
+ 22:31/22:38), and the VM restarted at 22:13, 22:20, 22:29 and 23:19, killing every
+ running flow. Check `journalctl -b -1 | grep -i hscl` and the boot list before a
+-multi-hour run; on a busy host, prefer bounded runs and `--last-run` resumes.
++multi-hour run; on a busy host, prefer bounded runs and `--last-run`/`--from` resumes.
+ 
++On 2026-11-11 between 02:24 and 03:09 the distro was **cleanly shut down** every 3ÔÇô5
++minutes (journal shows `Reached target shutdown.target`, not a crash), which no client
++attachment can prevent. If `journalctl --list-boots` shows such a cadence, physical
++flows cannot finish; wait for the other workload to stop.
++
+ ## 3. Full flow and the knobs that matter
+ 
+ ```powershell
+ ... librelane --run-tag <tag>-full `
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'uptime | cut -c1-45; journalctl --list-boots --no-pager | tail -2; date'
+03:11:00 up 3 min,  1 user,  load average: 0
+ -1 dd7ba3e16fdf415baca09c575a4b283b Wed 2026-11-11 03:02:55 CET Wed 2026-11-11 03:05:39 CET
+  0 0615c25078414f74b924599b2157e34b Wed 2026-11-11 03:08:42 CET Wed 2026-11-11 03:11:01 CET
+Wed Nov 11 03:11:02 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "OpenLane|pre-PnR|ich_metrics|Fmax" README.md | Select-Object -First 12
+54:- **Not silicon-proven.** There is no tapeout. Fmax is not signed off.
+258:| Sky130 pre-PnR STA | **250 MHz WNS ÔêÆ8.27 ns ┬À 322 MHz WNS ÔêÆ9.14 ns ┬À Fmax Ôëê 81.5 MHz**; worst path FF 
+ÔåÆ `raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
+259:| GF180 pre-PnR STA | **322 MHz WNS ÔêÆ19.87 ns ┬À Fmax Ôëê 43.5 MHz**; worst path FF ÔåÆ `raw_order_data[260]` 
+(ss/125 ┬░C, pre-PnR) | `reports/openlane_gf180-sta.json` |
+260:| IHP SG13G2 pre-PnR STA | **322 MHz WNS ÔêÆ3.08 ns ┬À Fmax Ôëê 161.9 MHz**; hold WNS ÔêÆ0.052 ns; worst path FF 
+ÔåÆ FF (slow/125 ┬░C, pre-PnR) | `reports/openlane_ihp-sta.json` |
+261:| Wrapper pre-PnR STA | **322 MHz WNS ÔêÆ8.62 ns ┬À Fmax Ôëê 85.3 MHz**; worst path FF ÔåÆ FF, no debug bus (ss, 
+pre-PnR) | `reports/openlane_wrap-sta.json` |
+262:| Small-block full flow | **`itch_metrics` 6,776 cells: 0 DRC, 0 LVS, timing closed at 10 ns (Fmax Ôëê 101 MHz)** 
+| `reports/openlane_metrics-full3.json` |
+263:| 32-bit wrapper STA | **322 MHz WNS ÔêÆ6.55 ns ┬À Fmax Ôëê 103.7 MHz**; worst path FF ÔåÆ FF (ss, pre-PnR) | 
+`reports/openlane_wrap32-sta.json` |
+300:a 322 MHz sign-off requires OpenSTA/OpenLane, which is **not** claimed here.
+525:2. **No Fmax sign-off.** 322.26 MHz is the target/model clock. OpenLane configs are
+547:- [ ] OpenLane P&R + OpenSTA slack for Sky130/GF180/IHP.
+567:WebAssembly, WebGPU, Rust, MCP, formal verification, Z3, CVC5, SymbiYosys, OpenLane,
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -260,8 +260,9 @@
+ | IHP SG13G2 pre-PnR STA | **322 MHz WNS ÔêÆ3.08 ns ┬À Fmax Ôëê 161.9 MHz**; hold WNS ÔêÆ0.052 ns; worst path FF ÔåÆ 
+FF (slow/125 ┬░C, pre-PnR) | `reports/openlane_ihp-sta.json` |
+ | Wrapper pre-PnR STA | **322 MHz WNS ÔêÆ8.62 ns ┬À Fmax Ôëê 85.3 MHz**; worst path FF ÔåÆ FF, no debug bus (ss, 
+pre-PnR) | `reports/openlane_wrap-sta.json` |
+ | Small-block full flow | **`itch_metrics` 6,776 cells: 0 DRC, 0 LVS, timing closed at 10 ns (Fmax Ôëê 101 MHz)** | 
+`reports/openlane_metrics-full3.json` |
+ | 32-bit wrapper STA | **322 MHz WNS ÔêÆ6.55 ns ┬À Fmax Ôëê 103.7 MHz**; worst path FF ÔåÆ FF (ss, pre-PnR) | 
+`reports/openlane_wrap32-sta.json` |
++| Wrapper full flow (50 ns) | **first completed P&R: 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, 
+Fmax Ôëê 30.8 MHz** (AREA synth, 1800 ┬Ám die; not a 10 ns result) | `reports/openlane_routetest-full.json` |
+ | BBO area estimate | **70,715 cells, 115,792 wires** (Yosys 0.52, reduced 32/4/4 config, includes top-4 depth + risk 
+checks; not optimized) | `reports/synth_book.json` |
+ | Parser ÔåÆ BBO | **152 raw ITCH messages, 0 mismatches** end to end | `tb/test_book_top.py` |
+ | A/B feed arbiter | **selection + recovery: requestÔåÆreplay, multi-gap [1..8], abandon on timeout** | 
+`tb/test_arbiter.py` |
+ | A/B system | **2 Ethernet feeds ÔåÆ arbiter ÔåÆ 10 ITCH records, 1 gap** | `tb/test_ab_system.py` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 02:59 - Autonomy tick + 30 ns run loses DRC/LVS to repeated host shutdowns
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08f197d` **success**.
++- The `--from Magic.DRC` resume works (no replay ÔÇö it jumped straight to Magic DRC on
++  the already-routed layout) and is now documented in `docs/long-runs.md`.
++- It could not finish: the distro was cleanly shut down every 3ÔÇô5 minutes between 02:24
++  and 03:09 (boot list 02:56 ÔåÆ 03:00 ÔåÆ 03:05 ÔåÆ 03:08, journal `Reached target
++  shutdown.target`). Magic DRC restarted from scratch each time.
++- Documented the cadence and what it means for physical flows; added the completed
++  50 ns wrapper full-flow result to the main README evidence table.
++- Open: Magic/KLayout DRC + LVS for the 30 ns AREA+sizing run (routing itself was
++  **0 violations**); resume with `--from Magic.DRC` when the host has a stable window.
++
+ ## 2026-11-11 01:59 - Autonomy tick + AREA+sizing at 30 ns routes clean
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `8ff0147` **success**.
+ - New `openlane/sky130_wrap32_area_sized.json` (AREA synthesis, `SYNTH_SIZING: 1`,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(openlane): --from fast resume; host shutdown cadence; README 
+evidence row" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 6 files changed, 45 insertions(+), 14 deletions(-)
+[31;1m   08f197d..c0b9c55  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'uptime | cut -c1-40; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+  03:13:55 up 0 min,  1 user,  load avera
+Wed Nov 11 03:13:55 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "vercel.app|production URL" README.md | Select-Object -First 3
+28:**[Live demo](https://chiplab-ten.vercel.app/)** ┬À **[Local demo](http://127.0.0.1:4173)** after `node 
+backend/server.mjs`.
+289:| Vercel | **READY**, live at `https://chiplab-ten.vercel.app/`; `/api/health` ok v0.3.1, page 200 | 
+`reports/web-vercel.png` |
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mtry { $h = Invoke-RestMethod https://chiplab-ten.vercel.app/api/health -TimeoutSec 15; "health ok=$($h.ok) 
+version=$($h.version) wasm=$($h.wasmBytes)" } catch { "health FAIL: $($_.Exception.Message)" }; try { $r = 
+Invoke-WebRequest https://chiplab-ten.vercel.app/ -TimeoutSec 15 -UseBasicParsing; "page status=$($r.StatusCode) 
+bytes=$($r.RawContentLength)" } catch { "page FAIL: $($_.Exception.Message)" }
+health ok=True version=0.3.1 wasm=
+page status=200 bytes=13797
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -c 3000 /home/tim/chiplab-native/areasized-drc.log | tr -d "\000" | tail -20; 
+echo ===; grep -a -c "EXIT=" /home/tim/chiplab-native/areasized-drc.log'
+780000 uses                                                                                                         
+    785000 uses                                                                                                        
+ 
+    790000 uses                                                                                                        
+ 
+    795000 uses                                                                                                        
+ 
+    800000 uses                                                                                                        
+ 
+    805000 uses                                                                                                        
+ 
+    810000 uses                                                                                                        
+ 
+    815000 uses                                                                                                        
+ 
+    820000 uses                                                                                                        
+ 
+    825000 uses                                                                                                        
+ 
+    830000 uses                                                                                                        
+ 
+    835000 uses                                                                                                        
+ 
+    840000 uses                                                                                                        
+ 
+    845000 uses                                                                                                        
+ 
+    850000 uses                                                                                                        
+ 
+CIF file read error: Warning:  Cell itch_wishbone_wrap boundary was redefined.                                         
+ 
+[INFO] Loading itch_wishbone_wrap                                                                                      
+ 
+                                                                                                                       
+ 
+DRC style is now "drc(full)"                                                                                           
+ 
+Loading DRC CIF style.                                                                                                 
+ 
+===
+0
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_areasized_klayout.sh
+Created file successfully: reports/run_areasized_klayout.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_areasized_klayout.sh 
+/home/tim/chiplab-native/run_areasized_klayout.sh && chmod +x /home/tim/chiplab-native/run_areasized_klayout.sh && 
+echo copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_areasized_klayout.sh'; Start-Sleep -Seconds 40; wsl -d Ubuntu bash 
+-lc 'tail -4 /home/tim/chiplab-native/areasized-klayout.log 2>/dev/null; date'
+copied
+    Polygons (raw): 854895 (flat)  90 (hierarchical)                                                                   
+ 
+    Elapsed: 0.150s  Memory: 975.00M                                                                                   
+ 
+START: 64/20 (nwell)                                                                                                   
+ 
+"width" in: sky130A_mr.drc:315                                                                                         
+ 
+Wed Nov 11 03:16:44 CET 2026
+> build ┬À deepseek-v4.1-flash

@@ -269,8 +269,12 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   shutdown.target`). Magic DRC restarted from scratch each time.
 - Documented the cadence and what it means for physical flows; added the completed
   50 ns wrapper full-flow result to the main README evidence table.
+- Tried a cheaper tail: `--from KLayout.DRC` (skips the slow Magic DRC). KLayout DRC
+  ran 29 min and was at `sky130A_mr.drc:903` (6.5 M flat polygons) when the distro was
+  killed again at 03:45. So neither DRC engine gets a long enough window on this host.
 - Open: Magic/KLayout DRC + LVS for the 30 ns AREA+sizing run (routing itself was
-  **0 violations**); resume with `--from Magic.DRC` when the host has a stable window.
+  **0 violations**); resume with `--from KLayout.DRC` or `--from Magic.DRC` when the
+  host has a stable window.
 
 ## 2026-11-11 01:59 - Autonomy tick + AREA+sizing at 30 ns routes clean
 
