@@ -299,11 +299,9 @@ module itch_top_of_book #(
     end
   end
 
-  assign s_ready = init_done;
-  assign busy    = 1'b0;
-
   // --------------------------------------------------------------------------
-  // Init + event processing
+  // Init + event processing (signals declared before use; iverilog rejects
+  // forward references)
   // --------------------------------------------------------------------------
   localparam [1:0] PH_ORD = 2'd0;
   localparam [1:0] PH_BID = 2'd1;
@@ -315,6 +313,9 @@ module itch_top_of_book #(
   reg [LVL_AW-1:0] lvl_i;
   reg [LOC_AW-1:0] trd_i;
   reg             init_done;
+
+  assign s_ready = init_done;
+  assign busy    = 1'b0;
 
   always @(posedge clk) begin
     if (!rst_n) begin

@@ -204,14 +204,8 @@ module moldudp64_frontend #(
   /* verilator lint_on WIDTHTRUNC */
 
   // --------------------------------------------------------------------------
-  // Output repacker
+  // Output repacker (declarations before use; iverilog rejects forward refs)
   // --------------------------------------------------------------------------
-  wire [7:0]           feed_bytes = (state == ST_DRAIN) ? drain_n : in_bytes;
-  wire                 feed_space_ok = ({24'd0, feed_bytes} <= (2*BYTES_PER_WORD - {24'd0, rem_count}));
-  wire                 feed_valid = ((state == ST_DRAIN && out_ready) ||
-                                    (state == ST_STREAM && in_accept)) && feed_space_ok;
-  wire [DATA_WIDTH-1:0] feed_data = (state == ST_DRAIN) ? drain_data : in_masked;
-
   wire                 emit_full = (out_count >= 8'(BYTES_PER_WORD));
   wire                 emit_any  = emit_full || (state == ST_FLUSH && out_count > 8'd0);
   wire [7:0]           emit_n    = emit_full ? BYTES_PER_WORD[7:0] : out_count;
@@ -221,6 +215,13 @@ module moldudp64_frontend #(
   wire [7:0]           emit_eff  = do_emit ? emit_n : 8'd0;
   wire [2*DATA_WIDTH-1:0] shifted = out_buf >> (emit_eff*8);
   wire [7:0]           rem_count = out_count - emit_eff;
+
+  wire [7:0]           feed_bytes = (state == ST_DRAIN) ? drain_n : in_bytes;
+  wire                 feed_space_ok = ({24'd0, feed_bytes} <= (2*BYTES_PER_WORD - {24'd0, rem_count}));
+  wire                 feed_valid = ((state == ST_DRAIN && out_ready) ||
+                                    (state == ST_STREAM && in_accept)) && feed_space_ok;
+  wire [DATA_WIDTH-1:0] feed_data = (state == ST_DRAIN) ? drain_data : in_masked;
+
   wire [2*DATA_WIDTH-1:0] appended = feed_valid ?
         ({{(2*DATA_WIDTH-DATA_WIDTH){1'b0}}, feed_data} << (rem_count*8)) : {2*DATA_WIDTH{1'b0}};
   wire [7:0]           next_out_count = rem_count + (feed_valid ? feed_bytes : 8'd0);
