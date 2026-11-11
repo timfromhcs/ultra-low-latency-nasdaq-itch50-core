@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 02:59 - Autonomy tick + 30 ns run loses DRC/LVS to repeated host shutdowns
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08f197d` **success**.
+- The `--from Magic.DRC` resume works (no replay — it jumped straight to Magic DRC on
+  the already-routed layout) and is now documented in `docs/long-runs.md`.
+- It could not finish: the distro was cleanly shut down every 3–5 minutes between 02:24
+  and 03:09 (boot list 02:56 → 03:00 → 03:05 → 03:08, journal `Reached target
+  shutdown.target`). Magic DRC restarted from scratch each time.
+- Documented the cadence and what it means for physical flows; added the completed
+  50 ns wrapper full-flow result to the main README evidence table.
+- Open: Magic/KLayout DRC + LVS for the 30 ns AREA+sizing run (routing itself was
+  **0 violations**); resume with `--from Magic.DRC` when the host has a stable window.
+
 ## 2026-11-11 01:59 - Autonomy tick + AREA+sizing at 30 ns routes clean
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `8ff0147` **success**.

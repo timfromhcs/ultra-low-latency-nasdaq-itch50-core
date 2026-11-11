@@ -86,7 +86,12 @@ trusting a long run.
 by another session building `hscl-*` packages (`/home/tim/hscl1-src`, sudo installs at
 22:31/22:38), and the VM restarted at 22:13, 22:20, 22:29 and 23:19, killing every
 running flow. Check `journalctl -b -1 | grep -i hscl` and the boot list before a
-multi-hour run; on a busy host, prefer bounded runs and `--last-run` resumes.
+multi-hour run; on a busy host, prefer bounded runs and `--last-run`/`--from` resumes.
+
+On 2026-11-11 between 02:24 and 03:09 the distro was **cleanly shut down** every 3–5
+minutes (journal shows `Reached target shutdown.target`, not a crash), which no client
+attachment can prevent. If `journalctl --list-boots` shows such a cadence, physical
+flows cannot finish; wait for the other workload to stop.
 
 ## 3. Full flow and the knobs that matter
 
@@ -132,6 +137,16 @@ LibreLane can continue an existing run tag, but the CLI still requires a config:
 `--last-run` picks the newest run directory under `openlane/runs`. Repeat the same
 `--skip` flags: skipped steps are not recorded as completed, so omitting them re-runs
 those steps.
+
+**Fast resume:** if only the tail of the flow is missing (e.g. the run died before
+Magic DRC), use `--from` to start at a later step and reuse the saved state:
+
+```powershell
+... librelane --last-run openlane/<config>.json --from Magic.DRC
+```
+
+Verified 2026-11-11 on `sky130_wrap32_area_sized.json`: `--from Magic.DRC` jumped
+straight to the Magic DRC step instead of replaying synthesis/placement/routing.
 
 Observed on 2026-11-10: Docker Desktop restarted while `OpenROAD.GlobalRouting` was
 running (container exit 255). The `--last-run` resume re-ran the flow from synthesis
