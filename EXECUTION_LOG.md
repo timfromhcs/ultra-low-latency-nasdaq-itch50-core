@@ -259,6 +259,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 19:59 - Autonomy tick + 25 ns with resizers (hold/slew cleanup attempt)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `6c0ebb5` **success**.
+- Started a **fresh 25 ns run with the post-CTS/post-GRT resizers enabled**
+  (`--run-tag native-25fx`, no `--skip`), which is the standard lever for the
+  −12.3 ps hold and the cap/slew violations of the previous 25 ns run.
+- The post-CTS resizer completed quickly (step 37) and detailed routing started with
+  **0 violations**; the host restarted the distro at 19:49, so DRT was resumed.
+- The 10 ns flow was stopped after its STA result (setup −13.77 ns): its DRC/LVS would
+  not change the conclusion that 25 ns is the practical target.
+
 ## 2026-11-11 18:59 - Autonomy tick + 10 ns post-route STA: not achievable
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `167236e` **success**.
