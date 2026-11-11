@@ -63,14 +63,8 @@ module itch_parser_core (
   assign parsed_is_drop = parsed_is_reference;
 
   // --------------------------------------------------------------------------
-  // Direct L3 pre-trigger (bytes 1..2, big-endian) with an explicit valid.
-  // --------------------------------------------------------------------------
-  assign stock_locate_pre_trigger = {window_data[15:8], window_data[23:16]};
-  // A corrupt/unknown opcode must not trigger a downstream L3 prefetch.
-  assign pre_trigger_valid        = enable_parser && (window_valid_bytes >= 8'd3) && !gate_is_corrupt;
-
-  // --------------------------------------------------------------------------
-  // Early opcode classifier / length decoder
+  // Early opcode classifier / length decoder signals (declared before use; iverilog
+  // rejects use-before-declaration even inside a module).
   // --------------------------------------------------------------------------
   wire       gate_is_trade;
   wire       gate_is_reference;
@@ -81,6 +75,17 @@ module itch_parser_core (
   wire       gate_en;
   wire       gate_admin_drop;
   /* verilator lint_on UNUSED */
+
+  // --------------------------------------------------------------------------
+  // Direct L3 pre-trigger (bytes 1..2, big-endian) with an explicit valid.
+  // --------------------------------------------------------------------------
+  assign stock_locate_pre_trigger = {window_data[15:8], window_data[23:16]};
+  // A corrupt/unknown opcode must not trigger a downstream L3 prefetch.
+  assign pre_trigger_valid        = enable_parser && (window_valid_bytes >= 8'd3) && !gate_is_corrupt;
+
+  // --------------------------------------------------------------------------
+  // Early opcode classifier / length decoder
+  // --------------------------------------------------------------------------
 
   itch_drop_gate u_drop_gate (
     .msg_type       (window_data[7:0]),
