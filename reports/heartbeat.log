@@ -547,3 +547,11 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `af5dd24` was **stuck** at the
    RTL job's "Toolchain" step since 14:15 UTC (>45 min); the workflow has
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: log the CI Toolchain bound" 2>&1 | Select-Object -Last 1; 
+git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 2 files changed, 90 insertions(+)
+[31;1m   334e7e3..0f696e0  main -> main[0m

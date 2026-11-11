@@ -21,11 +21,23 @@ jobs:
       - name: Toolchain
         run: |
           export DEBIAN_FRONTEND=noninteractive
-          # Slow/blocked apt mirrors have stalled this job for >45 min; bound it.
-          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq
-          timeout 600 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq verilator yosys iverilog z3 python3-pip
+          # apt mirrors on the runners have hung for >5 min twice today (exit 124).
+          # Only install what is missing, retry the index update, and bound every call.
+          need=""
+          for t in verilator yosys iverilog z3; do
+            command -v "$t" >/dev/null 2>&1 || need="$need $t"
+          done
+          if [ -n "$need" ]; then
+            for i in 1 2 3; do
+              if timeout 240 sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 update -qq; then break; fi
+              echo "apt-get update attempt $i failed"
+              sudo rm -rf /var/lib/apt/lists/* || true
+              sleep 5
+            done
+            timeout 900 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq $need python3-pip
+          fi
           # cvc5 is optional for the CI proof (Z3 is the required solver)
-          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq cvc5 || true
+          timeout 180 sudo apt-get -o Acquire::http::Timeout=20 install -y -qq cvc5 || true
       - name: Python deps
         run: |
           python3 -m pip install --break-system-packages --upgrade pip
