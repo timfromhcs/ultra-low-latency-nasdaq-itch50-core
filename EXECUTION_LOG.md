@@ -259,6 +259,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 15:59 - Autonomy tick + 10 ns retarget on the XL die
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `af5dd24` was **stuck** at the
+  RTL job's "Toolchain" step since 14:15 UTC (>45 min); the workflow has
+  `cancel-in-progress: true`, so this commit's push starts a fresh run.
+- New experiment `openlane/sky130_wrap32_10ns_xl.json`: the 25 ns XL configuration
+  retargeted to **10 ns** on the 2200 µm die, to answer whether the big die also fixes
+  the 10 ns DELAY netlist (42k detailed-routing violations on 1800 µm).
+- Run started natively (`native-10xl`); synthesis finished and the flow is at placement.
+
 ## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f16b83c` **success**.

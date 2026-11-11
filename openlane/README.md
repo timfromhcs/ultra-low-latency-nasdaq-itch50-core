@@ -24,6 +24,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 ns |
 | `sky130_wrap32_25ns_xl.json` | wrapper at 25 ns on a 2200 µm die (does extra area fix the DELAY short storm?) | Sky130 | 25.0 ns |
 | `sky130_wrap32_25ns_xl_hold.json` | same run, single-corner (`min_ff`) STA for the hold number | Sky130 | 25.0 ns |
+| `sky130_wrap32_10ns_xl.json` | the 25 ns XL config retargeted to 10 ns (does the big die fix the 10 ns netlist too?) | Sky130 | 10.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
