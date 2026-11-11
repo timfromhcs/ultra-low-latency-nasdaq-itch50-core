@@ -470,3 +470,80 @@ Select-Object -First 1
 [7m[0m  .github\workflows\ci.yml:43:          python3 tb/run_book_cocotb.py[0m
 [7m[0m  .github\workflows\ci.yml:44:          python3 tb/run_book_top_cocotb.py[0m
 [7m[0m  .github\workflows\ci.yml:45:          python3 tb/run_book_top_skid_cocotb.py[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead .github/workflows/ci.yml [90m[limit=30][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -14,16 +14,19 @@
+ jobs:
+   rtl:
+     name: RTL + formal + model
+     runs-on: ubuntu-24.04
++    timeout-minutes: 45
+     steps:
+       - uses: actions/checkout@v4
+       - name: Toolchain
+         run: |
+-          sudo apt-get update -qq
+-          sudo apt-get install -y -qq verilator yosys iverilog z3 python3-pip
++          export DEBIAN_FRONTEND=noninteractive
++          # Slow/blocked apt mirrors have stalled this job for >45 min; bound it.
++          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq
++          timeout 600 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq verilator yosys 
+iverilog z3 python3-pip
+           # cvc5 is optional for the CI proof (Z3 is the required solver)
+-          sudo apt-get install -y -qq cvc5 || true
++          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq cvc5 || true
+       - name: Python deps
+         run: |
+           python3 -m pip install --break-system-packages --upgrade pip
+           python3 -m pip install --break-system-packages cocotb pytest scapy
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && python3 -c "import 
+yaml;d=yaml.safe_load(open(\".github/workflows/ci.yml\"));print(\"yaml ok\", list(d[\"jobs\"]))"'
+yaml ok ['rtl', 'wasm-web', 'docker', 'packages']
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "ci: bound 
+the Toolchain apt steps and add a job timeout (stalled twice)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 
+| Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 143 insertions(+), 18 deletions(-)
+[31;1m   a07cacc..334e7e3  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 16:59 - Autonomy tick + 10 ns XL converges; CI Toolchain stall bounded
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
++- **CI was stuck twice** at the RTL job's `Toolchain` step (first run 45+ min at
++  `apt-get`, then again on `c2e6e21`). Bounded it: `DEBIAN_FRONTEND=noninteractive`,
++  `Acquire::Retries=3`, `Acquire::http::Timeout=30`, `timeout 300/600` around apt, and
++  `timeout-minutes: 45` on the job. YAML validated with PyYAML.
++- The 10 ns XL detailed routing **converged to 0 violations**
++  (35,944 ÔåÆ 21,341 ÔåÆ 19,028 ÔåÆ 1,988 ÔåÆ 776 ÔåÆ 75 ÔåÆ 0), so the 10 ns DELAY netlist is
++  routable on the 2200 ┬Ám die. A second DRT pass started and the host killed the distro
++  at 16:58; resumed.
++- Next: finish the second pass, then RCX/STA and DRC/LVS at 10 ns.
++
+ ## 2026-11-11 15:59 - Autonomy tick + 10 ns retarget on the XL die
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `af5dd24` was **stuck** at the
+   RTL job's "Toolchain" step since 14:15 UTC (>45 min); the workflow has
+

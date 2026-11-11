@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 16:59 - Autonomy tick + 10 ns XL converges; CI Toolchain stall bounded
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+- **CI was stuck twice** at the RTL job's `Toolchain` step (first run 45+ min at
+  `apt-get`, then again on `c2e6e21`). Bounded it: `DEBIAN_FRONTEND=noninteractive`,
+  `Acquire::Retries=3`, `Acquire::http::Timeout=30`, `timeout 300/600` around apt, and
+  `timeout-minutes: 45` on the job. YAML validated with PyYAML.
+- The 10 ns XL detailed routing **converged to 0 violations**
+  (35,944 → 21,341 → 19,028 → 1,988 → 776 → 75 → 0), so the 10 ns DELAY netlist is
+  routable on the 2200 µm die. A second DRT pass started and the host killed the distro
+  at 16:58; resumed.
+- Next: finish the second pass, then RCX/STA and DRC/LVS at 10 ns.
+
 ## 2026-11-11 15:59 - Autonomy tick + 10 ns retarget on the XL die
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `af5dd24` was **stuck** at the
