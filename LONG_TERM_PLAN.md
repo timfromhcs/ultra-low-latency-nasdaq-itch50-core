@@ -145,7 +145,12 @@ MDN PWA best practices, GitHub Actions docs.
       10 ns) completed the whole flow — **0 routing/Magic/KLayout DRC, 0 LVS errors,
       timing closed (WNS +0.12 ns, Fmax ≈101 MHz)**, 6,776 stdcells on a 500 µm die
       (`reports/openlane_metrics-full3.json`). Flow validation, not a parser result.
-- [ ] Post-route STA with the full flow (blocked on the P&R above).
+- [x] Post-route STA with the full flow — **first completed wrapper P&R (2026-11-11)**:
+      `openlane/sky130_wrap32_routetest.json` (50 ns, AREA synthesis, 1800 µm die)
+      finished with **Magic/KLayout DRC 0, LVS 0**, post-route setup WNS **+17.49 ns**,
+      hold **+0.0088 ns**, **Fmax ≈ 30.8 MHz** (`reports/openlane_routetest-full.json`;
+      worst path `rst_n` → FF). Scope: wrapper at 50 ns — the 10 ns netlist still shorts,
+      so this is flow/DRC/LVS evidence, not a parser speed sign-off.
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

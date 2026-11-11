@@ -20,6 +20,7 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 | `sky130_wrap32_fitted_area.json` | 32-bit wrapper, AREA synthesis variant (routing experiments only) | Sky130 | 10.0 ns |
 | `sky130_wrap32_wide.json` | 32-bit wrapper, 1800 µm die at 15 %, `CTS_APPLY_NDR: "none"`, antenna repair off | Sky130 | 10.0 ns |
 | `sky130_wrap32_routetest.json` | routing test: same wrapper, 50 ns, AREA synthesis, no sizing/buffering | Sky130 | 50.0 ns |
+| `sky130_wrap32_25ns.json` | wrapper at 25 ns on the wide die (frequency step after the 50 ns full flow) | Sky130 | 25.0 ns |
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)
@@ -72,6 +73,26 @@ wrapper (`itch_host_wrap`, 32-bit host port instead of the debug bus) removes th
 Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynchronous
 bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
 depth. **Pre-PnR only — no placement/routing, no sign-off.**
+
+## Wrapper full-flow result (2026-11-11) — first completed P&R for the wrapper
+
+`openlane/sky130_wrap32_routetest.json` (same wrapper RTL, **50 ns**, AREA synthesis,
+1800 µm die, antenna repair off) completed the whole Classic flow:
+
+| Result | Value |
+|---|---|
+| Magic DRC / KLayout DRC | **0 / 0** |
+| LVS | **0 errors** (devices, nets, pins, properties) |
+| Post-route STA (50 ns, ss/100 °C) | setup WNS **+17.49 ns**, hold **+0.0088 ns** |
+| Fmax estimate | **30.76 MHz** (`reports/openlane_routetest-full.json`) |
+| Cells / area | 59,465 stdcells, 218,344 µm², 7.1 % utilization (1800 × 1800 µm) |
+| Worst path | `rst_n` → FF `_21959_` |
+| Detailed routing | 10 → 7 → **0 violations** |
+
+This is the first completed wrapper P&R with DRC/LVS sign-off, but it is **not** a 10 ns
+result: the fast netlist still shorts. The routing test exists to isolate that (see the
+fitted-attempt section above). The run directory itself stays git-ignored; the committed
+summary `reports/openlane_routetest-full.json` carries the measured values.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

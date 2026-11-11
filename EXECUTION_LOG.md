@@ -259,6 +259,23 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 00:59 - Autonomy tick + first completed wrapper P&R (50 ns) with 0 DRC / 0 LVS
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `54c8984` **success**.
+- The detached routing test finished the **entire Classic flow** (EXIT=0):
+  - Magic DRC **0**, KLayout DRC **0**, LVS **0 errors**
+  - post-route STA at 50 ns (ss/100 °C): setup WNS **+17.49 ns**, hold **+0.0088 ns**,
+    Fmax estimate **30.76 MHz**, worst path `rst_n` → FF `_21959_`
+  - 59,465 stdcells (218,344 µm², 7.1 % utilization) on the 1800 µm die
+  - detailed routing 10 → 7 → **0 violations**
+  This is the first completed wrapper P&R with DRC/LVS sign-off. Artifact produced with
+  `node scripts/openlane_summary.mjs openlane/routetest-full` →
+  `reports/openlane_routetest-full.json` (the heavy run dir stays git-ignored).
+- Started the next frequency step: `openlane/sky130_wrap32_25ns.json` (DELAY synthesis,
+  1800 µm/15 %, `--run-tag native-25ns`), in placement after ~3 min.
+- WSL was force-terminated once more at 01:03 (`Wsl/Service/HCS_E_TERMINATED`) before the
+  25 ns run could start; relaunched successfully. The shared-host restarts continue.
+
 ## 2026-11-10 22:59 - Autonomy tick + wrapper DRT re-run is non-deterministic but still failing
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `22d7b91` **success**.
