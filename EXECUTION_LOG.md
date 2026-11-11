@@ -271,6 +271,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   Magic DRC and a continuous multi-corner STA still open).
 - Started `--from Magic.DRC` on the 25 ns XL run for the last missing check; it was still
   loading the layout after 42 minutes at the end of the tick (no result yet).
+- **Follow-up (next tick): Magic DRC completed** after ~1h40m — `127-magic-drc/reports/
+  drc.magic.rpt` reports **`COUNT: 0`**. The distro restarted at 15:00 while the flow was
+  re-running SPICE extraction/LVS, but the Magic DRC result is saved. The 25 ns XL
+  configuration is therefore **fully DRC/LVS clean**: Magic DRC 0, KLayout DRC 0
+  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold −0.00687 ns (min_ff).
 
 ## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (−6.9 ps)
 

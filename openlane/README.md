@@ -120,9 +120,11 @@ Setup closes with ≈1.46 ns margin (Fmax ≈ 42.5 MHz); hold needs a buffer fix
 hold number quickly.
 
 **KLayout DRC on the 25 ns layout: 0 violations** across all 257 rules
-(`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). Magic DRC was skipped to
-fit the host's windows. **LVS: 0 errors** — the Netgen step completed on the third try
-when the host finally kept the distro alive for ~13 minutes.
+(`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). **Magic DRC: 0** as well
+(`127-magic-drc/reports/drc.magic.rpt`, `COUNT: 0`). **LVS: 0 errors** — the Netgen step
+completed on the third try when the host finally kept the distro alive for ~13 minutes.
+So the 25 ns XL configuration has **both DRC engines clean, LVS clean**, setup closed and
+a 6.9 ps hold miss.
 
 The run summary is `reports/openlane_25xl-full.json` (note: its `timing__setup__ws` comes
 from the single-corner `min_ff` STA, so the file's Fmax estimate is **not** a signoff

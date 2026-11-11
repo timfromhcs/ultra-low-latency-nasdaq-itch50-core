@@ -350,5 +350,5 @@
     "design__lvs_unmatched_net__count": 0,
     "design__lvs_unmatched_pin__count": 0
   },
-  "note": "timing__setup__ws here comes from the single-corner min_ff STA run, not the signoff ss corner. Signoff setup slack is +1.4597 ns at max_ss (max_ss/ws.max.rpt); hold is -0.00687 ns at min_ff (min_ff/wns.min.rpt). derived.fmaxEstimateMHz is not a signoff number."
+  "note": "timing__setup__ws here comes from the single-corner min_ff STA run, not the signoff ss corner. Signoff setup slack is +1.4597 ns at max_ss (max_ss/ws.max.rpt); hold is -0.00687 ns at min_ff (min_ff/wns.min.rpt). derived.fmaxEstimateMHz is not a signoff number. Separate late steps: Magic DRC 0 (openlane/runs/25xl-full/magic_drc/drc.magic.rpt, step 127); KLayout DRC 0 (drc.klayout.json)."
 }

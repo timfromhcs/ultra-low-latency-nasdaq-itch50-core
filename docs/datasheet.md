@@ -62,9 +62,9 @@ Two egress paths exist:
 > sign-offs. First **completed** wrapper P&R (2026-11-11, 50 ns, AREA synthesis):
 > 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz
 > (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 µm die reaches
-> **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns, hold
-> −0.0069 ns** (`reports/openlane_25xl-full.json`); Magic DRC and a continuous
-> multi-corner STA are still open, so the parser itself has **no** physical sign-off.
+> **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns,
+> hold −0.0069 ns** (`reports/openlane_25xl-full.json`); only a continuous multi-corner
+> STA and the 6.9 ps hold fix remain, so the parser itself has **no** physical sign-off.
 
 ## 4. Area estimate
 
@@ -163,14 +163,14 @@ arriving earlier are otherwise accepted by the parser but not booked.
 | Formal | protocol invariants proven (Z3/CVC5) | `formal/`, weekly job |
 | Small-block full flow | `itch_metrics`: **0 DRC, 0 LVS**, timing closed at 10 ns | `reports/openlane_metrics-full3.json` |
 | Wrapper full flow (50 ns) | **0 Magic/KLayout DRC, 0 LVS**, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz | `reports/openlane_routetest-full.json` |
-| Wrapper 25 ns XL (2200 µm) | **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 ns, hold −0.0069 ns (Magic DRC/multi-corner STA open) | `reports/openlane_25xl-full.json` |
+| Wrapper 25 ns XL (2200 µm) | **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 ns, hold −0.0069 ns | `reports/openlane_25xl-full.json` |
 
 ## 8. Known limitations
 
 See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
-(the wrapper has completed flows at 50 ns and a 25 ns run with KLayout DRC/LVS clean but
-no Magic DRC), no fabricated silicon, and the book is a 16-locate/16-level model rather
-than a full-depth L3 book.
+(the wrapper has a completed 50 ns flow and a 25 ns run with Magic/KLayout DRC and LVS
+clean but a 6.9 ps hold miss), no fabricated silicon, and the book is a
+16-locate/16-level model rather than a full-depth L3 book.
 
 ## 9. Ordering and support
 

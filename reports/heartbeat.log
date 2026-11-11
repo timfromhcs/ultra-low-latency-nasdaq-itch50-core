@@ -3044,3 +3044,137 @@ warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF
 warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
  4 files changed, 242 insertions(+), 23 deletions(-)
 [31;1m   f16b83c..779368c  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_magic.sh
+Created file successfully: reports/run_25xl_magic.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_magic.sh 
+/home/tim/chiplab-native/run_25xl_magic.sh && chmod +x /home/tim/chiplab-native/run_25xl_magic.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_magic.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-magic.log 2>/dev/null; date; 
+uptime | cut -c1-22'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+    1255000 uses                                                                                                       
+ 
+    1260000 uses                                                                                                       
+ 
+    1265000 uses                                                                                                       
+ 
+Wed Nov 11 13:17:19 CET 2026
+ 13:17:19 up 1 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25xl-magic.log; date; 
+uptime | cut -c1-22'
+DRC style is now "drc(full)"                                                                                           
+ 
+Loading DRC CIF style.                                                                                                 
+ 
+Wed Nov 11 13:32:39 CET 2026
+ 13:32:39 up 16 min,
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-magic.log; date; 
+uptime | cut -c1-22'
+DRC style is now "drc(full)"                                                                                           
+ 
+Loading DRC CIF style.                                                                                                 
+ 
+Wed Nov 11 13:47:53 CET 2026
+ 13:47:53 up 31 min,
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-magic.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl/129-magic-drc 2>/dev/null | head -4; date; uptime | cut -c1-22'
+DRC style is now "drc(full)"                                                                                           
+ 
+Loading DRC CIF style.                                                                                                 
+ 
+Wed Nov 11 13:58:14 CET 2026
+ 13:58:14 up 42 min,
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f16b83c` **success**.
++- Multi-corner STA was killed again after three of six corners (host restart at 13:11).
++  The sign-off corners already captured separately (max_ss setup, min_ff hold) remain the
++  authoritative numbers.
++- `docs/datasheet.md` now publishes both completed wrapper results (50 ns full flow and
++  the 25 ns XL run) and states the sign-off scope precisely: the **parser** has no
++  physical sign-off, the wrapper does (50 ns full; 25 ns with KLayout DRC/LVS clean,
++  Magic DRC and a continuous multi-corner STA still open).
++- Started `--from Magic.DRC` on the 25 ns XL run for the last missing check; it was still
++  loading the layout after 42 minutes at the end of the tick (no result yet).
++
+ ## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (ÔêÆ6.9 ps)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3d7213a` **success**.
+ - The multi-corner STA kept dying at the fifth/sixth corner (host shutdowns at 10:09),
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25xl_magic.sh -ErrorAction SilentlyContinue; node scripts/gate.mjs 
+2>&1 | Select-Object -Last 2; git add -A; git commit -m "docs: log the Magic DRC attempt and the datasheet publish" 
+2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 176 insertions(+), 15 deletions(-)
+[31;1m   779368c..ac6df34  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25xl-magic.log; uptime | cut -c1-22; pgrep -c 
+magic 2>/dev/null; date'; Start-Sleep -Seconds 120; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core 
+--workflow ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { 
+"$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }
+DRC style is now "drc(full)"                                                                                           
+ 
+Loading DRC CIF style.                                                                                                 
+ 
+ 14:00:28 up 44 min,  
+1
+Wed Nov 11 14:00:28 CET 2026
+ac6df34 completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git status --porcelain; git log --oneline -3
+M reports/heartbeat.log
+ac6df34 docs: log the Magic DRC attempt and the datasheet publish
+779368c docs(datasheet): published wrapper P&R results and precise sign-off scope
+f16b83c feat(openlane): 25 ns XL completes KLayout DRC 0 and LVS 0
+> build ┬À deepseek-v4.1-flash
+Tick 12:59ÔÇô14:02 abgeschlossen ÔÇö **Datasheet ver├Âffentlicht die P&R-Ergebnisse; Magic DRC l├ñuft**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks |
+| Gate | **11/11**, Docs-Links 25/25 |
+| CI | `ac6df34` **success** |
+| Multi-Corner-STA | erneut nach 3 von 6 Ecken gekillt (Host-Restart 13:11) ÔÇö Sign-off-Ecken bleiben die separat gemessenen |
+| **Magic DRC (25 ns XL)** | gestartet 13:17, nach 44 min noch im Layout-Laden, Prozess lebt ÔÇö **l├ñuft weiter** |
+| Datasheet | ver├Âffentlicht jetzt beide abgeschlossenen Wrapper-Flows + pr├ñzisen Sign-off-Scope |
+
+## Datasheet-Inhalt (neu)
+- 50 ns Full-Flow: **0 Magic/KLayout DRC, 0 LVS**, Setup +17,49 ns, Hold +0,0088 ns, Fmax Ôëê 30,8 MHz.
+- 25 ns XL (2200 ┬Ám): **0 DRT-Violations, KLayout DRC 0 (257 Regeln), LVS 0**, Setup +1,4597 ns, Hold ÔêÆ0,0069 ns.
+- Klarstellung: der **Parser** hat keinen physikalischen Sign-off; der Wrapper hat abgeschlossene Flows (50 ns vollst├ñndig, 25 ns mit KLayout/LVS, Magic DRC + durchgehende Multi-Corner-STA offen).
+
+## Verifikation
+Commits `779368c` (Datasheet), `ac6df34` (Log/Scope); Arbeitsbaum clean (nur Heartbeat).
+
+**N├ñchster Schritt:** Magic-DRC-Ergebnis des 25-ns-XL-Laufs abwarten (l├ñuft detached weiter) und danach die verbleibenden offenen Punkte angehen: Hold-Fix (6,9 ps), durchgehende Multi-Corner-STA, Parser-Sign-off sowie die externen Blocker (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-11T14:59:19.4395993+01:00] hallo, es ist 14:59
+[tick] ran 0, failed 0
