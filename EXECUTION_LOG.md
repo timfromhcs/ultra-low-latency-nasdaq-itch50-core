@@ -268,8 +268,9 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   passes ended at **0 violations** — the DELAY netlist at 25 ns is routable on 2200 µm.
 - The flow then ran RCX and started post-route STA, but the distro was shut down again
   at 07:16 during the `max_ss` corner STA, so **Magic/KLayout DRC and LVS are still
-  missing for the 25 ns run**. The evidence stands at: GRT 0 overflow, DRT 0 violations
-  (twice), RCX done, post-route STA incomplete.
+  missing for the 25 ns run**. A retry from `--from OpenROAD.STAPostPNR` (Magic DRC
+  skipped) was killed again at 07:42, still inside the corner STA. The evidence stands
+  at: GRT 0 overflow, DRT 0 violations (twice), RCX done, post-route STA incomplete.
 - The 2200 µm die therefore solves the short storm (42,342 → 0), at the cost of area.
 
 ## 2026-11-11 04:59 - Autonomy tick + extra area fixes the DELAY short storm (42k → 7)
