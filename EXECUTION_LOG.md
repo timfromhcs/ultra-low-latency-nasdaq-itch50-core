@@ -271,7 +271,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - First detailed-routing pass: **35,944 → 21,341 violations**, then optimisation
   iteration 2 — the same convergence shape as the 25 ns run (which reached 0). The host
   restarted the distro at 16:32, so the run was resumed from `OpenROAD.DetailedRouting`.
-  This will show whether 10 ns also becomes routable on the 2200 µm die.
+- **The resumed DRT converged to 0 violations** (21,341 → 19,028 → 1,988 → 776 → 75 → **0**)
+  before a second DRT pass started. So the 10 ns DELAY netlist *is* routable on the
+  2200 µm die; the host killed the distro again at 16:58 and the run was resumed.
+- Next: finish the second DRT pass, then RCX/STA and DRC/LVS at 10 ns (Magic DRC alone
+  took 1h40m on this design, so this will span several ticks).
 
 ## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
 
