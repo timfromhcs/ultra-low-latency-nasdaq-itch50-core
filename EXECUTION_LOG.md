@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f16b83c` **success**.
+- Multi-corner STA was killed again after three of six corners (host restart at 13:11).
+  The sign-off corners already captured separately (max_ss setup, min_ff hold) remain the
+  authoritative numbers.
+- `docs/datasheet.md` now publishes both completed wrapper results (50 ns full flow and
+  the 25 ns XL run) and states the sign-off scope precisely: the **parser** has no
+  physical sign-off, the wrapper does (50 ns full; 25 ns with KLayout DRC/LVS clean,
+  Magic DRC and a continuous multi-corner STA still open).
+- Started `--from Magic.DRC` on the 25 ns XL run for the last missing check; it was still
+  loading the layout after 42 minutes at the end of the tick (no result yet).
+
 ## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (−6.9 ps)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3d7213a` **success**.
