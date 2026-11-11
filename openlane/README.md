@@ -121,8 +121,12 @@ hold number quickly.
 
 **KLayout DRC on the 25 ns layout: 0 violations** across all 257 rules
 (`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). Magic DRC was skipped to
-fit the host's windows. **LVS is still open** — Netgen was killed twice at ~11:32 and
-~11:47 when the host shut the distro down.
+fit the host's windows. **LVS: 0 errors** — the Netgen step completed on the third try
+when the host finally kept the distro alive for ~13 minutes.
+
+The run summary is `reports/openlane_25xl-full.json` (note: its `timing__setup__ws` comes
+from the single-corner `min_ff` STA, so the file's Fmax estimate is **not** a signoff
+number; the signoff values are the corner reports quoted above).
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

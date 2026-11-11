@@ -2677,3 +2677,11 @@ warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF
 warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
  create mode 100644 reports/run_25xl_lvs.sh
 [31;1m   d07a216..d163e0e  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25xl_lvs.sh -ErrorAction SilentlyContinue; git add -A; git commit 
+-m "chore: drop stray runner script" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_lvs.sh'; 
+Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25xl-lvs.log; date'
+delete mode 100644 reports/run_25xl_lvs.sh
+[31;1m   d163e0e..7538531  main -> main[0m
+Wed Nov 11 11:50:28 CET 2026

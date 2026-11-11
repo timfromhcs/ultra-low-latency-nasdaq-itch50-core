@@ -272,10 +272,14 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Then KLayout DRC ran to completion in a 42-minute window: **0 violations across all
   257 rules** (`112-klayout-drc/reports/drc.klayout.json`). Magic DRC was skipped to fit
   the window.
-- **LVS is still open**: Netgen was killed at 11:32 (during the first attempt) and again
-  at 11:47 when the host restarted the distro.
-- Net state for 25 ns XL: GRT 0 overflow, DRT 0 violations, KLayout DRC 0,
-  setup +1.4597 ns, hold −0.0069 ns, LVS pending.
+- **LVS completed (0 errors)** on the third attempt — the host kept the distro alive for
+  ~13 minutes and the flow ran Netgen.LVS, the checkers and `ReportManufacturability`,
+  saving the final views (exit code 2 only because hold (−6.9 ps) and the skipped Magic
+  DRC are reported as violations).
+- Final 25 ns XL evidence: GRT 0 overflow, DRT 0 violations, **KLayout DRC 0 (257 rules)**,
+  **LVS 0**, setup **+1.4597 ns** (max_ss, WNS 0), hold **−0.00687 ns** (min_ff).
+  Magic DRC was skipped for time. Summary: `reports/openlane_25xl-full.json` (with an
+  explicit note that its aggregate setup metric is from the `min_ff` corner).
 
 ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
 
