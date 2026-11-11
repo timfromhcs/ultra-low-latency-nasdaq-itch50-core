@@ -63,8 +63,9 @@ Two egress paths exist:
 > 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz
 > (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 µm die reaches
 > **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns,
-> hold −0.0069 ns** (`reports/openlane_25xl-full.json`); only a continuous multi-corner
-> STA and the 6.9 ps hold fix remain, so the parser itself has **no** physical sign-off.
+> hold −0.0069 ns (worst case −0.0123 ns at max_ff)** (`reports/openlane_25xl-full.json`);
+> thousands of max-cap/max-slew violations remain, so the parser itself has **no**
+> physical sign-off.
 
 ## 4. Area estimate
 
@@ -169,8 +170,8 @@ arriving earlier are otherwise accepted by the parser but not booked.
 
 See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
 (the wrapper has a completed 50 ns flow and a 25 ns run with Magic/KLayout DRC and LVS
-clean but a 6.9 ps hold miss), no fabricated silicon, and the book is a
-16-locate/16-level model rather than a full-depth L3 book.
+clean but hold −12.3 ps at max_ff and cap/slew violations), no fabricated silicon, and
+the book is a 16-locate/16-level model rather than a full-depth L3 book.
 
 ## 9. Ordering and support
 

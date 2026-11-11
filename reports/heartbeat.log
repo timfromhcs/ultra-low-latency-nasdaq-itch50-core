@@ -3443,3 +3443,216 @@ warning: in the working copy of 'reports/scorecard.json', LF will be replaced by
 25ns_xl.json','utf8'));j.STA_CORNERS=['min_ss_100C_1v60','min_tt_025C_1v80','max_ff_n40C_1v95'];fs.writeFileSync('openl
 ane/sky130_wrap32_25ns_xl_corners.json',JSON.stringify(j,null,2)+'\n');console.log('written')"
 written
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_corners.sh
+Created file successfully: reports/run_25xl_corners.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_corners.sh 
+/home/tim/chiplab-native/run_25xl_corners.sh && chmod +x /home/tim/chiplab-native/run_25xl_corners.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_corners.sh'; 
+Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25xl-corners.log 2>/dev/null; date'
+copied
+[15:04:27] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25xl/134-openroad-stapostpnr/max_ff_n40C_1v95/sta.log'ÔÇª                    
+   
+Wed Nov 11 15:04:45 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 420; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" 
+/home/tim/chiplab-native/ns25xl-corners.log | tail -2; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl/134-openroad-stapostpnr 2>/dev/null | tail -4; date; uptime | cut 
+-c1-22'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ [15:06:01] INFO     Flow complete.                                                                     
+sequential.py:413
+EXIT=0
+runtime.txt
+state_in.json
+state_out.json
+summary.rpt
+Wed Nov 11 15:12:38 CET 2026
+ 15:12:38 up 0 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25xl/134-openroad-stapostpnr/summary.rpt 2>/dev/null | head -14'
+ÔöÅÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔö
+üÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔ
+ö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöü
+ÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö
+üÔöô
+Ôöâ                      Ôöâ Hold     Ôöâ Reg to   Ôöâ          Ôöâ          Ôöâ of which  Ôöâ Setup    Ôöâ           
+Ôöâ          Ôöâ           Ôöâ of which Ôöâ           Ôöâ          Ôöâ
+Ôöâ                      Ôöâ Worst    Ôöâ Reg      Ôöâ          Ôöâ Hold Vio Ôöâ reg to    Ôöâ Worst    Ôöâ Reg to    
+Ôöâ Setup    Ôöâ Setup Vio Ôöâ reg to   Ôöâ Max Cap   Ôöâ Max Slew Ôöâ
+Ôöâ Corner/Group         Ôöâ Slack    Ôöâ Paths    Ôöâ Hold TNS Ôöâ Count    Ôöâ reg       Ôöâ Slack    Ôöâ Reg Paths 
+Ôöâ TNS      Ôöâ Count     Ôöâ reg      Ôöâ ViolatioÔÇª Ôöâ ViolatiÔÇª Ôöâ
+ÔöíÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔö
+üÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔ
+òçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöü
+ÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö
+üÔö®
+Ôöé Overall              Ôöé -0.0123  Ôöé -0.0123  Ôöé -0.0147  Ôöé 2        Ôöé 2         Ôöé 4.3244   Ôöé 4.3244    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 3262      Ôöé 11370    Ôöé
+Ôöé min_ss_100C_1v60     Ôöé 0.5574   Ôöé 0.5574   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 4.3244   Ôöé 4.3244    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2541      Ôöé 11370    Ôöé
+Ôöé min_tt_025C_1v80     Ôöé 0.1524   Ôöé 0.1524   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 13.7453  Ôöé 13.8740   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2537      Ôöé 321      Ôöé
+Ôöé max_ff_n40C_1v95     Ôöé -0.0123  Ôöé -0.0123  Ôöé -0.0147  Ôöé 2        Ôöé 2         Ôöé 15.3846  Ôöé 16.4201   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 3262      Ôöé 313      Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔ
+ö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÿ
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -129,8 +129,20 @@
+ The run summary is `reports/openlane_25xl-full.json` (note: its `timing__setup__ws` comes
+ from the single-corner `min_ff` STA, so the file's Fmax estimate is **not** a signoff
+ number; the signoff values are the corner reports quoted above).
+ 
++Corner STA (3-corner batch, `134-openroad-stapostpnr/summary.rpt`):
++
++| Corner | Hold WS | Setup WS | Max cap | Max slew |
++|---|---|---|---|---|
++| min_ss_100C_1v60 | +0.5574 | +4.3244 | 2,541 | 11,370 |
++| min_tt_025C_1v80 | +0.1524 | +13.7453 | 2,537 | 321 |
++| max_ff_n40C_1v95 | **ÔêÆ0.0123** (2 vio) | +15.3846 | 3,262 | 313 |
++
++So the real hold worst case is **ÔêÆ12.3 ps at max_ff**, and the design carries
++**thousands of max-cap/max-slew violations** ÔÇö this is routing/DRC/LVS evidence, not a
++timing sign-off.
++
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+ `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns) was run to characterise the congestion
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -160,11 +160,13 @@
+       or the buffer strategy itself).
+       **2026-11-11:** a 2200 ┬Ám die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
+       0** detailed-routing violations (GRT 0 overflow, Ôëñ41.9 % usage; both DRT passes end
+       at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold ÔêÆ0.0069 ns**
+-      at 25 ns (Ôëê42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. The 25 ns
+-      configuration is DRC/LVS-clean with a 6.9 ps hold miss; a continuous multi-corner
+-      STA and a hold fix remain.
++      at 25 ns (Ôëê42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. A 3-corner
++      batch shows the true hold worst case **ÔêÆ0.0123 ns (max_ff)** and **thousands of
++      max-cap/max-slew violations** (2.5kÔÇô3.3k cap, up to 11.4k slew at min_ss), so this
++      is DRC/LVS evidence, not a timing sign-off. A continuous multi-corner STA and the
++      hold/slew cleanup remain.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit EXECUTION_LOG.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\EXECUTION_LOG.md. It must match exactly, including 
+whitespace and indentation.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path EXECUTION_LOG.md -Pattern "fully DRC/LVS clean" -Context 0,2
+> EXECUTION_LOG.md:277:  configuration is therefore **[7mfully DRC/LVS clean[0m**: Magic DRC 0, KLayout DRC 0[0m
+[7m[0m  EXECUTION_LOG.md:278:  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold -0.00687 ns (min_ff).[0m
+[7m[0m  EXECUTION_LOG.md:279:[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -274,9 +274,13 @@
+ - **Follow-up (next tick): Magic DRC completed** after ~1h40m ÔÇö `127-magic-drc/reports/
+   drc.magic.rpt` reports **`COUNT: 0`**. The distro restarted at 15:00 while the flow was
+   re-running SPICE extraction/LVS, but the Magic DRC result is saved. The 25 ns XL
+   configuration is therefore **fully DRC/LVS clean**: Magic DRC 0, KLayout DRC 0
+-  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold ÔêÆ0.00687 ns (min_ff).
++  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold -0.00687 ns (min_ff).
++- A 3-corner STA batch (max_ff, min_ss, min_tt) completed in 6 minutes and adds the honest
++  qualifier: true hold worst case **ÔêÆ0.0123 ns at max_ff** (2 violations), and
++  **2,537ÔÇô3,262 max-cap plus up to 11,370 max-slew violations**. So the 25 ns result is
++  routing/DRC/LVS evidence, **not** a timing sign-off.
+ 
+ ## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (ÔêÆ6.9 ps)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3d7213a` **success**.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mcd E:\chips\main; Remove-Item reports\run_25xl_corners.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add 
+-A; git commit -m "docs(openlane): 25 ns corner batch ÔÇö hold -12.3 ps, cap/slew violations, no sign-off" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1 failed
+[91m[1mError: [0mPortable shell scanner cannot analyze command: invalid-structure
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25xl_corners.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs(openlane): 25 ns corner batch shows hold -12.3 ps and 
+cap/slew violations" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_25ns_xl_corners.json', LF will be replaced by CRLF the next 
+time Git touches it
+ create mode 100644 openlane/sky130_wrap32_25ns_xl_corners.json
+[31;1m   53167b5..f847c03  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -62,10 +62,11 @@
+ > sign-offs. First **completed** wrapper P&R (2026-11-11, 50 ns, AREA synthesis):
+ > 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, Fmax Ôëê 30.8 MHz
+ > (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 ┬Ám die reaches
+ > **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns,
+-> hold ÔêÆ0.0069 ns** (`reports/openlane_25xl-full.json`); only a continuous multi-corner
+-> STA and the 6.9 ps hold fix remain, so the parser itself has **no** physical sign-off.
++> hold ÔêÆ0.0069 ns (worst case ÔêÆ0.0123 ns at max_ff)** (`reports/openlane_25xl-full.json`);
++> thousands of max-cap/max-slew violations remain, so the parser itself has **no**
++> physical sign-off.
+ 
+ ## 4. Area estimate
+ 
+ Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -169,10 +169,10 @@
+ ## 8. Known limitations
+ 
+ See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
+ (the wrapper has a completed 50 ns flow and a 25 ns run with Magic/KLayout DRC and LVS
+-clean but a 6.9 ps hold miss), no fabricated silicon, and the book is a
+-16-locate/16-level model rather than a full-depth L3 book.
++clean but hold ÔêÆ12.3 ps at max_ff and cap/slew violations), no fabricated silicon, and
++the book is a 16-locate/16-level model rather than a full-depth L3 book.
+ 
+ ## 9. Ordering and support
+ 
+ This is an open-source repository: <https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core>.
+
