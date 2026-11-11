@@ -201,3 +201,148 @@ Hold-/Slew-Cleanup (Buffer/Resizer), durchgehende Multi-Corner-STA, Parser-Sign-
 [heartbeat] log rotated at 228149 bytes
 [2026-11-11T15:59:21.4127402+01:00] hallo, es ist 15:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+af5dd24 in_progress
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const 
+j=JSON.parse(fs.readFileSync('openlane/sky130_wrap32_25ns_xl.json','utf8'));j.CLOCK_PERIOD=10.0;delete j.STA_CORNERS;fs
+.writeFileSync('openlane/sky130_wrap32_10ns_xl.json',JSON.stringify(j,null,2)+'\n');console.log('written 10ns xl')"
+written 10ns xl
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"af5dd24\"));\nif (!run) return { runs: r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion]) };\nconst j = await tools.github.actions_list({ method: 
+\"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 20 });\nconst rtl = j.jobs?.jobs?.find(x => x.name.startsWith(\"RTL\"));\nreturn { status: 
+run.status, rtl: rtl?.steps?.map(s => [s.number, s.name, s.status, s.conclusion]), started: rtl?.started_at };"} 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_10xl.sh
+Created file successfully: reports/run_10xl.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_10xl.sh /home/tim/chiplab-native/run_10xl.sh && 
+chmod +x /home/tim/chiplab-native/run_10xl.sh && echo copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_10xl.sh'; Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -2 
+/home/tim/chiplab-native/ns10xl.log 2>/dev/null; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+[16:01:39] INFO     Skipping corner max_ff_n40C_1v95 for STA (identical to nom_ff_n40C_1v95 at this      
+openroad.py:787
+                    stage)ÔÇª                                                                                          
+   
+Wed Nov 11 16:01:49 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path .github\workflows\ci.yml -Pattern "concurrency" -Context 0,3
+> .github\workflows\ci.yml:10:[7mconcurrency[0m:[0m
+[7m[0m  .github\workflows\ci.yml:11:  group: ci-${{ github.ref }}[0m
+[7m[0m  .github\workflows\ci.yml:12:  cancel-in-progress: true[0m
+[7m[0m  .github\workflows\ci.yml:13:[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -23,8 +23,9 @@
+ | `sky130_wrap32_25ns.json` | wrapper at 25 ns on the wide die (frequency step after the 50 ns full flow) | Sky130 | 
+25.0 ns |
+ | `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 
+ns |
+ | `sky130_wrap32_25ns_xl.json` | wrapper at 25 ns on a 2200 ┬Ám die (does extra area fix the DELAY short storm?) | 
+Sky130 | 25.0 ns |
+ | `sky130_wrap32_25ns_xl_hold.json` | same run, single-corner (`min_ff`) STA for the hold number | Sky130 | 25.0 ns |
++| `sky130_wrap32_10ns_xl.json` | the 25 ns XL config retargeted to 10 ns (does the big die fix the 10 ns netlist 
+too?) | Sky130 | 10.0 ns |
+ | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+ 
+ ## Verified toolchain (2026-11-03)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit EXECUTION_LOG.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\EXECUTION_LOG.md. It must match exactly, including 
+whitespace and indentation.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path EXECUTION_LOG.md -Pattern "^## 2026-11-11 14:59" -Context 1,0
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path EXECUTION_LOG.md -Pattern "^## 2026-11-11" | Select-Object -First 3
+EXECUTION_LOG.md:262:[7m## 2026-11-11[0m 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC 
+attempt
+EXECUTION_LOG.md:284:[7m## 2026-11-11[0m 09:59 - Autonomy tick + 25 ns hold corner measured (-6.9 ps)
+EXECUTION_LOG.md:306:[7m## 2026-11-11[0m 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,18 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 15:59 - Autonomy tick + 10 ns retarget on the XL die
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `af5dd24` was **stuck** at the
++  RTL job's "Toolchain" step since 14:15 UTC (>45 min); the workflow has
++  `cancel-in-progress: true`, so this commit's push starts a fresh run.
++- New experiment `openlane/sky130_wrap32_10ns_xl.json`: the 25 ns XL configuration
++  retargeted to **10 ns** on the 2200 ┬Ám die, to answer whether the big die also fixes
++  the 10 ns DELAY netlist (42k detailed-routing violations on 1800 ┬Ám).
++- Run started natively (`native-10xl`); synthesis finished and the flow is at placement.
++
+ ## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f16b83c` **success**.
+ - Multi-corner STA was killed again after three of six corners (host restart at 13:11).
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_10xl.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "feat(openlane): 10 ns retarget on the 2200 um die" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_10ns_xl.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 openlane/sky130_wrap32_10ns_xl.json
+[31;1m   af5dd24..39e16b8  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns10xl.log; grep -a -E 
+"Number of violations =" /home/tim/chiplab-native/ns10xl.log | tail -3; date; uptime | cut -c1-22'; gh run list --repo 
+timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json headSha,status,conclusion | 
+ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }
+Completing 90% with 25365 violations.                                                                               
+    elapsed time = 00:02:00, memory = 2453.60 (MB).                                                                    
+ 
+[INFO DRT-0199]   Number of violations = 35944.                                                                        
+ 
+Wed Nov 11 16:16:38 CET 2026
+ 16:16:38 up 16 min,  
+39e16b8 in_progress
+> build ┬À deepseek-v4.1-flash

@@ -268,6 +268,10 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   retargeted to **10 ns** on the 2200 µm die, to answer whether the big die also fixes
   the 10 ns DELAY netlist (42k detailed-routing violations on 1800 µm).
 - Run started natively (`native-10xl`); synthesis finished and the flow is at placement.
+- First detailed-routing pass: **35,944 → 21,341 violations**, then optimisation
+  iteration 2 — the same convergence shape as the 25 ns run (which reached 0). The host
+  restarted the distro at 16:32, so the run was resumed from `OpenROAD.DetailedRouting`.
+  This will show whether 10 ns also becomes routable on the 2200 µm die.
 
 ## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
 
