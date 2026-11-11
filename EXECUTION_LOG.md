@@ -275,9 +275,10 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
      positives (`msg_count`, `snap_hit`, `upd_volume`, …).
 - Local regression: `make lint` + gate 11/11; cocotb `run_cocotb`, `run_multi`,
   `run_book_top`, `run_book_top_skid`, `run_book_snapshot` all pass with the local
-  iverilog 12. CI on `cc48a75` is the iverilog-13 check.
+  iverilog 12. **CI on `3723c6a` is green** (RTL job included, so iverilog 13 accepts the
+  reordered RTL), and `formal/run_formal.sh z3` still reports **PASS**.
 - The 10 ns XL run reached 19,028 violations before the host restarted; it is queued
-  behind the CI work.
+  behind the CI work and will be resumed.
 
 ## 2026-11-11 16:59 - Autonomy tick + 10 ns XL converges; CI Toolchain stall bounded
 
