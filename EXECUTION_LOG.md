@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 05:59 - Autonomy tick + XL die reaches 0 DRT violations at 25 ns
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `e6d227c` **success**.
+- Resumed the XL run (`--from OpenROAD.DetailedRouting`): detailed routing converged
+  **35,826 → 21,362 → 18,565 → 12 → 7 → 0**, then a second DRT pass in the same flow
+  repeated the pattern (**106,258 → 31,984 → 26,450 → 154 → 74 → 41 → 5 → 0**). Both
+  passes ended at **0 violations** — the DELAY netlist at 25 ns is routable on 2200 µm.
+- The flow then ran RCX and started post-route STA, but the distro was shut down again
+  at 07:16 during the `max_ss` corner STA, so **Magic/KLayout DRC and LVS are still
+  missing for the 25 ns run**. The evidence stands at: GRT 0 overflow, DRT 0 violations
+  (twice), RCX done, post-route STA incomplete.
+- The 2200 µm die therefore solves the short storm (42,342 → 0), at the cost of area.
+
 ## 2026-11-11 04:59 - Autonomy tick + extra area fixes the DELAY short storm (42k → 7)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `73ef57a` **success**.

@@ -1519,3 +1519,93 @@ met5            100850          3490            3.46%             0 /  0 /  0
 Wed Nov 11 05:11:53 CET 2026
  05:11:53 up 22 min,  1 us
 > build ┬À deepseek-v4.1-flash
+[2026-11-11T05:59:20.9136490+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl | grep -E "^[0-9]" | tail -2; 
+tail -2 /home/tim/chiplab-native/ns25xl-drt.log; date'
+84-openroad-detailedrouting
+85-openroad-detailedrouting
+    Completing 30% with 27274 violations.                                                                              
+ 
+    elapsed time = 00:01:43, memory = 3330.33 (MB).                                                                    
+ 
+Wed Nov 11 06:05:16 CET 2026
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+?? reports/run_25xl_drt.sh
+e6d227c completed success
+> build ┬À deepseek-v4.1-flash
+[2026-11-11T06:59:20.2113056+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl/95-openroad-rcx 2>/dev/null | 
+head -3; ls /home/tim/chiplab-native/openlane/runs/native-25xl/96-openroad-stapostpnr 2>/dev/null | head -3'
+COMMANDS
+_env_ThreadPoolExecutor-2_0.tcl
+_env_ThreadPoolExecutor-2_1.tcl
+COMMANDS
+config.json
+max_ff_n40C_1v95
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+?? reports/run_25xl_drt.sh
+e6d227c completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_tail.sh
+Created file successfully: reports/run_25xl_tail.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_tail.sh 
+/home/tim/chiplab-native/run_25xl_tail.sh && chmod +x /home/tim/chiplab-native/run_25xl_tail.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_tail.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-tail.log 2>/dev/null; date'
+copied
+                    'openlane/runs/native-25xl/97-openroad-stapostpnr/min_ss_100C_1v60/sta.log'ÔÇª                     
+   
+[07:12:17] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25xl/97-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                     
+   
+Wed Nov 11 07:13:00 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_tail2.sh
+Created file successfully: reports/run_25xl_tail2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pkill -f librelane-wrapped; pkill -x openroad; sleep 2; pgrep -c openroad; echo 
+killed'; wsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_tail2.sh 
+/home/tim/chiplab-native/run_25xl_tail2.sh && chmod +x /home/tim/chiplab-native/run_25xl_tail2.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_tail2.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-tail2.log 2>/dev/null; date'
+copied
+                    'openlane/runs/native-25xl/98-openroad-stapostpnr/min_ss_100C_1v60/sta.log'ÔÇª                     
+   
+[07:13:28] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25xl/98-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                     
+   
+Wed Nov 11 07:14:10 CET 2026
+> build ┬À deepseek-v4.1-flash

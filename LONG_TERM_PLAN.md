@@ -159,8 +159,9 @@ MDN PWA best practices, GitHub Actions docs.
       congestion/pin-access root cause (candidate: larger die for the 20 k+ cell netlists,
       or the buffer strategy itself).
       **2026-11-11:** a 2200 µm die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
-      7** detailed-routing violations (GRT 0 overflow, ≤41.9 % usage). Extra area is the
-      fix; the last 7 violations still need to be cleared before DRC/LVS at 25 ns.
+      0** detailed-routing violations (GRT 0 overflow, ≤41.9 % usage; both DRT passes end
+      at 0). The flow reached RCX/post-route STA, so only DRC/LVS at 25 ns remain to be
+      captured.
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

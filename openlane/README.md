@@ -106,9 +106,10 @@ remains the fastest fully verified configuration; the AREA netlist tops out arou
 
 **XL die (2200 µm, 25 ns DELAY).** `sky130_wrap32_25ns_xl.json` shows that area is the
 fix for the short storm: global routing is clean (0 overflow, ≤41.9 % usage) and detailed
-routing falls from **35,826 → 21,362 → 18,565 → 12 → 7** violations — versus 42,342 on
-the 1800 µm die at the same clock. Seven stubborn violations remained when the host
-restarted at 05:46, so this run has no DRC/LVS result yet.
+routing goes **35,826 → 21,362 → 18,565 → 12 → 7 → 0** (a second DRT pass in the same
+flow repeats it: 106,258 → … → 0). Both passes end at **0 violations**, versus 42,342 on
+the 1800 µm die at the same clock. The run reached RCX and started post-route STA, then
+the host shut the distro down at 07:16 — **DRC/LVS for 25 ns are still open**.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 
