@@ -130,6 +130,18 @@ The run summary is `reports/openlane_25xl-full.json` (note: its `timing__setup__
 from the single-corner `min_ff` STA, so the file's Fmax estimate is **not** a signoff
 number; the signoff values are the corner reports quoted above).
 
+Corner STA (3-corner batch, `134-openroad-stapostpnr/summary.rpt`):
+
+| Corner | Hold WS | Setup WS | Max cap | Max slew |
+|---|---|---|---|---|
+| min_ss_100C_1v60 | +0.5574 | +4.3244 | 2,541 | 11,370 |
+| min_tt_025C_1v80 | +0.1524 | +13.7453 | 2,537 | 321 |
+| max_ff_n40C_1v95 | **−0.0123** (2 vio) | +15.3846 | 3,262 | 313 |
+
+So the real hold worst case is **−12.3 ps at max_ff**, and the design carries
+**thousands of max-cap/max-slew violations** — this is routing/DRC/LVS evidence, not a
+timing sign-off.
+
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 
 `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 µm die, 25 % density,

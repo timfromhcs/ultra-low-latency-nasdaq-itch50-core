@@ -275,7 +275,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   drc.magic.rpt` reports **`COUNT: 0`**. The distro restarted at 15:00 while the flow was
   re-running SPICE extraction/LVS, but the Magic DRC result is saved. The 25 ns XL
   configuration is therefore **fully DRC/LVS clean**: Magic DRC 0, KLayout DRC 0
-  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold −0.00687 ns (min_ff).
+  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold -0.00687 ns (min_ff).
+- A 3-corner STA batch (max_ff, min_ss, min_tt) completed in 6 minutes and adds the honest
+  qualifier: true hold worst case **−0.0123 ns at max_ff** (2 violations), and
+  **2,537–3,262 max-cap plus up to 11,370 max-slew violations**. So the 25 ns result is
+  routing/DRC/LVS evidence, **not** a timing sign-off.
 
 ## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (−6.9 ps)
 

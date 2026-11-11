@@ -3178,3 +3178,268 @@ Commits `779368c` (Datasheet), `ac6df34` (Log/Scope); Arbeitsbaum clean (nur Hea
 **N├ñchster Schritt:** Magic-DRC-Ergebnis des 25-ns-XL-Laufs abwarten (l├ñuft detached weiter) und danach die verbleibenden offenen Punkte angehen: Hold-Fix (6,9 ps), durchgehende Multi-Corner-STA, Parser-Sign-off sowie die externen Blocker (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle).
 [2026-11-11T14:59:19.4395993+01:00] hallo, es ist 14:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ac6df34 completed success
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-magic.log; uptime | cut -c1-22; pgrep -c 
+magic; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ Circuit contains 0 nets, and 4 disconnected pins.                                                                     
+  
+                                                                                                                       
+ 
+Circuit sky130_fd_sc_hd__fill_1 contains no devices.                                                                   
+ 
+ 15:00:17 up 0 min,  1
+0
+Wed Nov 11 15:00:17 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl | grep -E "magic|netgen|lvs" | 
+tail -6; date'
+119-netgen-lvs
+120-checker-lvs
+127-magic-drc
+129-checker-magicdrc
+131-magic-spiceextraction
+133-netgen-lvs
+Wed Nov 11 15:00:24 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl/127-magic-drc/reports 
+2>/dev/null; ls /home/tim/chiplab-native/openlane/runs/native-25xl/129-checker-magicdrc 2>/dev/null; grep -a -m 4 -iE 
+"violation|error" /home/tim/chiplab-native/openlane/runs/native-25xl/129-checker-magicdrc/*.log 2>/dev/null | tail -4'
+drc.magic.lyrdb
+drc.magic.rpt
+config.json
+runtime.txt
+state_in.json
+state_out.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'wc -l 
+/home/tim/chiplab-native/openlane/runs/native-25xl/127-magic-drc/reports/drc.magic.rpt; head -20 
+/home/tim/chiplab-native/openlane/runs/native-25xl/127-magic-drc/reports/drc.magic.rpt'
+5 /home/tim/chiplab-native/openlane/runs/native-25xl/127-magic-drc/reports/drc.magic.rpt
+itch_wishbone_wrap
+----------------------------------------
+[INFO] COUNT: 0
+[INFO] Should be divided by 3 or 4
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'mkdir -p /mnt/e/chips/main/openlane/runs/25xl-full/magic_drc && cp 
+/home/tim/chiplab-native/openlane/runs/native-25xl/127-magic-drc/reports/drc.magic.rpt 
+/mnt/e/chips/main/openlane/runs/25xl-full/magic_drc/ && ls -l /mnt/e/chips/main/openlane/runs/25xl-full/magic_drc'
+total 0
+-rwxrwxrwx 1 tim tim 112 Nov 11 15:01 drc.magic.rpt
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const p='reports/openlane_25xl-full.json';const 
+j=JSON.parse(fs.readFileSync(p,'utf8'));j.note='timing__setup__ws here comes from the single-corner min_ff STA run, 
+not the signoff ss corner. Signoff setup slack is +1.4597 ns at max_ss (max_ss/ws.max.rpt); hold is -0.00687 ns at 
+min_ff (min_ff/wns.min.rpt). derived.fmaxEstimateMHz is not a signoff number. Separate late steps: Magic DRC 0 
+(openlane/runs/25xl-full/magic_drc/drc.magic.rpt, step 127); KLayout DRC 0 
+(drc.klayout.json).';fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');console.log('note updated')"
+note updated
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -119,11 +119,13 @@
+ `openlane/sky130_wrap32_25ns_xl_hold.json` is the single-corner variant used to get the
+ hold number quickly.
+ 
+ **KLayout DRC on the 25 ns layout: 0 violations** across all 257 rules
+-(`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). Magic DRC was skipped to
+-fit the host's windows. **LVS: 0 errors** ÔÇö the Netgen step completed on the third try
+-when the host finally kept the distro alive for ~13 minutes.
++(`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). **Magic DRC: 0** as well
++(`127-magic-drc/reports/drc.magic.rpt`, `COUNT: 0`). **LVS: 0 errors** ÔÇö the Netgen step
++completed on the third try when the host finally kept the distro alive for ~13 minutes.
++So the 25 ns XL configuration has **both DRC engines clean, LVS clean**, setup closed and
++a 6.9 ps hold miss.
+ 
+ The run summary is `reports/openlane_25xl-full.json` (note: its `timing__setup__ws` comes
+ from the single-corner `min_ff` STA, so the file's Fmax estimate is **not** a signoff
+ number; the signoff values are the corner reports quoted above).
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -160,11 +160,11 @@
+       or the buffer strategy itself).
+       **2026-11-11:** a 2200 ┬Ám die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
+       0** detailed-routing violations (GRT 0 overflow, Ôëñ41.9 % usage; both DRT passes end
+       at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold ÔêÆ0.0069 ns**
+-      at 25 ns (Ôëê42.5 MHz); KLayout DRC **0** (257 rules) and **LVS 0** complete, Magic
+-      DRC skipped for time. Hold needs a small buffer fix; a full sign-off still wants
+-      Magic DRC and a multi-corner STA in one continuous run.
++      at 25 ns (Ôëê42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. The 25 ns
++      configuration is DRC/LVS-clean with a 6.9 ps hold miss; a continuous multi-corner
++      STA and a hold fix remain.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit EXECUTION_LOG.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\EXECUTION_LOG.md. It must match exactly, including 
+whitespace and indentation.
+
+The closest lines in the file:
+272: - Started `--from Magic.DRC` on the 25 ns XL run for the last missing check; it was still
+273:   loading the layout after 42 minutes at the end of the tick (no result yet).
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,13 @@
+   physical sign-off, the wrapper does (50 ns full; 25 ns with KLayout DRC/LVS clean,
+   Magic DRC and a continuous multi-corner STA still open).
+ - Started `--from Magic.DRC` on the 25 ns XL run for the last missing check; it was still
+   loading the layout after 42 minutes at the end of the tick (no result yet).
++- **Follow-up (next tick): Magic DRC completed** after ~1h40m ÔÇö `127-magic-drc/reports/
++  drc.magic.rpt` reports **`COUNT: 0`**. The distro restarted at 15:00 while the flow was
++  re-running SPICE extraction/LVS, but the Magic DRC result is saved. The 25 ns XL
++  configuration is therefore **fully DRC/LVS clean**: Magic DRC 0, KLayout DRC 0
++  (257 rules), LVS 0, setup +1.4597 ns (max_ss), hold ÔêÆ0.00687 ns (min_ff).
+ 
+ ## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (ÔêÆ6.9 ps)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3d7213a` **success**.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -162,9 +162,9 @@
+ | Mutation (book) | 9/9 mutants killed | `reports/mutation_book.json` |
+ | Formal | protocol invariants proven (Z3/CVC5) | `formal/`, weekly job |
+ | Small-block full flow | `itch_metrics`: **0 DRC, 0 LVS**, timing closed at 10 ns | 
+`reports/openlane_metrics-full3.json` |
+ | Wrapper full flow (50 ns) | **0 Magic/KLayout DRC, 0 LVS**, setup +17.49 ns, hold +0.0088 ns, Fmax Ôëê 30.8 MHz | 
+`reports/openlane_routetest-full.json` |
+-| Wrapper 25 ns XL (2200 ┬Ám) | **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 ns, hold 
+ÔêÆ0.0069 ns (Magic DRC/multi-corner STA open) | `reports/openlane_25xl-full.json` |
++| Wrapper 25 ns XL (2200 ┬Ám) | **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 
+ns, hold ÔêÆ0.0069 ns | `reports/openlane_25xl-full.json` |
+ 
+ ## 8. Known limitations
+ 
+ See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -64,9 +64,8 @@
+ > (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 ┬Ám die reaches
+ > **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns, hold
+ > ÔêÆ0.0069 ns** (`reports/openlane_25xl-full.json`); Magic DRC and a continuous
+ > multi-corner STA are still open, so the parser itself has **no** physical sign-off.
+-
+ ## 4. Area estimate
+ 
+ Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+ mapping, **70,715 cells / 115,792 wires** (`reports/synth_book.json`; includes the
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path docs\datasheet.md -Pattern "25 ns DELAY" -Context 0,4
+> docs\datasheet.md:64:> (`reports/openlane_routetest-full.json`). A [7m25 ns DELAY[0m run on a 2200 ´┐¢m die 
+reaches[0m
+[7m[0m  docs\datasheet.md:65:> **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns, hold[0m
+[7m[0m  docs\datasheet.md:66:> -0.0069 ns** (`reports/openlane_25xl-full.json`); Magic DRC and a continuous[0m
+[7m[0m  docs\datasheet.md:67:> multi-corner STA are still open, so the parser itself has **no** physical 
+sign-off.[0m
+[7m[0m  docs\datasheet.md:68:## 4. Area estimate[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -61,11 +61,12 @@
+ > (Ôëê103.7 MHz)**, all at the ss corner ÔÇö honest pre-place-and-route numbers, not
+ > sign-offs. First **completed** wrapper P&R (2026-11-11, 50 ns, AREA synthesis):
+ > 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, Fmax Ôëê 30.8 MHz
+ > (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 ┬Ám die reaches
+-> **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns, hold
+-> ÔêÆ0.0069 ns** (`reports/openlane_25xl-full.json`); Magic DRC and a continuous
+-> multi-corner STA are still open, so the parser itself has **no** physical sign-off.
++> **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns,
++> hold ÔêÆ0.0069 ns** (`reports/openlane_25xl-full.json`); only a continuous multi-corner
++> STA and the 6.9 ps hold fix remain, so the parser itself has **no** physical sign-off.
++
+ ## 4. Area estimate
+ 
+ Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+ mapping, **70,715 cells / 115,792 wires** (`reports/synth_book.json`; includes the
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -167,11 +167,11 @@
+ 
+ ## 8. Known limitations
+ 
+ See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
+-(the wrapper has completed flows at 50 ns and a 25 ns run with KLayout DRC/LVS clean but
+-no Magic DRC), no fabricated silicon, and the book is a 16-locate/16-level model rather
+-than a full-depth L3 book.
++(the wrapper has a completed 50 ns flow and a 25 ns run with Magic/KLayout DRC and LVS
++clean but a 6.9 ps hold miss), no fabricated silicon, and the book is a
++16-locate/16-level model rather than a full-depth L3 book.
+ 
+ ## 9. Ordering and support
+ 
+ This is an open-source repository: <https://github.com/timfromhcs/ultra-low-latency-nasdaq-itch50-core>.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(openlane): Magic DRC 0 on the 25 ns XL layout; DRC/LVS 
+complete" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/openlane_25xl-full.json', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 8 files changed, 170 insertions(+), 29 deletions(-)
+[31;1m   ac6df34..53167b5  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_wrap32_
+25ns_xl.json','utf8'));j.STA_CORNERS=['min_ss_100C_1v60','min_tt_025C_1v80','max_ff_n40C_1v95'];fs.writeFileSync('openl
+ane/sky130_wrap32_25ns_xl_corners.json',JSON.stringify(j,null,2)+'\n');console.log('written')"
+written

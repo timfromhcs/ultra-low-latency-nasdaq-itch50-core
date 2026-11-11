@@ -161,9 +161,11 @@ MDN PWA best practices, GitHub Actions docs.
       **2026-11-11:** a 2200 µm die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
       0** detailed-routing violations (GRT 0 overflow, ≤41.9 % usage; both DRT passes end
       at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold −0.0069 ns**
-      at 25 ns (≈42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. The 25 ns
-      configuration is DRC/LVS-clean with a 6.9 ps hold miss; a continuous multi-corner
-      STA and a hold fix remain.
+      at 25 ns (≈42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. A 3-corner
+      batch shows the true hold worst case **−0.0123 ns (max_ff)** and **thousands of
+      max-cap/max-slew violations** (2.5k–3.3k cap, up to 11.4k slew at min_ss), so this
+      is DRC/LVS evidence, not a timing sign-off. A continuous multi-corner STA and the
+      hold/slew cleanup remain.
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax
