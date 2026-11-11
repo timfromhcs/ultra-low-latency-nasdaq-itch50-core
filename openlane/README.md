@@ -104,6 +104,12 @@ Fmax estimate **28.58 MHz** (`reports/openlane_areasized-full.json`). So 50 ns /
 remains the fastest fully verified configuration; the AREA netlist tops out around
 29–31 MHz, and the faster DELAY netlists are the ones that short.
 
+**XL die (2200 µm, 25 ns DELAY).** `sky130_wrap32_25ns_xl.json` shows that area is the
+fix for the short storm: global routing is clean (0 overflow, ≤41.9 % usage) and detailed
+routing falls from **35,826 → 21,362 → 18,565 → 12 → 7** violations — versus 42,342 on
+the 1800 µm die at the same clock. Seven stubborn violations remained when the host
+restarted at 05:46, so this run has no DRC/LVS result yet.
+
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 
 `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 µm die, 25 % density,

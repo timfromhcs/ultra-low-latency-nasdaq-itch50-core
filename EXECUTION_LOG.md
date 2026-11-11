@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 04:59 - Autonomy tick + extra area fixes the DELAY short storm (42k → 7)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `73ef57a` **success**.
+- `sky130_wrap32_25ns_xl.json` (2200 µm die, 12 %, 25 ns DELAY) ran on a good window:
+  - global routing **0 overflow**, max layer usage 41.9 % (met2)
+  - detailed routing **35,826 → 21,362 → 18,565 → 12 → 7 violations** — the same
+    netlist that produced **42,342** violations on the 1800 µm die at 25 ns. Extra area
+    is therefore the short-storm fix.
+  - the last 7 violations kept iterating; the distro restarted at 05:46 and killed the
+    run before DRC/LVS.
+- Docs updated with the XL-die numbers; next step is to eliminate the last few
+  violations (slightly larger die or more DRT iterations) and then close DRC/LVS at 25 ns.
+
 ## 2026-11-11 03:59 - Autonomy tick + 30 ns run gets KLayout DRC 0 / LVS 0 (timing fails)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ca7a2cc` **success**.

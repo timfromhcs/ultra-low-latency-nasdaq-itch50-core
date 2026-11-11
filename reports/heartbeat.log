@@ -1455,3 +1455,67 @@ sort -V | tail -3'
 /home/tim/chiplab-native/openlane/runs/native-areasized/53-openroad-stapostpnr/nom_ff_n40C_1v95/wns.max.rpt
 /home/tim/chiplab-native/openlane/runs/native-areasized/53-openroad-stapostpnr/nom_ss_100C_1v60/wns.max.rpt
 /home/tim/chiplab-native/openlane/runs/native-areasized/53-openroad-stapostpnr/nom_tt_025C_1v80/wns.max.rpt
+[2026-11-11T04:59:21.1918579+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25xl.log; grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25xl.log | tail -3; date; uptime | cut -c1-26'
+[INFO GRT-0014] Routed nets: 28718                                                                                     
+ 
+[INFO GRT-0303] Global routing runtime = 00:00:52                                                                      
+ 
+Wed Nov 11 04:59:37 CET 2026
+ 04:59:37 up 10 min,  1 us
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+73ef57a completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -A 9 "Final congestion report" /home/tim/chiplab-native/ns25xl.log | tail 
+-12'
+[INFO GRT-0096] Final congestion report:                                                                               
+ 
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow                                
+ 
+---------------------------------------------------------------------------------------                                
+ 
+li1                  0             0            0.00%             0 /  0 /  0                                          
+ 
+met1           1194325        456032           38.18%             0 /  0 /  0                                          
+ 
+met2           1179660        494008           41.88%             0 /  0 /  0                                          
+ 
+met3            797608        139855           17.53%             0 /  0 /  0                                          
+ 
+met4            541620        178904           33.03%             0 /  0 /  0                                          
+ 
+met5            100850          3490            3.46%             0 /  0 /  0                                          
+ 
+---------------------------------------------------------------------------------------
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25xl.log | tail -3; tail -2 /home/tim/chiplab-native/ns25xl.log; date; uptime | cut -c1-26'
+[INFO DRT-0199]   Number of violations = 35826.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 21362.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 18565.                                                                        
+ 
+    Completing 90% with 6184 violations.                                                                               
+ 
+    elapsed time = 00:02:21, memory = 2452.29 (MB).                                                                    
+ 
+Wed Nov 11 05:11:53 CET 2026
+ 05:11:53 up 22 min,  1 us
+> build ┬À deepseek-v4.1-flash
