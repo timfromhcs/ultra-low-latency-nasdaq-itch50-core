@@ -1053,3 +1053,284 @@ Wed Nov 11 19:09:42 CET 2026
 [tick] ran 0, failed 0
 [2026-11-11T20:59:21.6781187+01:00] hallo, es ist 20:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+a8403e1 completed success
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" /home/tim/chiplab-native/ns25fx-drt.log 
+2>/dev/null | tail -3; ls /home/tim/chiplab-native/openlane/runs/native-25fx 2>/dev/null | grep -E "^[0-9]" | tail -2; 
+tail -2 /home/tim/chiplab-native/ns25fx-drt.log 2>/dev/null; date; uptime | cut -c1-24'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ [INFO DRT-0199]   Number of violations = 36202.                                                                       
+  
+[INFO DRT-0199]   Number of violations = 20630.                                                                        
+ 
+43-openroad-detailedrouting
+44-openroad-detailedrouting
+    Completing 90% with 18873 violations.                                                                              
+ 
+    elapsed time = 00:02:22, memory = 2407.44 (MB).                                                                    
+ 
+Wed Nov 11 21:00:22 CET 2026
+ 21:00:22 up 0 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/run_25fx_drt.sh && echo ok'; Start-Process -FilePath 
+wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25fx_drt.sh'; Start-Sleep -Seconds 45; wsl -d 
+Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25fx-drt.log 2>/dev/null; date'
+/home/tim/chiplab-native/run_25fx_drt.sh
+ok
+[INFO DRT-0082]   Complete 10000 groups.                                                                               
+ 
+[INFO DRT-0082]   Complete 20000 groups.                                                                               
+ 
+Wed Nov 11 21:01:16 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx-drt.log | tail -3; ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 1758.                                                                         
+ 
+[INFO DRT-0199]   Number of violations = 87.                                                                           
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+44-openroad-detailedrouting
+45-openroad-detailedrouting
+Wed Nov 11 21:13:24 CET 2026
+ 21:13:24 up 13 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx-drt.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E 
+"^[0-9]" | tail -3; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 31496.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 26455.                                                                        
+ 
+43-openroad-detailedrouting
+44-openroad-detailedrouting
+45-openroad-detailedrouting
+Wed Nov 11 21:28:35 CET 2026
+ 21:28:35 up 29 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx-drt.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 54.                                                                           
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+44-openroad-detailedrouting
+45-openroad-detailedrouting
+Wed Nov 11 21:43:48 CET 2026
+ 21:43:48 up 44 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx | 
+grep -E "^[0-9]" | tail -3; tail -2 /home/tim/chiplab-native/ns25fx-drt.log; date; uptime | cut -c1-24'
+43-openroad-detailedrouting
+44-openroad-detailedrouting
+45-openroad-detailedrouting
+    Completing 70% with 603 violations.                                                                                
+ 
+    elapsed time = 00:00:29, memory = 3786.76 (MB).                                                                    
+ 
+Wed Nov 11 21:53:59 CET 2026
+ 21:53:59 up 54 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx-drt.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 91.                                                                           
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+54-odb-cellfrequencytables
+55-openroad-rcx
+Wed Nov 11 22:04:19 CET 2026
+ 22:04:19 up  1:04,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx | 
+grep -E "^[0-9]" | tail -2; cat /home/tim/chiplab-native/openlane/runs/native-25fx/*stapostpnr/summary.rpt 2>/dev/null 
+| head -16; date'
+56-openroad-stapostpnr
+57-openroad-irdropreport
+ÔöÅÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔö
+üÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔ
+ö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöü
+ÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö
+üÔöô
+Ôöâ                      Ôöâ Hold     Ôöâ Reg to   Ôöâ          Ôöâ          Ôöâ of which  Ôöâ Setup    Ôöâ           
+Ôöâ          Ôöâ           Ôöâ of which Ôöâ           Ôöâ          Ôöâ
+Ôöâ                      Ôöâ Worst    Ôöâ Reg      Ôöâ          Ôöâ Hold Vio Ôöâ reg to    Ôöâ Worst    Ôöâ Reg to    
+Ôöâ Setup    Ôöâ Setup Vio Ôöâ reg to   Ôöâ Max Cap   Ôöâ Max Slew Ôöâ
+Ôöâ Corner/Group         Ôöâ Slack    Ôöâ Paths    Ôöâ Hold TNS Ôöâ Count    Ôöâ reg       Ôöâ Slack    Ôöâ Reg Paths 
+Ôöâ TNS      Ôöâ Count     Ôöâ reg      Ôöâ ViolatioÔÇª Ôöâ ViolatiÔÇª Ôöâ
+ÔöíÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔö
+üÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔ
+òçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöü
+ÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö
+üÔö®
+Ôöé Overall              Ôöé 0.0840   Ôöé 0.0840   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 1.3333   Ôöé 1.3333    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 3320      Ôöé 19788    Ôöé
+Ôöé nom_tt_025C_1v80     Ôöé 0.3182   Ôöé 0.3182   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 13.0349  Ôöé 13.0349   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2954      Ôöé 1230     Ôöé
+Ôöé nom_ss_100C_1v60     Ôöé 0.8649   Ôöé 0.8649   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 2.8210   Ôöé 2.8210    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2966      Ôöé 15084    Ôöé
+Ôöé nom_ff_n40C_1v95     Ôöé 0.0930   Ôöé 0.0930   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 15.5842  Ôöé 17.1350   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2958      Ôöé 11       Ôöé
+Ôöé min_tt_025C_1v80     Ôöé 0.3128   Ôöé 0.3128   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 13.7867  Ôöé 13.8330   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2529      Ôöé 325      Ôöé
+Ôöé min_ss_100C_1v60     Ôöé 0.8514   Ôöé 0.8514   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 4.1545   Ôöé 4.1545    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2535      Ôöé 11412    Ôöé
+Ôöé min_ff_n40C_1v95     Ôöé 0.0970   Ôöé 0.0970   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 15.8069  Ôöé 17.6988   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2530      Ôöé 6        Ôöé
+Ôöé max_tt_025C_1v80     Ôöé 0.3210   Ôöé 0.3210   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 12.0441  Ôöé 12.0441   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 3272      Ôöé 2999     Ôöé
+Ôöé max_ss_100C_1v60     Ôöé 0.5976   Ôöé 0.8758   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 1.3333   Ôöé 1.3333    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 3320      Ôöé 19788    Ôöé
+Ôöé max_ff_n40C_1v95     Ôöé 0.0840   Ôöé 0.0840   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 15.3551  Ôöé 16.3933   
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 3275      Ôöé 331      Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔ
+ö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÿ
+Wed Nov 11 22:16:28 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -151,8 +151,16 @@
+ So the real hold worst case is **ÔêÆ12.3 ps at max_ff**, and the design carries
+ **thousands of max-cap/max-slew violations** ÔÇö this is routing/DRC/LVS evidence, not a
+ timing sign-off.
+ 
++**Resizer run (`native-25fx`).** Re-running 25 ns with the post-CTS/post-GRT resizers
++enabled (no `--skip`) fixes the timing: post-route STA over all nine corners gives
++**hold worst +0.0840 ns (0 violations, TNS 0)** and **setup worst +1.3333 ns
++(max_ss, 0 violations)**, e.g. max_ss hold +0.5976/setup +1.3333, max_ff hold
+++0.0840/setup +15.3551. Detailed routing again ends at **0 violations**. Max-cap
++(2,529ÔÇô3,320) and max-slew (up to 19,788) violations remain, so a full sign-off still
++needs those cleaned up ÔÇö but setup and hold are now clean on this layout.
++
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+ `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns) was run to characterise the congestion
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -169,8 +169,13 @@
+       **10 ns retarget on the same die:** DRT converges to 0 as well, but post-route STA
+       fails badly ÔÇö setup WNS **ÔêÆ13.77 ns** at max_ss (5,695 violations), hold ÔêÆ0.0108 ns
+       at max_ff. The achievable period is Ôëê23.8 ns, the same Ôëê42 MHz as 25 ns, so **10 ns
+       is not reachable with this netlist; 25 ns (40 MHz) is the practical target**.
++      **Resizer run (native-25fx, 2026-11-11):** running 25 ns with the post-CTS/post-GRT
++      resizers enabled fixes timing ÔÇö **hold +0.0840 ns (0 violations)** and **setup
++      +1.3333 ns (0 violations)** over all nine corners, DRT 0. Max-cap (2.5kÔÇô3.3k) and
++      max-slew (up to 19.8k) violations remain, and the DRC/LVS for this new layout is
++      still being collected.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 20:59 - Autonomy tick + resizer run fixes hold and setup at 25 ns
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a8403e1` **success**.
++- The `native-25fx` run (25 ns, 2200 ┬Ám, post-CTS/post-GRT resizers enabled) converged
++  again to **0 detailed-routing violations** (three DRT passes) and completed post-route
++  STA over all nine corners:
++  - **hold worst +0.0840 ns (0 violations, TNS 0)**, e.g. max_ss +0.5976, max_ff +0.0840
++  - **setup worst +1.3333 ns at max_ss (0 violations)**
++  - max-cap 2,529ÔÇô3,320 and max-slew up to 19,788 violations remain
++- So the resizer fixes the ÔêÆ12.3 ps hold cleanly. The flow continued to IR drop and
++  streamout; **DRC/LVS for this new layout are still running**.
++- Cap/slew cleanup is the remaining timing-quality item.
++
+ ## 2026-11-11 19:59 - Autonomy tick + 25 ns with resizers (hold/slew cleanup attempt)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `6c0ebb5` **success**.
+ - Started a **fresh 25 ns run with the post-CTS/post-GRT resizers enabled**
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(openlane): resizer run gives 0 hold and 0 setup violations at 
+25 ns" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 6 files changed, 45 insertions(+), 15 deletions(-)
+[31;1m   a8403e1..5168f75  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E "^[0-9]" | tail -2; 
+tail -2 /home/tim/chiplab-native/ns25fx-drt.log; date; uptime | cut -c1-24'
+56-openroad-stapostpnr
+57-openroad-irdropreport
+[INFO] Setting timing derate to: 5.0%                                                                                  
+ 
+[INFO] Using voltage extracted from lib (1.8000000000V) for power nets and 0V for ground netsÔÇª                       
+   
+Wed Nov 11 22:17:54 CET 2026
+ 22:17:54 up  1:18,  1 u
+> build ┬À deepseek-v4.1-flash
+Tick 20:59ÔÇô22:20 abgeschlossen ÔÇö **Resizer-Lauf beseitigt Hold- und Setup-Verletzungen bei 25 ns**.
+
+## Ergebnis `native-25fx` (25 ns, 2200 ┬Ám, Resizer aktiv)
+| Pr├╝fung | Wert |
+|---|---|
+| Detailed Routing | **0 Violations** (drei P├ñsse) |
+| **Hold (alle 9 Ecken)** | **+0,0840 ns** (max_ff), **0 Verletzungen**, TNS 0 |
+| **Setup (alle 9 Ecken)** | **+1,3333 ns** (max_ss), **0 Verletzungen** |
+| Beispiel max_ss | Hold +0,5976 / Setup +1,3333 |
+| Beispiel max_ff | Hold +0,0840 / Setup +15,3551 |
+| Max-Cap | 2.529ÔÇô3.320 Verletzungen (offen) |
+| Max-Slew | bis 19.788 (offen) |
+
+Damit ist der vorherige Hold-Fehler (ÔêÆ12,3 ps) **behoben** ÔÇö die Resizer (post-CTS/post-GRT), die wir zuvor ├╝bersprungen hatten, sind der richtige Hebel. Setup und Hold sind auf diesem Layout clean; Cap/Slew-Cleanup bleibt als Timing-Qualit├ñtspunkt.
+
+## Verifikation
+- Autonomy: 0 Tasks; Gate **11/11**; Docs-Links 25/25; CI auf `a8403e1` **success**.
+- Commit `5168f75`; `openlane/README.md`, `LONG_TERM_PLAN.md`, `EXECUTION_LOG.md` aktualisiert.
+
+## Laufend
+Der 25fx-Flow ist nach STA bei **IR-Drop ÔåÆ Streamout ÔåÆ DRC/LVS** (KLayout ~42 min, Magic ~100 min). Der Host h├ñlt WSL aktuell seit >1 h stabil; bei Abbruch wird mit `--last-run --from ÔÇª` fortgesetzt.
+
+Offen: DRC/LVS f├╝r das neue 25fx-Layout, Cap/Slew-Cleanup, Parser-Sign-off und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-11T22:59:21.5945624+01:00] hallo, es ist 22:59
+[tick] ran 0, failed 0
