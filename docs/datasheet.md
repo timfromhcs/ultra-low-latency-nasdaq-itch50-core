@@ -165,6 +165,7 @@ arriving earlier are otherwise accepted by the parser but not booked.
 | Small-block full flow | `itch_metrics`: **0 DRC, 0 LVS**, timing closed at 10 ns | `reports/openlane_metrics-full3.json` |
 | Wrapper full flow (50 ns) | **0 Magic/KLayout DRC, 0 LVS**, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz | `reports/openlane_routetest-full.json` |
 | Wrapper 25 ns XL (2200 µm) | **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 ns, hold −0.0069 ns | `reports/openlane_25xl-full.json` |
+| Wrapper 25 ns + resizers (25fx) | **complete flow: Magic/KLayout DRC 0, LVS 0, setup +1.3333 ns, hold +0.0840 ns (0 violations), Fmax ≈ 42.25 MHz**; max-cap/slew advisory counts remain | `reports/openlane_25fx-full.json` |
 
 ## 8. Known limitations
 

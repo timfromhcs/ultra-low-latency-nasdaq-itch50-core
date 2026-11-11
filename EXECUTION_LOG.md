@@ -259,6 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-12 00:00 - 25fx completes: first full 25 ns sign-off (43 MHz class)
+
+- The `native-25fx` run (25 ns, 2200 µm, post-CTS/post-GRT resizers) finished the whole
+  Classic flow with **EXIT=0**:
+  - **Magic DRC 0**, **KLayout DRC 0** (all 257 rules), **LVS 0 errors**
+  - **setup +1.3333 ns** at max_ss, **hold +0.0840 ns** at max_ff — 0 violations each
+    over all nine corners
+  - **Fmax estimate 42.25 MHz**, worst path FF → FF, 100,348 stdcells / 446,548 µm²
+  - max-cap 2,529–3,320 and max-slew up to 15,084 (advisory checkers; flow exits 0)
+- Artifacts: `reports/openlane_25fx-full.json`, `openlane/runs/25fx-full/` (metrics,
+  STA corner reports, Magic/KLayout DRC reports; run dir git-ignored).
+- This is the first **complete DRC/LVS/timing-closed wrapper P&R** at 25 ns. Remaining
+  quality item: max-cap/max-slew cleanup via `RUN_POST_GRT_DESIGN_REPAIR`
+  (`sky130_wrap32_25ns_fx2.json`).
+
 ## 2026-11-11 22:59 - Autonomy tick + 25fx: Magic DRC 0 on the resized layout
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `5168f75` and `798bd72`

@@ -153,15 +153,23 @@ So the real hold worst case is **−12.3 ps at max_ff**, and the design carries
 **thousands of max-cap/max-slew violations** — this is routing/DRC/LVS evidence, not a
 timing sign-off.
 
-**Resizer run (`native-25fx`).** Re-running 25 ns with the post-CTS/post-GRT resizers
-enabled (no `--skip`) fixes the timing: post-route STA over all nine corners gives
-**hold worst +0.0840 ns (0 violations, TNS 0)** and **setup worst +1.3333 ns
-(max_ss, 0 violations)**, e.g. max_ss hold +0.5976/setup +1.3333, max_ff hold
-+0.0840/setup +15.3551. Detailed routing again ends at **0 violations**, and **Magic DRC
-is 0** on the resized layout (`65-magic-drc/reports/drc.magic.rpt`, `COUNT: 0`). Max-cap
-(2,529–3,320) and max-slew (up to 19,788) violations remain; `RUN_POST_GRT_DESIGN_REPAIR`
-is the knob for those (`sky130_wrap32_25ns_fx2.json`). KLayout DRC and LVS for this
-layout are still running.
+**Resizer run (`native-25fx`) — the current best result.** Running 25 ns with the
+post-CTS/post-GRT resizers enabled completes the whole flow:
+
+| Result | Value |
+|---|---|
+| Magic DRC / KLayout DRC | **0 / 0** |
+| LVS | **0 errors** |
+| Setup (9 corners) | **+1.3333 ns** at max_ss, **0 violations** |
+| Hold (9 corners) | **+0.0840 ns** at max_ff, **0 violations** |
+| Fmax estimate | **42.25 MHz** (worst path FF → FF) |
+| Cells / area | 100,348 stdcells (incl. tap/fill), 446,548 µm² |
+| Max cap / max slew | 2,529–3,320 cap, up to 15,084 slew (advisory checkers; the flow exits 0) |
+
+Summary artifact: `reports/openlane_25fx-full.json`. This is the first complete
+DRC/LVS/timing-closed wrapper P&R at 25 ns (40 MHz); the only open quality item is the
+max-cap/max-slew cleanup (`sky130_wrap32_25ns_fx2.json` with `RUN_POST_GRT_DESIGN_REPAIR`
+is the prepared follow-up).
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 
