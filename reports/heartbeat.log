@@ -2113,3 +2113,262 @@ Dazu aus dem Lauf: **GRT 0 Overflow**, **DRT 0 Violations** in beiden P├ñssen
 **N├ñchster Schritt:** Hold-STA und DRC/LVS des 25-ns-XL-Laufs in einem stabilen Host-Fenster nachholen (der Host beendet die WSL-Distro aktuell alle ~10ÔÇô15 min). ├£brige Blocker unver├ñndert: Parser-Sign-off, FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-11T09:59:19.4053795+01:00] hallo, es ist 09:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+3d7213a completed success
+[0m$ [0mwsl -d Ubuntu bash -lc 'uptime | cut -c1-30; ls /home/tim/chiplab-native/openlane/runs/native-25xl | grep -E 
+"^[0-9]" | tail -2; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+  10:00:19 up 0 min,  1 user,  
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+Wed Nov 11 10:00:19 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_sta.sh'; Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail 
+-2 /home/tim/chiplab-native/ns25xl-sta.log 2>/dev/null; date'
+[10:00:32] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25xl/110-openroad-stapostpnr/min_ss_100C_1v60/sta.log'ÔÇª                    
+   
+Wed Nov 11 10:01:11 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 660; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" 
+/home/tim/chiplab-native/ns25xl-sta.log | tail -2; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl/110-openroad-stapostpnr 2>/dev/null | tail -4; date; uptime | cut 
+-c1-24'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ nom_ff_n40C_1v95
+nom_ss_100C_1v60
+nom_tt_025C_1v80
+state_in.json
+Wed Nov 11 10:13:02 CET 2026
+ 10:13:02 up 0 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'journalctl -b -1 -p 3 --no-pager 2>/dev/null | tail -6; echo ---; journalctl -b -1 
+--no-pager 2>/dev/null | grep -iE "oom|out of memory|killed process|shutdown.target" | tail -4'
+Nov 11 10:00:17 WIN-UT58NNIMA2L kernel: misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -22
+Nov 11 10:00:17 WIN-UT58NNIMA2L kernel: misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -22
+Nov 11 10:00:17 WIN-UT58NNIMA2L kernel: misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -22
+Nov 11 10:00:17 WIN-UT58NNIMA2L kernel: misc dxg: dxgk: dxgkio_query_adapter_info: Ioctl failed: -2
+Nov 11 10:09:09 WIN-UT58NNIMA2L systemd[1]: Failed unmounting init.mount - /init.
+Nov 11 10:09:09 WIN-UT58NNIMA2L systemd[1]: Failed unmounting tmp-.X11\x2dunix.mount - /tmp/.X11-unix.
+---
+Nov 11 10:09:09 WIN-UT58NNIMA2L systemd[381]: Reached target shutdown.target - Shutdown.
+Nov 11 10:09:09 WIN-UT58NNIMA2L systemd[1]: Reached target shutdown.target - System Shutdown.
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -rhoE "\"(STA_[A-Z0-9_]+|TIMING_CORNERS|STA_CORNERS)\"" 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/*.py | 
+sort -u | head -20'
+"STA_CORNERS"
+"STA_EXTRA_CORNER_TCL_FILE"
+"STA_MACRO_PRIORITIZE_NL"
+"STA_MAX_VIOLATOR_COUNT"
+"STA_THREADS"
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Copy-Item openlane\sky130_wrap32_25ns_xl.json openlane\sky130_wrap32_25ns_xl_hold.json 
+-Force; (Get-Content openlane\sky130_wrap32_25ns_xl_hold.json -Raw) -replace '"CTS_APPLY_NDR": "none",', 
+'"CTS_APPLY_NDR": "none",
+  "STA_CORNERS": ["min_ff_n40C_1v95"],' | Set-Content openlane\sky130_wrap32_25ns_xl_hold.json -Encoding ASCII; 
+Select-String -Path openlane\sky130_wrap32_25ns_xl_hold.json -Pattern "STA_CORNERS"
+(no output)
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path openlane\sky130_wrap32_25ns_xl_hold.json -Pattern "CTS_APPLY_NDR" 
+-Context 0,1
+[31;1mSelect-String: [31;1mDer Pfad "E:\chips\main\openlane\sky130_wrap32_25ns_xl_hold.json" wurde nicht gefunden, 
+da er nicht vorhanden ist.[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead openlane/sky130_wrap32_25ns_xl.json 
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_wrap32_25ns_xl_hold.json
+Created file successfully: openlane/sky130_wrap32_25ns_xl_hold.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_hold.sh
+Created file successfully: reports/run_25xl_hold.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_hold.sh 
+/home/tim/chiplab-native/run_25xl_hold.sh && chmod +x /home/tim/chiplab-native/run_25xl_hold.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_hold.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-hold.log 2>/dev/null; date'
+copied
+[10:14:39] INFO     Starting STA for the min_ff_n40C_1v95 timing cornerÔÇª                                 
+openroad.py:749
+[10:14:39] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25xl/111-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                    
+   
+Wed Nov 11 10:15:22 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" 
+/home/tim/chiplab-native/ns25xl-hold.log | tail -2; tail -2 
+/home/tim/chiplab-native/openlane/runs/native-25xl/111-openroad-stapostpnr/min_ff_n40C_1v95/ws.min.rpt 2>/dev/null; 
+tail -2 /home/tim/chiplab-native/openlane/runs/native-25xl/111-openroad-stapostpnr/min_ff_n40C_1v95/wns.min.rpt 
+2>/dev/null; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ [10:16:01] INFO     Flow complete.                                                                     
+sequential.py:413
+EXIT=0
+============================================================================
+min_ff_n40C_1v95: -0.006871836627568681
+============================================================================
+min_ff_n40C_1v95: -0.006871836627568681
+Wed Nov 11 10:20:18 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -110,11 +110,15 @@
+ flow repeats it: 106,258 ÔåÆ ÔÇª ÔåÆ 0). Both passes end at **0 violations**, versus 42,342 on
+ the 1800 ┬Ám die at the same clock. The GDS is streamed out; KLayout DRC started but the
+ host shut the distro down at 08:34, so **DRC/LVS for 25 ns are still open**.
+ 
+-Post-route STA did produce its corner reports before the host cut the step:
+-**max_ss_100C_1v60 setup worst slack +1.4597 ns, WNS 0, all paths MET** at 25 ns
+-(Fmax estimate Ôëê 42.5 MHz). Hold (`min_ff`) did not complete, so hold is unverified.
++Post-route STA completed for the two sign-off corners:
++**max_ss_100C_1v60 setup worst slack +1.4597 ns (WNS 0, all paths MET)** and
++**min_ff_n40C_1v95 hold WNS ÔêÆ0.0069 ns** (6.9 ps, essentially marginal) at 25 ns.
++Setup closes with Ôëê1.46 ns margin (Fmax Ôëê 42.5 MHz); hold needs a buffer fix.
++`openlane/sky130_wrap32_25ns_xl_hold.json` is the single-corner variant used to get the
++hold number quickly. **Magic/KLayout DRC and LVS for 25 ns are still open** ÔÇö the host
++shuts the distro down every ~10ÔÇô15 min, so a 25ÔÇô30 min DRC pass cannot finish.
+ 
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -22,8 +22,9 @@
+ | `sky130_wrap32_routetest.json` | routing test: same wrapper, 50 ns, AREA synthesis, no sizing/buffering | Sky130 | 
+50.0 ns |
+ | `sky130_wrap32_25ns.json` | wrapper at 25 ns on the wide die (frequency step after the 50 ns full flow) | Sky130 | 
+25.0 ns |
+ | `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 
+ns |
+ | `sky130_wrap32_25ns_xl.json` | wrapper at 25 ns on a 2200 ┬Ám die (does extra area fix the DELAY short storm?) | 
+Sky130 | 25.0 ns |
++| `sky130_wrap32_25ns_xl_hold.json` | same run, single-corner (`min_ff`) STA for the hold number | Sky130 | 25.0 ns |
+ | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+ 
+ ## Verified toolchain (2026-11-03)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -159,10 +159,11 @@
+       congestion/pin-access root cause (candidate: larger die for the 20 k+ cell netlists,
+       or the buffer strategy itself).
+       **2026-11-11:** a 2200 ┬Ám die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
+       0** detailed-routing violations (GRT 0 overflow, Ôëñ41.9 % usage; both DRT passes end
+-      at 0). Post-route STA (max_ss corner) shows **setup worst slack +1.4597 ns, WNS 0,
+-      all paths MET** at 25 ns (Ôëê42.5 MHz); hold and DRC/LVS still need a clean window.
++      at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold ÔêÆ0.0069 ns**
++      at 25 ns (Ôëê42.5 MHz); hold needs a small buffer fix. Magic/KLayout DRC and LVS for
++      25 ns still need a clean window.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (ÔêÆ6.9 ps)
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3d7213a` **success**.
++- The multi-corner STA kept dying at the fifth/sixth corner (host shutdowns at 10:09),
++  so the hold number was captured with a **single-corner** config
++  (`sky130_wrap32_25ns_xl_hold.json`, `STA_CORNERS: ["min_ff_n40C_1v95"]`,
++  `--from OpenROAD.STAPostPNR --to ÔÇª`). That run finished in 90 s:
++  - **min_ff_n40C_1v95 hold WNS ÔêÆ0.00687 ns** (6.9 ps violation)
++  - with the earlier **max_ss setup +1.4597 ns (WNS 0)**, the 25 ns XL design closes
++    setup with 1.46 ns margin and misses hold by 6.9 ps.
++- Magic/KLayout DRC and LVS for the 25 ns XL run remain open; a 25ÔÇô30 min DRC pass cannot
++  finish in the current ~10ÔÇô15 min host windows.
++
+ ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0e623e2` **success**.
+ - Resuming the 25 ns XL run needed care: `--from KLayout.DRC` fails with "missing
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25xl_hold.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add 
+-A; git commit -m "feat(openlane): 25 ns XL setup +1.46 ns, hold -6.9 ps (single-corner STA)" 2>&1 | Select-Object 
+-Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_25ns_xl_hold.json', LF will be replaced by CRLF the next time 
+Git touches it
+ create mode 100644 openlane/sky130_wrap32_25ns_xl_hold.json
+[31;1m   3d7213a..d07a216  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_drc2.sh 
+/home/tim/chiplab-native/run_25xl_drc2.sh 2>/dev/null || echo missing'; wsl -d Ubuntu bash -lc 'ls 
+/home/tim/chiplab-native/run_25xl_drc2.sh 2>/dev/null || echo no-script'
+missing
+/home/tim/chiplab-native/run_25xl_drc2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_drc2.sh'; Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 
+'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log 2>/dev/null; date; uptime | cut -c1-24'
+Elapsed: 0.210s  Memory: 1287.00M                                                                                   
+START: 64/20 (nwell)                                                                                                   
+ 
+"width" in: sky130A_mr.drc:315                                                                                         
+ 
+Wed Nov 11 10:23:00 CET 2026
+ 10:23:00 up 3 min,  1 u

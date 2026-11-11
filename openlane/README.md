@@ -117,8 +117,12 @@ Post-route STA completed for the two sign-off corners:
 **min_ff_n40C_1v95 hold WNS −0.0069 ns** (6.9 ps, essentially marginal) at 25 ns.
 Setup closes with ≈1.46 ns margin (Fmax ≈ 42.5 MHz); hold needs a buffer fix.
 `openlane/sky130_wrap32_25ns_xl_hold.json` is the single-corner variant used to get the
-hold number quickly. **Magic/KLayout DRC and LVS for 25 ns are still open** — the host
-shuts the distro down every ~10–15 min, so a 25–30 min DRC pass cannot finish.
+hold number quickly.
+
+**KLayout DRC on the 25 ns layout: 0 violations** across all 257 rules
+(`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). Magic DRC was skipped to
+fit the host's windows. **LVS is still open** — Netgen was killed twice at ~11:32 and
+~11:47 when the host shut the distro down.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

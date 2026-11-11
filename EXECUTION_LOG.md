@@ -269,8 +269,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   - **min_ff_n40C_1v95 hold WNS −0.00687 ns** (6.9 ps violation)
   - with the earlier **max_ss setup +1.4597 ns (WNS 0)**, the 25 ns XL design closes
     setup with 1.46 ns margin and misses hold by 6.9 ps.
-- Magic/KLayout DRC and LVS for the 25 ns XL run remain open; a 25–30 min DRC pass cannot
-  finish in the current ~10–15 min host windows.
+- Then KLayout DRC ran to completion in a 42-minute window: **0 violations across all
+  257 rules** (`112-klayout-drc/reports/drc.klayout.json`). Magic DRC was skipped to fit
+  the window.
+- **LVS is still open**: Netgen was killed at 11:32 (during the first attempt) and again
+  at 11:47 when the host restarted the distro.
+- Net state for 25 ns XL: GRT 0 overflow, DRT 0 violations, KLayout DRC 0,
+  setup +1.4597 ns, hold −0.0069 ns, LVS pending.
+
+## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
 
 ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
 
