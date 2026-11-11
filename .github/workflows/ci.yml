@@ -15,14 +15,17 @@ jobs:
   rtl:
     name: RTL + formal + model
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Toolchain
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq verilator yosys iverilog z3 python3-pip
+          export DEBIAN_FRONTEND=noninteractive
+          # Slow/blocked apt mirrors have stalled this job for >45 min; bound it.
+          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq
+          timeout 600 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq verilator yosys iverilog z3 python3-pip
           # cvc5 is optional for the CI proof (Z3 is the required solver)
-          sudo apt-get install -y -qq cvc5 || true
+          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq cvc5 || true
       - name: Python deps
         run: |
           python3 -m pip install --break-system-packages --upgrade pip

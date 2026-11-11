@@ -348,3 +348,125 @@ Wed Nov 11 16:16:38 CET 2026
 > build ┬À deepseek-v4.1-flash
 [2026-11-11T16:59:19.7106608+01:00] hallo, es ist 16:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" /home/tim/chiplab-native/ns10xl-drt.log | tail 
+-2; tail -2 /home/tim/chiplab-native/ns10xl-drt.log; date; uptime | cut -c1-22'
+[INFO DRT-0028]   Complete via4.                                                                                       
+ 
+[INFO DRT-0028]   Complete met5.                                                                                       
+ 
+Wed Nov 11 16:59:36 CET 2026
+ 16:59:36 up 2 min,  1
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+c2e6e21 in_progress
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,9 +270,13 @@
+ - Run started natively (`native-10xl`); synthesis finished and the flow is at placement.
+ - First detailed-routing pass: **35,944 ÔåÆ 21,341 violations**, then optimisation
+   iteration 2 ÔÇö the same convergence shape as the 25 ns run (which reached 0). The host
+   restarted the distro at 16:32, so the run was resumed from `OpenROAD.DetailedRouting`.
+-  This will show whether 10 ns also becomes routable on the 2200 ┬Ám die.
++- **The resumed DRT converged to 0 violations** (21,341 ÔåÆ 19,028 ÔåÆ 1,988 ÔåÆ 776 ÔåÆ 75 ÔåÆ **0**)
++  before a second DRT pass started. So the 10 ns DELAY netlist *is* routable on the
++  2200 ┬Ám die; the host killed the distro again at 16:58 and the run was resumed.
++- Next: finish the second DRT pass, then RCX/STA and DRC/LVS at 10 ns (Magic DRC alone
++  took 1h40m on this design, so this will span several ticks).
+ 
+ ## 2026-11-11 12:59 - Autonomy tick + datasheet publishes the P&R results; Magic DRC attempt
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `f16b83c` **success**.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -24,8 +24,13 @@
+ | `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 
+ns |
+ | `sky130_wrap32_25ns_xl.json` | wrapper at 25 ns on a 2200 ┬Ám die (does extra area fix the DELAY short storm?) | 
+Sky130 | 25.0 ns |
+ | `sky130_wrap32_25ns_xl_hold.json` | same run, single-corner (`min_ff`) STA for the hold number | Sky130 | 25.0 ns |
+ | `sky130_wrap32_10ns_xl.json` | the 25 ns XL config retargeted to 10 ns (does the big die fix the 10 ns netlist 
+too?) | Sky130 | 10.0 ns |
++
++The 10 ns retarget answers the obvious question: on the 2200 ┬Ám die the 10 ns DELAY
++netlist also converges in detailed routing (**21,341 ÔåÆ 19,028 ÔåÆ 1,988 ÔåÆ 776 ÔåÆ 75 ÔåÆ 0**),
++where the 1800 ┬Ám die produced 42,342 violations. The second DRT pass, RCX/STA and
++DRC/LVS for 10 ns are still being collected.
+ | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+ 
+ ## Verified toolchain (2026-11-03)
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(openlane): 10 ns XL converges to 0 detailed-routing 
+violations" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 27 insertions(+), 16 deletions(-)
+[31;1m   c2e6e21..a07cacc  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 3 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"c2e6e21\"));\nif (!run) return { runs: r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion]) };\nconst j = await tools.github.actions_list({ method: 
+\"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 20 });\nconst rtl = j.jobs?.jobs?.find(x => x.name.startsWith(\"RTL\"));\nreturn { status: 
+run.status, jobs: j.jobs?.jobs?.map(x => [x.name, x.status, x.conclusion]), rtlStep: rtl?.steps?.find(s => s.status 
+=== \"in_progress\")?.name };"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path .github\workflows\ci.yml -Pattern "Toolchain" -Context 0,25 | 
+Select-Object -First 1
+> .github\workflows\ci.yml:20:      - name: [7mToolchain[0m
+[7m[0m  .github\workflows\ci.yml:21:        run: |[0m
+[7m[0m  .github\workflows\ci.yml:22:          sudo apt-get update -qq[0m
+[7m[0m  .github\workflows\ci.yml:23:          sudo apt-get install -y -qq verilator yosys iverilog z3 python3-pip[0m
+[7m[0m  .github\workflows\ci.yml:24:          # cvc5 is optional for the CI proof (Z3 is the required solver)[0m
+[7m[0m  .github\workflows\ci.yml:25:          sudo apt-get install -y -qq cvc5 || true[0m
+[7m[0m  .github\workflows\ci.yml:26:      - name: Python deps[0m
+[7m[0m  .github\workflows\ci.yml:27:        run: |[0m
+[7m[0m  .github\workflows\ci.yml:28:          python3 -m pip install --break-system-packages --upgrade pip[0m
+[7m[0m  .github\workflows\ci.yml:29:          python3 -m pip install --break-system-packages cocotb pytest scapy[0m
+[7m[0m  .github\workflows\ci.yml:30:      - name: Lint[0m
+[7m[0m  .github\workflows\ci.yml:31:        run: make lint[0m
+[7m[0m  .github\workflows\ci.yml:32:      - name: Vectors (50k for CI time)[0m
+[7m[0m  .github\workflows\ci.yml:33:        run: python3 tb/itch_model.py --count 50000 --out tb/vectors[0m
+[7m[0m  .github\workflows\ci.yml:34:      - name: Full-field regression[0m
+[7m[0m  .github\workflows\ci.yml:35:        run: make sim VECTORS=tb/vectors[0m
+[7m[0m  .github\workflows\ci.yml:36:      - name: Model tests[0m
+[7m[0m  .github\workflows\ci.yml:37:        run: python3 -m pytest -q tb/test_model.py[0m
+[7m[0m  .github\workflows\ci.yml:38:      - name: Cocotb[0m
+[7m[0m  .github\workflows\ci.yml:39:        run: |[0m
+[7m[0m  .github\workflows\ci.yml:40:          python3 tb/run_cocotb.py[0m
+[7m[0m  .github\workflows\ci.yml:41:          python3 tb/run_pipeline_cocotb.py[0m
+[7m[0m  .github\workflows\ci.yml:42:          python3 tb/run_multi_cocotb.py[0m
+[7m[0m  .github\workflows\ci.yml:43:          python3 tb/run_book_cocotb.py[0m
+[7m[0m  .github\workflows\ci.yml:44:          python3 tb/run_book_top_cocotb.py[0m
+[7m[0m  .github\workflows\ci.yml:45:          python3 tb/run_book_top_skid_cocotb.py[0m
