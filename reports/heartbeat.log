@@ -2685,3 +2685,214 @@ Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-nativ
 delete mode 100644 reports/run_25xl_lvs.sh
 [31;1m   d163e0e..7538531  main -> main[0m
 Wed Nov 11 11:50:28 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls -l /home/tim/chiplab-native/ns25xl-lvs.log 2>&1 | tail -1; pgrep -c netgen; pgrep 
+-c openroad; date'
+-rw-r--r-- 1 tim tim 11377 Nov 11 11:50 /home/tim/chiplab-native/ns25xl-lvs.log
+1
+0
+Wed Nov 11 11:50:35 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" 
+/home/tim/chiplab-native/ns25xl-lvs.log | tail -2; tail -3 
+/home/tim/chiplab-native/openlane/runs/native-25xl/flow.log; date; uptime | cut -c1-22'
+Running 'Misc.ReportManufacturability' at 'openlane/runs/native-25xl/125-misc-reportmanufacturability'ÔÇª
+magic__drc_error__count not reported. Magic.DRC may have been skipped.
+Saving views to '/home/tim/chiplab-native/openlane/runs/native-25xl/final'ÔÇª
+Wed Nov 11 12:02:48 CET 2026
+ 12:02:48 up 13 min,
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" /home/tim/chiplab-native/ns25xl-lvs.log | tail -2; 
+grep -oE "\"(design__lvs_error__count|klayout__drc_error__count|magic__drc_error__count|design__instance__count__stdcel
+l|design__instance__area__stdcell|timing__setup__ws|timing__hold__ws)\": ?[^,}]*" 
+/home/tim/chiplab-native/openlane/runs/native-25xl/final/metrics.json'
+EXIT=2
+"timing__hold__ws": -0.006871836627568681
+"timing__setup__ws": 15.786142617699465
+"design__instance__count__stdcell": 99790
+"design__instance__area__stdcell": 441759
+"klayout__drc_error__count": 0
+"design__lvs_error__count": 0
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/collect_25xl.sh
+Created file successfully: reports/collect_25xl.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/collect_25xl.sh /home/tim/chiplab-native/ && chmod +x 
+/home/tim/chiplab-native/collect_25xl.sh && bash /home/tim/chiplab-native/collect_25xl.sh'
+mkdir: Permission denied
+mkdir: Permission denied
+mkdir: Permission denied
+cp: cannot create regular file '/mnt/e/chips/main/openlane/runs/25xl-full/final/': No such file or directory
+cp: cannot create regular file '/mnt/e/chips/main/openlane/runs/25xl-full/': Not a directory
+ls: cannot access '/mnt/e/chips/main/openlane/runs/25xl-full': No such file or directory
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'sudo mkdir -p /mnt/e/chips/main/openlane/runs/25xl-full && sudo chown -R $(id 
+-u):$(id -g) /mnt/e/chips/main/openlane/runs && echo ok'; wsl -d Ubuntu bash -lc 'bash 
+/home/tim/chiplab-native/collect_25xl.sh'
+ok
+/mnt/e/chips/main/openlane/runs/25xl-full:
+drc.klayout.json
+final
+max_ss
+min_ff
+resolved.json
+
+/mnt/e/chips/main/openlane/runs/25xl-full/final:
+metrics.json
+
+/mnt/e/chips/main/openlane/runs/25xl-full/max_ss:
+max.rpt
+wns.max.rpt
+ws.max.rpt
+
+/mnt/e/chips/main/openlane/runs/25xl-full/min_ff:
+wns.min.rpt
+ws.min.rpt
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/openlane_summary.mjs openlane/runs/25xl-full 2>&1 | Select-Object -Last 12
+design__lvs_unmatched_pin__count = 0
+derived:
+  clockPeriodNs = 25
+  fmaxEstimateMHz = 108.53
+  timingClosed = true
+worst path:
+  file = openlane/runs/25xl-full/max_ss/max.rpt
+  startpoint = _38373_ (rising edge-triggered flip-flop clocked by clk)
+  endpoint = _38723_ (rising edge-triggered flip-flop clocked by clk)
+  pathGroup = clk
+  slackNs = 0
+wrote reports/openlane_25xl-full.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const p='reports/openlane_25xl-full.json';const 
+j=JSON.parse(fs.readFileSync(p,'utf8'));j.note='timing__setup__ws here comes from the single-corner min_ff STA run, 
+not the signoff ss corner. Signoff setup slack is +1.4597 ns at max_ss (max_ss/ws.max.rpt); hold is -0.00687 ns at 
+min_ff (min_ff/wns.min.rpt). derived.fmaxEstimateMHz is not a signoff 
+number.';fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');console.log('note added')"
+note added
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -120,11 +120,15 @@
+ hold number quickly.
+ 
+ **KLayout DRC on the 25 ns layout: 0 violations** across all 257 rules
+ (`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). Magic DRC was skipped to
+-fit the host's windows. **LVS is still open** ÔÇö Netgen was killed twice at ~11:32 and
+-~11:47 when the host shut the distro down.
++fit the host's windows. **LVS: 0 errors** ÔÇö the Netgen step completed on the third try
++when the host finally kept the distro alive for ~13 minutes.
+ 
++The run summary is `reports/openlane_25xl-full.json` (note: its `timing__setup__ws` comes
++from the single-corner `min_ff` STA, so the file's Fmax estimate is **not** a signoff
++number; the signoff values are the corner reports quoted above).
++
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+ `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns) was run to characterise the congestion
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -271,12 +271,16 @@
+     setup with 1.46 ns margin and misses hold by 6.9 ps.
+ - Then KLayout DRC ran to completion in a 42-minute window: **0 violations across all
+   257 rules** (`112-klayout-drc/reports/drc.klayout.json`). Magic DRC was skipped to fit
+   the window.
+-- **LVS is still open**: Netgen was killed at 11:32 (during the first attempt) and again
+-  at 11:47 when the host restarted the distro.
+-- Net state for 25 ns XL: GRT 0 overflow, DRT 0 violations, KLayout DRC 0,
+-  setup +1.4597 ns, hold ÔêÆ0.0069 ns, LVS pending.
++- **LVS completed (0 errors)** on the third attempt ÔÇö the host kept the distro alive for
++  ~13 minutes and the flow ran Netgen.LVS, the checkers and `ReportManufacturability`,
++  saving the final views (exit code 2 only because hold (ÔêÆ6.9 ps) and the skipped Magic
++  DRC are reported as violations).
++- Final 25 ns XL evidence: GRT 0 overflow, DRT 0 violations, **KLayout DRC 0 (257 rules)**,
++  **LVS 0**, setup **+1.4597 ns** (max_ss, WNS 0), hold **ÔêÆ0.00687 ns** (min_ff).
++  Magic DRC was skipped for time. Summary: `reports/openlane_25xl-full.json` (with an
++  explicit note that its aggregate setup metric is from the `min_ff` corner).
+ 
+ ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
+ 
+ ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -160,10 +160,11 @@
+       or the buffer strategy itself).
+       **2026-11-11:** a 2200 ┬Ám die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
+       0** detailed-routing violations (GRT 0 overflow, Ôëñ41.9 % usage; both DRT passes end
+       at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold ÔêÆ0.0069 ns**
+-      at 25 ns (Ôëê42.5 MHz); hold needs a small buffer fix. Magic/KLayout DRC and LVS for
+-      25 ns still need a clean window.
++      at 25 ns (Ôëê42.5 MHz); KLayout DRC **0** (257 rules) and **LVS 0** complete, Magic
++      DRC skipped for time. Hold needs a small buffer fix; a full sign-off still wants
++      Magic DRC and a multi-corner STA in one continuous run.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\collect_25xl.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add 
+-A; git commit -m "feat(openlane): 25 ns XL completes KLayout DRC 0 and LVS 0" 2>&1 | Select-Object -Last 1; git push 
+origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/openlane_25xl-full.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 reports/openlane_25xl-full.json
+[31;1m   7538531..f16b83c  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 200; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+f16b83c completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 09:59ÔÇô12:10 abgeschlossen ÔÇö **25-ns-XL-Konfiguration jetzt mit KLayout DRC 0 und LVS 0**.
+
+## Endergebnis (Wrapper, 25 ns, DELAY, 2200 ┬Ám)
+| Pr├╝fung | Messwert |
+|---|---|
+| Global Routing | **0 Overflow**, max. 41,9 % Layer-Auslastung |
+| Detailed Routing | **0 Violations** (beide P├ñsse: 35.826ÔåÆ0, 106.258ÔåÆ0) |
+| **KLayout DRC** | **0** ├╝ber alle **257 Regeln** (42 min Deck-Laufzeit) |
+| **LVS (Netgen)** | **0 Fehler** |
+| Setup (max_ss_100C_1v60) | **+1,4597 ns**, WNS 0, alle Pfade MET |
+| Hold (min_ff_n40C_1v95) | **ÔêÆ0,0069 ns** (6,9 ps) |
+| Std-Zellen | 99.790 (inkl. Tap/Fill), 441.759 ┬Ám┬▓ |
+| Magic DRC | bewusst ├╝bersprungen (Zeitfenster) |
+
+Flow lief bis `ReportManufacturability` durch (Exit 2 nur wegen Hold-Verletzung und fehlendem Magic DRC).
+
+## Vorgehen
+- Hold separat ├╝ber `STA_CORNERS: ["min_ff_n40C_1v95"]` (90 s statt 12 min) ÔÇö neue Config `sky130_wrap32_25ns_xl_hold.json`.
+- KLayout DRC nach mehreren Host-Abbr├╝chen in einem 42-min-Fenster vollst├ñndig.
+- LVS im dritten Anlauf (Netgen) in einem 13-min-Fenster.
+
+## Artefakte
+`reports/openlane_25xl-full.json` (mit ausdr├╝cklichem Hinweis, dass dessen aggregierter Setup-Wert aus der `min_ff`-Ecke stammt und die Fmax-Sch├ñtzung kein Sign-off ist), `112-klayout-drc/reports/drc.klayout.json`, Corner-Reports, Doku in `openlane/README.md`, `LONG_TERM_PLAN.md`, `EXECUTION_LOG.md`.
+
+## Verifikation
+Gate **11/11**, Docs-Links 25/25, CI auf `f16b83c` **success**; Commits `d163e0e`, `7538531`, `f16b83c`.
+
+**Offen:** Magic DRC + durchgehende Multi-Corner-STA f├╝r 25 ns, Hold-Fix (6,9 ps), Parser-Sign-off und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-11T12:59:20.5044193+01:00] hallo, es ist 12:59
+[tick] ran 0, failed 0

@@ -55,11 +55,16 @@ Two egress paths exist:
 | Optional ingress skid | `INGRESS_SKID=1`: 2-entry elastic buffer | At most +1 beat latency, zero loss |
 | I/O | All single clock domain | No CDC inside the core |
 
-> Fmax and area are **model numbers**. There is no OpenSTA/LibreLane sign-off in this
-> repository; do not quote them as silicon results. Pre-PnR Sky130 runs (2026-11-03/04)
-> measure WNS −9.14 ns at 3.10 ns for the raw parser (≈81.5 MHz), −8.62 ns for the
-> 128-bit wrapper (≈85.3 MHz) and **−6.55 ns for the 32-bit wrapper (≈103.7 MHz)**;
-> all at the ss corner. These are honest pre-place-and-route numbers, not sign-offs.
+> Fmax and area in the table above are **model numbers**. Pre-PnR Sky130 runs
+> (2026-11-03/04) measure WNS −9.14 ns at 3.10 ns for the raw parser (≈81.5 MHz),
+> −8.62 ns for the 128-bit wrapper (≈85.3 MHz) and **−6.55 ns for the 32-bit wrapper
+> (≈103.7 MHz)**, all at the ss corner — honest pre-place-and-route numbers, not
+> sign-offs. First **completed** wrapper P&R (2026-11-11, 50 ns, AREA synthesis):
+> 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz
+> (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 µm die reaches
+> **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns, hold
+> −0.0069 ns** (`reports/openlane_25xl-full.json`); Magic DRC and a continuous
+> multi-corner STA are still open, so the parser itself has **no** physical sign-off.
 
 ## 4. Area estimate
 
@@ -157,12 +162,15 @@ arriving earlier are otherwise accepted by the parser but not booked.
 | Mutation (book) | 9/9 mutants killed | `reports/mutation_book.json` |
 | Formal | protocol invariants proven (Z3/CVC5) | `formal/`, weekly job |
 | Small-block full flow | `itch_metrics`: **0 DRC, 0 LVS**, timing closed at 10 ns | `reports/openlane_metrics-full3.json` |
+| Wrapper full flow (50 ns) | **0 Magic/KLayout DRC, 0 LVS**, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz | `reports/openlane_routetest-full.json` |
+| Wrapper 25 ns XL (2200 µm) | **0 DRT violations, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 ns, hold −0.0069 ns (Magic DRC/multi-corner STA open) | `reports/openlane_25xl-full.json` |
 
 ## 8. Known limitations
 
-See `errata.md`. In short: no 100G MAC, no PCIe/DMA, no physical sign-off, no
-fabricated silicon, and the book is a 16-locate/16-level model rather than a
-full-depth L3 book.
+See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
+(the wrapper has completed flows at 50 ns and a 25 ns run with KLayout DRC/LVS clean but
+no Magic DRC), no fabricated silicon, and the book is a 16-locate/16-level model rather
+than a full-depth L3 book.
 
 ## 9. Ordering and support
 
