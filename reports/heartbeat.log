@@ -2372,3 +2372,308 @@ START: 64/20 (nwell)
  
 Wed Nov 11 10:23:00 CET 2026
  10:23:00 up 3 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log; date; 
+uptime | cut -c1-24'; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 
+--json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+Edge pairs: 0 (flat)  0 (hierarchical)                                                                              
+    Elapsed: 0.150s  Memory: 5148.00M                                                                                  
+ 
+"space" in: sky130A_mr.drc:897                                                                                         
+ 
+Wed Nov 11 10:35:13 CET 2026
+ 10:35:13 up 15 min,  1 
+d07a216 completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log; date; 
+uptime | cut -c1-24'
+Polygons (raw): 3102857 (flat)  112169 (hierarchical)                                                               
+    Elapsed: 0.100s  Memory: 3708.00M                                                                                  
+ 
+"with_area" in: sky130A_mr.drc:911                                                                                     
+ 
+Wed Nov 11 10:47:23 CET 2026
+ 10:47:23 up 27 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'tail -4 /home/tim/chiplab-native/ns25xl-drc2.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl | grep -E "^[0-9]" | tail -2; date'
+"edges" in: sky130A_mr.drc:983                                                                                         
+ 
+    Edges: 0 (flat)  0 (hierarchical)                                                                                  
+ 
+    Elapsed: 0.400s  Memory: 4899.00M                                                                                  
+ 
+"merged" in: sky130A_mr.drc:983                                                                                        
+ 
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+Wed Nov 11 10:55:37 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log; date; 
+uptime | cut -c1-24'
+Edge pairs: 0 (flat)  0 (hierarchical)                                                                              
+    Elapsed: 0.140s  Memory: 5155.00M                                                                                  
+ 
+"ongrid" in: sky130A_mr.drc:1547                                                                                       
+ 
+Wed Nov 11 11:03:50 CET 2026
+ 11:03:50 up 44 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl | grep -E "^[0-9]" | tail -2; date'
+Extracting sky130_fd_sc_hd__fill_2 into sky130_fd_sc_hd__fill_2.ext:                                                   
+ 
+Extracting sky130_fd_sc_hd__diode_2 into sky130_fd_sc_hd__diode_2.ext:                                                 
+ 
+Extracting itch_wishbone_wrap into itch_wishbone_wrap.ext:                                                             
+ 
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+Wed Nov 11 11:12:03 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 360; wsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl | 
+grep -E "^[0-9]" | tail -3; grep -a -E "Flow complete|EXIT=" /home/tim/chiplab-native/ns25xl-drc2.log | tail -2; date'
+97-openroad-stapostpnr
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+Wed Nov 11 11:18:18 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -4 /home/tim/chiplab-native/ns25xl-drc2.log; tail -4 
+/home/tim/chiplab-native/openlane/runs/native-25xl/flow.log; date'
+[11:16:31] VERBOSE  Logging subprocess to 'openlane/runs/native-25xl/117-netgen-lvs/netgen-lvs.log'ÔÇª        
+step.py:1338
+Netgen 1.5.316 compiled on Tue Feb 10 11:09:08 UTC 2026                                                                
+ 
+Warning: netgen command 'format' use fully-qualified name '::netgen::format'                                           
+ 
+Warning: netgen command 'global' use fully-qualified name '::netgen::global'                                           
+ 
+Running 'Checker.IllegalOverlap' at 'openlane/runs/native-25xl/116-checker-illegaloverlap'ÔÇª
+Check for Magic Illegal Overlap errors clear.
+Running 'Netgen.LVS' at 'openlane/runs/native-25xl/117-netgen-lvs'ÔÇª
+Logging subprocess to [repr.filename]'openlane/runs/native-25xl/117-netgen-lvs/netgen-lvs.log'[/repr.filename]ÔÇª
+Wed Nov 11 11:18:27 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 360; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" 
+/home/tim/chiplab-native/ns25xl-drc2.log | tail -2; tail -3 
+/home/tim/chiplab-native/openlane/runs/native-25xl/flow.log; date'
+Check for Magic Illegal Overlap errors clear.
+Running 'Netgen.LVS' at 'openlane/runs/native-25xl/117-netgen-lvs'ÔÇª
+Logging subprocess to [repr.filename]'openlane/runs/native-25xl/117-netgen-lvs/netgen-lvs.log'[/repr.filename]ÔÇª
+Wed Nov 11 11:24:44 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=|LVS" 
+/home/tim/chiplab-native/ns25xl-drc2.log | tail -3; tail -2 
+/home/tim/chiplab-native/openlane/runs/native-25xl/flow.log; date; uptime | cut -c1-24'
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Netgen LVS ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔ
+öÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+[11:16:31] VERBOSE  Running 'Netgen.LVS' at 'openlane/runs/native-25xl/117-netgen-lvs'ÔÇª                     
+step.py:1138
+Running 'Netgen.LVS' at 'openlane/runs/native-25xl/117-netgen-lvs'ÔÇª
+Logging subprocess to [repr.filename]'openlane/runs/native-25xl/117-netgen-lvs/netgen-lvs.log'[/repr.filename]ÔÇª
+Wed Nov 11 11:33:06 CET 2026
+ 11:33:06 up 0 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls -d /home/tim/chiplab-native/openlane/runs/native-25xl/*klayout-drc* 2>/dev/null; 
+ls /home/tim/chiplab-native/openlane/runs/native-25xl/*klayout-drc*/ 2>/dev/null | head; find 
+/home/tim/chiplab-native/openlane/runs/native-25xl -maxdepth 2 -name "*drc*.rpt" -o -maxdepth 2 -name "*.lyrdb" | head'
+/home/tim/chiplab-native/openlane/runs/native-25xl/100-klayout-drc
+/home/tim/chiplab-native/openlane/runs/native-25xl/108-klayout-drc
+/home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc
+/home/tim/chiplab-native/openlane/runs/native-25xl/100-klayout-drc/:
+config.json
+state_in.json
+
+/home/tim/chiplab-native/openlane/runs/native-25xl/108-klayout-drc/:
+COMMANDS
+config.json
+klayout-drc.log
+reports
+state_in.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc/reports 2>/dev/null | head'
+COMMANDS
+config.json
+klayout-drc.log
+klayout-drc.process_stats.json
+reports
+runtime.txt
+state_in.json
+state_out.json
+xml_drc_report_to_json.log
+xml_drc_report_to_json.process_stats.json
+drc.klayout.json
+drc.klayout.lyrdb
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'head -c 800 
+/home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc/reports/drc.klayout.json; echo; grep -a -m 5 -E 
+"violations|Total" /home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc/klayout-drc.log | tail -5'
+{
+    "dnwell.1": 0,
+    "dnwell.2": 0,
+    "nwell.1": 0,
+    "nwell.2a": 0,
+    "nwell.6": 0,
+    "nwell.9": 0,
+    "hvtp.1": 0,
+    "hvtp.2": 0,
+    "pwde.1": 0,
+    "pwde.2": 0,
+    "hvtr.1": 0,
+    "hvtr.2": 0,
+    "hvtr.2_a": 0,
+    "lvtn.1a": 0,
+    "lvtn.2": 0,
+    "MR_lvtn.OVL.2": 0,
+    "ncm.1": 0,
+    "ncm.2a": 0,
+    "difftap.1": 0,
+    "difftap.1_a": 0,
+    "difftap.2": 0,
+    "difftap.1_b": 0,
+    "difftap.1_c": 0,
+    "difftap.3": 0,
+    "tunm.1": 0,
+    "tunm.2": 0,
+    "MR_tunm.CON.1": 0,
+    "thkox.1": 0,
+    "thkox.2": 0,
+    "MR_thkox.CON.1": 0,
+    "poly.1a": 0,
+    "poly.2": 0,
+    "poly.3": 0,
+    "ldntm.1": 0,
+    "ldntm.2": 0,
+    "rpm.1a": 0,
+    "rpm.2": 0,
+    "rdl.1": 0,
+    "rdl.2": 0,
+    "MR_rdl.CON.1": 0,
+    "urpm.1a": 0,
+    "urpm.2": 0,
+    "npc.1": 0,
+  
+Total elapsed: 2526.420s  Memory: 4547.00M
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -E "\": [1-9]" 
+/home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc/reports/drc.klayout.json | head -20; echo ---; grep 
+-c ":" /home/tim/chiplab-native/openlane/runs/native-25xl/112-klayout-drc/reports/drc.klayout.json'
+---
+257
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_lvs.sh
+Created file successfully: reports/run_25xl_lvs.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_lvs.sh 
+/home/tim/chiplab-native/run_25xl_lvs.sh && chmod +x /home/tim/chiplab-native/run_25xl_lvs.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_lvs.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-lvs.log 2>/dev/null; date'
+copied
+Netgen 1.5.316 compiled on Tue Feb 10 11:09:08 UTC 2026                                                                
+ 
+Warning: netgen command 'format' use fully-qualified name '::netgen::format'                                           
+ 
+Warning: netgen command 'global' use fully-qualified name '::netgen::global'                                           
+ 
+Wed Nov 11 11:35:24 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "Flow complete|EXIT=" 
+/home/tim/chiplab-native/ns25xl-lvs.log | tail -2; tail -3 
+/home/tim/chiplab-native/openlane/runs/native-25xl/flow.log; date; uptime | cut -c1-24'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ Skipping step 'Illegal Overlap Checker'ÔÇª
+Running 'Netgen.LVS' at 'openlane/runs/native-25xl/118-netgen-lvs'ÔÇª
+Logging subprocess to [repr.filename]'openlane/runs/native-25xl/118-netgen-lvs/netgen-lvs.log'[/repr.filename]ÔÇª
+Wed Nov 11 11:48:16 CET 2026
+ 11:48:16 up 0 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -m 6 -iE "match|mismatch|failed|error|LVS" 
+/home/tim/chiplab-native/openlane/runs/native-25xl/117-netgen-lvs/netgen-lvs.log 2>/dev/null | tail -6; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl/117-netgen-lvs 2>/dev/null'
+COMMANDS
+_env.tcl
+config.json
+lvs_script.lvs
+netgen-lvs.log
+reports
+state_in.json
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit openlane/README.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\openlane\README.md. It must match exactly, including 
+whitespace and indentation.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -116,11 +116,15 @@
+ **max_ss_100C_1v60 setup worst slack +1.4597 ns (WNS 0, all paths MET)** and
+ **min_ff_n40C_1v95 hold WNS ÔêÆ0.0069 ns** (6.9 ps, essentially marginal) at 25 ns.
+ Setup closes with Ôëê1.46 ns margin (Fmax Ôëê 42.5 MHz); hold needs a buffer fix.
+ `openlane/sky130_wrap32_25ns_xl_hold.json` is the single-corner variant used to get the
+-hold number quickly. **Magic/KLayout DRC and LVS for 25 ns are still open** ÔÇö the host
+-shuts the distro down every ~10ÔÇô15 min, so a 25ÔÇô30 min DRC pass cannot finish.
++hold number quickly.
+ 
++**KLayout DRC on the 25 ns layout: 0 violations** across all 257 rules
++(`112-klayout-drc/reports/drc.klayout.json`, 42 min deck time). Magic DRC was skipped to
++fit the host's windows. **LVS is still open** ÔÇö Netgen was killed twice at ~11:32 and
++~11:47 when the host shut the distro down.
++
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+ `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns) was run to characterise the congestion
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -268,13 +268,20 @@
+   `--from OpenROAD.STAPostPNR --to ÔÇª`). That run finished in 90 s:
+   - **min_ff_n40C_1v95 hold WNS ÔêÆ0.00687 ns** (6.9 ps violation)
+   - with the earlier **max_ss setup +1.4597 ns (WNS 0)**, the 25 ns XL design closes
+     setup with 1.46 ns margin and misses hold by 6.9 ps.
+-- Magic/KLayout DRC and LVS for the 25 ns XL run remain open; a 25ÔÇô30 min DRC pass cannot
+-  finish in the current ~10ÔÇô15 min host windows.
++- Then KLayout DRC ran to completion in a 42-minute window: **0 violations across all
++  257 rules** (`112-klayout-drc/reports/drc.klayout.json`). Magic DRC was skipped to fit
++  the window.
++- **LVS is still open**: Netgen was killed at 11:32 (during the first attempt) and again
++  at 11:47 when the host restarted the distro.
++- Net state for 25 ns XL: GRT 0 overflow, DRT 0 violations, KLayout DRC 0,
++  setup +1.4597 ns, hold ÔêÆ0.0069 ns, LVS pending.
+ 
+ ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
+ 
++## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
++
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0e623e2` **success**.
+ - Resuming the 25 ns XL run needed care: `--from KLayout.DRC` fails with "missing
+   required input 'gds'" and `--from KLayout.StreamOut` fails at `Magic.WriteLEF` for the
+   same reason ÔÇö the GDS only exists after `Magic.StreamOut`. Ran
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(openlane): 25 ns XL KLayout DRC 0 across 257 rules; LVS 
+pending" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 reports/run_25xl_lvs.sh
+[31;1m   d07a216..d163e0e  main -> main[0m
