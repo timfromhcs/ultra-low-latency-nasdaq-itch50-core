@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 20:59 - Autonomy tick + resizer run fixes hold and setup at 25 ns
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a8403e1` **success**.
+- The `native-25fx` run (25 ns, 2200 µm, post-CTS/post-GRT resizers enabled) converged
+  again to **0 detailed-routing violations** (three DRT passes) and completed post-route
+  STA over all nine corners:
+  - **hold worst +0.0840 ns (0 violations, TNS 0)**, e.g. max_ss +0.5976, max_ff +0.0840
+  - **setup worst +1.3333 ns at max_ss (0 violations)**
+  - max-cap 2,529–3,320 and max-slew up to 19,788 violations remain
+- So the resizer fixes the −12.3 ps hold cleanly. The flow continued to IR drop and
+  streamout; **DRC/LVS for this new layout are still running**.
+- Cap/slew cleanup is the remaining timing-quality item.
+
 ## 2026-11-11 19:59 - Autonomy tick + 25 ns with resizers (hold/slew cleanup attempt)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `6c0ebb5` **success**.
