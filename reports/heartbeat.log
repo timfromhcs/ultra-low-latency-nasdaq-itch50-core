@@ -1334,3 +1334,162 @@ Der 25fx-Flow ist nach STA bei **IR-Drop ÔåÆ Streamout ÔåÆ DRC/LVS** (KLay
 Offen: DRC/LVS f├╝r das neue 25fx-Layout, Cap/Slew-Cleanup, Parser-Sign-off und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
 [2026-11-11T22:59:21.5945624+01:00] hallo, es ist 22:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E "^[0-9]" | tail -3; 
+tail -3 /home/tim/chiplab-native/ns25fx-drt.log; date; uptime | cut -c1-24'
+63-klayout-xor
+64-checker-xor
+65-magic-drc
+                                                                                                                       
+ 
+DRC style is now "drc(full)"                                                                                           
+ 
+Loading DRC CIF style.                                                                                                 
+ 
+Wed Nov 11 22:59:30 CET 2026
+ 22:59:30 up  1:59,  1 u
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+5168f75 completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E 
+"klayout-drc|netgen|magic" ; grep -cE "\": [1-9]" 
+/home/tim/chiplab-native/openlane/runs/native-25fx/*klayout-drc/reports/drc.klayout.json 2>/dev/null'
+58-magic-streamout
+61-magic-writelef
+65-magic-drc
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx | grep -E "^[0-9]" | sed -n 
+"30,45p"'
+30-checker-powergridviolations
+31-openroad-stamidpnr
+32-openroad-repairdesignpostgpl
+33-odb-manualglobalplacement
+34-openroad-detailedplacement
+35-openroad-cts
+36-openroad-stamidpnr-1
+37-openroad-resizertimingpostcts
+38-openroad-stamidpnr-2
+39-openroad-globalrouting
+40-openroad-checkantennas
+41-odb-diodesonports
+42-openroad-stamidpnr-3
+43-openroad-detailedrouting
+44-openroad-detailedrouting
+45-openroad-detailedrouting
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -rn "id = \"OpenROAD.Repair\|id = \"OpenROAD.Resizer" /nix/store/1pkfh3p98m8i3jp
+642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/steps/openroad.py | head -10'
+1881:    id = "OpenROAD.RepairAntennas"
+2566:    id = "OpenROAD.RepairDesignPostGPL"
+2640:    id = "OpenROAD.RepairDesign"
+2650:    id = "OpenROAD.RepairDesignPostGRT"
+2701:    id = "OpenROAD.ResizerTimingPostCTS"
+2807:    id = "OpenROAD.ResizerTimingPostGRT"
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -n -B2 -A6 "RepairDesignPostGRT" 
+/nix/store/1pkfh3p98m8i3jp642n3bznpjfq65i6m-python3-3.13.9-env/lib/python3.13/site-packages/librelane/flows/classic.py 
+| head -30'
+79-        OpenROAD.GlobalRouting,
+80-        OpenROAD.CheckAntennas,
+81:        OpenROAD.RepairDesignPostGRT,
+82-        Odb.DiodesOnPorts,
+83-        Odb.HeuristicDiodeInsertion,
+84-        OpenROAD.RepairAntennas,
+85-        OpenROAD.ResizerTimingPostGRT,
+86-        OpenROAD.STAMidPNR,
+87-        OpenROAD.DetailedRouting,
+--
+269-    gating_config_vars = {
+270-        "OpenROAD.RepairDesignPostGPL": ["RUN_POST_GPL_DESIGN_REPAIR"],
+271:        "OpenROAD.RepairDesignPostGRT": ["RUN_POST_GRT_DESIGN_REPAIR"],
+272-        "OpenROAD.ResizerTimingPostCTS": ["RUN_POST_CTS_RESIZER_TIMING"],
+273-        "OpenROAD.ResizerTimingPostGRT": ["RUN_POST_GRT_RESIZER_TIMING"],
+274-        "OpenROAD.CTS": ["RUN_CTS"],
+275-        "OpenROAD.RCX": ["RUN_SPEF_EXTRACTION"],
+276-        "OpenROAD.TapEndcapInsertion": ["RUN_TAP_ENDCAP_INSERTION"],
+277-        "Odb.HeuristicDiodeInsertion": ["RUN_HEURISTIC_DIODE_INSERTION"],
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_wrap32_
+25ns_xl.json','utf8'));j.RUN_POST_GRT_DESIGN_REPAIR=true;fs.writeFileSync('openlane/sky130_wrap32_25ns_fx2.json',JSON.s
+tringify(j,null,2)+'\n');console.log('written fx2')"
+written fx2
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -24,8 +24,9 @@
+ | `sky130_wrap32_area_sized.json` | wrapper, AREA synthesis + sizing, 30 ns (fastest routable step) | Sky130 | 30.0 
+ns |
+ | `sky130_wrap32_25ns_xl.json` | wrapper at 25 ns on a 2200 ┬Ám die (does extra area fix the DELAY short storm?) | 
+Sky130 | 25.0 ns |
+ | `sky130_wrap32_25ns_xl_hold.json` | same run, single-corner (`min_ff`) STA for the hold number | Sky130 | 25.0 ns |
+ | `sky130_wrap32_10ns_xl.json` | the 25 ns XL config retargeted to 10 ns (does the big die fix the 10 ns netlist 
+too?) | Sky130 | 10.0 ns |
++| `sky130_wrap32_25ns_fx2.json` | 25 ns XL with `RUN_POST_GRT_DESIGN_REPAIR` (max-cap/slew repair) | Sky130 | 25.0 ns 
+|
+ 
+ The 10 ns retarget answers the obvious question: on the 2200 ┬Ám die the 10 ns DELAY
+ netlist also converges in detailed routing (**21,341 ÔåÆ 19,028 ÔåÆ 1,988 ÔåÆ 776 ÔåÆ 75 ÔåÆ 0**),
+ where the 1800 ┬Ám die produced 42,342 violations. But **10 ns does not close timing**:
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,21 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 22:59 - Autonomy tick + 25fx reaches Magic DRC; cap/slew repair option found
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `5168f75` **success**.
++- `native-25fx` passed streamout, LEF write and started **Magic.DRC** (host has been
++  stable for >2 h, so this is the first realistic chance to get Magic DRC on a resized
++  25 ns layout).
++- Found the knob for the remaining max-cap/max-slew violations:
++  `OpenROAD.RepairDesignPostGRT` is gated by **`RUN_POST_GRT_DESIGN_REPAIR`** (default
++  false, so it never ran). Added `openlane/sky130_wrap32_25ns_fx2.json` with that flag
++  for the follow-up run once the 25fx DRC/LVS is in.
++- No result claimed for the 25fx DRC/LVS yet ÔÇö Magic DRC and Netgen LVS are still
++  running.
++
+ ## 2026-11-11 20:59 - Autonomy tick + resizer run fixes hold and setup at 25 ns
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a8403e1` **success**.
+ - The `native-25fx` run (25 ns, 2200 ┬Ám, post-CTS/post-GRT resizers enabled) converged
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "feat(openlane): fx2 config with RUN_POST_GRT_DESIGN_REPAIR for 
+cap/slew" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_25ns_fx2.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 openlane/sky130_wrap32_25ns_fx2.json
+[31;1m   5168f75..798bd72  main -> main[0m
+> build ┬À deepseek-v4.1-flash

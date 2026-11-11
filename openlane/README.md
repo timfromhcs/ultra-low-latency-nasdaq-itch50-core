@@ -157,9 +157,11 @@ timing sign-off.
 enabled (no `--skip`) fixes the timing: post-route STA over all nine corners gives
 **hold worst +0.0840 ns (0 violations, TNS 0)** and **setup worst +1.3333 ns
 (max_ss, 0 violations)**, e.g. max_ss hold +0.5976/setup +1.3333, max_ff hold
-+0.0840/setup +15.3551. Detailed routing again ends at **0 violations**. Max-cap
-(2,529–3,320) and max-slew (up to 19,788) violations remain, so a full sign-off still
-needs those cleaned up — but setup and hold are now clean on this layout.
++0.0840/setup +15.3551. Detailed routing again ends at **0 violations**, and **Magic DRC
+is 0** on the resized layout (`65-magic-drc/reports/drc.magic.rpt`, `COUNT: 0`). Max-cap
+(2,529–3,320) and max-slew (up to 19,788) violations remain; `RUN_POST_GRT_DESIGN_REPAIR`
+is the knob for those (`sky130_wrap32_25ns_fx2.json`). KLayout DRC and LVS for this
+layout are still running.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

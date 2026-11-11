@@ -259,18 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
-## 2026-11-11 22:59 - Autonomy tick + 25fx reaches Magic DRC; cap/slew repair option found
+## 2026-11-11 22:59 - Autonomy tick + 25fx: Magic DRC 0 on the resized layout
 
-- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `5168f75` **success**.
-- `native-25fx` passed streamout, LEF write and started **Magic.DRC** (host has been
-  stable for >2 h, so this is the first realistic chance to get Magic DRC on a resized
-  25 ns layout).
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `5168f75` and `798bd72`
+  **success**.
+- `native-25fx` completed **Magic DRC: COUNT 0**
+  (`65-magic-drc/reports/drc.magic.rpt`) on the resized 25 ns layout — the layout that
+  has **0 setup and 0 hold violations**. The flow moved on to KLayout DRC (step 66),
+  then XOR/SPICE/LVS.
 - Found the knob for the remaining max-cap/max-slew violations:
   `OpenROAD.RepairDesignPostGRT` is gated by **`RUN_POST_GRT_DESIGN_REPAIR`** (default
   false, so it never ran). Added `openlane/sky130_wrap32_25ns_fx2.json` with that flag
-  for the follow-up run once the 25fx DRC/LVS is in.
-- No result claimed for the 25fx DRC/LVS yet — Magic DRC and Netgen LVS are still
-  running.
+  for the follow-up run.
+- KLayout DRC and Netgen LVS for 25fx are still running; no result claimed yet.
+
+## 2026-11-11 20:59 - Autonomy tick + resizer run fixes hold and setup at 25 ns
 
 ## 2026-11-11 20:59 - Autonomy tick + resizer run fixes hold and setup at 25 ns
 
