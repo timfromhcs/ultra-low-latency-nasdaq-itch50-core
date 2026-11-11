@@ -108,8 +108,9 @@ remains the fastest fully verified configuration; the AREA netlist tops out arou
 fix for the short storm: global routing is clean (0 overflow, ≤41.9 % usage) and detailed
 routing goes **35,826 → 21,362 → 18,565 → 12 → 7 → 0** (a second DRT pass in the same
 flow repeats it: 106,258 → … → 0). Both passes end at **0 violations**, versus 42,342 on
-the 1800 µm die at the same clock. The run reached RCX and started post-route STA, then
-the host shut the distro down at 07:16 — **DRC/LVS for 25 ns are still open**.
+the 1800 µm die at the same clock. The GDS is streamed out; KLayout DRC started but the
+host shut the distro down at 08:34, so **DRC/LVS and post-route STA for 25 ns are still
+open**.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

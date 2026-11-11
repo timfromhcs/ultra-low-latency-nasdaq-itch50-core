@@ -259,6 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0e623e2` **success**.
+- Resuming the 25 ns XL run needed care: `--from KLayout.DRC` fails with "missing
+  required input 'gds'" and `--from KLayout.StreamOut` fails at `Magic.WriteLEF` for the
+  same reason — the GDS only exists after `Magic.StreamOut`. Ran
+  `--from Magic.StreamOut`: both GDS files were produced
+  (`101/105-klayout-streamout/...gds`, `104-magic-streamout/...magic.gds`).
+- Then `--from KLayout.DRC --skip Magic.DRC` started the KLayout deck (rule 697 by
+  08:34), and the distro was shut down again at 08:34. **DRC/LVS and post-route STA for
+  25 ns are still missing.**
+- The host now shuts the distro down every ~10–15 min; a 25–30 min DRC pass cannot
+  finish. The 25 ns evidence remains: GRT 0 overflow, DRT 0 violations twice, GDS
+  streamed out.
+
 ## 2026-11-11 05:59 - Autonomy tick + XL die reaches 0 DRT violations at 25 ns
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `e6d227c` **success**.
