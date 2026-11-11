@@ -151,6 +151,13 @@ MDN PWA best practices, GitHub Actions docs.
       hold **+0.0088 ns**, **Fmax ≈ 30.8 MHz** (`reports/openlane_routetest-full.json`;
       worst path `rst_n` → FF). Scope: wrapper at 50 ns — the 10 ns netlist still shorts,
       so this is flow/DRC/LVS evidence, not a parser speed sign-off.
+- [x] 30 ns AREA+sizing step (2026-11-11): routes clean and finishes
+      **KLayout DRC 0 / LVS 0** (Magic DRC skipped on resume), but timing **fails**:
+      setup WNS **−4.99 ns**, Fmax **28.58 MHz** (`reports/openlane_areasized-full.json`).
+      50 ns / 30.8 MHz remains the fastest verified closure.
+- [ ] The real speed lever is the DELAY netlist, which currently short-storms; needs a
+      congestion/pin-access root cause (candidate: larger die for the 20 k+ cell netlists,
+      or the buffer strategy itself).
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

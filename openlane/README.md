@@ -95,6 +95,14 @@ result: the fast netlist still shorts. The routing test exists to isolate that (
 fitted-attempt section above). The run directory itself stays git-ignored; the committed
 summary `reports/openlane_routetest-full.json` carries the measured values.
 
+**30 ns step (AREA + sizing).** `sky130_wrap32_area_sized.json` routes cleanly on the
+same die (detailed routing 15 → … → 0) and finished **KLayout DRC 0 / LVS 0** after a
+resume with `--from KLayout.DRC` (Magic DRC was skipped in that resume). Timing does
+**not** close: post-route setup WNS **−4.99 ns** at 30 ns (worst-path report −3.96 ns),
+Fmax estimate **28.58 MHz** (`reports/openlane_areasized-full.json`). So 50 ns / 30.8 MHz
+remains the fastest fully verified configuration; the AREA netlist tops out around
+29–31 MHz, and the faster DELAY netlists are the ones that short.
+
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 
 `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 µm die, 25 % density,

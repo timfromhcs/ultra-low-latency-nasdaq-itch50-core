@@ -259,6 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 03:59 - Autonomy tick + 30 ns run gets KLayout DRC 0 / LVS 0 (timing fails)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ca7a2cc` **success**.
+- `KLAYOUT_DRC_THREADS: 6` added to `sky130_wrap32_area_sized.json`, then resumed with
+  `--from KLayout.DRC`: the distro stayed up 32 min and the flow **completed**.
+  - **KLayout DRC 0**, **LVS 0 errors** (Magic DRC not run — skipped by `--from`)
+  - post-route STA at 30 ns: setup WNS **−4.99 ns** (worst-path rpt −3.96 ns),
+    hold WNS −0.010 ns → **timing does not close**, Fmax estimate **28.58 MHz**
+  - 59,471 stdcells, 218,872 µm², 7.08 % utilization
+  - routing DRC was already clear (15 → … → 0); LibreLane exit code 2 from the
+    timing checkers, not from DRC/LVS
+- Summary committed as `reports/openlane_areasized-full.json`. Conclusion so far:
+  AREA netlists route and sign off but top out at ≈29–31 MHz; the faster DELAY netlists
+  are exactly the ones that short-storm.
+
 ## 2026-11-11 02:59 - Autonomy tick + 30 ns run loses DRC/LVS to repeated host shutdowns
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08f197d` **success**.
