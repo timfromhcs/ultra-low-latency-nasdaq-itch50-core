@@ -273,6 +273,12 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - The host now shuts the distro down every ~10–15 min; a 25–30 min DRC pass cannot
   finish. The 25 ns evidence remains: GRT 0 overflow, DRT 0 violations twice, GDS
   streamed out.
+- Ran the post-route STA alone (`--from OpenROAD.STAPostPNR --to OpenROAD.STAPostPNR`):
+  it was killed after the fifth of six corners, but the sign-off corner
+  **max_ss_100C_1v60** completed — **setup worst slack +1.4597 ns, WNS 0, all paths
+  MET** at 25 ns (Fmax ≈ 42.5 MHz). Hold (`min_ff`) is not available yet.
+- So the 25 ns XL configuration has: GRT 0 overflow, DRT 0 violations (twice), setup
+  closed with 1.46 ns margin. Missing: hold, Magic/KLayout DRC, LVS.
 
 ## 2026-11-11 05:59 - Autonomy tick + XL die reaches 0 DRT violations at 25 ns
 

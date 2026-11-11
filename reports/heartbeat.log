@@ -1611,3 +1611,218 @@ Wed Nov 11 07:14:10 CET 2026
 > build ┬À deepseek-v4.1-flash
 [2026-11-11T07:59:20.0797140+01:00] hallo, es ist 07:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-lol-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion 2>$null | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 
+--json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+0e623e2 completed success
+[0m$ [0mwsl -d Ubuntu bash -lc 'uptime | cut -c1-28; ls /home/tim/chiplab-native/openlane/runs/native-25xl | grep -E 
+"^[0-9]" | tail -2; date'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+  08:00:20 up 0 min,  1 user,
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+Wed Nov 11 08:00:20 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_drc2.sh
+Created file successfully: reports/run_25xl_drc2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_drc2.sh 
+/home/tim/chiplab-native/run_25xl_drc2.sh && chmod +x /home/tim/chiplab-native/run_25xl_drc2.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_drc2.sh'; 
+Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log 2>/dev/null; date'
+copied
+                    DRC: missing required input 'gds'                                                                  
+ 
+[08:00:44] ERROR    LibreLane will now quit.                                                             
+__main__.py:186
+EXIT=1
+Wed Nov 11 08:01:22 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_gdsdrc.sh
+Created file successfully: reports/run_25xl_gdsdrc.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_gdsdrc.sh 
+/home/tim/chiplab-native/run_25xl_gdsdrc.sh && chmod +x /home/tim/chiplab-native/run_25xl_gdsdrc.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_gdsdrc.sh'; 
+Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-gdsdrc.log 2>/dev/null; date'
+copied
+                    WriteLEF: missing required input 'gds'                                                             
+ 
+[08:02:07] ERROR    LibreLane will now quit.                                                             
+__main__.py:186
+EXIT=1
+Wed Nov 11 08:02:25 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25xl_gdsdrc2.sh
+Created file successfully: reports/run_25xl_gdsdrc2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_gdsdrc2.sh 
+/home/tim/chiplab-native/run_25xl_gdsdrc2.sh && chmod +x /home/tim/chiplab-native/run_25xl_gdsdrc2.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_gdsdrc2.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-gdsdrc2.log 2>/dev/null; date'
+copied
+  Processed 1268134 subcell instances total.                                                                           
+ 
+  Processed 120 pins total.                                                                                            
+ 
+  Processed 2 special nets total.                                                                                      
+ 
+Wed Nov 11 08:03:26 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl | 
+grep -E "^[0-9]" | tail -2; tail -3 /home/tim/chiplab-native/ns25xl-gdsdrc2.log; date; uptime | cut -c1-24'
+E i n   V e r b i n d u n g s v e r s u c h   i s t   f e h l g e s c h l a g e n ,   d a   d i e  
+ G e g e n s t e l l e   n a c h   e i n e r   b e s t i m m t e n   Z e i t s p a n n e   n i c h t   r i c h t i g  
+ r e a g i e r t   h a t ,   o d e r   d i e   h e r g e s t e l l t e   V e r b i n d u n g   w a r  
+ f e h l e r h a f t ,   d a   d e r   v e r b u n d e n e   H o s t   n i c h t   r e a g i e r t   h a t .   
+ 
+ F e h l e r c o d e :   W s l / S e r v i c e / W S A E T I M E D O U T 
+ 
+ W e n n   d i e s e r   F e h l e r   u n e r w a r t e t   w a r ,   s u c h e n   S i e   n a c h  
+ v o r h a n d e n e n   P r o b l e m e n ,   o d e r   e r s t e l l e n   S i e   e i n   n e u e s  
+ P r o b l e m   u n t e r   h t t p s : / / g i t h u b . c o m / m i c r o s o f t / W S L / i s s u e s . 
+ 
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl --shutdown 2>&1 | Out-Null; Start-Sleep -Seconds 10; wsl -d Ubuntu bash -lc 'echo wsl-recovered; uptime 
+| cut -c1-30' 2>&1 | Select-Object -First 3
+[31;1mw s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A [0m
+[31;1m [0m
+[31;1m w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e  
+ C o n s o m m e . [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 30; wsl --status 2>&1 | Select-Object -First 3; wsl -d Ubuntu bash -lc 'echo ok' 2>&1 | 
+Select-Object -First 2
+S t a n d a r d d i s t r i b u t i o n :   U b u n t u 
+ 
+ S t a n d a r d v e r s i o n :   2 
+ok
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25xl | grep -E "^[0-9]" | tail -3; 
+find /home/tim/chiplab-native/openlane/runs/native-25xl -maxdepth 3 -name "*.gds" | tail -3'
+97-openroad-stapostpnr
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+/home/tim/chiplab-native/openlane/runs/native-25xl/104-magic-streamout/itch_wishbone_wrap.magic.gds
+/home/tim/chiplab-native/openlane/runs/native-25xl/101-klayout-streamout/itch_wishbone_wrap.klayout.gds
+/home/tim/chiplab-native/openlane/runs/native-25xl/105-klayout-streamout/itch_wishbone_wrap.klayout.gds
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25xl_drc2.sh 
+/home/tim/chiplab-native/run_25xl_drc2.sh && chmod +x /home/tim/chiplab-native/run_25xl_drc2.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25xl_drc2.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log 2>/dev/null; date'
+copied
+    Elapsed: 0.170s  Memory: 1287.00M                                                                                  
+ 
+START: 64/20 (nwell)                                                                                                   
+ 
+"width" in: sky130A_mr.drc:315                                                                                         
+ 
+Wed Nov 11 08:19:07 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/ns25xl-drc2.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-25xl | grep -E "^[0-9]" | tail -2; date; uptime | cut -c1-26'
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+     Edge pairs: 0 (flat)  0 (hierarchical)                                                                            
+  
+    Elapsed: 0.400s  Memory: 4390.00M                                                                                  
+ 
+"width" in: sky130A_mr.drc:697                                                                                         
+ 
+98-openroad-stapostpnr
+99-openroad-stapostpnr
+Wed Nov 11 08:34:59 CET 2026
+ 08:34:59 up 0 min,  1 use
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,23 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0e623e2` **success**.
++- Resuming the 25 ns XL run needed care: `--from KLayout.DRC` fails with "missing
++  required input 'gds'" and `--from KLayout.StreamOut` fails at `Magic.WriteLEF` for the
++  same reason ÔÇö the GDS only exists after `Magic.StreamOut`. Ran
++  `--from Magic.StreamOut`: both GDS files were produced
++  (`101/105-klayout-streamout/...gds`, `104-magic-streamout/...magic.gds`).
++- Then `--from KLayout.DRC --skip Magic.DRC` started the KLayout deck (rule 697 by
++  08:34), and the distro was shut down again at 08:34. **DRC/LVS and post-route STA for
++  25 ns are still missing.**
++- The host now shuts the distro down every ~10ÔÇô15 min; a 25ÔÇô30 min DRC pass cannot
++  finish. The 25 ns evidence remains: GRT 0 overflow, DRT 0 violations twice, GDS
++  streamed out.
++
+ ## 2026-11-11 05:59 - Autonomy tick + XL die reaches 0 DRT violations at 25 ns
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `e6d227c` **success**.
+ - Resumed the XL run (`--from OpenROAD.DetailedRouting`): detailed routing converged
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -107,10 +107,11 @@
+ **XL die (2200 ┬Ám, 25 ns DELAY).** `sky130_wrap32_25ns_xl.json` shows that area is the
+ fix for the short storm: global routing is clean (0 overflow, Ôëñ41.9 % usage) and detailed
+ routing goes **35,826 ÔåÆ 21,362 ÔåÆ 18,565 ÔåÆ 12 ÔåÆ 7 ÔåÆ 0** (a second DRT pass in the same
+ flow repeats it: 106,258 ÔåÆ ÔÇª ÔåÆ 0). Both passes end at **0 violations**, versus 42,342 on
+-the 1800 ┬Ám die at the same clock. The run reached RCX and started post-route STA, then
+-the host shut the distro down at 07:16 ÔÇö **DRC/LVS for 25 ns are still open**.
++the 1800 ┬Ám die at the same clock. The GDS is streamed out; KLayout DRC started but the
++host shut the distro down at 08:34, so **DRC/LVS and post-route STA for 25 ns are still
++open**.
+ 
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item 
+reports\run_25xl_drc2.sh,reports\run_25xl_gdsdrc.sh,reports\run_25xl_gdsdrc2.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add 
+-A; git commit -m "docs(openlane): 25 ns XL GDS streamed; KLayout DRC cut off by host shutdown" 2>&1 | Select-Object 
+-Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 35 insertions(+), 17 deletions(-)
+[31;1m   0e623e2..c44e23e  main -> main[0m
