@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 09:59 - Autonomy tick + 25 ns hold corner measured (−6.9 ps)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `3d7213a` **success**.
+- The multi-corner STA kept dying at the fifth/sixth corner (host shutdowns at 10:09),
+  so the hold number was captured with a **single-corner** config
+  (`sky130_wrap32_25ns_xl_hold.json`, `STA_CORNERS: ["min_ff_n40C_1v95"]`,
+  `--from OpenROAD.STAPostPNR --to …`). That run finished in 90 s:
+  - **min_ff_n40C_1v95 hold WNS −0.00687 ns** (6.9 ps violation)
+  - with the earlier **max_ss setup +1.4597 ns (WNS 0)**, the 25 ns XL design closes
+    setup with 1.46 ns margin and misses hold by 6.9 ps.
+- Magic/KLayout DRC and LVS for the 25 ns XL run remain open; a 25–30 min DRC pass cannot
+  finish in the current ~10–15 min host windows.
+
 ## 2026-11-11 07:59 - Autonomy tick + 25 ns XL: GDS produced, KLayout DRC cut off again
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `0e623e2` **success**.
