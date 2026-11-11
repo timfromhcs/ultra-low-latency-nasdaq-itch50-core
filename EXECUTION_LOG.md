@@ -259,6 +259,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-11 18:59 - Autonomy tick + 10 ns post-route STA: not achievable
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `167236e` **success**.
+- The 10 ns XL run resumed in a long stable WSL window (1h+): DRT converged to **0
+  violations** again, then RCX and **post-route STA over all nine corners** completed.
+- Result: **setup WNS −13.77 ns** at `max_ss_100C_1v60` (5,695 setup violations), hold
+  **−0.0108 ns** at `max_ff_n40C_1v95`. Achievable period ≈23.8 ns → **≈42 MHz**, the
+  same as the 25 ns run. So the 10 ns target is not reachable with this netlist; **25 ns
+  (40 MHz) is the practical target**.
+- Cap/slew violations remain (2.5k–3.3k max-cap, up to 19.7k max-slew), so both runs are
+  DRC/LVS evidence rather than timing sign-off. The flow continued to IR drop / streamout
+  and the DRC/LVS steps.
+
 ## 2026-11-11 17:59 - Autonomy tick + CI chain fixed (apt fallback, iverilog-13 RTL refs)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks.

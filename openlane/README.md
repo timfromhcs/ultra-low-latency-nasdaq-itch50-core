@@ -28,8 +28,12 @@ failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 
 The 10 ns retarget answers the obvious question: on the 2200 µm die the 10 ns DELAY
 netlist also converges in detailed routing (**21,341 → 19,028 → 1,988 → 776 → 75 → 0**),
-where the 1800 µm die produced 42,342 violations. The second DRT pass, RCX/STA and
-DRC/LVS for 10 ns are still being collected.
+where the 1800 µm die produced 42,342 violations. But **10 ns does not close timing**:
+post-route STA over all nine corners gives setup WNS **−13.77 ns** at max_ss (5,695 setup
+violations) and hold **−0.0108 ns** at max_ff, i.e. an achievable period of ≈23.8 ns —
+the same ≈42 MHz as the 25 ns run. The 10 ns target is therefore not reachable with this
+netlist; **25 ns (40 MHz) is the practical target**. Cap/slew violations (2.5k–3.3k cap,
+up to 19.7k slew) remain in both runs.
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
 
 ## Verified toolchain (2026-11-03)

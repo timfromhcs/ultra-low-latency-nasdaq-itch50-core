@@ -166,6 +166,10 @@ MDN PWA best practices, GitHub Actions docs.
       max-cap/max-slew violations** (2.5k–3.3k cap, up to 11.4k slew at min_ss), so this
       is DRC/LVS evidence, not a timing sign-off. A continuous multi-corner STA and the
       hold/slew cleanup remain.
+      **10 ns retarget on the same die:** DRT converges to 0 as well, but post-route STA
+      fails badly — setup WNS **−13.77 ns** at max_ss (5,695 violations), hold −0.0108 ns
+      at max_ff. The achievable period is ≈23.8 ns, the same ≈42 MHz as 25 ns, so **10 ns
+      is not reachable with this netlist; 25 ns (40 MHz) is the practical target**.
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

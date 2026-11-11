@@ -933,3 +933,119 @@ itch_formal: /mnt/e/chips/main/formal/itch_formal.sv:311.7-311.69
 ($cover$/mnt/e/chips/main/formal/itch_formal.sv:311$237)
 ##   0:01:06  Status: PASSED
 [FORMAL] PASS (z3)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -274,11 +274,12 @@
+      `itch_top_of_book.sv`), now also fixed. The other scan hits were substring false
+      positives (`msg_count`, `snap_hit`, `upd_volume`, ÔÇª).
+ - Local regression: `make lint` + gate 11/11; cocotb `run_cocotb`, `run_multi`,
+   `run_book_top`, `run_book_top_skid`, `run_book_snapshot` all pass with the local
+-  iverilog 12. CI on `cc48a75` is the iverilog-13 check.
++  iverilog 12. **CI on `3723c6a` is green** (RTL job included, so iverilog 13 accepts the
++  reordered RTL), and `formal/run_formal.sh z3` still reports **PASS**.
+ - The 10 ns XL run reached 19,028 violations before the host restarted; it is queued
+-  behind the CI work.
++  behind the CI work and will be resumed.
+ 
+ ## 2026-11-11 16:59 - Autonomy tick + 10 ns XL converges; CI Toolchain stall bounded
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: CI green on iverilog 13, formal still passes" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+ 2 files changed, 42 insertions(+), 2 deletions(-)
+[31;1m   3723c6a..167236e  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_10xl_drt.sh'; Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail 
+-2 /home/tim/chiplab-native/ns10xl-drt.log 2>/dev/null; date'
+[INFO DRT-0082]   Complete 10000 groups.                                                                               
+ 
+[INFO DRT-0082]   Complete 20000 groups.                                                                               
+ 
+Wed Nov 11 18:14:22 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+167236e completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 17:59ÔÇô18:20 abgeschlossen ÔÇö **CI-Kette repariert, alles wieder gr├╝n**.
+
+## Was kaputt war (und behoben ist)
+1. **apt-Mirror der Runner h├ñngt** (Exit 124 bei jedem Versuch). Die CI nutzt jetzt einen **Fallback auf das gepinnte oss-cad-suite 2026-11-03** (wie `formal.yml`, mit `actions/cache` + `GITHUB_PATH`). Toolchain, pip, Lint, Vektoren, 50k-Regression und Modelltests laufen damit.
+2. **iverilog 13 (aus dem Suite) lehnt Use-before-Declaration ab.** Drei echte F├ñlle korrigiert:
+   - `rtl/itch_parser_core.sv` (`gate_is_corrupt`)
+   - `rtl/moldudp64_frontend.sv` (Repacker-Deklarationen: `rem_count`/`feed_space_ok`)
+   - `rtl/itch_top_of_book.sv` (`init_done`)
+   
+   Die ├╝brigen Scan-Treffer waren Substring-Fehltreffer (`msg_count`, `snap_hit`, `upd_volume`, ÔÇª).
+
+## Verifikation
+| Pr├╝fung | Ergebnis |
+|---|---|
+| Gate (lokal) | **11/11**, Docs-Links 25/25 |
+| Lokale cocotb-Tests | `run_cocotb`, `run_multi`, `run_book_top`, `run_book_top_skid`, `run_book_snapshot` ÔÇö **alle PASS** |
+| **Formal (z3)** | **PASS** nach den RTL-├änderungen |
+| **CI** | `3723c6a` und `167236e` **success** (inkl. RTL-Job mit iverilog 13) |
+
+## Laufend
+Der **10-ns-XL-Lauf** wurde nach dem Host-Neustart neu gestartet (DRT-Resume, aktuell im Detail-Routing); er hatte zuvor bereits **0 Violations** im ersten Pass erreicht.
+
+Commits: `144df32`, `cc48a75`, `3723c6a`, `167236e`.
+
+Offen bleiben: 10-ns-DRC/LVS + STA, Multi-Corner-STA/Hold-Cleanup bei 25 ns, Parser-Sign-off und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-11T18:59:20.1495526+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" /home/tim/chiplab-native/ns10xl-drt.log | tail 
+-3; tail -2 /home/tim/chiplab-native/ns10xl-drt.log; date; uptime | cut -c1-22'
+[INFO DRT-0199]   Number of violations = 7253.                                                                         
+ 
+[INFO DRT-0199]   Number of violations = 5949.                                                                         
+ 
+[INFO DRT-0199]   Number of violations = 1356.                                                                         
+ 
+    Completing 20% with 1356 violations.                                                                               
+ 
+    elapsed time = 00:00:01, memory = 3605.38 (MB).                                                                    
+ 
+Wed Nov 11 18:59:29 CET 2026
+ 18:59:29 up 48 min,
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+167236e completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns10xl-drt.log | tail -3; ls /home/tim/chiplab-native/openlane/runs/native-10xl | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-22'
+[INFO DRT-0199]   Number of violations = 3.                                                                            
+ 
+[INFO DRT-0199]   Number of violations = 3.                                                                            
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+46-odb-removeroutingobstructions
+47-openroad-checkantennas-1
+Wed Nov 11 19:09:42 CET 2026
+ 19:09:42 up 58 min,
+> build ┬À deepseek-v4.1-flash
