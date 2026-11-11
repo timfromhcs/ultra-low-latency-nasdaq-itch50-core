@@ -18,28 +18,42 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      - name: Cache oss-cad-suite
+        uses: actions/cache@v4
+        with:
+          path: /opt/oss-cad-suite
+          key: oss-cad-suite-2026-11-03
       - name: Toolchain
         run: |
           export DEBIAN_FRONTEND=noninteractive
-          # apt mirrors on the runners have hung for >5 min twice today (exit 124).
-          # Only install what is missing, retry the index update, and bound every call.
-          need=""
-          for t in verilator yosys iverilog z3; do
-            command -v "$t" >/dev/null 2>&1 || need="$need $t"
-          done
-          if [ -n "$need" ]; then
-            for i in 1 2 3; do
-              if timeout 240 sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 update -qq; then break; fi
-              echo "apt-get update attempt $i failed"
-              sudo rm -rf /var/lib/apt/lists/* || true
-              sleep 5
-            done
-            timeout 900 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq $need python3-pip
+          # The runners' apt mirrors hung for >5 min repeatedly on 2026-11-11
+          # (exit 124). Try apt, but fall back to the same pinned oss-cad-suite the
+          # formal workflow uses; it ships verilator, yosys, iverilog and z3.
+          apt_ok=0
+          if timeout 240 sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 update -qq; then
+            if timeout 900 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq verilator yosys iverilog z3 python3-pip; then
+              apt_ok=1
+            fi
           fi
+          if [ "$apt_ok" -ne 1 ] || ! command -v verilator >/dev/null || ! command -v iverilog >/dev/null || ! command -v yosys >/dev/null; then
+            echo "apt unavailable, using the pinned oss-cad-suite"
+            if [ ! -x /opt/oss-cad-suite/bin/yosys ]; then
+              curl -fsSL -o /tmp/oss-cad-suite.tgz \
+                https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-11-03/oss-cad-suite-linux-x64-20261103.tgz
+              sudo tar -xzf /tmp/oss-cad-suite.tgz -C /opt
+            fi
+            echo "/opt/oss-cad-suite/bin" >> "$GITHUB_PATH"
+            export PATH="/opt/oss-cad-suite/bin:$PATH"
+          fi
+          verilator --version
+          iverilog -V 2>&1 | head -1
+          yosys -V
+          z3 --version || true
           # cvc5 is optional for the CI proof (Z3 is the required solver)
           timeout 180 sudo apt-get -o Acquire::http::Timeout=20 install -y -qq cvc5 || true
       - name: Python deps
         run: |
+          python3 -m pip --version || python3 -m ensurepip --upgrade
           python3 -m pip install --break-system-packages --upgrade pip
           python3 -m pip install --break-system-packages cocotb pytest scapy
       - name: Lint

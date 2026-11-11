@@ -555,3 +555,150 @@ warning: in the working copy of 'reports/links.json', LF will be replaced by CRL
 warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
  2 files changed, 90 insertions(+)
 [31;1m   334e7e3..0f696e0  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns10xl-drt.log | tail -3; tail -2 /home/tim/chiplab-native/ns10xl-drt.log; date; uptime | cut 
+-c1-22'; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ [INFO DRT-0199]   Number of violations = 35944.                                                                       
+  
+[INFO DRT-0199]   Number of violations = 21341.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 19028.                                                                        
+ 
+    Completing 70% with 10274 violations.                                                                              
+ 
+    elapsed time = 00:01:35, memory = 2442.33 (MB).                                                                    
+ 
+Wed Nov 11 17:13:40 CET 2026
+ 17:13:40 up 0 min,  1
+fb6d5cd completed failure
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git log --oneline -4; git fetch origin main 2>&1 | Out-Null; git log --oneline -3 
+origin/main; git status -sb | Select-Object -First 2
+0f696e0 docs: log the CI Toolchain bound
+334e7e3 ci: bound the Toolchain apt steps and add a job timeout (stalled twice)
+a07cacc docs(openlane): 10 ns XL converges to 0 detailed-routing violations
+c2e6e21 docs(openlane): 10 ns XL first DRT pass 35.9k -> 21.3k
+0f696e0 docs: log the CI Toolchain bound
+334e7e3 ci: bound the Toolchain apt steps and add a job timeout (stalled twice)
+a07cacc docs(openlane): 10 ns XL converges to 0 detailed-routing violations
+## main...origin/main
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mgh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --limit 5 --json 
+headSha,headBranch,status,conclusion,workflowName,event | ConvertFrom-Json | ForEach-Object { 
+"$($_.headSha.Substring(0,7)) $($_.headBranch) $($_.workflowName) $($_.event) $($_.status) $($_.conclusion)" }
+fb6d5cd dependabot/github_actions/actions/checkout-7 CI pull_request completed failure
+0f696e0 main Dependabot Updates dynamic completed success
+0f696e0 main Windows single EXE push completed success
+0f696e0 main Container image push completed success
+0f696e0 main CI push completed failure
+> build ┬À deepseek-v4.1-flash
+[0mÔÜÖ [0mexecute {"code":"const r = await tools.github.actions_list({ method: \"list_workflow_runs\", owner: 
+\"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: \"ci.yml\", perPage: 5 });\nconst run = 
+r.workflow_runs?.find(x => x.head_sha?.startsWith(\"0f696e0\"));\nif (!run) return { runs: r.workflow_runs?.map(x => 
+[x.head_sha?.slice(0,7), x.status, x.conclusion]) };\nconst j = await tools.github.actions_list({ method: 
+\"list_workflow_jobs\", owner: \"timfromhcs\", repo: \"ultra-low-latency-nasdaq-itch50-core\", resource_id: 
+String(run.id), perPage: 20 });\nconst rtl = j.jobs?.jobs?.find(x => x.name.startsWith(\"RTL\"));\nreturn { id: 
+run.id, jobId: rtl?.id, status: run.status, conclusion: run.conclusion, jobs: j.jobs?.jobs?.map(x => [x.name, 
+x.conclusion]), steps: rtl?.steps?.map(s => [s.number, s.name, s.status, s.conclusion]) };"} 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mgh run view 43054359664 --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --job 130639874369 --log 2>&1 
+| Select-String -Pattern "E:|Err:|error|E: |Failed|timeout|Unmet|404" | Select-Object -First 20
+RTL + formal + model	Set up job	2026-11-11T16:03:05.0321505Z Build Dat[7me:[0m 2026-10-28T21:51:42Z
+RTL + formal + model	Set up job	2026-11-11T16:03:05.0329668Z Imag[7me:[0m ubuntu-24.04
+RTL + formal + model	Set up job	2026-11-11T16:03:05.0331449Z Included Softwar[7me: [0m
+[7m[0mhttps://github.com/actions/runner-images/blob/ubuntu24/20261101.360/images/ubuntu/Ubuntu2404-Readme.md[0m
+RTL + formal + model	Set up job	2026-11-11T16:03:05.0333255Z Image Releas[7me: [0m
+[7m[0mhttps://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261101.360[0m
+RTL + formal + model	Set up job	2026-11-11T16:03:05.0342366Z Secret sourc[7me:[0m Actions
+RTL + formal + model	Set up job	2026-11-11T16:03:05.0343453Z Cache mod[7me:[0m write
+RTL + formal + model	Set up job	2026-11-11T16:03:05.6318133Z Complete job nam[7me:[0m RTL + formal + model
+RTL + formal + model	Run actions/checkout@v4	2026-11-11T16:03:05.7214116Z   sparse-checkout-cone-mod[7me:[0m true
+RTL + formal + model	Toolchain	2026-11-11T16:03:07.0869688Z ^[[36;1m[7mtimeout [0m[7m[0m300 [0m[7m[0msudo 
+[0m[7m[0mapt-get [0m[7m[0m-o [0m[7m[0mAcquire::Retries=3 [0m[7m[0m-o [0m
+[7m[0mAcquire::http::Timeout=30 [0m[7m[0mupdate [0m[7m[0m-qq^[[0m[0m
+RTL + formal + model	Toolchain	2026-11-11T16:03:07.0873243Z ^[[36;1m[7mtimeout [0m[7m[0m600 [0m[7m[0msudo 
+[0m[7m[0mapt-get [0m[7m[0m-o [0m[7m[0mAcquire::Retries=3 [0m[7m[0m-o [0m
+[7m[0mAcquire::http::Timeout=30 [0m[7m[0minstall [0m[7m[0m-y [0m[7m[0m-qq [0m[7m[0mverilator 
+[0m[7m[0myosys [0m[7m[0miverilog [0m[7m[0mz3 [0m[7m[0mpython3-pip^[[0m[0m
+RTL + formal + model	Toolchain	2026-11-11T16:03:07.0879575Z ^[[36;1m[7mtimeout [0m[7m[0m300 [0m[7m[0msudo 
+[0m[7m[0mapt-get [0m[7m[0m-o [0m[7m[0mAcquire::Retries=3 [0m[7m[0m-o [0m
+[7m[0mAcquire::http::Timeout=30 [0m[7m[0minstall [0m[7m[0m-y [0m[7m[0m-qq [0m[7m[0mcvc5 [0m[7m[0m|| 
+[0m[7m[0mtrue^[[0m[0m
+RTL + formal + model	Toolchain	2026-11-11T16:08:12.1080190Z ##[[7merror[0m]Process completed with exit code 124.
+RTL + formal + model	Complete job	2026-11-11T16:08:12.4212784Z ##[warning]Node.js 20 is deprecated. The following 
+actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information 
+se[7me: [0m
+[7m[0mhttps://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit .github/workflows/ci.yml
+Index: .github/workflows/ci.yml
+===================================================================
+--- .github/workflows/ci.yml
++++ .github/workflows/ci.yml
+@@ -20,13 +20,25 @@
+       - uses: actions/checkout@v4
+       - name: Toolchain
+         run: |
+           export DEBIAN_FRONTEND=noninteractive
+-          # Slow/blocked apt mirrors have stalled this job for >45 min; bound it.
+-          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update -qq
+-          timeout 600 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq verilator yosys 
+iverilog z3 python3-pip
++          # apt mirrors on the runners have hung for >5 min twice today (exit 124).
++          # Only install what is missing, retry the index update, and bound every call.
++          need=""
++          for t in verilator yosys iverilog z3; do
++            command -v "$t" >/dev/null 2>&1 || need="$need $t"
++          done
++          if [ -n "$need" ]; then
++            for i in 1 2 3; do
++              if timeout 240 sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=20 update -qq; then break; 
+fi
++              echo "apt-get update attempt $i failed"
++              sudo rm -rf /var/lib/apt/lists/* || true
++              sleep 5
++            done
++            timeout 900 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq $need 
+python3-pip
++          fi
+           # cvc5 is optional for the CI proof (Z3 is the required solver)
+-          timeout 300 sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 install -y -qq cvc5 || true
++          timeout 180 sudo apt-get -o Acquire::http::Timeout=20 install -y -qq cvc5 || true
+       - name: Python deps
+         run: |
+           python3 -m pip install --break-system-packages --upgrade pip
+           python3 -m pip install --break-system-packages cocotb pytest scapy
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && python3 -c "import 
+yaml;d=yaml.safe_load(open(\".github/workflows/ci.yml\"));print(\"yaml ok\")"'; cd E:\chips\main; node 
+scripts/gate.mjs 2>&1 | Select-Object -Last 2
+w s l :   F e h l e r   b e i m   E r m i t t e l n   d e r   U n t e r s t ´┐¢ t z u n g   f ´┐¢ r  
+ g e s c h a c h t e l t e   V i r t u a l i s i e r u n g ,   F e h l e r :   E R R O R _ I N V A L I D _ D A T A 
+ 
+ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ yaml ok
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "ci: retry apt index update and install only missing tools" 2>&1 
+| Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of '.github/workflows/ci.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 39 insertions(+), 19 deletions(-)
+[31;1m   0f696e0..12773c3  main -> main[0m
+> build ┬À deepseek-v4.1-flash
