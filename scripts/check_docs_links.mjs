@@ -27,8 +27,10 @@ for (const d of ["docs", "openlane", "mcp", "caravel", ".opencode"]) {
 }
 
 const linkRe = /\[[^\]]*\]\(([^)\s]+)\)/g;
+const artifactRe = /(?<![\w/.-])reports\/[A-Za-z0-9_.-]+\.json\b/g;
 const rows = [];
 let missing = 0;
+let artifacts = 0;
 
 for (const file of files) {
   const rel = path.relative(root, file).replace(/\\/g, "/");
@@ -37,6 +39,13 @@ for (const file of files) {
   lines.forEach((line, i) => {
     if (/^\s*```/.test(line)) { fence = !fence; return; }
     if (fence) return;
+    for (const m of line.matchAll(artifactRe)) {
+      artifacts++;
+      if (!fs.existsSync(path.join(root, m[0]))) {
+        missing++;
+        rows.push({ file: rel, line: i + 1, target: m[0], kind: "artifact" });
+      }
+    }
     for (const m of line.matchAll(linkRe)) {
       let target = m[1];
       if (/^(https?:|mailto:|#)/.test(target)) continue;
@@ -48,18 +57,18 @@ for (const file of files) {
       const ok = fs.existsSync(resolved);
       if (!ok) {
         missing++;
-        rows.push({ file: rel, line: i + 1, target, resolved: path.relative(root, resolved).replace(/\\/g, "/") });
+        rows.push({ file: rel, line: i + 1, target, resolved: path.relative(root, resolved).replace(/\\/g, "/"), kind: "link" });
       }
     }
   });
 }
 
 fs.mkdirSync("reports", { recursive: true });
-fs.writeFileSync("reports/links.json", JSON.stringify({ files: files.length, missing, rows }, null, 2) + "\n");
+fs.writeFileSync("reports/links.json", JSON.stringify({ files: files.length, artifacts, missing, rows }, null, 2) + "\n");
 
 if (missing) {
-  console.error(`[FAIL] ${missing} dead relative link(s):`);
+  console.error(`[FAIL] ${missing} dead reference(s):`);
   for (const r of rows) console.error(`  ${r.file}:${r.line} -> ${r.target}`);
   process.exit(1);
 }
-console.log(`[OK] ${files.length} Markdown files, no dead relative links`);
+console.log(`[OK] ${files.length} Markdown files, ${artifacts} report references, no dead links`);

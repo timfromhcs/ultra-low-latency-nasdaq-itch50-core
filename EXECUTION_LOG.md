@@ -271,6 +271,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 13:59 - Autonomy tick + docs check now validates report references
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `d27c633` **success**.
+- The level-table flow resume died again after ~10 min (`WSAETIMEDOUT`), so the physical
+  item stays open with the pre-PnR number only.
+- Extended `scripts/check_docs_links.mjs`: it now also verifies every bare
+  `reports/*.json` reference in the Markdown docs (67 references), so a renamed or
+  deleted evidence artifact fails the gate instead of rotting silently. A lookbehind
+  excludes run-directory paths like `openlane/runs/…/reports/…`.
+- Gate **12/12** green with the new check.
+
 ## 2026-11-12 12:59 - Autonomy tick + level-table flow keeps dying at STA
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `5ecd4d4` **success**.
