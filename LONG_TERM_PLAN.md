@@ -89,11 +89,11 @@ MDN PWA best practices, GitHub Actions docs.
       max/min reduction; 2-cycle latency.
 - [x] 4-way set-associative order lookup (4 compares, was 256).
 - [ ] Physical timing sign-off of the level table + reduction (Phase 2).
-      **2026-11-12:** the block is big — `itch_top_book` reports 2,094,858 µm² and its
-      Yosys ABC mapping exceeds the host's stable windows. Narrowed to
-      `itch_top_of_book` (ORDERS=32/4/4) via `openlane/sky130_leveltable_sta.json`;
-      synthesis is quick, but the post-synthesis STA was killed twice before writing a
-      report. Configs are committed; rerun in a stable window.
+      **2026-11-12:** measured pre-PnR STA for `itch_top_of_book` (ORDERS=32/4/4) at
+      25 ns: setup **WNS −1.9742 ns**, TNS −1,753 ns, Fmax ≈ **37.1 MHz**, 769,484 µm²
+      generic, worst path `s_locate[1]` → FF. So the block needs ≈27 ns pre-PnR; a full
+      P&R sign-off is still open (the 2.09 mm² `itch_top_book` exceeds the host's stable
+      windows). Config: `openlane/sky130_leveltable_sta.json`.
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and

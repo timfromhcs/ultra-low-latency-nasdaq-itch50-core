@@ -167,6 +167,7 @@ arriving earlier are otherwise accepted by the parser but not booked.
 | Wrapper full flow (50 ns) | **0 Magic/KLayout DRC, 0 LVS**, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz | `reports/openlane_routetest-full.json` |
 | Wrapper 25 ns XL (2200 µm) | **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 ns, hold −0.0069 ns | `reports/openlane_25xl-full.json` |
 | Wrapper 25 ns + resizers (25fx) | **complete flow: Magic/KLayout DRC 0, LVS 0, setup +1.3333 ns, hold +0.0840 ns (0 violations), Fmax ≈ 42.25 MHz**; max-cap/slew advisory counts remain | `reports/openlane_25fx-full.json` |
+| Level table pre-PnR (32/4/4, 25 ns) | setup **WNS −1.9742 ns**, TNS −1,753 ns, Fmax ≈ 37.1 MHz, 769,484 µm² generic, worst path `s_locate[1]` → FF (pre-PnR, not a sign-off) | `openlane/README.md` §level-table |
 
 ## 8. Known limitations
 

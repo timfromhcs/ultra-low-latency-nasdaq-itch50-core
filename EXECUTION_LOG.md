@@ -281,6 +281,12 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   Docker-free WSL flow path, the new physical configs, `scripts/check_reports.mjs`, the
   **iverilog-13 use-before-declaration fixes** and the **CI oss-cad-suite fallback**.
 - No new physical number claimed this tick.
+- **Level-table pre-PnR STA landed** (after a `wsl --shutdown` recovery): `itch_top_of_book`
+  (ORDERS=32, LOCATES=4, LEVELS=4) at 25 ns gives setup **WNS −1.9742 ns**, TNS
+  −1,753.4 ns at `max_ss_100C_1v60`, worst path `s_locate[1]` → FF `_133398_`, chip area
+  769,484 µm² → **Fmax ≈ 37.1 MHz pre-PnR**. Published in `openlane/README.md`,
+  `docs/datasheet.md` and the plan item (still open: pre-PnR, and the full
+  `itch_top_book` P&R does not fit the host's windows).
 
 ## 2026-11-12 09:59 - Autonomy tick + CI validates the report artifacts
 

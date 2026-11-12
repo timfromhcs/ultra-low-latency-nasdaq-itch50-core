@@ -88,6 +88,24 @@ Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynch
 bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
 depth. **Pre-PnR only — no placement/routing, no sign-off.**
 
+## Level-table pre-PnR STA (2026-11-12) — measured, not a sign-off
+
+`openlane/sky130_leveltable_sta.json` targets the **level table + reduction**
+(`itch_top_of_book`, `ORDERS=32`, `LOCATES=4`, `LEVELS=4`) at 25 ns on sky130. It is the
+narrowed target for the open "physical timing sign-off of the level table" item, because
+`itch_top_book` (2.09 mm²) is too large for the host's stable windows.
+
+| Result | Value |
+|---|---|
+| Synthesis (Yosys + ABC, DELAY 0) | chip area **769,484 µm²** (generic mapping) |
+| Pre-PnR STA, max_ss_100C_1v60, 25 ns | setup **WNS −1.9742 ns**, TNS −1,753.4 ns |
+| Fmax estimate (pre-PnR) | **≈ 37.1 MHz** |
+| Worst path | `s_locate[1]` → FF `_133398_` (clk group) |
+
+So the level table + reduction needs ≈27 ns pre-PnR; this is a pre-place-and-route number
+from an unoptimised generic netlist, not a sign-off. The artifact reports live in the
+git-ignored run directory (`openlane/runs/native-leveltable-sta/15-openroad-staprepnr/`).
+
 ## Wrapper full-flow result (2026-11-11) — first completed P&R for the wrapper
 
 `openlane/sky130_wrap32_routetest.json` (same wrapper RTL, **50 ns**, AREA synthesis,
