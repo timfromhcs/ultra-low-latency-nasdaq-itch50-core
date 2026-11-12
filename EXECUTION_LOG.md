@@ -271,6 +271,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 10:59 - Autonomy tick + changelog records the physical milestone
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9ddee86` **success**.
+- The level-table STA could not be retried (WSL unresponsive at 11:00, no uptime output);
+  the item stays open.
+- `CHANGELOG.md` (Unreleased) now records the release-relevant work of the last days:
+  the **25 ns wrapper sign-off** (0 DRC/0 LVS, +1.3333/+0.0840 ns, 42.25 MHz), the
+  Docker-free WSL flow path, the new physical configs, `scripts/check_reports.mjs`, the
+  **iverilog-13 use-before-declaration fixes** and the **CI oss-cad-suite fallback**.
+- No new physical number claimed this tick.
+
 ## 2026-11-12 09:59 - Autonomy tick + CI validates the report artifacts
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `c82f6f1` **success**.

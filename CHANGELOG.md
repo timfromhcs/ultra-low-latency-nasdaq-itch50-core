@@ -6,7 +6,32 @@ All notable changes to ChipLab are documented here. The format follows
 
 ## Unreleased
 
+### Added
+- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 µm
+  die with the post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow —
+  **0 Magic/KLayout DRC, 0 LVS**, setup **+1.3333 ns**, hold **+0.0840 ns** (0 violations
+  over nine corners), **Fmax ≈ 42.25 MHz**
+  (`reports/openlane_25fx-full.json`). Flow/DRC/LVS evidence for the 50 ns and 30 ns
+  variants is in `reports/openlane_routetest-full.json` and
+  `reports/openlane_areasized-full.json`; the 10 ns target is unreachable (post-route
+  setup −13.77 ns).
+- Docker-free LibreLane path inside WSL (`docs/long-runs.md` §2b), used for all
+  multi-hour runs; parity with the container verified (same WNS/slew numbers).
+- Physical flow configs: `sky130_wrap32_{routetest,areasized,wide,fitted,25ns_xl,10ns_xl,25ns_fx2,25ns_slew}.json`,
+  plus `sky130_book_sta.json` and `sky130_leveltable_sta.json` for the BBO/level-table
+  pre-PnR STA (still open).
+- `scripts/check_reports.mjs`: validates every `reports/openlane_*.json` (tag/file match,
+  timestamp, metrics, and setup/DRC/LVS for `*-full.json`); wired into the gate (12 fast /
+  14 deep checks) and the `npm + PyPI artifacts` CI job.
+
 ### Fixed
+- **iverilog 13 rejects use-before-declaration**: declarations moved ahead of use in
+  `rtl/itch_parser_core.sv` (`gate_is_corrupt`), `rtl/moldudp64_frontend.sv` (repacker
+  signals) and `rtl/itch_top_of_book.sv` (`init_done`). Verilator lint, cocotb and the
+  Z3 formal proof still pass.
+- **CI toolchain resilience**: when the runners' apt mirrors hang (exit 124 twice on
+  2026-11-11), the RTL job falls back to the pinned oss-cad-suite 2026-11-03 (cached,
+  same as `formal.yml`), with bounded apt calls and a 45-minute job timeout.
 - **MoldUDP64 multi-frame back-to-back flow control** (`rtl/moldudp64_frontend.sv`,
   `moldudp64_depacketizer.sv`, `moldudp64_pipeline.sv`):
   - `tlast` is held with a back-pressured beat instead of being cleared after one cycle;
