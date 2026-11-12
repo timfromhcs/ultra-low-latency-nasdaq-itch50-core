@@ -280,7 +280,8 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   keeps the measured pre-PnR number (WNS −1.9742 ns, ≈37.1 MHz) as the evidence.
 - Dispatched the **nightly** workflow (`count=200000`) to re-verify the GitHub-side path
   (full-field regression, formal, mutation, RTL↔WASM equivalence) independently of the
-  local WSL state.
+  local WSL state. **Result: success on `983661c`** — 200k regression, deep Z3 proof,
+  mutation and equivalence all green; CI on `0f30418` is green as well.
 - Gate 12/12, docs links and 67 report references valid.
 
 ## 2026-11-12 14:59 - Autonomy tick + WSL memory is not the cause of the timeouts
