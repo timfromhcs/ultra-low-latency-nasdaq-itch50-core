@@ -271,6 +271,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 16:59 - Autonomy tick + reproducible import of a run's evidence
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b7b3f53` **success**.
+- Added `scripts/import_openlane_run.sh`: copies `final/metrics.json`, `resolved.json`,
+  the post-route STA corner reports and both DRC reports from a WSL run into
+  `openlane/runs/<tag>` (git-ignored) so `scripts/openlane_summary.mjs` can regenerate
+  the committed report on the Windows side. Needed `sudo` because `openlane/runs` is
+  owned by root on the 9p mount.
+- **Reproducibility check:** re-imported the 25fx run as `25fx-reimport` and regenerated
+  its summary — setup `1.3333388104337431`, hold `0.08400347322180847`, Magic/KLayout DRC
+  `0`, LVS `0`, 100,348 stdcells: **all match `reports/openlane_25fx-full.json` exactly**
+  (the duplicate JSON was deleted afterwards).
+- `docs/long-runs.md` §2b now documents the import command instead of manual copying.
+- Gate 12/12, docs links and 67 report references valid.
+
 ## 2026-11-12 15:59 - Autonomy tick + level-table item marked host-blocked; nightly dispatched
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `983661c` **success**.

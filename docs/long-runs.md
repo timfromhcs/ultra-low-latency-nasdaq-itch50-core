@@ -69,7 +69,21 @@ Parity is verified: the native STA run of `sky130_wrap32_fitted.json` reproduced
 container numbers exactly (setup WNS **+0.3537 ns**, **19,660** max-slew violations).
 The native path is also complete: `sky130_metrics.json` finished the whole flow with
 **Magic DRC 0, KLayout DRC 0, LVS 0** and setup/hold WNS **+0.123 / +0.107 ns**.
-Do **not** run `wsl --shutdown` while a flow is active. Copy the finished `final/metrics.json` (or the summary JSON) back into
+Do **not** run `wsl --shutdown` while a flow is active.
+
+**Import a finished run** so the summary can be regenerated on the Windows side:
+
+```bash
+# inside WSL; the run dir lives in the WSL filesystem, only small files are copied
+sudo bash scripts/import_openlane_run.sh \
+  /home/tim/chiplab-native/openlane/runs/<tag> <report-tag>
+# then on Windows
+node scripts/openlane_summary.mjs openlane/runs/<report-tag>
+```
+
+The script copies `final/metrics.json`, `resolved.json`, the post-route STA corner
+reports and both DRC reports. Verified by re-importing the 25fx run: setup, hold, DRC,
+LVS and cell count all matched `reports/openlane_25fx-full.json` exactly. Copy the finished `final/metrics.json` (or the summary JSON) back into
 `reports/`.
 
 **Keep a WSL client attached.** Docker Desktop's distro and Ubuntu share one WSL2
