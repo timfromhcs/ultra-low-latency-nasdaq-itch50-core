@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 21:59 - Autonomy tick + reproducibility workflow re-verified
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `48a2ab5` **success**.
+- No physical run (the level-table flow remains blocked by the host's ≈16 min VM
+  lifetime; DRC/DRT need longer).
+- Dispatched the **Repro** workflow on `48a2ab5` to re-verify the pinned toolchains
+  independently of the local WSL state. **Both jobs succeeded**:
+  - *Reproducible WASM + Python artifacts* — two clean builds + the committed binary,
+    wheel/sdist byte-identical under `SOURCE_DATE_EPOCH`
+  - *Reproducible Windows EXE* — SEA build twice, identical SHA-256
+- Gate 12/12; docs links and report references valid.
+
 ## 2026-11-12 20:59 - Autonomy tick + errata corrected for the physical state
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `12e5ae3` **success**.
