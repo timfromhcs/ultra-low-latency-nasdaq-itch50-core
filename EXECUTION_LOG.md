@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 15:59 - Autonomy tick + level-table item marked host-blocked; nightly dispatched
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `983661c` **success**.
+- No further level-table run this tick: with DRT needing 20+ min and DRC 40+ min, and the
+  VM dying every ≈10 min (memory ruled out), the item cannot complete on this host. The
+  plan entry now says **blocked on a stable host** instead of "rerun when possible", and
+  keeps the measured pre-PnR number (WNS −1.9742 ns, ≈37.1 MHz) as the evidence.
+- Dispatched the **nightly** workflow (`count=200000`) to re-verify the GitHub-side path
+  (full-field regression, formal, mutation, RTL↔WASM equivalence) independently of the
+  local WSL state.
+- Gate 12/12, docs links and 67 report references valid.
+
 ## 2026-11-12 14:59 - Autonomy tick + WSL memory is not the cause of the timeouts
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ad77d2b` **success**.
