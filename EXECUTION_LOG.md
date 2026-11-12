@@ -271,6 +271,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 17:59 - Autonomy tick + level-table STA is memory-hungry (>9 GiB)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `2e4e7ad` **success**.
+- Resumed the level-table full flow at `OpenROAD.STAMidPNR`. It failed with an
+  "unexpected error" at the hold report; `openroad-stamidpnr.process_stats.json` shows
+  **peak RSS 9 GiB** — the 6 GB VM OOM-killed it (and the 10 GB VM too, at the same
+  point).
+- With `.wslconfig memory=12GB` the STA passes that corner and the flow advances (it
+  reached the next STA step); the VM still restarts under sustained load, so DRT has not
+  run yet. The original 6 GB config is preserved as `~/.wslconfig.bak2`.
+- This explains the earlier "unexpected error" reports: not a tool bug, a memory limit.
+  For the level-table flow the host needs ≥12 GB for WSL, or a smaller STA footprint.
+- No new sign-off claim.
+
 ## 2026-11-12 16:59 - Autonomy tick + reproducible import of a run's evidence
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b7b3f53` **success**.

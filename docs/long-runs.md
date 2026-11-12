@@ -109,8 +109,14 @@ flows cannot finish; wait for the other workload to stop.
 
 On 2026-11-12 the same VM became unresponsive (`Wsl/Service/WSAETIMEDOUT`) after ≈10
 minutes of sustained OpenROAD load. Raising the VM from 6 GB to 10 GB **did not change**
-the behaviour, so it is not an OOM; `wsl --shutdown` is the only recovery. Keep runs
-short and resumable (`--from <step>`).
+the behaviour, so it is not a simple OOM; `wsl --shutdown` is the only recovery. Keep
+runs short and resumable (`--from <step>`).
+
+**STA memory:** `openroad-stamidpnr.process_stats.json` for the 72 k-cell level table
+reports **peak RSS 9 GiB**. A 6 GB or 10 GB WSL VM OOM-kills the step at the hold report
+("OpenROAD.STAMidPNR failed with an unexpected error"); with `memory=12GB` the step
+passes. If the host cannot spare 12 GB, split the flow with `--to` so each STA step runs
+alone and close other memory consumers first.
 
 ## 3. Full flow and the knobs that matter
 
