@@ -95,9 +95,11 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 - GF180: -19.87 ns (~43.5 MHz); IHP SG13G2: -3.08 ns (~161.9 MHz), small hold violation.
 - Full flow, `itch_metrics` at 10 ns: 0 routing/Magic/KLayout DRC, 0 LVS errors, timing
   closed (WNS +0.12 ns, Fmax ~101 MHz), 6,776 cells, 42,127 um2 on a 500 um die.
-- Parser full P&R is blocked: GRT-0116 congestion, GPL-0305 divergence, DPL-0036 pin
-  density, GRT-0183 diode insertion, container restarts. No parser sign-off exists.
-  See `openlane/README.md` and `docs/long-runs.md`.
+- Wrapper full P&R (2026-11-12): 25 ns on a 2200 um die with the resizers completes the
+  whole flow — 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
+  violations, 9 corners), Fmax ~42.25 MHz, 100,348 stdcells. The 10 ns netlist routes but
+  fails post-route STA (setup -13.77 ns). Earlier attempts failed on GRT-0116/GPL-0305/
+  DPL-0036/GRT-0183 and host restarts; see `openlane/README.md` and `docs/long-runs.md`.
 
 ## 9. Reproducibility and supply chain
 - WASM: rustc pinned 1.98.1; two clean builds and the shipped binary are identical.

@@ -271,6 +271,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 06:59 - Autonomy tick + plan closed on the physical milestone
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `73b9231` **success**.
+- Updated `LONG_TERM_PLAN.md` to match the evidence: the "Full LibreLane run",
+  "Full P&R" and "DELAY short storm" items are now **done**, each with the 25fx numbers
+  (0 DRC/0 LVS, setup +1.3333 ns, hold +0.0840 ns, Fmax ≈ 42.25 MHz) and the scope note
+  that the 10 ns target is unreachable (post-route setup −13.77 ns).
+- Removed the stale "no physical sign-off / blocked P&R" claims from `README.md`
+  (status, evidence table, file map), `docs/datasheet.md` and `llms-full.txt`; they now
+  state the wrapper sign-off and that parser/BBO blocks remain open.
+- No new physical run this tick; the remaining plan items are the BBO level-table
+  sign-off (block too large for P&R) and the external blockers.
+
 ## 2026-11-12 05:59 - Autonomy tick + tighter fanout makes slew worse
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `1ae6626` **success**.

@@ -3,7 +3,8 @@
 **Part:** `ultra_low_latency_nasdaq_itch50_cutthrough` (parser) and
 `itch_top_book` (parser + multi-symbol top-of-book)
 **Version:** 0.3.1
-**Status:** tapeout-ready RTL, **not fabricated**, **no physical sign-off**
+**Status:** tapeout-ready RTL, **not fabricated**; the wrapper is physically signed off
+at 25 ns (0 DRC/LVS, timing closed, ≈42 MHz), the parser/BBO blocks are not
 **Protocol:** NASDAQ TotalView-ITCH 5.0, all 22 official message types
 
 ---

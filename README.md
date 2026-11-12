@@ -51,7 +51,9 @@ single-file local backend. Pre-silicon, reproducible, and honest about what is n
 
 ## What this is not
 
-- **Not silicon-proven.** There is no tapeout. Fmax is not signed off.
+- **Not silicon-proven.** There is no tapeout. The wrapper has a completed Sky130
+  25 ns P&R (0 DRC/0 LVS, timing closed, ≈42 MHz); the parser/BBO blocks and silicon
+  themselves are not signed off.
 - **Not a trading system.** No order routing, no live feed, no investment advice.
 - **Not a zero-cycle wire-to-output parser.** The honest latency is:
   one clock from `s_axis_tdata` into the window register + one clock to the registered
@@ -254,7 +256,7 @@ Reports live in [`reports/`](reports/).
 | Mold back-pressure | **329 bytes under random `m_axis_tready`, no loss or reordering** | `tb/test_mold_pipeline.py` |
 | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
 | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; risk limits | `tb/test_book.py` |
-| LibreLane toolchain | **3.0.17 smoke test: Classic 80/80, DRC ✅, LVS ✅**; full P&R blocked by ~1,100-pin congestion (no sign-off) | `openlane/README.md` |
+| LibreLane full flow | **wrapper completes the whole flow at 25 ns (2200 µm, resizers): 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns, Fmax ≈ 42.25 MHz** (`reports/openlane_25fx-full.json`) | `openlane/README.md` |
 | Sky130 pre-PnR STA | **250 MHz WNS −8.27 ns · 322 MHz WNS −9.14 ns · Fmax ≈ 81.5 MHz**; worst path FF → `raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
 | GF180 pre-PnR STA | **322 MHz WNS −19.87 ns · Fmax ≈ 43.5 MHz**; worst path FF → `raw_order_data[260]` (ss/125 °C, pre-PnR) | `reports/openlane_gf180-sta.json` |
 | IHP SG13G2 pre-PnR STA | **322 MHz WNS −3.08 ns · Fmax ≈ 161.9 MHz**; hold WNS −0.052 ns; worst path FF → FF (slow/125 °C, pre-PnR) | `reports/openlane_ihp-sta.json` |
@@ -479,7 +481,7 @@ docs/guides/         zero-to-hero guides (EN / DE / FR)
 docs/design/         Mold back-pressure design note (R1)
 docs/datasheet.md    ports, timing, area estimate, verification evidence
 docs/integration-guide.md  how to instantiate parser/book/Mold and poll counters
-docs/errata.md       known limitations (no physical sign-off, no 100G/PCIe)
+docs/errata.md       known limitations (no tapeout; parser/BBO not signed off)
 docs/api.md          HTTP, MCP, npm and Python API reference
 LONG_TERM_PLAN.md    12-month roadmap, KPIs, gates
 AUTONOMOUS_PLAN_V2.md

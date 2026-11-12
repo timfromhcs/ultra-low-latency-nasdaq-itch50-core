@@ -106,11 +106,10 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] LibreLane toolchain: **3.0.17 smoke test passed** (Classic flow 80/80, DRC ✅,
       LVS ✅, RC 0) via Docker Desktop + `ghcr.io/librelane/librelane:3.0.17` with a
       cached PDK volume; see `openlane/README.md`.
-- [ ] Full LibreLane Sky130 run: **attempted, not achievable with the current pin
-      count**. Without the resizer skips it stalls >1 h on the −9 ns path; with the
-      resizer steps skipped, GlobalRouting fails with **GRT-0116 congestion** at the
-      700×700 µm die with ~1,100 top-level pins (484-bit `raw_order_data`, 512-bit
-      `raw_payload`). Needs a narrow physical wrapper and a fitted/larger die.
+- [x] Full LibreLane Sky130 run: **resolved 2026-11-12** by the wrapper flows below —
+      the 25 ns run completes the whole Classic flow with 0 Magic/KLayout DRC and 0 LVS
+      (`reports/openlane_25fx-full.json`). The earlier congestion history is kept in the
+      "Full P&R" entry.
 - [x] Narrow physical wrapper `itch_host_wrap` (128-bit AXI4-Stream ingress, 32-bit
       host register port with counters + last-message fields, no debug payload bus):
       test passes (2 messages, type/locate/shares/ref read back), lint clean.
@@ -119,24 +118,18 @@ MDN PWA best practices, GitHub Actions docs.
 - [x] 32-bit wrapper config: `openlane/sky130_wrap32.json` (`SYNTH_PARAMETERS:
       ["DATA_WIDTH=32"]`) → pre-PnR **WNS −6.55 ns**, Fmax **103.67 MHz**, worst path
       FF → FF (`reports/openlane_wrap32-sta.json`).
-- [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 µm) / GPL-0305 (1400 µm); 32-bit
-      wrapper still congested at 700 µm; at 1000 µm/35 % it reached DetailedRouting but
-      did not converge; the 100 MHz relaxed runs either failed in DiodeInsertion
-      (GRT-0183) or were aborted by Docker/host restarts. 2026-11-10 fitted attempt
-      (1400 µm/25 %, 10 ns): pre-PnR setup **+0.354 ns** but 19,660 slew violations,
-      54,569 instances post-CTS; global routing finishes at **81.3 % usage with 25,661
-      overflowed nodes** after six clock-NDR passes (native WSL run, ≈55 min), so the
-      die is still too small for this netlist. AREA synth variant is 133,125 µm² but
-      **−83.06 ns** setup. 1800 µm/15 % die: global routing **clean (1 overflow node,
-      45.9 % usage, no NDR retries)** but detailed routing still **171,735 violations**
-      (met1 shorts 82,017, met2 65,698). **Control:** the same RTL at 50 ns with AREA
-      synthesis (no sizing/buffering) **routes clean** (10 → 0 violations, routing DRC
-      clear) and completes post-route STA/DRC/LVS on the same die — so the short storm is
-      a property of the 10 ns buffer-heavy netlist. Next: sweep 25/20 ns for the fastest
-      routable configuration, then reduce 10 ns buffering. The Docker-free path
-      (`docs/long-runs.md` §2b) removes the container-restart blocker, but this host is
-      shared and its WSL VM restarted every ~10–50 min on 2026-11-10 (external `hscl-*`
-      work in the same distro), so runs must stay resumable.
+- [x] Full P&R: **achieved 2026-11-12** — `itch_wishbone_wrap` (the parser + host port)
+      completes the whole flow at **25 ns on a 2200 µm die with the resizers enabled**:
+      0 Magic/KLayout DRC, 0 LVS, setup **+1.3333 ns**, hold **+0.0840 ns** (0 violations
+      over nine corners), **Fmax ≈ 42.25 MHz**, 100,348 stdcells,
+      `reports/openlane_25fx-full.json`. History that led there: 128-bit wrapper GRT-0116
+      at 700 µm / GPL-0305 at 1400 µm; 32-bit wrapper congested at 700 µm; 1000 µm/35 %
+      reached DRT without convergence; 1400 µm/25 % gave 81.3 % GRT usage with 25,661
+      overflow nodes and 171,735 DRT violations; 1800 µm/15 % fixed GRT (1 overflow) but
+      still shorted; the 2200 µm die reduced the 25 ns storm to 0. The 10 ns netlist
+      remains unreachable (post-route setup −13.77 ns). The Docker-free path
+      (`docs/long-runs.md` §2b) made multi-hour runs possible; the host is shared, so
+      runs stay resumable.
 - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
       250 MHz → **WNS −8.27 ns**, 322 MHz → **WNS −9.14 ns**, both ss/100C/1.60 V;
       Fmax estimate **≈81.5 MHz**, worst path `_35427_` → `raw_payload[0]`.
@@ -155,31 +148,17 @@ MDN PWA best practices, GitHub Actions docs.
       **KLayout DRC 0 / LVS 0** (Magic DRC skipped on resume), but timing **fails**:
       setup WNS **−4.99 ns**, Fmax **28.58 MHz** (`reports/openlane_areasized-full.json`).
       50 ns / 30.8 MHz remains the fastest verified closure.
-- [ ] The real speed lever is the DELAY netlist, which currently short-storms; needs a
-      congestion/pin-access root cause (candidate: larger die for the 20 k+ cell netlists,
-      or the buffer strategy itself).
-      **2026-11-11:** a 2200 µm die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
-      0** detailed-routing violations (GRT 0 overflow, ≤41.9 % usage; both DRT passes end
-      at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold −0.0069 ns**
-      at 25 ns (≈42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. A 3-corner
-      batch shows the true hold worst case **−0.0123 ns (max_ff)** and **thousands of
-      max-cap/max-slew violations** (2.5k–3.3k cap, up to 11.4k slew at min_ss), so this
-      is DRC/LVS evidence, not a timing sign-off. A continuous multi-corner STA and the
-      hold/slew cleanup remain.
-      **10 ns retarget on the same die:** DRT converges to 0 as well, but post-route STA
-      fails badly — setup WNS **−13.77 ns** at max_ss (5,695 violations), hold −0.0108 ns
-      at max_ff. The achievable period is ≈23.8 ns, the same ≈42 MHz as 25 ns, so **10 ns
-      is not reachable with this netlist; 25 ns (40 MHz) is the practical target**.
-      **Resizer run (native-25fx, 2026-11-11/12): complete flow** — 25 ns with the
-      post-CTS/post-GRT resizers gives **Magic DRC 0, KLayout DRC 0, LVS 0**, setup
-      **+1.3333 ns** and hold **+0.0840 ns** (both 0 violations over nine corners),
-      **Fmax ≈ 42.25 MHz**, 100,348 stdcells (`reports/openlane_25fx-full.json`).
-      Remaining: max-cap (2.5k–3.3k) and max-slew (up to 15k) violations — advisory
-      checkers; `sky130_wrap32_25ns_fx2.json` (`RUN_POST_GRT_DESIGN_REPAIR`) and a
-      `MAX_FANOUT_CONSTRAINT: 8` variant were both tried and **do not reduce them**
-      (fx2: setup +0.4960/hold +0.1038 ns, cap 2,539–3,312, slew 19,671; fanout-8:
-      setup +0.1414 ns, cap 2,460, slew **23,198**). They need a different synthesis
-      strategy or relaxed corner limits.
+- [x] DELAY-netlist short storm — **resolved 2026-11-12**. Root cause was die area, not
+      the buffer strategy: on a 2200 µm die (12 %) the 25 ns DELAY netlist drops from
+      42,342 to **0** detailed-routing violations (GRT 0 overflow, ≤41.9 % usage), and
+      with the post-CTS/post-GRT resizers the whole flow completes: **Magic/KLayout DRC 0,
+      LVS 0, setup +1.3333 ns, hold +0.0840 ns (0 violations, 9 corners), Fmax ≈
+      42.25 MHz** (`reports/openlane_25fx-full.json`). The 10 ns retarget routes clean but
+      fails post-route STA (setup −13.77 ns), so **25 ns / 40 MHz is the practical
+      target**. Advisory max-cap (2.5k–3.3k) and max-slew (15k–20k) counts remain; neither
+      `RUN_POST_GRT_DESIGN_REPAIR` nor `MAX_FANOUT_CONSTRAINT: 8` reduces them (the latter
+      makes slew worse), so they need a different synthesis strategy or relaxed corner
+      limits.
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

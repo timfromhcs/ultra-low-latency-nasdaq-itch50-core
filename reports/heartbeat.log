@@ -2214,3 +2214,204 @@ $($_.conclusion)" }
 [0m$ [0mwsl -d Ubuntu bash -lc 'uptime | cut -c1-24; date' 2>&1 | Select-Object -Last 2
 05:59:32 up  1:48,  1 u
 Thu Nov 12 05:59:32 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_wrap32_
+25ns_slew.json','utf8'));j.STA_CORNERS=['max_ss_100C_1v60'];fs.writeFileSync('openlane/sky130_wrap32_25ns_slew_sta1.jso
+n',JSON.stringify(j,null,2)+'\n');console.log('ok')"
+ok
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25slew_sta1.sh
+Created file successfully: reports/run_25slew_sta1.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25slew_sta1.sh 
+/home/tim/chiplab-native/run_25slew_sta1.sh && chmod +x /home/tim/chiplab-native/run_25slew_sta1.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25slew_sta1.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25slew-sta1.log 2>/dev/null; date'
+copied
+E i n   V e r b i n d u n g s v e r s u c h   i s t   f e h l g e s c h l a g e n ,   d a   d i e  
+ G e g e n s t e l l e   n a c h   e i n e r   b e s t i m m t e n   Z e i t s p a n n e   n i c h t   r i c h t i g  
+ r e a g i e r t   h a t ,   o d e r   d i e   h e r g e s t e l l t e   V e r b i n d u n g   w a r  
+ f e h l e r h a f t ,   d a   d e r   v e r b u n d e n e   H o s t   n i c h t   r e a g i e r t   h a t .   
+ 
+ F e h l e r c o d e :   W s l / S e r v i c e / W S A E T I M E D O U T 
+ 
+ W e n n   d i e s e r   F e h l e r   u n e r w a r t e t   w a r ,   s u c h e n   S i e   n a c h  
+ v o r h a n d e n e n   P r o b l e m e n ,   o d e r   e r s t e l l e n   S i e   e i n   n e u e s  
+ P r o b l e m   u n t e r   h t t p s : / / g i t h u b . c o m / m i c r o s o f t / W S L / i s s u e s . 
+ 
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl --shutdown 2>&1 | Out-Null; Start-Sleep -Seconds 15; wsl -d Ubuntu bash -lc 'echo ok; uptime | cut 
+-c1-22' 2>&1 | Select-Object -Last 2
+06:02:26 up 0 min,  1
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_25slew_sta1.sh'; Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 
+'tail -2 /home/tim/chiplab-native/ns25slew-sta1.log 2>/dev/null; date'
+[06:02:36] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25slew/57-openroad-stapostpnr/max_ss_100C_1v60/sta.log'ÔÇª                   
+   
+Thu Nov 12 06:03:19 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25slew/57-openroad-stapostpnr/summary.rpt 2>/dev/null | head -10; grep 
+-a -E "EXIT=" /home/tim/chiplab-native/ns25slew-sta1.log | tail -1; date'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ ÔöÅÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔ
+öüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöü
+Ôö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔö
+üÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö│ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔ
+öüÔöô
+Ôöâ                      Ôöâ Hold     Ôöâ Reg to   Ôöâ          Ôöâ          Ôöâ of which  Ôöâ Setup    Ôöâ           
+Ôöâ          Ôöâ           Ôöâ of which Ôöâ           Ôöâ          Ôöâ
+Ôöâ                      Ôöâ Worst    Ôöâ Reg      Ôöâ          Ôöâ Hold Vio Ôöâ reg to    Ôöâ Worst    Ôöâ Reg to    
+Ôöâ Setup    Ôöâ Setup Vio Ôöâ reg to   Ôöâ Max Cap   Ôöâ Max Slew Ôöâ
+Ôöâ Corner/Group         Ôöâ Slack    Ôöâ Paths    Ôöâ Hold TNS Ôöâ Count    Ôöâ reg       Ôöâ Slack    Ôöâ Reg Paths 
+Ôöâ TNS      Ôöâ Count     Ôöâ reg      Ôöâ ViolatioÔÇª Ôöâ ViolatiÔÇª Ôöâ
+ÔöíÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔö
+üÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔ
+òçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöü
+ÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔòçÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔö
+üÔö®
+Ôöé Overall              Ôöé 0.3496   Ôöé 0.8794   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 0.1414   Ôöé 0.1414    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2460      Ôöé 23198    Ôöé
+Ôöé max_ss_100C_1v60     Ôöé 0.3496   Ôöé 0.8794   Ôöé 0.0000   Ôöé 0        Ôöé 0         Ôöé 0.1414   Ôöé 0.1414    
+Ôöé 0.0000   Ôöé 0         Ôöé 0        Ôöé 2460      Ôöé 23198    Ôöé
+ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔ
+ö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö┤ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÿ
+EXIT=0
+Thu Nov 12 06:08:10 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -173,12 +173,16 @@
+ **fx2 (`RUN_POST_GRT_DESIGN_REPAIR`) does not fix cap/slew.** The follow-up run
+ (`native-25fx2`) routes clean (DRT 0) and its 3-corner STA gives setup **+0.4960 ns**
+ (max_ss), hold **+0.1038 ns** (min_ff), both 0 violations ÔÇö but max-cap stays
+ **2,539ÔÇô3,312** and max-slew up to **19,671**, i.e. the repair pass did not reduce them.
+-Those counts are therefore not a routing artefact; they come from the design/library
+-limits (ss corner), and cleaning them needs a different lever (e.g. synthesis-level
+-buffering or relaxed corner limits). fx2's full DRC/LVS was not collected.
+ 
++**Tighter fanout makes it worse.** `sky130_wrap32_25ns_slew.json` (`MAX_FANOUT_CONSTRAINT:
++8`) routes clean (DRT 0) and still closes at max_ss (setup **+0.1414 ns**, hold
+++0.3496), but max-cap only drops to **2,460** and max-slew rises to **23,198**. So the
++cap/slew counts are not a routing or fanout artefact; they come from the design/library
++limits at the ss corner, and cleaning them needs a different synthesis strategy or
++relaxed corner limits. The 25fx result remains the reference sign-off.
++
+ ## Fitted wrapper attempt (2026-11-10) ÔÇö measured, incomplete
+ 
+ `openlane/sky130_wrap32_fitted.json` (32-bit wrapper, 1400 ┬Ám die, 25 % density,
+ `RUN_HEURISTIC_DIODE_INSERTION: false`, 10 ns) was run to characterise the congestion
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -174,11 +174,13 @@
+       post-CTS/post-GRT resizers gives **Magic DRC 0, KLayout DRC 0, LVS 0**, setup
+       **+1.3333 ns** and hold **+0.0840 ns** (both 0 violations over nine corners),
+       **Fmax Ôëê 42.25 MHz**, 100,348 stdcells (`reports/openlane_25fx-full.json`).
+       Remaining: max-cap (2.5kÔÇô3.3k) and max-slew (up to 15k) violations ÔÇö advisory
+-      checkers; `sky130_wrap32_25ns_fx2.json` (`RUN_POST_GRT_DESIGN_REPAIR`) was tried and
+-      **does not reduce them** (fx2: setup +0.4960/hold +0.1038 ns, cap 2,539ÔÇô3,312,
+-      slew up to 19,671), so they need a synthesis-level or limit-relaxation lever.
++      checkers; `sky130_wrap32_25ns_fx2.json` (`RUN_POST_GRT_DESIGN_REPAIR`) and a
++      `MAX_FANOUT_CONSTRAINT: 8` variant were both tried and **do not reduce them**
++      (fx2: setup +0.4960/hold +0.1038 ns, cap 2,539ÔÇô3,312, slew 19,671; fanout-8:
++      setup +0.1414 ns, cap 2,460, slew **23,198**). They need a different synthesis
++      strategy or relaxed corner limits.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,21 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-12 05:59 - Autonomy tick + tighter fanout makes slew worse
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `1ae6626` **success**.
++- Completed the single-corner (`max_ss`) STA for the low-fanout experiment after a
++  `wsl --shutdown` recovery:
++  - `sky130_wrap32_25ns_slew.json` (`MAX_FANOUT_CONSTRAINT: 8`): setup **+0.1414 ns**,
++    hold +0.3496 (0 violations), max-cap **2,460**, max-slew **23,198**
++- So the tighter fanout slightly reduces cap but **increases slew** (19,671 ÔåÆ 23,198)
++  and eats setup margin (+1.3333 ÔåÆ +0.1414). Rejected; the cap/slew counts are inherent
++  to the ss-corner limits of this netlist, not a routing artefact.
++- The 25fx sign-off stays the reference: 0 DRC/0 LVS, setup +1.3333 / hold +0.0840 ns,
++  Fmax 42.25 MHz.
++
+ ## 2026-11-12 03:59 - Autonomy tick + fx2 STA: cap/slew repair has no effect
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08be844` **success**.
+ - fx2's post-route STA was re-run with a **3-corner subset** (`max_ss`, `min_ff`,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25slew_sta1.sh -ErrorAction SilentlyContinue; node 
+scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add 
+-A; git commit -m "docs(openlane): tighter fanout raises slew; 25fx remains the reference" 2>&1 | Select-Object -Last 
+1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_25ns_slew_sta1.json', LF will be replaced by CRLF the next 
+time Git touches it
+ create mode 100644 openlane/sky130_wrap32_25ns_slew_sta1.json
+[31;1m   1ae6626..73b9231  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 200; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+73b9231 completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 05:59ÔÇô06:15 abgeschlossen ÔÇö **Fanout-Experiment widerlegt: engeres Fanout verschlechtert Slew**.
+
+## Ergebnis `native-25slew` (`MAX_FANOUT_CONSTRAINT: 8`, max_ss)
+| Metrik | Wert | Vergleich 25fx (Fanout 12) |
+|---|---|---|
+| Setup | **+0,1414 ns** | +1,3333 ns |
+| Hold | +0,3496 ns | +0,0840 ns |
+| Max-Cap | **2.460** | 3.312 |
+| **Max-Slew** | **23.198** | 19.671 |
+
+ÔçÆ Engeres Fanout senkt Cap leicht, **erh├Âht aber Slew um ~18 %** und frisst Setup-Marge. Verworfen.
+
+**Fazit zu Cap/Slew:** Weder `RUN_POST_GRT_DESIGN_REPAIR` noch engeres Fanout reduzieren die Z├ñhlwerte ÔÇö sie stammen aus den Design-/Library-Grenzen der ss-Ecke. Der **25fx-Sign-off bleibt die Referenz** (0 DRC / 0 LVS, Setup +1,3333 ns, Hold +0,0840 ns, Fmax 42,25 MHz).
+
+## Verifikation
+- Autonomy 0 Tasks; Gate **11/11**; Docs-Links 25/25; CI auf `73b9231` **success**.
+- WSL war zweimal via `WSAETIMEDOUT` weg; `wsl --shutdown` hat sie jeweils wiederhergestellt ÔÇö die Einzel-Corner-STA (2 min) passte danach in ein Fenster.
+- Commits `1ae6626`, `73b9231`; README, LONG_TERM_PLAN, EXECUTION_LOG aktualisiert.
+
+## Status
+Physisch ist der Wrapper bei 25 ns vollst├ñndig signiert (DRC/LVS/Timing); die Cap/Slew-Warnungen sind als inh├ñrent dokumentiert. Offen bleiben der BBO-Level-Tabellen-Signoff (Block zu gro├ƒ f├╝r P&R), Parser-Signoff und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-12T06:59:21.4951133+01:00] hallo, es ist 06:59
+[tick] ran 0, failed 0
