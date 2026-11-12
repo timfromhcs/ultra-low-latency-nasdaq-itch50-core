@@ -271,6 +271,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 19:59 - Autonomy tick + STA passes at 12 GB, VM still restarts under load
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ee01410` **success**.
+- With `memory=12GB` the level-table flow now **passes the STA steps** that used to OOM
+  (51 → 53 over ~30 min, hold/setup reports written). That confirms the 9 GiB RSS
+  finding: the step itself is fine, the VM was too small.
+- The VM still restarted after ≈16 min of sustained load (20:32, uptime 0), so the flow
+  never reached detailed routing (~20–30 min). The level-table full flow therefore
+  remains host-blocked, now with a precise explanation and the 12 GB requirement.
+- The published level-table evidence stays the pre-PnR number (WNS −1.9742 ns, ≈37.1 MHz).
+
 ## 2026-11-12 17:59 - Autonomy tick + level-table STA is memory-hungry (>9 GiB)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `2e4e7ad` **success**.

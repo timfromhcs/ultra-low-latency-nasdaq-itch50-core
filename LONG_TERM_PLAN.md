@@ -93,10 +93,10 @@ MDN PWA best practices, GitHub Actions docs.
       25 ns: setup **WNS −1.9742 ns**, TNS −1,753 ns, Fmax ≈ **37.1 MHz**, 769,484 µm²
       generic, worst path `s_locate[1]` → FF. So the block needs ≈27 ns pre-PnR (config
       `openlane/sky130_leveltable_sta.json`). The full flow
-      (`openlane/sky130_leveltable.json`, 30 ns/2200 µm, 72,053 cells) reaches **STA
-      mid-PnR** but is killed by the host every ≈10 min (verified not memory-bound: a
-      10 GB VM fails identically), while DRT needs 20+ min and KLayout/Magic DRC 40+
-      minutes. **Blocked on a stable host**, not on the design.
+      (`openlane/sky130_leveltable.json`, 30 ns/2200 µm, 72,053 cells) reaches the STA
+      steps — which need **~9 GiB RSS**, so the WSL VM must have **12 GB** (6/10 GB OOM at
+      the hold report) — but the host restarts the VM after ≈15–16 min of sustained load
+      while DRT needs 20+ min and DRC 40+. **Blocked on a stable host**, not the design.
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and
