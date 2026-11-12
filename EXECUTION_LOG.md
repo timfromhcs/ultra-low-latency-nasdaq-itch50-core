@@ -271,6 +271,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 09:59 - Autonomy tick + CI validates the report artifacts
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `c82f6f1` **success**.
+- The level-table STA retry died after ~3 min again (WSL restarted at 09:59, process gone
+  by 10:03) — the physical item stays open, no number claimed.
+- Added the report-artifact check to **CI** (`node scripts/check_reports.mjs` in the
+  `npm + PyPI artifacts` job), so a corrupted or mismatched `reports/openlane_*.json`
+  now fails CI, not just the local gate. YAML validated with PyYAML.
+- Gate remains 12/12 fast, 14/14 deep.
+
 ## 2026-11-12 08:59 - Autonomy tick + report-artifact gate check
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `49df7a6` **success**.

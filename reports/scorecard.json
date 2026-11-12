@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-12T08:11:28.856Z",
-  "deep": true,
+  "generatedAt": "2026-11-12T09:04:54.563Z",
+  "deep": false,
   "score": 100,
   "rows": [
     {
       "name": "model-tests",
       "cmd": "python -m pytest -q tb/test_model.py",
       "status": "PASS",
-      "ms": 3663,
-      "tail": "........                                                                 [100%]\r\n8 passed in 0.48s"
+      "ms": 2090,
+      "tail": "........                                                                 [100%]\r\n8 passed in 0.42s"
     },
     {
       "name": "wasm-smoke",
       "cmd": "node scripts/wasm_smoke.mjs",
       "status": "PASS",
-      "ms": 512,
+      "ms": 410,
       "tail": "  },\n  \"rtl1c\": {\n    \"magic\": \"42414c43\",\n    \"chip\": 1,\n    \"count\": 10000,\n    \"cycles\": 18210,\n    \"bytes_in\": 291340,\n    \"corrupt\": 101,\n    \"frames\": 0\n  },\n  \"lossy\": {\n    \"magic\": \"42414c43\",\n    \"chip\": 5,\n    \"count\": 4212,\n    \"cycles\": 18210,\n    \"bytes_in\": 291340,\n    \"corrupt\": 101,\n    \"frames\": 0\n  },\n  \"golden_vs_rtl1c_records_equal\": true,\n  \"mold\": {\n    \"stream_bytes\": 339684,\n    \"magic\": \"42414c43\",\n    \"chip\": 6,\n    \"count\": 10000,\n    \"cycles\": 23421,\n    \"bytes_in\": 294684,\n    \"corrupt\": 0,\n    \"frames\": 1250\n  },\n  \"ethernet\": {\n    \"stream_bytes\": 392184,\n    \"magic\": \"42414c43\",\n    \"chip\": 6,\n    \"count\": 10000,\n    \"cycles\": 23421,\n    \"bytes_in\": 294684,\n    \"corrupt\": 0,\n    \"frames\": 1250\n  }\n}\nwrote reports/wasm_stream.bin and reports/wasm_records.bin"
     },
     {
       "name": "wasm-crosscheck",
       "cmd": "python scripts/check_wasm_fixture.py",
       "status": "PASS",
-      "ms": 2130,
+      "ms": 214,
       "tail": "wasm_vs_python: 10000 records, 0 mismatches"
     },
     {
@@ -35,71 +35,57 @@
       "name": "mcp",
       "cmd": "node mcp/client_smoke.mjs",
       "status": "PASS",
-      "ms": 259,
+      "ms": 609,
       "tail": "initialize: { name: 'chiplab', version: '0.3.1' }\ntools: chiplab.chips, chiplab.run, chiplab.compare, chiplab.book, chiplab.formal_status, chiplab.health, chiplab.cloud_info, chiplab.history, chiplab.release_status, chiplab.sbom, chiplab.synth_status, chiplab.docs\nchips: 8\ncompare: scalar:PASS rtl-1c:PASS rtl-2c-safe:PASS rival-3c:PASS rival-2c:PASS lossy:FAIL mold-128:PASS book-128:PASS\nrun: 5000 41.29 Gbps 24 sample records\nchiplab.health: ok\nchiplab.cloud_info: ok\nchiplab.history: ok\nchiplab.release_status: ok\nchiplab.sbom: ok\nchiplab.synth_status: ok\nchiplab.docs: ok\nMCP SMOKE PASS"
     },
     {
       "name": "cloud-api",
       "cmd": "node scripts/test_cloud_api.mjs",
       "status": "PASS",
-      "ms": 442,
-      "tail": "CLOUD API PASS (port 4393, auth, revisions, 409, 400, 413, list, delete)"
+      "ms": 402,
+      "tail": "CLOUD API PASS (port 4390, auth, revisions, 409, 400, 413, list, delete)"
     },
     {
       "name": "web-smoke",
       "cmd": "node scripts/web_smoke.mjs",
       "status": "PASS",
-      "ms": 394,
+      "ms": 376,
       "tail": "web smoke: 13758 B html, 50322 B wasm, 1000 messages, 41.26 Gbps PASS"
     },
     {
       "name": "sbom",
       "cmd": "node scripts/sbom.mjs",
       "status": "PASS",
-      "ms": 98,
+      "ms": 118,
       "tail": "SBOM: 163 components → reports/sbom.json"
     },
     {
       "name": "release-check",
       "cmd": "node scripts/release_check.mjs",
       "status": "PASS",
-      "ms": 194,
+      "ms": 2008,
       "tail": "rsion — 000301 vs 000301\nPASS changelog has version — ## 0.3.1\nPASS README mentions version — 0.3.1\nPASS vercel health version — 0.3.1\nPASS python __version__ — 0.3.1\nPASS runtime VERSION — 0.3.1\nPASS package-lock version — 0.3.1\nPASS artifact web/wasm/chiplab_core.wasm\nPASS artifact reports/sbom.json\nPASS sbom metadata version — 0.3.1\nHASH dist/chiplab.exe 67d05b221d937dbdec8ea80489b5f8a2e0d833ba359f9d6c9ab5371b68601dfa\nHASH packages/npm/chiplab-core-0.3.1.tgz 2ac6a21c5ec1780ea60f169c8130e7adc3d24f555de37f8999608e71c37da1e3\nHASH packages/python/dist/chiplab_itch-0.3.1-py3-none-any.whl e9c43d826516414baa4307dbf6e382b36f6b97c9debde0aa88dbb2cb9f840f7b\nHASH packages/python/dist/chiplab_itch-0.3.1.tar.gz 9f13dd9cdcde8f2a090f564a319ad459a66b2a44f1f718c0b2563c2ec40ea9c3\nrelease_check: 14/14 PASS"
     },
     {
       "name": "docs-links",
       "cmd": "node scripts/check_docs_links.mjs",
       "status": "PASS",
-      "ms": 149,
+      "ms": 2256,
       "tail": "[OK] 25 Markdown files, no dead relative links"
     },
     {
       "name": "reports",
       "cmd": "node scripts/check_reports.mjs",
       "status": "PASS",
-      "ms": 95,
+      "ms": 287,
       "tail": "[OK] 10 openlane report artifacts valid"
     },
     {
       "name": "vercel-api",
       "cmd": "node scripts/build_vercel.mjs && node scripts/test_vercel_api.mjs",
       "status": "PASS",
-      "ms": 282,
+      "ms": 457,
       "tail": "[vercel] wrote E:\\chips\\main\\public (15 top-level entries)\nhealth: chiplab-vercel 8 chips\nrun: 5000 41.29 Gbps\ncompare: scalar:PASS rtl-1c:PASS rtl-2c-safe:PASS rival-3c:PASS rival-2c:PASS lossy:FAIL mold-128:PASS book-128:PASS\nVERCEL API SMOKE PASS"
-    },
-    {
-      "name": "formal-z3",
-      "cmd": "wsl -d Ubuntu /mnt/e/chips/main/formal/run_formal.sh z3",
-      "status": "PASS",
-      "ms": 195012,
-      "tail": "ep 14..\n##   0:00:42  Reached cover statement in step 14 at itch_formal: /mnt/e/chips/main/formal/itch_formal.sv:310.7-310.69 ($cover$/mnt/e/chips/main/formal/itch_formal.sv:310$234)\n##   0:00:42  Checking cover reachability in step 14..\n##   0:00:50  Checking cover reachability in step 15..\n##   0:01:05  Reached cover statement in step 15 at itch_formal: /mnt/e/chips/main/formal/itch_formal.sv:309.7-309.69 ($cover$/mnt/e/chips/main/formal/itch_formal.sv:309$231)\n##   0:01:05  Checking cover reachability in step 15..\n##   0:01:19  Checking cover reachability in step 16..\n##   0:01:42  Reached cover statement in step 16 at itch_formal: /mnt/e/chips/main/formal/itch_formal.sv:311.7-311.69 ($cover$/mnt/e/chips/main/formal/itch_formal.sv:311$237)\n##   0:01:42  Status: PASSED\n[FORMAL] PASS (z3)"
-    },
-    {
-      "name": "native-bins",
-      "cmd": "node scripts/check_native_bins.mjs",
-      "status": "PASS",
-      "ms": 259,
-      "tail": "native bins: 200000 records, sum=254251, mismatches=0"
     }
   ]
 }
