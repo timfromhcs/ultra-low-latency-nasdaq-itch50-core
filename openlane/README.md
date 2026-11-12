@@ -174,9 +174,13 @@ max-cap/max-slew cleanup.
 (`native-25fx2`) routes clean (DRT 0) and its 3-corner STA gives setup **+0.4960 ns**
 (max_ss), hold **+0.1038 ns** (min_ff), both 0 violations — but max-cap stays
 **2,539–3,312** and max-slew up to **19,671**, i.e. the repair pass did not reduce them.
-Those counts are therefore not a routing artefact; they come from the design/library
-limits (ss corner), and cleaning them needs a different lever (e.g. synthesis-level
-buffering or relaxed corner limits). fx2's full DRC/LVS was not collected.
+
+**Tighter fanout makes it worse.** `sky130_wrap32_25ns_slew.json` (`MAX_FANOUT_CONSTRAINT:
+8`) routes clean (DRT 0) and still closes at max_ss (setup **+0.1414 ns**, hold
++0.3496), but max-cap only drops to **2,460** and max-slew rises to **23,198**. So the
+cap/slew counts are not a routing or fanout artefact; they come from the design/library
+limits at the ss corner, and cleaning them needs a different synthesis strategy or
+relaxed corner limits. The 25fx result remains the reference sign-off.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

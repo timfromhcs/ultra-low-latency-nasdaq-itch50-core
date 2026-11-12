@@ -2011,3 +2011,206 @@ openroad.py:787
                     stage)ÔÇª                                                                                          
    
 Thu Nov 12 04:12:08 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cd /mnt/e/chips/main && make verify-deep > /tmp/vd.log 2>&1; echo RC=$?; grep -E 
+"Full-field mismatches|scorecard" /tmp/vd.log | tail -3'
+RC=0
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+ Full-field mismatches   : 0
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 1200; wsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25slew | 
+grep -E "^[0-9]" | tail -2; grep -a -E "Number of violations =" /home/tim/chiplab-native/ns25slew.log | tail -2; date; 
+uptime | cut -c1-24'
+42-openroad-stamidpnr-3
+43-openroad-detailedrouting
+[INFO DRT-0199]   Number of violations = 23.                                                                           
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+Thu Nov 12 04:35:17 CET 2026
+ 04:35:17 up 24 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25slew.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25slew | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 30482.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 8356.                                                                         
+ 
+42-openroad-stamidpnr-3
+43-openroad-detailedrouting
+Thu Nov 12 04:50:26 CET 2026
+ 04:50:26 up 39 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25slew.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25slew | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 1193.                                                                         
+ 
+[INFO DRT-0199]   Number of violations = 388.                                                                          
+ 
+42-openroad-stamidpnr-3
+43-openroad-detailedrouting
+Thu Nov 12 05:02:33 CET 2026
+ 05:02:33 up 51 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25slew.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25slew | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 107.                                                                          
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+53-openroad-rcx
+54-openroad-stapostpnr
+Thu Nov 12 05:12:43 CET 2026
+ 05:12:43 up  1:01,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25slew/54-openroad-stapostpnr/summary.rpt 2>/dev/null | head -16; tail 
+-1 /home/tim/chiplab-native/ns25slew.log; date'
+'openlane/runs/native-25slew/54-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                      
+Thu Nov 12 05:24:52 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25slew/54-openroad-stapostpnr/summary.rpt 2>/dev/null | head -16; date'
+Thu Nov 12 05:30:00 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -c openroad; ls 
+/home/tim/chiplab-native/openlane/runs/native-25slew/54-openroad-stapostpnr | wc -l; tail -2 
+/home/tim/chiplab-native/ns25slew.log; date; uptime | cut -c1-22'
+0
+12
+[05:09:50] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25slew/54-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                   
+   
+Thu Nov 12 05:30:09 CET 2026
+ 05:30:09 up  1:19,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_wrap32_
+25ns_slew.json','utf8'));j.STA_CORNERS=['max_ss_100C_1v60','min_ff_n40C_1v95','nom_ss_100C_1v60'];fs.writeFileSync('ope
+nlane/sky130_wrap32_25ns_slew_sta.json',JSON.stringify(j,null,2)+'\n');console.log('ok')"
+ok
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25slew_sta.sh
+Created file successfully: reports/run_25slew_sta.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25slew_sta.sh 
+/home/tim/chiplab-native/run_25slew_sta.sh && chmod +x /home/tim/chiplab-native/run_25slew_sta.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25slew_sta.sh'; 
+Start-Sleep -Seconds 40; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25slew-sta.log 2>/dev/null; date'
+copied
+[05:30:40] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25slew/55-openroad-stapostpnr/nom_ss_100C_1v60/sta.log'ÔÇª                   
+   
+Thu Nov 12 05:31:15 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25slew/55-openroad-stapostpnr/summary.rpt 2>/dev/null | head -12; grep 
+-a -E "EXIT=" /home/tim/chiplab-native/ns25slew-sta.log | tail -1; date'
+Thu Nov 12 05:36:23 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -c openroad; ls 
+/home/tim/chiplab-native/openlane/runs/native-25slew/55-openroad-stapostpnr 2>/dev/null | wc -l; tail -2 
+/home/tim/chiplab-native/ns25slew-sta.log; date'
+0
+6
+[05:30:40] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25slew/55-openroad-stapostpnr/nom_ss_100C_1v60/sta.log'ÔÇª                   
+   
+Thu Nov 12 05:36:35 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,20 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-12 05:30 - Slew experiment (MAX_FANOUT 8): DRT clean, STA killed twice
++
++- New `sky130_wrap32_25ns_slew.json` (25 ns, resizers, `MAX_FANOUT_CONSTRAINT: 8`) to
++  attack the max-slew counts at synthesis level.
++- Detailed routing converged to **0 violations** (30,482 ÔåÆ 8,356 ÔåÆ 1,193 ÔåÆ 388 ÔåÆ 107 ÔåÆ 0),
++  so the tighter fanout is still routable.
++- Post-route STA was killed twice by the host (full 9-corner run at ~12 min, then the
++  3-corner subset after ~5 min, both with no summary). **No timing/cap/slew numbers for
++  this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
++- `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
++  **0 mismatches**, deep **13/13**.
++
+ ## 2026-11-12 03:59 - Autonomy tick + fx2 STA: cap/slew repair has no effect
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08be844` **success**.
+ - fx2's post-route STA was re-run with a **3-corner subset** (`max_ss`, `min_ff`,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25slew.sh,reports\run_25slew_sta.sh -ErrorAction SilentlyContinue; 
+node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; 
+git add -A; git commit -m "feat(openlane): low-fanout slew experiment configs; deep gate 13/13" 2>&1 | Select-Object 
+-Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_wrap32_25ns_slew.json', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'openlane/sky130_wrap32_25ns_slew_sta.json', LF will be replaced by CRLF the next time 
+Git touches it
+ create mode 100644 openlane/sky130_wrap32_25ns_slew_sta.json
+[31;1m   32e35b5..1ae6626  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 200; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+1ae6626 completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 03:59ÔÇô05:40 abgeschlossen ÔÇö **Cap/Slew-Ursache eingegrenzt, Deep-Gate erneut gr├╝n**.
+
+## Ergebnisse
+| Experiment | Ergebnis |
+|---|---|
+| **fx2** (`RUN_POST_GRT_DESIGN_REPAIR`) 3-Corner-STA | Setup **+0,4960 ns** (max_ss), Hold **+0,1038 ns** (min_ff), 0 Violations ÔÇö aber Max-Cap **2.539ÔÇô3.312**, Max-Slew bis **19.671** ÔçÆ **Repair bringt nichts** |
+| **slew** (`MAX_FANOUT_CONSTRAINT: 8`) | DRT **0 Violations** (30.482 ÔåÆ 8.356 ÔåÆ 1.193 ÔåÆ 388 ÔåÆ 107 ÔåÆ 0), also routbar |
+| slew-STA | zweimal vom Host gekillt (9-Ecken nach ~12 min, 3-Ecken nach ~5 min) ÔÇö **keine Zahlen** |
+| `make verify-deep` (WSL) | Fast **11/11**, 1.000.000 Records **0 Mismatches**, Deep **13/13** |
+
+**Schlussfolgerung:** Die Max-Cap/Max-Slew-Zahlen sind kein Routing-Artefakt und auch nicht durch Post-GRT-Repair zu senken ÔÇö sie kommen aus den Design-/Library-Grenzen der ss-Ecke. Der 25fx-Sign-off (0 DRC/0 LVS, +1,3333/+0,0840 ns, 42,25 MHz) bleibt das Referenzergebnis.
+
+## Verifikation
+Autonomy 0 Tasks; Gate **11/11**; Docs-Links 25/25; CI auf `1ae6626` **success**; Commits `32e35b5`, `1ae6626`.
+
+## N├ñchstes
+Der slew-Lauf ist mit `--from OpenROAD.STAPostPNR` fortsetzbar; sobald der Host ein stabiles Fenster hat, werden Cap/Slew-Zahlen f├╝r MAX_FANOUT 8 erhoben. Unver├ñndert offen: BBO-Level-Tabellen-Signoff, Parser-Signoff und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-12T05:59:21.9944317+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo repo 2>$null; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 
+1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+1ae6626 completed success
+[0m$ [0mwsl -d Ubuntu bash -lc 'uptime | cut -c1-24; date' 2>&1 | Select-Object -Last 2
+05:59:32 up  1:48,  1 u
+Thu Nov 12 05:59:32 CET 2026

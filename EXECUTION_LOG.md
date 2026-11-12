@@ -271,6 +271,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 05:59 - Autonomy tick + tighter fanout makes slew worse
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `1ae6626` **success**.
+- Completed the single-corner (`max_ss`) STA for the low-fanout experiment after a
+  `wsl --shutdown` recovery:
+  - `sky130_wrap32_25ns_slew.json` (`MAX_FANOUT_CONSTRAINT: 8`): setup **+0.1414 ns**,
+    hold +0.3496 (0 violations), max-cap **2,460**, max-slew **23,198**
+- So the tighter fanout slightly reduces cap but **increases slew** (19,671 → 23,198)
+  and eats setup margin (+1.3333 → +0.1414). Rejected; the cap/slew counts are inherent
+  to the ss-corner limits of this netlist, not a routing artefact.
+- The 25fx sign-off stays the reference: 0 DRC/0 LVS, setup +1.3333 / hold +0.0840 ns,
+  Fmax 42.25 MHz.
+
 ## 2026-11-12 03:59 - Autonomy tick + fx2 STA: cap/slew repair has no effect
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08be844` **success**.
