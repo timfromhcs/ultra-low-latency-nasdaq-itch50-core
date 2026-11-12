@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 14:59 - Autonomy tick + WSL memory is not the cause of the timeouts
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ad77d2b` **success**.
+- Level-table resume died again after ~10 min (`WSAETIMEDOUT`). To rule out an OOM, the
+  WSL VM was temporarily raised from 6 GB to **10 GB** (`.wslconfig`, backup kept) and the
+  run repeated: same timeout at the same point, so the VM is **not memory-bound**. The
+  original `.wslconfig` (6 GB / 6 CPUs) was restored afterwards.
+- Conclusion for the physical item: the shared host kills the WSL utility VM under
+  sustained OpenROAD load (≈10 min), independent of memory and of Docker. The wrapper
+  25 ns sign-off stands; the level-table full flow needs a stable host.
+- No new physical number claimed; gate 12/12, CI green.
+
 ## 2026-11-12 13:59 - Autonomy tick + docs check now validates report references
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `d27c633` **success**.

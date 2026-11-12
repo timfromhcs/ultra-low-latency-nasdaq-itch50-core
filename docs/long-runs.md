@@ -93,6 +93,11 @@ minutes (journal shows `Reached target shutdown.target`, not a crash), which no 
 attachment can prevent. If `journalctl --list-boots` shows such a cadence, physical
 flows cannot finish; wait for the other workload to stop.
 
+On 2026-11-12 the same VM became unresponsive (`Wsl/Service/WSAETIMEDOUT`) after ≈10
+minutes of sustained OpenROAD load. Raising the VM from 6 GB to 10 GB **did not change**
+the behaviour, so it is not an OOM; `wsl --shutdown` is the only recovery. Keep runs
+short and resumable (`--from <step>`).
+
 ## 3. Full flow and the knobs that matter
 
 ```powershell
