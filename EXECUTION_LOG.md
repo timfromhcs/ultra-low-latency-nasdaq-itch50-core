@@ -259,6 +259,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-12 05:30 - Slew experiment (MAX_FANOUT 8): DRT clean, STA killed twice
+
+- New `sky130_wrap32_25ns_slew.json` (25 ns, resizers, `MAX_FANOUT_CONSTRAINT: 8`) to
+  attack the max-slew counts at synthesis level.
+- Detailed routing converged to **0 violations** (30,482 → 8,356 → 1,193 → 388 → 107 → 0),
+  so the tighter fanout is still routable.
+- Post-route STA was killed twice by the host (full 9-corner run at ~12 min, then the
+  3-corner subset after ~5 min, both with no summary). **No timing/cap/slew numbers for
+  this experiment yet** — it is resumable with `--from OpenROAD.STAPostPNR`.
+- `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+  **0 mismatches**, deep **13/13**.
+
 ## 2026-11-12 03:59 - Autonomy tick + fx2 STA: cap/slew repair has no effect
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08be844` **success**.
