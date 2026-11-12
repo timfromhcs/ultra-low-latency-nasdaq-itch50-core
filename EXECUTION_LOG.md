@@ -271,6 +271,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 20:59 - Autonomy tick + errata corrected for the physical state
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `12e5ae3` **success**.
+- No physical run this tick: the level-table flow needs a continuous 30–60 min window and
+  the host still restarts the VM at ≈16 min; a reduced config does not help because the
+  KLayout/Magic DRC steps are the long pole regardless of block size.
+- `docs/errata.md` corrected:
+  - **E9** now states that the wrapper has a DRC/LVS-clean GDS from the 25 ns flow (run
+    dir only, not committed), while the parser/BBO blocks, a bitstream and silicon are
+    still absent.
+  - **E12** added: the advisory max-cap/max-slew counts (and that repair/fanout attempts do
+    not reduce them), plus the level-table pre-PnR-only status with its memory/host
+    requirements.
+- Gate 12/12; docs links and 69 report references valid.
+
 ## 2026-11-12 19:59 - Autonomy tick + STA passes at 12 GB, VM still restarts under load
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ee01410` **success**.

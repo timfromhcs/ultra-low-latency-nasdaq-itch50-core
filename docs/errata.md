@@ -81,13 +81,17 @@ often enough to unwrap, or use the deltas between samples.
 **Workaround:** poll at a fixed interval and unwrap in software; the histogram and
 message counters have the same width.
 
-## E9 — ASIC/FPGA claims are not backed by a bitstream or GDS
+## E9 — ASIC/FPGA claims are not backed by a bitstream or a committed GDS
 
-**Status:** open
+**Status:** partially resolved (wrapper only)
 **Impact:** `docs/layout_preview.*` is an illustrative render, not a tapeout artifact.
-There is no bitstream, no DRC/LVS-clean GDS, and no fabricated silicon.
-**Workaround:** label any downstream use accordingly. The repository explicitly claims
-"tapeout-ready RTL, not fabricated".
+Since 2026-11-12 the **wrapper** (`itch_wishbone_wrap`) has a completed Sky130 flow at
+25 ns: 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns, Fmax ≈ 42.25 MHz
+(`reports/openlane_25fx-full.json`). The GDS lives in the git-ignored run directory, not
+in the repository, and the **parser-level/BBO blocks** have no sign-off. There is still
+no bitstream and no fabricated silicon.
+**Workaround:** label downstream use accordingly. The repository claims "tapeout-ready
+RTL, not fabricated"; the wrapper P&R is evidence, not a tapeout.
 
 ## E10 — npm/PyPI registry publishing is pending
 
@@ -112,6 +116,23 @@ passes BMC (depth 8, 47 s) and k-induction (2 s), but the cover checks (which ne
 exceeded 30 minutes.
 **Workaround:** Z3 is the gate and passes BMC + k-induction + covers in ≈90 s. Use the
 pinned oss-cad-suite bundle in CI for the opt-in solver matrix.
+
+---
+
+## E12 — Physical limits of the wrapper and the missing level-table sign-off
+
+**Status:** open (advisory findings + host limit)
+**Impact:** the 25 ns wrapper sign-off is DRC/LVS/timing clean, but post-route STA still
+reports **max-cap 2,529–3,320** and **max-slew up to 15,084–19,788** violations in the
+advisory checkers (they do not fail the flow). Neither `RUN_POST_GRT_DESIGN_REPAIR` nor a
+`MAX_FANOUT_CONSTRAINT: 8` retry reduces them (the latter makes slew worse), so they come
+from the design/library limits at the ss corner. The level table
+(`itch_top_of_book`, 32/4/4) has only a **pre-PnR** number (WNS −1.9742 ns, ≈37.1 MHz at
+25 ns): its full flow needs ~9 GiB RSS (12 GB WSL) and 20+ min of routing plus 40+ min of
+DRC, while this host restarts the WSL VM every ≈15 min under sustained load.
+**Workaround:** treat the 25 ns wrapper as the signed-off evidence, use the level-table
+pre-PnR number only as an estimate, and rerun the level-table flow on a stable host with
+`openlane/sky130_leveltable.json`.
 
 ---
 
