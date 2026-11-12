@@ -279,7 +279,8 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   first (`dist\chiplab.exe`), so it now matches only table rows; **12/12 tools match**.
 - Wired into the gate: **13 fast checks** (15 with `--deep`); `llms-full.txt` updated.
   Gate `13/13` green.
-- The level-table flow is running again (STA step 54); no result yet.
+- The level-table flow was resumed once more (STA step 54); it died after ≈16 min with
+  `WSAETIMEDOUT`, consistent with every attempt today. No new physical number.
 
 ## 2026-11-12 21:59 - Autonomy tick + reproducibility workflow re-verified
 
