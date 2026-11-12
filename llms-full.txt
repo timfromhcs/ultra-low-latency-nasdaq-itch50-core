@@ -50,7 +50,7 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
   CVC5 pass is the 2026-11-03 oss-cad-suite run.
 - Mutation: 9/9 parser→BBO mutants killed (`tools/mutate_book.py`).
 - RTL↔WASM equivalence: 100,000 records, every field equal (weekly job).
-- Gate: 12 fast checks, 14 with `--deep` (adds Z3 formal + native bins).
+- Gate: 13 fast checks, 15 with `--deep` (adds Z3 formal + native bins).
 - Yosys 0.52 cells (re-run 2026-11-10): 22,710 (128), 25,324 (256), 29,568 (512),
   2,228 DFFs; book 70,715 cells at 32/4/4 (with depth + risk checks).
 

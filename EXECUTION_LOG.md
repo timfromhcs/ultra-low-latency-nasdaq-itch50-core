@@ -271,6 +271,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 22:59 - Autonomy tick + MCP tool/docs drift check
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9faf682` **success**.
+- Added `scripts/check_mcp_docs.mjs`: every `chiplab.*` tool in `mcp/server.mjs` must
+  appear in the tool table of `docs/api.md` and vice versa. It caught a false positive
+  first (`dist\chiplab.exe`), so it now matches only table rows; **12/12 tools match**.
+- Wired into the gate: **13 fast checks** (15 with `--deep`); `llms-full.txt` updated.
+  Gate `13/13` green.
+- The level-table flow is running again (STA step 54); no result yet.
+
 ## 2026-11-12 21:59 - Autonomy tick + reproducibility workflow re-verified
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `48a2ab5` **success**.

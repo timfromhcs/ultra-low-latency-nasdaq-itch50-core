@@ -21,6 +21,7 @@ const checks = [
   ["wasm-crosscheck", `${PY} scripts/check_wasm_fixture.py`],
   ["backend-compare", "node backend/run.mjs --compare --count 20000"],
   ["mcp", "node mcp/client_smoke.mjs"],
+  ["mcp-docs", "node scripts/check_mcp_docs.mjs"],
   ["cloud-api", "node scripts/test_cloud_api.mjs"],
   ["web-smoke", "node scripts/web_smoke.mjs"],
   ["sbom", "node scripts/sbom.mjs"],
