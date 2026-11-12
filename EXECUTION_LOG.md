@@ -271,6 +271,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 11:59 - Autonomy tick + level-table full flow attempt
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `78a502c` **success**.
+- Added `openlane/sky130_leveltable.json` (full flow: `itch_top_of_book` 32/4/4,
+  **30 ns**, 2200 µm die at 12 %, resizers enabled, DRC/LVS on) to turn the pre-PnR
+  number into a sign-off. The block has 72,053 mapped cells, i.e. smaller than the
+  wrapper, so the die is generous.
+- First attempt died during the pre-PnR STA (host restart); the resume replayed
+  synthesis and advanced through floorplan/placement/CTS to **STA mid-PnR (step 31)**,
+  then the process vanished again (~12:30). No route/DRC/LVS yet.
+- The verified number for the plan item remains the **pre-PnR** one: setup WNS
+  −1.9742 ns, Fmax ≈ 37.1 MHz at 25 ns. The full-flow config is committed for a stable
+  window.
+
 ## 2026-11-12 10:59 - Autonomy tick + changelog records the physical milestone
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9ddee86` **success**.

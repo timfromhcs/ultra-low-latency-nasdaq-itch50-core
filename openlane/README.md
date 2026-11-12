@@ -36,6 +36,8 @@ the same ≈42 MHz as the 25 ns run. The 10 ns target is therefore not reachable
 netlist; **25 ns (40 MHz) is the practical target**. Cap/slew violations (2.5k–3.3k cap,
 up to 19.7k slew) remain in both runs.
 | `sky130_metrics.json` | `itch_metrics` (small-block flow validation) | Sky130 | 3.10 ns |
+| `sky130_leveltable_sta.json` | level table `itch_top_of_book` (32/4/4), pre-PnR STA | Sky130 | 25.0 ns |
+| `sky130_leveltable.json` | level table full flow (32/4/4, 2200 µm) | Sky130 | 30.0 ns |
 
 ## Verified toolchain (2026-11-03)
 
