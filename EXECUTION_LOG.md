@@ -259,6 +259,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-12 00:59 - Autonomy tick + fx2 (post-GRT design repair): DRT clean, STA interrupted
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `e7defdb` **success**.
+- Started `native-25fx2` (`sky130_wrap32_25ns_fx2.json`: 25 ns, resizers **and**
+  `RUN_POST_GRT_DESIGN_REPAIR: true`) to attack the remaining max-cap/max-slew counts.
+- The post-GRT repair changed the netlist enough that detailed routing again converged
+  to **0 violations** (first pass 105,038 → 31,472 → 25,874 → 8,763 → 7,138 → 2,195 → 0),
+  and the flow reached RCX and post-route STA.
+- The STA step was then killed twice (WSL `WSAETIMEDOUT`, then the process vanished after
+  12 min), so **fx2 has no verified cap/slew or timing summary yet**. The run is resumable
+  with `--from OpenROAD.STAPostPNR`.
+- The previously verified 25fx sign-off (0 DRC / 0 LVS, +1.3333/+0.0840 ns, 42.25 MHz)
+  remains the reference result.
+
 ## 2026-11-12 00:00 - 25fx completes: first full 25 ns sign-off (43 MHz class)
 
 - The `native-25fx` run (25 ns, 2200 µm, post-CTS/post-GRT resizers) finished the whole
