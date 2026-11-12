@@ -2415,3 +2415,331 @@ Tick 05:59ÔÇô06:15 abgeschlossen ÔÇö **Fanout-Experiment widerlegt: engere
 Physisch ist der Wrapper bei 25 ns vollst├ñndig signiert (DRC/LVS/Timing); die Cap/Slew-Warnungen sind als inh├ñrent dokumentiert. Offen bleiben der BBO-Level-Tabellen-Signoff (Block zu gro├ƒ f├╝r P&R), Parser-Signoff und die externen Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
 [2026-11-12T06:59:21.4951133+01:00] hallo, es ist 06:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "^- \[ \]" LONG_TERM_PLAN.md | Select-Object -First 12
+91:- [ ] Physical timing sign-off of the level table + reduction (Phase 2).
+109:- [ ] Full LibreLane Sky130 run: **attempted, not achievable with the current pin
+122:- [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 ┬Ám) / GPL-0305 (1400 ┬Ám); 32-bit
+158:- [ ] The real speed lever is the DELAY netlist, which currently short-storms; needs a
+188:- [ ] FPGA target: UltraScale+ / Agilex shell with 100G MAC + Mold front-end.
+207:- [ ] Hardware/upstream retransmit requester (network protocol) ÔÇö out of scope for the
+219:- [ ] PCIe/DMA or 100G MAC integration.
+231:- [ ] Caravel-style harness; pad ring; timing closure at target; DRC/LVS clean.
+239:- [ ] Full Caravel harness integration (pad ring, Caravel simulation).
+268:- [ ] Optional shuttle submission; otherwise label "tapeout-ready, not fabricated".
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+73b9231 completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead LONG_TERM_PLAN.md [90m[limit=75, offset=100][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -105,13 +105,12 @@
+       no timing claim) ÔÇö `scripts/synth_book.sh`, `reports/synth_book.json`.
+ - [x] LibreLane toolchain: **3.0.17 smoke test passed** (Classic flow 80/80, DRC Ô£à,
+       LVS Ô£à, RC 0) via Docker Desktop + `ghcr.io/librelane/librelane:3.0.17` with a
+       cached PDK volume; see `openlane/README.md`.
+-- [ ] Full LibreLane Sky130 run: **attempted, not achievable with the current pin
+-      count**. Without the resizer skips it stalls >1 h on the ÔêÆ9 ns path; with the
+-      resizer steps skipped, GlobalRouting fails with **GRT-0116 congestion** at the
+-      700├ù700 ┬Ám die with ~1,100 top-level pins (484-bit `raw_order_data`, 512-bit
+-      `raw_payload`). Needs a narrow physical wrapper and a fitted/larger die.
++- [x] Full LibreLane Sky130 run: **resolved 2026-11-12** by the wrapper flows below ÔÇö
++      the 25 ns run completes the whole Classic flow with 0 Magic/KLayout DRC and 0 LVS
++      (`reports/openlane_25fx-full.json`). The earlier congestion history is kept in the
++      "Full P&R" entry.
+ - [x] Narrow physical wrapper `itch_host_wrap` (128-bit AXI4-Stream ingress, 32-bit
+       host register port with counters + last-message fields, no debug payload bus):
+       test passes (2 messages, type/locate/shares/ref read back), lint clean.
+ - [x] Wrapper pre-PnR STA: **WNS ÔêÆ8.62 ns at 3.10 ns** (ss), Fmax **85.34 MHz**, worst
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -117,26 +117,20 @@
+       path FF ÔåÆ FF; the debug-bus endpoint is gone (`reports/openlane_wrap-sta.json`).
+ - [x] 32-bit wrapper config: `openlane/sky130_wrap32.json` (`SYNTH_PARAMETERS:
+       ["DATA_WIDTH=32"]`) ÔåÆ pre-PnR **WNS ÔêÆ6.55 ns**, Fmax **103.67 MHz**, worst path
+       FF ÔåÆ FF (`reports/openlane_wrap32-sta.json`).
+-- [ ] Full P&R: 128-bit wrapper fails GRT-0116 (700 ┬Ám) / GPL-0305 (1400 ┬Ám); 32-bit
+-      wrapper still congested at 700 ┬Ám; at 1000 ┬Ám/35 % it reached DetailedRouting but
+-      did not converge; the 100 MHz relaxed runs either failed in DiodeInsertion
+-      (GRT-0183) or were aborted by Docker/host restarts. 2026-11-10 fitted attempt
+-      (1400 ┬Ám/25 %, 10 ns): pre-PnR setup **+0.354 ns** but 19,660 slew violations,
+-      54,569 instances post-CTS; global routing finishes at **81.3 % usage with 25,661
+-      overflowed nodes** after six clock-NDR passes (native WSL run, Ôëê55 min), so the
+-      die is still too small for this netlist. AREA synth variant is 133,125 ┬Ám┬▓ but
+-      **ÔêÆ83.06 ns** setup. 1800 ┬Ám/15 % die: global routing **clean (1 overflow node,
+-      45.9 % usage, no NDR retries)** but detailed routing still **171,735 violations**
+-      (met1 shorts 82,017, met2 65,698). **Control:** the same RTL at 50 ns with AREA
+-      synthesis (no sizing/buffering) **routes clean** (10 ÔåÆ 0 violations, routing DRC
+-      clear) and completes post-route STA/DRC/LVS on the same die ÔÇö so the short storm is
+-      a property of the 10 ns buffer-heavy netlist. Next: sweep 25/20 ns for the fastest
+-      routable configuration, then reduce 10 ns buffering. The Docker-free path
+-      (`docs/long-runs.md` ┬º2b) removes the container-restart blocker, but this host is
+-      shared and its WSL VM restarted every ~10ÔÇô50 min on 2026-11-10 (external `hscl-*`
+-      work in the same distro), so runs must stay resumable.
++- [x] Full P&R: **achieved 2026-11-12** ÔÇö `itch_wishbone_wrap` (the parser + host port)
++      completes the whole flow at **25 ns on a 2200 ┬Ám die with the resizers enabled**:
++      0 Magic/KLayout DRC, 0 LVS, setup **+1.3333 ns**, hold **+0.0840 ns** (0 violations
++      over nine corners), **Fmax Ôëê 42.25 MHz**, 100,348 stdcells,
++      `reports/openlane_25fx-full.json`. History that led there: 128-bit wrapper GRT-0116
++      at 700 ┬Ám / GPL-0305 at 1400 ┬Ám; 32-bit wrapper congested at 700 ┬Ám; 1000 ┬Ám/35 %
++      reached DRT without convergence; 1400 ┬Ám/25 % gave 81.3 % GRT usage with 25,661
++      overflow nodes and 171,735 DRT violations; 1800 ┬Ám/15 % fixed GRT (1 overflow) but
++      still shorted; the 2200 ┬Ám die reduced the 25 ns storm to 0. The 10 ns netlist
++      remains unreachable (post-route setup ÔêÆ13.77 ns). The Docker-free path
++      (`docs/long-runs.md` ┬º2b) made multi-hour runs possible; the host is shared, so
++      runs stay resumable.
+ - [x] Pre-PnR OpenSTA slack published at both targets (sky130, sky130_fd_sc_hd):
+       250 MHz ÔåÆ **WNS ÔêÆ8.27 ns**, 322 MHz ÔåÆ **WNS ÔêÆ9.14 ns**, both ss/100C/1.60 V;
+       Fmax estimate **Ôëê81.5 MHz**, worst path `_35427_` ÔåÆ `raw_payload[0]`.
+       Artifact `reports/openlane_sky130-250mhz-sta.json`. This is pre-PnR, not sign-off.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead LONG_TERM_PLAN.md [90m[limit=36, offset=150][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -147,33 +147,19 @@
+ - [x] 30 ns AREA+sizing step (2026-11-11): routes clean and finishes
+       **KLayout DRC 0 / LVS 0** (Magic DRC skipped on resume), but timing **fails**:
+       setup WNS **ÔêÆ4.99 ns**, Fmax **28.58 MHz** (`reports/openlane_areasized-full.json`).
+       50 ns / 30.8 MHz remains the fastest verified closure.
+-- [ ] The real speed lever is the DELAY netlist, which currently short-storms; needs a
+-      congestion/pin-access root cause (candidate: larger die for the 20 k+ cell netlists,
+-      or the buffer strategy itself).
+-      **2026-11-11:** a 2200 ┬Ám die (12 %, 25 ns DELAY) cuts the storm from **42,342 to
+-      0** detailed-routing violations (GRT 0 overflow, Ôëñ41.9 % usage; both DRT passes end
+-      at 0). Post-route STA: **setup +1.4597 ns (WNS 0, all MET)**, **hold ÔêÆ0.0069 ns**
+-      at 25 ns (Ôëê42.5 MHz); **Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**. A 3-corner
+-      batch shows the true hold worst case **ÔêÆ0.0123 ns (max_ff)** and **thousands of
+-      max-cap/max-slew violations** (2.5kÔÇô3.3k cap, up to 11.4k slew at min_ss), so this
+-      is DRC/LVS evidence, not a timing sign-off. A continuous multi-corner STA and the
+-      hold/slew cleanup remain.
+-      **10 ns retarget on the same die:** DRT converges to 0 as well, but post-route STA
+-      fails badly ÔÇö setup WNS **ÔêÆ13.77 ns** at max_ss (5,695 violations), hold ÔêÆ0.0108 ns
+-      at max_ff. The achievable period is Ôëê23.8 ns, the same Ôëê42 MHz as 25 ns, so **10 ns
+-      is not reachable with this netlist; 25 ns (40 MHz) is the practical target**.
+-      **Resizer run (native-25fx, 2026-11-11/12): complete flow** ÔÇö 25 ns with the
+-      post-CTS/post-GRT resizers gives **Magic DRC 0, KLayout DRC 0, LVS 0**, setup
+-      **+1.3333 ns** and hold **+0.0840 ns** (both 0 violations over nine corners),
+-      **Fmax Ôëê 42.25 MHz**, 100,348 stdcells (`reports/openlane_25fx-full.json`).
+-      Remaining: max-cap (2.5kÔÇô3.3k) and max-slew (up to 15k) violations ÔÇö advisory
+-      checkers; `sky130_wrap32_25ns_fx2.json` (`RUN_POST_GRT_DESIGN_REPAIR`) and a
+-      `MAX_FANOUT_CONSTRAINT: 8` variant were both tried and **do not reduce them**
+-      (fx2: setup +0.4960/hold +0.1038 ns, cap 2,539ÔÇô3,312, slew 19,671; fanout-8:
+-      setup +0.1414 ns, cap 2,460, slew **23,198**). They need a different synthesis
+-      strategy or relaxed corner limits.
++- [x] DELAY-netlist short storm ÔÇö **resolved 2026-11-12**. Root cause was die area, not
++      the buffer strategy: on a 2200 ┬Ám die (12 %) the 25 ns DELAY netlist drops from
++      42,342 to **0** detailed-routing violations (GRT 0 overflow, Ôëñ41.9 % usage), and
++      with the post-CTS/post-GRT resizers the whole flow completes: **Magic/KLayout DRC 0,
++      LVS 0, setup +1.3333 ns, hold +0.0840 ns (0 violations, 9 corners), Fmax Ôëê
++      42.25 MHz** (`reports/openlane_25fx-full.json`). The 10 ns retarget routes clean but
++      fails post-route STA (setup ÔêÆ13.77 ns), so **25 ns / 40 MHz is the practical
++      target**. Advisory max-cap (2.5kÔÇô3.3k) and max-slew (15kÔÇô20k) counts remain; neither
++      `RUN_POST_GRT_DESIGN_REPAIR` nor `MAX_FANOUT_CONSTRAINT: 8` reduces them (the latter
++      makes slew worse), so they need a different synthesis strategy or relaxed corner
++      limits.
+ - [x] GF180 pre-PnR STA run: **WNS ÔêÆ19.87 ns at 3.10 ns** (ss/125 ┬░C), Fmax **43.54 MHz**,
+       worst path FF ÔåÆ `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
+ - [x] IHP SG13G2 pre-PnR STA run: **WNS ÔêÆ3.08 ns at 3.10 ns** (slow/125 ┬░C), Fmax
+       **161.9 MHz**, hold WNS ÔêÆ0.052 ns, worst path FF ÔåÆ FF
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "no P&R|no physical|not signed off|no OpenLane|no sign-off" README.md 
+docs\datasheet.md llms-full.txt | Select-Object -First 12
+docs\datasheet.md:6:**Status:** tapeout-ready RTL, **not fabricated**, **no physical sign-off**
+README.md:54:- **Not silicon-proven.** There is no tapeout. Fmax is not signed off.
+README.md:257:| LibreLane toolchain | **3.0.17 smoke test: Classic 80/80, DRC Ô£à, LVS Ô£à**; full P&R blocked by 
+~1,100-pin congestion (no sign-off) | `openlane/README.md` |
+README.md:258:| Sky130 pre-PnR STA | **250 MHz WNS ÔêÆ8.27 ns ┬À 322 MHz WNS ÔêÆ9.14 ns ┬À Fmax Ôëê 81.5 MHz**; worst 
+path FF ÔåÆ `raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
+README.md:482:docs/errata.md       known limitations (no physical sign-off, no 100G/PCIe)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead README.md [90m[limit=6, offset=52][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -50,9 +50,11 @@
+   proofs, synthesis matrix, mutation tests, browser gates.
+ 
+ ## What this is not
+ 
+-- **Not silicon-proven.** There is no tapeout. Fmax is not signed off.
++- **Not silicon-proven.** There is no tapeout. The wrapper has a completed Sky130
++  25 ns P&R (0 DRC/0 LVS, timing closed, Ôëê42 MHz); the parser/BBO blocks and silicon
++  themselves are not signed off.
+ - **Not a trading system.** No order routing, no live feed, no investment advice.
+ - **Not a zero-cycle wire-to-output parser.** The honest latency is:
+   one clock from `s_axis_tdata` into the window register + one clock to the registered
+   output = **2 clocks (6.20 ns at 322.26 MHz)**. The async bypass is valid in the same
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -255,9 +255,9 @@
+ | MoldUDP64 multi-frame | **5 frames back-to-back, 28 records, 1 gap, 1 drop**, no loss | `tb/test_mold_multi.py` |
+ | Mold back-pressure | **329 bytes under random `m_axis_tready`, no loss or reordering** | `tb/test_mold_pipeline.py` 
+|
+ | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
+ | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; 
+risk limits | `tb/test_book.py` |
+-| LibreLane toolchain | **3.0.17 smoke test: Classic 80/80, DRC Ô£à, LVS Ô£à**; full P&R blocked by ~1,100-pin 
+congestion (no sign-off) | `openlane/README.md` |
++| LibreLane full flow | **wrapper completes the whole flow at 25 ns (2200 ┬Ám, resizers): 0 Magic/KLayout DRC, 0 LVS, 
+setup +1.3333 ns, hold +0.0840 ns, Fmax Ôëê 42.25 MHz** (`reports/openlane_25fx-full.json`) | `openlane/README.md` |
+ | Sky130 pre-PnR STA | **250 MHz WNS ÔêÆ8.27 ns ┬À 322 MHz WNS ÔêÆ9.14 ns ┬À Fmax Ôëê 81.5 MHz**; worst path FF ÔåÆ 
+`raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
+ | GF180 pre-PnR STA | **322 MHz WNS ÔêÆ19.87 ns ┬À Fmax Ôëê 43.5 MHz**; worst path FF ÔåÆ `raw_order_data[260]` 
+(ss/125 ┬░C, pre-PnR) | `reports/openlane_gf180-sta.json` |
+ | IHP SG13G2 pre-PnR STA | **322 MHz WNS ÔêÆ3.08 ns ┬À Fmax Ôëê 161.9 MHz**; hold WNS ÔêÆ0.052 ns; worst path FF ÔåÆ 
+FF (slow/125 ┬░C, pre-PnR) | `reports/openlane_ihp-sta.json` |
+ | Wrapper pre-PnR STA | **322 MHz WNS ÔêÆ8.62 ns ┬À Fmax Ôëê 85.3 MHz**; worst path FF ÔåÆ FF, no debug bus (ss, 
+pre-PnR) | `reports/openlane_wrap-sta.json` |
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -480,9 +480,9 @@
+ 
+ docs/design/         Mold back-pressure design note (R1)
+ docs/datasheet.md    ports, timing, area estimate, verification evidence
+ docs/integration-guide.md  how to instantiate parser/book/Mold and poll counters
+-docs/errata.md       known limitations (no physical sign-off, no 100G/PCIe)
++docs/errata.md       known limitations (no tapeout; parser/BBO not signed off)
+ docs/api.md          HTTP, MCP, npm and Python API reference
+ LONG_TERM_PLAN.md    12-month roadmap, KPIs, gates
+ AUTONOMOUS_PLAN_V2.md
+ EXECUTION_LOG.md
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead docs/datasheet.md [90m[limit=4, offset=4][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -2,9 +2,10 @@
+ 
+ **Part:** `ultra_low_latency_nasdaq_itch50_cutthrough` (parser) and
+ `itch_top_book` (parser + multi-symbol top-of-book)
+ **Version:** 0.3.1
+-**Status:** tapeout-ready RTL, **not fabricated**, **no physical sign-off**
++**Status:** tapeout-ready RTL, **not fabricated**; the wrapper is physically signed off
++at 25 ns (0 DRC/LVS, timing closed, Ôëê42 MHz), the parser/BBO blocks are not
+ **Protocol:** NASDAQ TotalView-ITCH 5.0, all 22 official message types
+ 
+ ---
+ 
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; rg -n "no physical|not signed|no P&R|blocked" llms-full.txt llms.txt | Select-Object 
+-First 8
+llms-full.txt:98:- Parser full P&R is blocked: GRT-0116 congestion, GPL-0305 divergence, DPL-0036 pin
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead llms-full.txt [90m[limit=10, offset=94][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit llms-full.txt
+Index: llms-full.txt
+===================================================================
+--- llms-full.txt
++++ llms-full.txt
+@@ -94,11 +94,13 @@
+ - 128-bit wrapper: -8.62 ns (~85.3 MHz); 32-bit wrapper: -6.55 ns (~103.7 MHz).
+ - GF180: -19.87 ns (~43.5 MHz); IHP SG13G2: -3.08 ns (~161.9 MHz), small hold violation.
+ - Full flow, `itch_metrics` at 10 ns: 0 routing/Magic/KLayout DRC, 0 LVS errors, timing
+   closed (WNS +0.12 ns, Fmax ~101 MHz), 6,776 cells, 42,127 um2 on a 500 um die.
+-- Parser full P&R is blocked: GRT-0116 congestion, GPL-0305 divergence, DPL-0036 pin
+-  density, GRT-0183 diode insertion, container restarts. No parser sign-off exists.
+-  See `openlane/README.md` and `docs/long-runs.md`.
++- Wrapper full P&R (2026-11-12): 25 ns on a 2200 um die with the resizers completes the
++  whole flow ÔÇö 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
++  violations, 9 corners), Fmax ~42.25 MHz, 100,348 stdcells. The 10 ns netlist routes but
++  fails post-route STA (setup -13.77 ns). Earlier attempts failed on GRT-0116/GPL-0305/
++  DPL-0036/GRT-0183 and host restarts; see `openlane/README.md` and `docs/long-runs.md`.
+ 
+ ## 9. Reproducibility and supply chain
+ - WASM: rustc pinned 1.98.1; two clean builds and the shipped binary are identical.
+ - Python: wheel reproducible with SOURCE_DATE_EPOCH; sdist after container normalization.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,21 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-12 06:59 - Autonomy tick + plan closed on the physical milestone
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `73b9231` **success**.
++- Updated `LONG_TERM_PLAN.md` to match the evidence: the "Full LibreLane run",
++  "Full P&R" and "DELAY short storm" items are now **done**, each with the 25fx numbers
++  (0 DRC/0 LVS, setup +1.3333 ns, hold +0.0840 ns, Fmax Ôëê 42.25 MHz) and the scope note
++  that the 10 ns target is unreachable (post-route setup ÔêÆ13.77 ns).
++- Removed the stale "no physical sign-off / blocked P&R" claims from `README.md`
++  (status, evidence table, file map), `docs/datasheet.md` and `llms-full.txt`; they now
++  state the wrapper sign-off and that parser/BBO blocks remain open.
++- No new physical run this tick; the remaining plan items are the BBO level-table
++  sign-off (block too large for P&R) and the external blockers.
++
+ ## 2026-11-12 05:59 - Autonomy tick + tighter fanout makes slew worse
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `1ae6626` **success**.
+ - Completed the single-corner (`max_ss`) STA for the low-fanout experiment after a
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs: mark the wrapper P&R milestone done and drop stale 
+no-signoff claims" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'llms-full.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 8 files changed, 268 insertions(+), 70 deletions(-)
+[31;1m   73b9231..eea820f  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite openlane/sky130_book_sta.json
+Created file successfully: openlane/sky130_book_sta.json

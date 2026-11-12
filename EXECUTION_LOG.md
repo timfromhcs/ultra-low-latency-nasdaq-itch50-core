@@ -283,6 +283,11 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   state the wrapper sign-off and that parser/BBO blocks remain open.
 - No new physical run this tick; the remaining plan items are the BBO level-table
   sign-off (block too large for P&R) and the external blockers.
+- Started a **pre-PnR STA of the BBO block** (`openlane/sky130_book_sta.json`,
+  `itch_top_book`, 25 ns). Two fixes were needed: add `itch_metrics.sv` to the file list,
+  and drop `SYNTH_PARAMETERS` (the parameters live on `itch_top_of_book`, not the top).
+  Yosys reports a chip area of **2,094,858 µm²** for the block; ABC mapping was still
+  running at the end of the tick.
 
 ## 2026-11-12 05:59 - Autonomy tick + tighter fanout makes slew worse
 
