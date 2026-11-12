@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 12:59 - Autonomy tick + level-table flow keeps dying at STA
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `5ecd4d4` **success**.
+- Resumed the level-table full flow at `OpenROAD.STAMidPNR` (no synthesis replay): it ran
+  ~15 min, then the WSL VM died again (`WSAETIMEDOUT`, recovered with `wsl --shutdown`).
+  Across the three attempts the flow reached **STA mid-PnR (steps 31/43)** but never
+  global/detailed routing.
+- The published level-table number therefore stays the **pre-PnR** one (WNS −1.9742 ns,
+  Fmax ≈ 37.1 MHz at 25 ns); the full-flow config is committed and repeatable.
+- Host note: `WSAETIMEDOUT` is now the dominant failure, usually within 15 minutes of a
+  long OpenROAD run.
+
 ## 2026-11-12 11:59 - Autonomy tick + level-table full flow attempt
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `78a502c` **success**.
