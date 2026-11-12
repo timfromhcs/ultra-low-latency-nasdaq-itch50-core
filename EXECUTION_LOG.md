@@ -271,6 +271,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 00:00 - Autonomy tick + full deep verification with the new checks
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `731da62` **success**.
+- Ran the complete verification after adding the report and MCP-docs checks:
+  - `node scripts/gate.mjs --deep` → **15/15** (formal-z3 90 s, native bins)
+  - `make verify-deep` in WSL → fast **13/13**, 1,000,000 records **0 mismatches**,
+    deep **15/15**, RC=0
+- No physical run (level-table flow still host-blocked at ≈16 min VM lifetime).
+- `reports/scorecard.json` now records the 15/15 run.
+
 ## 2026-11-12 22:59 - Autonomy tick + MCP tool/docs drift check
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9faf682` **success**.
