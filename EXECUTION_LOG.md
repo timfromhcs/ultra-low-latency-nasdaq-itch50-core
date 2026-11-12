@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 08:59 - Autonomy tick + report-artifact gate check
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `49df7a6` **success**.
+- The level-table STA retry was killed by another WSL restart (up 0 min at 09:06), so
+  the physical item stays open; no new number claimed.
+- Added `scripts/check_reports.mjs` and wired it into the gate: every
+  `reports/openlane_*.json` must parse, carry a tag matching its file name, a valid
+  `generatedAt`, a non-trivial metrics object, and — for `*-full.json` — setup, DRC and
+  LVS summaries. It validates all 10 current artifacts.
+- Gate is now **12 fast checks** (14 with `--deep`): `12/12` and `14/14` verified,
+  formal-z3 195 s, native bins pass. `llms-full.txt` updated.
+
 ## 2026-11-12 07:59 - Autonomy tick + BBO/level-table STA blocked by the host again
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ecab264` **success**.
