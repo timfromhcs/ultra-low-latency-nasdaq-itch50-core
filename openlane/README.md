@@ -168,8 +168,15 @@ post-CTS/post-GRT resizers enabled completes the whole flow:
 
 Summary artifact: `reports/openlane_25fx-full.json`. This is the first complete
 DRC/LVS/timing-closed wrapper P&R at 25 ns (40 MHz); the only open quality item is the
-max-cap/max-slew cleanup (`sky130_wrap32_25ns_fx2.json` with `RUN_POST_GRT_DESIGN_REPAIR`
-is the prepared follow-up).
+max-cap/max-slew cleanup.
+
+**fx2 (`RUN_POST_GRT_DESIGN_REPAIR`) does not fix cap/slew.** The follow-up run
+(`native-25fx2`) routes clean (DRT 0) and its 3-corner STA gives setup **+0.4960 ns**
+(max_ss), hold **+0.1038 ns** (min_ff), both 0 violations — but max-cap stays
+**2,539–3,312** and max-slew up to **19,671**, i.e. the repair pass did not reduce them.
+Those counts are therefore not a routing artefact; they come from the design/library
+limits (ss corner), and cleaning them needs a different lever (e.g. synthesis-level
+buffering or relaxed corner limits). fx2's full DRC/LVS was not collected.
 
 ## Fitted wrapper attempt (2026-11-10) — measured, incomplete
 

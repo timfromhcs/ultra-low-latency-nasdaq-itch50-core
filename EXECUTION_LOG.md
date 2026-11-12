@@ -259,6 +259,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
 - `make lint` and CI now cover the wrapper and the new test.
 
+## 2026-11-12 03:59 - Autonomy tick + fx2 STA: cap/slew repair has no effect
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `08be844` **success**.
+- fx2's post-route STA was re-run with a **3-corner subset** (`max_ss`, `min_ff`,
+  `nom_ss`, `sky130_wrap32_25ns_fx2_sta.json`) so it fits the short host windows; it
+  completed (EXIT=0):
+  - setup **+0.4960 ns** (max_ss), hold **+0.1038 ns** (min_ff), 0 violations
+  - **max-cap 2,539–3,312**, **max-slew up to 19,671** — i.e. `RUN_POST_GRT_DESIGN_REPAIR`
+    did **not** reduce the cap/slew counts compared with 25fx
+- Interpretation: the cap/slew counts are not a routing artefact; they come from the
+  design/library limits at the ss corner. Cleaning them needs a synthesis-level buffering
+  change or relaxed corner limits, not another P&R pass.
+- fx2's full DRC/LVS was not collected (STA interruptions); the 25fx sign-off remains the
+  reference.
+
 ## 2026-11-12 00:59 - Autonomy tick + fx2 (post-GRT design repair): DRT clean, STA interrupted
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `e7defdb` **success**.

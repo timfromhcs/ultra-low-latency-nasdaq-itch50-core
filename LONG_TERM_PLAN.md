@@ -175,8 +175,9 @@ MDN PWA best practices, GitHub Actions docs.
       **+1.3333 ns** and hold **+0.0840 ns** (both 0 violations over nine corners),
       **Fmax ≈ 42.25 MHz**, 100,348 stdcells (`reports/openlane_25fx-full.json`).
       Remaining: max-cap (2.5k–3.3k) and max-slew (up to 15k) violations — advisory
-      checkers; `sky130_wrap32_25ns_fx2.json` (`RUN_POST_GRT_DESIGN_REPAIR`) is the
-      prepared cleanup run.
+      checkers; `sky130_wrap32_25ns_fx2.json` (`RUN_POST_GRT_DESIGN_REPAIR`) was tried and
+      **does not reduce them** (fx2: setup +0.4960/hold +0.1038 ns, cap 2,539–3,312,
+      slew up to 19,671), so they need a synthesis-level or limit-relaxation lever.
 - [x] GF180 pre-PnR STA run: **WNS −19.87 ns at 3.10 ns** (ss/125 °C), Fmax **43.54 MHz**,
       worst path FF → `raw_order_data[260]` (`reports/openlane_gf180-sta.json`).
 - [x] IHP SG13G2 pre-PnR STA run: **WNS −3.08 ns at 3.10 ns** (slow/125 °C), Fmax

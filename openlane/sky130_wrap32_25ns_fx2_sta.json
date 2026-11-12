@@ -1,0 +1,43 @@
+{
+  "DESIGN_NAME": "itch_wishbone_wrap",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_drop_gate.sv",
+    "dir::../rtl/itch_parser_core.sv",
+    "dir::../rtl/itch_shifter.sv",
+    "dir::../rtl/itch_top.sv",
+    "dir::../rtl/itch_host_wrap.sv",
+    "dir::../rtl/itch_wishbone_wrap.sv"
+  ],
+  "SYNTH_PARAMETERS": [
+    "DATA_WIDTH=32"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 25,
+  "PDN_MULTILAYER": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 2200 2200",
+  "CORE_AREA": "20 20 2180 2180",
+  "PL_TARGET_DENSITY_PCT": 12,
+  "GRT_ALLOW_CONGESTION": 1,
+  "GRT_OVERFLOW_ITERS": 20,
+  "GRT_ADJUSTMENT": 0.2,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "CTS_APPLY_NDR": "none",
+  "CTS_SINK_CLUSTERING_ENABLE": true,
+  "KLAYOUT_DRC_THREADS": 6,
+  "RUN_ANTENNA_REPAIR": false,
+  "RUN_HEURISTIC_DIODE_INSERTION": false,
+  "RUN_KLAYOUT_DRC": true,
+  "RUN_MAGIC_DRC": true,
+  "RUN_LVS": true,
+  "RUN_POST_GRT_DESIGN_REPAIR": true,
+  "STA_CORNERS": [
+    "max_ss_100C_1v60",
+    "min_ff_n40C_1v95",
+    "nom_ss_100C_1v60"
+  ]
+}

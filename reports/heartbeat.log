@@ -1564,3 +1564,252 @@ e7defdb completed success
 > build ┬À deepseek-v4.1-flash
 [0mÔåÉ [0mWrite reports/run_25fx2.sh
 Created file successfully: reports/run_25fx2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25fx2.sh /home/tim/chiplab-native/run_25fx2.sh && 
+chmod +x /home/tim/chiplab-native/run_25fx2.sh && echo copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_25fx2.sh'; Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -2 
+/home/tim/chiplab-native/ns25fx2.log 2>/dev/null; date; uptime | cut -c1-24'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+[01:01:03] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25fx2/12-openroad-staprepnr/nom_ss_100C_1v60/sta.log'ÔÇª                     
+   
+Thu Nov 12 01:01:20 CET 2026
+ 01:01:20 up 1 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 1200; wsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx2 | 
+grep -E "^[0-9]" | tail -3; tail -2 /home/tim/chiplab-native/ns25fx2.log; date; uptime | cut -c1-24'
+42-odb-diodesonports
+43-openroad-stamidpnr-3
+44-openroad-detailedrouting
+    Completing 20% with 1808 violations.                                                                               
+ 
+    elapsed time = 00:00:02, memory = 2548.87 (MB).                                                                    
+ 
+Thu Nov 12 01:21:32 CET 2026
+ 01:21:32 up 21 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx2.log | tail -3; ls /home/tim/chiplab-native/openlane/runs/native-25fx2 | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 105038.                                                                       
+ 
+[INFO DRT-0199]   Number of violations = 31472.                                                                        
+ 
+[INFO DRT-0199]   Number of violations = 25874.                                                                        
+ 
+43-openroad-stamidpnr-3
+44-openroad-detailedrouting
+Thu Nov 12 01:36:51 CET 2026
+ 01:36:51 up 36 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx2.log | tail -3; ls /home/tim/chiplab-native/openlane/runs/native-25fx2 | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 8763.                                                                         
+ 
+[INFO DRT-0199]   Number of violations = 7138.                                                                         
+ 
+[INFO DRT-0199]   Number of violations = 2195.                                                                         
+ 
+43-openroad-stamidpnr-3
+44-openroad-detailedrouting
+Thu Nov 12 01:52:02 CET 2026
+ 01:52:02 up 52 min,  1
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 900; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/ns25fx2.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/native-25fx2 | grep -E 
+"^[0-9]" | tail -2; date; uptime | cut -c1-24'
+[INFO DRT-0199]   Number of violations = 13.                                                                           
+ 
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+54-openroad-rcx
+55-openroad-stapostpnr
+Thu Nov 12 02:07:19 CET 2026
+ 02:07:20 up  1:07,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25fx2/*stapostpnr/summary.rpt 2>/dev/null | head -16; date'
+Thu Nov 12 02:19:34 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-25fx2 | grep -E "^[0-9]" | tail -2; 
+ls /home/tim/chiplab-native/openlane/runs/native-25fx2/55-openroad-stapostpnr 2>/dev/null | tail -4; date'
+54-openroad-rcx
+55-openroad-stapostpnr
+nom_ff_n40C_1v95
+nom_ss_100C_1v60
+nom_tt_025C_1v80
+state_in.json
+Thu Nov 12 02:19:45 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25fx2/55-openroad-stapostpnr/summary.rpt 2>/dev/null | head -16; date'
+Thu Nov 12 02:27:55 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -c openroad; tail -3 /home/tim/chiplab-native/ns25fx2.log; ls 
+/home/tim/chiplab-native/openlane/runs/native-25fx2/55-openroad-stapostpnr | wc -l; date; uptime | cut -c1-24'
+0
+[02:07:57] INFO     Starting STA for the max_ss_100C_1v60 timing cornerÔÇª                                 
+openroad.py:749
+[02:07:57] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25fx2/55-openroad-stapostpnr/max_ss_100C_1v60/sta.log'ÔÇª                    
+   
+12
+Thu Nov 12 02:28:08 CET 2026
+ 02:28:08 up  1:28,  1 u
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_25fx2_sta.sh
+Created file successfully: reports/run_25fx2_sta.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_25fx2_sta.sh 
+/home/tim/chiplab-native/run_25fx2_sta.sh && chmod +x /home/tim/chiplab-native/run_25fx2_sta.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_25fx2_sta.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/ns25fx2-sta.log 2>/dev/null; date'
+copied
+[02:28:59] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25fx2/56-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                    
+   
+Thu Nov 12 02:29:29 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25fx2/56-openroad-stapostpnr/summary.rpt 2>/dev/null | head -16; tail -1 
+/home/tim/chiplab-native/ns25fx2-sta.log; date'
+E i n   V e r b i n d u n g s v e r s u c h   i s t   f e h l g e s c h l a g e n ,   d a   d i e  
+ G e g e n s t e l l e   n a c h   e i n e r   b e s t i m m t e n   Z e i t s p a n n e   n i c h t   r i c h t i g  
+ r e a g i e r t   h a t ,   o d e r   d i e   h e r g e s t e l l t e   V e r b i n d u n g   w a r  
+ f e h l e r h a f t ,   d a   d e r   v e r b u n d e n e   H o s t   n i c h t   r e a g i e r t   h a t .   
+ 
+ F e h l e r c o d e :   W s l / S e r v i c e / W S A E T I M E D O U T 
+ 
+ W e n n   d i e s e r   F e h l e r   u n e r w a r t e t   w a r ,   s u c h e n   S i e   n a c h  
+ v o r h a n d e n e n   P r o b l e m e n ,   o d e r   e r s t e l l e n   S i e   e i n   n e u e s  
+ P r o b l e m   u n t e r   h t t p s : / / g i t h u b . c o m / m i c r o s o f t / W S L / i s s u e s . 
+ 
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 20; wsl -d Ubuntu bash -lc 'echo ok; uptime | cut -c1-24; ls 
+/home/tim/chiplab-native/openlane/runs/native-25fx2 | grep -E "^[0-9]" | tail -2' 2>&1 | Select-Object -First 4
+E i n   V e r b i n d u n g s v e r s u c h   i s t   f e h l g e s c h l a g e n ,   d a   d i e  
+ G e g e n s t e l l e   n a c h   e i n e r   b e s t i m m t e n   Z e i t s p a n n e   n i c h t   r i c h t i g  
+ r e a g i e r t   h a t ,   o d e r   d i e   h e r g e s t e l l t e   V e r b i n d u n g   w a r  
+ f e h l e r h a f t ,   d a   d e r   v e r b u n d e n e   H o s t   n i c h t   r e a g i e r t   h a t .   
+ 
+ F e h l e r c o d e :   W s l / S e r v i c e / W S A E T I M E D O U T 
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl --shutdown 2>&1 | Out-Null; Start-Sleep -Seconds 15; wsl -d Ubuntu bash -lc 'echo recovered; uptime | 
+cut -c1-24' 2>&1 | Select-Object -First 3
+[31;1mw s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e  
+ C o n s o m m e . [0m
+[31;1m [0m
+recovered
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_25fx2_sta.sh'; Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 
+'tail -2 /home/tim/chiplab-native/ns25fx2-sta.log 2>/dev/null; date; uptime | cut -c1-24'
+[02:44:58] VERBOSE  Logging subprocess to                                                                   
+step.py:1338
+                    'openlane/runs/native-25fx2/57-openroad-stapostpnr/min_ss_100C_1v60/sta.log'ÔÇª                    
+   
+Thu Nov 12 02:45:43 CET 2026
+ 02:45:44 up 1 min,  1 u
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'cat 
+/home/tim/chiplab-native/openlane/runs/native-25fx2/57-openroad-stapostpnr/summary.rpt 2>/dev/null | head -16; grep -a 
+-E "EXIT=" /home/tim/chiplab-native/ns25fx2-sta.log | tail -1; date'
+Thu Nov 12 02:55:54 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'pgrep -c openroad; ls 
+/home/tim/chiplab-native/openlane/runs/native-25fx2/57-openroad-stapostpnr 2>/dev/null | wc -l; tail -2 
+/home/tim/chiplab-native/ns25fx2-sta.log; date; uptime | cut -c1-22'
+0
+12
+                    'openlane/runs/native-25fx2/57-openroad-stapostpnr/max_ff_n40C_1v95/filter_unannotated.            
+ 
+                    log'ÔÇª                                                                                            
+   
+Thu Nov 12 02:56:09 CET 2026
+ 02:56:09 up 12 min,
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -258,8 +258,22 @@
+   (ITCH U has no side field) and is inserted under the new ref's hash set.
+ - Added `tb/test_book_top.py`: 152 raw ITCH messages -> 0 mismatches.
+ - `make lint` and CI now cover the wrapper and the new test.
+ 
++## 2026-11-12 00:59 - Autonomy tick + fx2 (post-GRT design repair): DRT clean, STA interrupted
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `e7defdb` **success**.
++- Started `native-25fx2` (`sky130_wrap32_25ns_fx2.json`: 25 ns, resizers **and**
++  `RUN_POST_GRT_DESIGN_REPAIR: true`) to attack the remaining max-cap/max-slew counts.
++- The post-GRT repair changed the netlist enough that detailed routing again converged
++  to **0 violations** (first pass 105,038 ÔåÆ 31,472 ÔåÆ 25,874 ÔåÆ 8,763 ÔåÆ 7,138 ÔåÆ 2,195 ÔåÆ 0),
++  and the flow reached RCX and post-route STA.
++- The STA step was then killed twice (WSL `WSAETIMEDOUT`, then the process vanished after
++  12 min), so **fx2 has no verified cap/slew or timing summary yet**. The run is resumable
++  with `--from OpenROAD.STAPostPNR`.
++- The previously verified 25fx sign-off (0 DRC / 0 LVS, +1.3333/+0.0840 ns, 42.25 MHz)
++  remains the reference result.
++
+ ## 2026-11-12 00:00 - 25fx completes: first full 25 ns sign-off (43 MHz class)
+ 
+ - The `native-25fx` run (25 ns, 2200 ┬Ám, post-CTS/post-GRT resizers) finished the whole
+   Classic flow with **EXIT=0**:
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_25fx2.sh,reports\run_25fx2_sta.sh -ErrorAction SilentlyContinue; 
+node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "docs: fx2 reaches 0 DRT, STA 
+interrupted by host restarts" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 50 insertions(+), 15 deletions(-)
+[31;1m   e7defdb..08be844  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 200; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+08be844 completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 00:59ÔÇô03:00 abgeschlossen ÔÇö **fx2-Lauf routet clean; STA vom Host zweimal gekillt**.
+
+## Ergebnis `native-25fx2` (25 ns + Resizer + `RUN_POST_GRT_DESIGN_REPAIR`)
+| Phase | Ergebnis |
+|---|---|
+| Post-GRT Design Repair | lief (Cap/Slew-Reparatur vor dem Routing) |
+| Detailed Routing | **0 Violations** (105.038 ÔåÆ 31.472 ÔåÆ 25.874 ÔåÆ 8.763 ÔåÆ 7.138 ÔåÆ 2.195 ÔåÆ 0) |
+| RCX | abgeschlossen |
+| Post-Route STA | **zweimal abgebrochen** (WSL `WSAETIMEDOUT`, danach Prozess nach 12 min verschwunden) |
+
+Damit ist fx2 **routbar und DRC-f├ñhig**, aber die Cap/Slew- und Timing-Zahlen sind **nicht verifiziert** ÔÇö ich beanspruche daf├╝r nichts. Der Lauf ist mit `--from OpenROAD.STAPostPNR` fortsetzbar.
+
+## Referenzergebnis bleibt 25fx
+| Pr├╝fung | Wert |
+|---|---|
+| Magic/KLayout DRC | **0 / 0** |
+| LVS | **0** |
+| Setup / Hold | **+1,3333 / +0,0840 ns** (0 Violations, 9 Ecken) |
+| Fmax | **42,25 MHz** |
+
+## Verifikation
+Autonomy 0 Tasks; Gate **11/11**; Docs-Links 25/25; CI auf `08be844` **success**.
+
+## Status / N├ñchstes
+Der Host hat in dieser Runde mehrfach die WSL-VM verloren (`WSAETIMEDOUT`); ein `wsl --shutdown` hat sie jeweils wiederhergestellt. N├ñchster Schritt: fx2-STA erneut ansto├ƒen und danach Streamout/DRC/LVS f├╝r fx2; die verbleibenden offenen Punkte (BBO-Level-Tabellen-Signoff, Parser-Signoff, FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle) sind unver├ñndert.
+[2026-11-12T03:59:21.7386895+01:00] hallo, es ist 03:59
+[tick] ran 0, failed 0
