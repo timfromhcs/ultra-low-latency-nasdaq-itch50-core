@@ -2743,3 +2743,219 @@ warning: in the working copy of 'reports/scorecard.json', LF will be replaced by
 > build ┬À deepseek-v4.1-flash
 [0mÔåÉ [0mWrite openlane/sky130_book_sta.json
 Created file successfully: openlane/sky130_book_sta.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_book_sta.sh
+Created file successfully: reports/run_book_sta.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_book_sta.sh 
+/home/tim/chiplab-native/run_book_sta.sh && chmod +x /home/tim/chiplab-native/run_book_sta.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_book_sta.sh'; 
+Start-Sleep -Seconds 45; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/book-sta.log 2>/dev/null; date'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+                    1 Lint errors found.                                                                               
+ 
+[07:03:32] ERROR    LibreLane will now quit.                                                             
+__main__.py:190
+EXIT=2
+Thu Nov 12 07:04:16 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -m 8 -E "%Error|Error" 
+/home/tim/chiplab-native/openlane/runs/native-book-sta/01-verilator-lint/verilator-lint.log 2>/dev/null | tail -8'
+%Error-MODMISSING: /home/tim/chiplab-native/rtl/itch_top_book.sv:215:3: Cannot find file containing module: 
+'itch_metrics'
+%Error: Exiting due to 1 error(s)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/sky130_book_sta.json
+Index: openlane/sky130_book_sta.json
+===================================================================
+--- openlane/sky130_book_sta.json
++++ openlane/sky130_book_sta.json
+@@ -5,8 +5,9 @@
+     "dir::../rtl/itch_drop_gate.sv",
+     "dir::../rtl/itch_parser_core.sv",
+     "dir::../rtl/itch_shifter.sv",
+     "dir::../rtl/itch_top.sv",
++    "dir::../rtl/itch_metrics.sv",
+     "dir::../rtl/itch_top_of_book.sv",
+     "dir::../rtl/itch_top_book.sv"
+   ],
+   "SYNTH_PARAMETERS": ["ORDERS=32", "LOCATES=4", "LEVELS=4"],
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/openlane/sky130_book_sta.json 
+/home/tim/chiplab-native/openlane/ && echo updated'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_book_sta.sh'; Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail 
+-3 /home/tim/chiplab-native/book-sta.log 2>/dev/null; date'
+updated
+                    _book.h.json']) failed                                                                             
+ 
+[07:04:39] ERROR    LibreLane will now quit.                                                             
+__main__.py:190
+EXIT=2
+Thu Nov 12 07:05:39 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -B 4 "failed" /home/tim/chiplab-native/book-sta.log | tail -10'
+son', '--extra-in',                                                                                 
+                    '/home/tim/chiplab-native/openlane/runs/native-book-sta/08-yosys-jsonheader/extra.js               
+ 
+                    on', '--output',                                                                                   
+ 
+                    '/home/tim/chiplab-native/openlane/runs/native-book-sta/08-yosys-jsonheader/itch_top               
+ 
+                    _book.h.json']) failed
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'ls /home/tim/chiplab-native/openlane/runs/native-book-sta/08-yosys-jsonheader 
+2>/dev/null; grep -a -m 6 -iE "error|warning" 
+/home/tim/chiplab-native/openlane/runs/native-book-sta/08-yosys-jsonheader/*.log 2>/dev/null | tail -6'
+COMMANDS
+config.json
+extra.json
+state_in.json
+yosys-jsonheader.log
+yosys-jsonheader.process_stats.json
+Warning: Encountered `translate_off' comment! Such legacy hot comments are supported by Yosys, but are not part of any 
+formal language specification. Using a portable and standards-compliant construct such as `ifdef is recommended!
+/home/tim/chiplab-native/rtl/itch_top_book.sv:19: ERROR: Can't find object for defparam `ORDERS`!
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const p='openlane/sky130_book_sta.json';const 
+j=JSON.parse(fs.readFileSync(p,'utf8'));delete 
+j.SYNTH_PARAMETERS;fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');console.log('params removed')"
+params removed
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_book_sta2.sh
+Created file successfully: reports/run_book_sta2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_book_sta2.sh 
+/home/tim/chiplab-native/run_book_sta2.sh && chmod +x /home/tim/chiplab-native/run_book_sta2.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_book_sta2.sh'; 
+Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail -3 /home/tim/chiplab-native/book-sta2.log 2>/dev/null; date'
+copied
+$flatten\u_book.$memrd$\lb_valid$/home/tim/chiplab-native/rtl/itch_top_of_book.sv:257$2740_DATA                        
+ 
+$auto$rtlil.cc:3337:Not$27476 $auto$rtlil.cc:3337:Not$27487 $auto$rtlil.cc:3337:Not$27498                              
+ 
+$auto$rtlil.cc:3340:ReduceAnd$27516 $auto$rtlil.cc:3337:Not$27520 } = 10'1011100010                                    
+ 
+Thu Nov 12 07:07:17 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Worst Slack|Number of cells" 
+/home/tim/chiplab-native/book-sta2.log | tail -4; ls /home/tim/chiplab-native/openlane/runs/native-book-sta2 
+2>/dev/null | grep -E "^[0-9]" | tail -2; date'
+05-yosys-jsonheader
+06-yosys-synthesis
+Thu Nov 12 07:15:24 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Worst Slack|Number of cells|Chip area" 
+/home/tim/chiplab-native/book-sta2.log | tail -4; ls /home/tim/chiplab-native/openlane/runs/native-book-sta2 
+2>/dev/null | grep -E "^[0-9]" | tail -2; date; uptime | cut -c1-22'
+Chip area for module '\itch_top_book': 2094857.884803                                                                
+05-yosys-jsonheader
+06-yosys-synthesis
+Thu Nov 12 07:23:32 CET 2026
+ 07:23:32 up 20 min,
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 420; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Worst Slack|Overall|nom_ss" 
+/home/tim/chiplab-native/book-sta2.log | tail -6; ls /home/tim/chiplab-native/openlane/runs/native-book-sta2 
+2>/dev/null | grep -E "^[0-9]" | tail -2; date'
+05-yosys-jsonheader
+06-yosys-synthesis
+Thu Nov 12 07:30:41 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 600; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Worst Slack" 
+/home/tim/chiplab-native/book-sta2.log | tail -4; ls /home/tim/chiplab-native/openlane/runs/native-book-sta2 
+2>/dev/null | grep -E "^[0-9]" | tail -2; tail -2 /home/tim/chiplab-native/book-sta2.log; date; uptime | cut -c1-22'
+05-yosys-jsonheader
+06-yosys-synthesis
+                                                                                                                       
+ 
+188.1. Extracting gate netlist of module `\itch_top_book' to `/tmp/yosys-abc-MA9G1T/input.blif'..                      
+ 
+Thu Nov 12 07:40:49 CET 2026
+ 07:40:49 up 38 min,
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 360; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Worst Slack|Overall" 
+/home/tim/chiplab-native/book-sta2.log | tail -4; ls /home/tim/chiplab-native/openlane/runs/native-book-sta2 
+2>/dev/null | grep -E "^[0-9]" | tail -2; tail -2 /home/tim/chiplab-native/book-sta2.log; date'
+05-yosys-jsonheader
+06-yosys-synthesis
+                                                                                                                       
+ 
+188.1. Extracting gate netlist of module `\itch_top_book' to `/tmp/yosys-abc-MA9G1T/input.blif'..                      
+ 
+Thu Nov 12 07:46:57 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit EXECUTION_LOG.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\EXECUTION_LOG.md. It must match exactly, including 
+whitespace and indentation.
+
+The closest lines in the file:
+284: - No new physical run this tick; the remaining plan items are the BBO level-table
+285:   sign-off (block too large for P&R) and the external blockers.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -282,8 +282,13 @@
+   (status, evidence table, file map), `docs/datasheet.md` and `llms-full.txt`; they now
+   state the wrapper sign-off and that parser/BBO blocks remain open.
+ - No new physical run this tick; the remaining plan items are the BBO level-table
+   sign-off (block too large for P&R) and the external blockers.
++- Started a **pre-PnR STA of the BBO block** (`openlane/sky130_book_sta.json`,
++  `itch_top_book`, 25 ns). Two fixes were needed: add `itch_metrics.sv` to the file list,
++  and drop `SYNTH_PARAMETERS` (the parameters live on `itch_top_of_book`, not the top).
++  Yosys reports a chip area of **2,094,858 ┬Ám┬▓** for the block; ABC mapping was still
++  running at the end of the tick.
+ 
+ ## 2026-11-12 05:59 - Autonomy tick + tighter fanout makes slew worse
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `1ae6626` **success**.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_book_sta.sh,reports\run_book_sta2.sh -ErrorAction 
+SilentlyContinue; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | 
+Select-Object -Last 2; git add -A; git commit -m "feat(openlane): BBO pre-PnR STA config (itch_top_book, 25 ns)" 2>&1 
+| Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, no dead relative links
+
+scorecard: 100% (11/11) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_book_sta.json', LF will be replaced by CRLF the next time Git touches 
+it
+ create mode 100644 openlane/sky130_book_sta.json
+[31;1m   eea820f..ecab264  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Worst Slack" /home/tim/chiplab-native/book-sta2.log | tail -3; ls 
+/home/tim/chiplab-native/openlane/runs/native-book-sta2 2>/dev/null | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/book-sta2.log; date'
+05-yosys-jsonheader
+06-yosys-synthesis
+188.1. Extracting gate netlist of module `\itch_top_book' to `/tmp/yosys-abc-MA9G1T/input.blif'..                      
+ 
+Thu Nov 12 07:47:35 CET 2026
+> build ┬À deepseek-v4.1-flash
+Tick 06:59ÔÇô07:50 abgeschlossen ÔÇö **Plan auf den physischen Meilenstein gebracht, BBO-STA angesto├ƒen**.
+
+## Plan/Doku
+- `LONG_TERM_PLAN.md`: die Punkte **ÔÇ×Full LibreLane run"**, **ÔÇ×Full P&R"** und **ÔÇ×DELAY-Short-Storm"** sind jetzt **erledigt** ÔÇö mit den 25fx-Zahlen (0 DRC/0 LVS, Setup +1,3333 ns, Hold +0,0840 ns, Fmax Ôëê 42,25 MHz) und dem Scope-Hinweis, dass 10 ns nicht erreichbar ist (Post-Route ÔêÆ13,77 ns).
+- Veraltete Aussagen (ÔÇ×no physical sign-off", ÔÇ×P&R blocked") aus **README**, **Datasheet** und **llms-full.txt** entfernt bzw. pr├ñzisiert: Wrapper ist signiert, Parser/BBO-Bl├Âcke nicht.
+
+## Neuer Lauf: BBO-Pre-PnR-STA (`itch_top_book`, 25 ns)
+- Zwei Config-Fixes n├Âtig: `itch_metrics.sv` erg├ñnzt; `SYNTH_PARAMETERS` entfernt (die Parameter h├ñngen an `itch_top_of_book`, nicht am Top).
+- Yosys-Chipfl├ñche des BBO: **2.094.858 ┬Ám┬▓** (~2,1 mm┬▓) ÔÇö plausibel zur 70k-Zellen-Sch├ñtzung.
+- ABC-Mapping lief am Tick-Ende noch; STA-Ergebnis folgt.
+
+## Verifikation
+Autonomy 0 Tasks; Gate **11/11**; Docs-Links 25/25; CI auf `eea820f` **success**; Commits `eea820f`, `ecab264`.
+
+## N├ñchstes
+BBO-STA-Ergebnis abholen (bzw. bei Abbruch mit `--to OpenROAD.STAPrePNR` neu starten) und in `docs/datasheet.md`/Plan als Pre-PnR-Zahl ver├Âffentlichen. Danach bleiben nur die extern blockierten Punkte (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-12T07:59:30.5829988+01:00] hallo, es ist 07:59
+[tick] ran 0, failed 0

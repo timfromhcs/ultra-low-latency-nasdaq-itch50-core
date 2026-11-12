@@ -271,6 +271,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-12 07:59 - Autonomy tick + BBO/level-table STA blocked by the host again
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ecab264` **success**.
+- The full `itch_top_book` pre-PnR STA (`sky130_book_sta.json`, 25 ns) never left Yosys
+  ABC: the 70 k-cell block needs >25 min of mapping and the distro was restarted each
+  time (area report 2,094,858 µm², same as the area estimate). An AREA-synthesis variant
+  (`sky130_book_sta_area.json`) behaves the same.
+- Narrowed the target to the plan item itself — `itch_top_of_book` (`ORDERS=32`,
+  `LOCATES=4`, `LEVELS=4`) with `openlane/sky130_leveltable_sta.json`. Synthesis
+  completes quickly, but the post-synthesis STA was killed twice (3-corner, then
+  single-corner `max_ss`) before writing a report.
+- So the level-table sign-off remains **open with measured attempts**, not a claimed
+  number. Configs are committed so the run can be repeated in a stable window.
+- Verified this tick: gate 11/11, docs links, CI green.
+
 ## 2026-11-12 06:59 - Autonomy tick + plan closed on the physical milestone
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `73b9231` **success**.
