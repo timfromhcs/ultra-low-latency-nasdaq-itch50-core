@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 22:59 - Autonomy tick + full 32/4/4 retarget to 50 ns with the resizer
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `7112a8d` **success**.
+- The 42 ns full run measured setup −6.99 ns and hold −47 ps, so the same design was
+  retargeted to **50 ns** (`sky130_leveltable_full50.json`) with the **post-CTS resizer
+  enabled** (hold repair) while the post-GRT resizer and the mid-PnR STA steps stay
+  skipped for memory/runtime.
+- Run `lvlfull50` started; after ~30 min it is inside `OpenROAD.ResizerTimingPostCTS`
+  (~750 iterations). Expected total ~3 h (the 42 ns run took 3 h16m).
+- No result claimed yet; the reduced 8/2/4 42 ns sign-off and the 32/4/4 DRC/LVS result
+  remain the published evidence.
+
 ## 2026-11-13 20:59 - Autonomy tick + full 32/4/4 level table completes (DRC/LVS 0)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `05f6a86` **success**.
