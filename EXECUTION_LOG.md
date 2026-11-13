@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 15:59 - Autonomy tick + machine-readable physical evidence index
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `629ff3f` **success**.
+- Added `scripts/physical_index.mjs`: aggregates every `reports/openlane_*.json` into
+  `reports/physical.json` (kind, clock, Fmax, setup/hold slack, Magic/KLayout DRC, LVS,
+  stdcells) and prints a table. Flows whose report carries a caveat note (the 25xl
+  aggregate setup metric) are marked `*` so the misleading 108 MHz number cannot be read
+  as a sign-off.
+- Indexed 12 flows; `openlane/README.md` now points at the index and its regeneration
+  command, and the stale "no completed P&R" intro is replaced with the actual status.
+- No new physical run this tick.
+
 ## 2026-11-13 13:59 - Autonomy tick + full 32/4/4 level table hits the memory wall
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `7b5b58f` **success**.

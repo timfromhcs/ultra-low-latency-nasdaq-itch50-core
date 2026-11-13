@@ -1,9 +1,12 @@
 # OpenLane / LibreLane targets
 
-These are **flow-ready** configurations, not sign-off results. Only the pre-PnR STA
-runs and the small-block validation are measured; the parser has no completed P&R, so
-no parser Fmax, slack or die-area claim is made. Operating notes (resume, knobs,
-failure modes, cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
+Flow-ready configurations plus the measured results below. The **wrapper** has a
+completed Sky130 sign-off at 25 ns (0 Magic/KLayout DRC, 0 LVS, timing closed) and the
+**reduced level table** one at 42 ns; the full 32/4/4 level table and Magic DRC for the
+reduced runs are still open. A machine-readable index of every measured flow lives in
+[`../reports/physical.json`](../reports/physical.json) — regenerate it with
+`node scripts/physical_index.mjs`. Operating notes (resume, knobs, failure modes,
+cleanup): [`../docs/long-runs.md`](../docs/long-runs.md).
 
 | File | Target | PDK | Clock |
 |---|---|---|---|
