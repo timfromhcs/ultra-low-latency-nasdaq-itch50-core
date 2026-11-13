@@ -201,3 +201,384 @@ DRT-Chunk zu Ende laufen lassen, dann **KLayout DRC** und **Netgen LVS** als eig
 [heartbeat] log rotated at 209540 bytes
 [2026-11-13T05:59:20.2310511+01:00] hallo, es ist 05:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" /home/tim/chiplab-native/lvlsmall-drt.log | tail -1; ls 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/lvlsmall-drt.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 6
+EXIT=0
+38-openroad-globalrouting
+39-openroad-detailedrouting
+EXIT=0
+Fri Nov 13 06:00:31 CET 2026
+ 06:00:31 up 2 min
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci 33f943b completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall_sta.sh
+Created file successfully: reports/run_lvlsmall_sta.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall_sta.sh 
+/home/tim/chiplab-native/run_lvlsmall_sta.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall_sta.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall_sta.sh'; 
+Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail -1 /home/tim/chiplab-native/lvlsmall-sta.log | tr -d "\000"; 
+date' 2>&1 | Select-Object -Last 2
+copied
+EXIT=1
+Fri Nov 13 06:01:50 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -c 1800 /home/tim/chiplab-native/lvlsmall-sta.log | tr -d "\000" | tail -16'
+y:370
+[06:00:51] INFO     Skipping step 'Report Disconnected Pins'ÔÇª                                          
+sequential.py:370
+[06:00:51] INFO     Skipping step 'Disconnected Pins Checker'ÔÇª                                         
+sequential.py:370
+[06:00:51] INFO     Skipping step 'Report Wire Length'ÔÇª                                                
+sequential.py:370
+[06:00:51] INFO     Skipping step 'Wire Length Threshold Checker'ÔÇª                                     
+sequential.py:370
+[06:00:51] INFO     Skipping step 'Fill Insertion'ÔÇª                                                    
+sequential.py:370
+[06:00:51] INFO     Skipping step 'Generate Cell Frequency Tables'ÔÇª                                    
+sequential.py:370
+[06:00:51] INFO     Skipping step 'Parasitics (RC) Extraction'ÔÇª                                        
+sequential.py:370
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇ Static Timing Analysis (Post-PnR) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+[06:00:51] VERBOSE  Running 'OpenROAD.STAPostPNR' at 'openlane/runs/lvlsmall2/40-openroad-stapostpnr'ÔÇª      
+step.py:1138
+Classic - Stage 58 - STA (Post-PnR) 
+ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔò©            57/80 0:00:00
+[06:00:51] ERROR    The flow has encountered an unexpected error:                                        
+__main__.py:185
+                    STAPostPNR: missing required input 'spef'                                                          
+ 
+[06:00:51] ERROR    LibreLane will now quit.                                                             
+__main__.py:186
+EXIT=1
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall_sta2.sh
+Created file successfully: reports/run_lvlsmall_sta2.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall_sta2.sh 
+/home/tim/chiplab-native/run_lvlsmall_sta2.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall_sta2.sh && echo 
+copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall_sta2.sh'; Start-Sleep -Seconds 90; wsl -d Ubuntu bash -lc 
+'tail -1 /home/tim/chiplab-native/lvlsmall-sta2.log | tr -d "\000"; ls 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E "^[0-9]" | tail -2; date' 2>&1 | Select-Object -Last 3
+copied
+41-openroad-rcx
+42-openroad-stapostpnr
+Fri Nov 13 06:03:39 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 420; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-sta2.log | tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E 
+"^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall-sta2.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 
+| Select-Object -Last 5
+41-openroad-rcx
+42-openroad-stapostpnr
+                    'openlane/runs/lvlsmall2/42-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                       
+   
+Fri Nov 13 06:10:46 CET 2026
+ 06:10:46 up 12 mi
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-sta2.log | tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E 
+"^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall-sta2.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 
+| Select-Object -Last 5
+41-openroad-rcx
+42-openroad-stapostpnr
+                    'ÔÇª                                                                                               
+   
+Fri Nov 13 06:15:54 CET 2026
+ 06:15:54 up 17 mi
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-sta2.log | tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E 
+"^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall-sta2.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 
+| Select-Object -Last 5
+42-openroad-stapostpnr
+                    'ÔÇª                                                                                               
+   
+Fri Nov 13 06:21:41 CET 2026
+ 06:21:41 up 0 min
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');const p='openlane/sky130_leveltable_small.json';const j=JSO
+N.parse(fs.readFileSync(p,'utf8'));j.STA_CORNERS=['max_ss_100C_1v60','min_ff_n40C_1v95'];fs.writeFileSync(p,JSON.string
+ify(j,null,2)+'\n');console.log('STA_CORNERS set')"
+STA_CORNERS set
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall_sta3.sh
+Created file successfully: reports/run_lvlsmall_sta3.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall_sta3.sh 
+/home/tim/chiplab-native/run_lvlsmall_sta3.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall_sta3.sh && echo 
+copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall_sta3.sh'; Start-Sleep -Seconds 90; wsl -d Ubuntu bash -lc 
+'tail -1 /home/tim/chiplab-native/lvlsmall-sta3.log | tr -d "\000"; ls 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E "^[0-9]" | tail -2; date' 2>&1 | Select-Object -Last 3
+copied
+43-openroad-rcx
+44-openroad-stapostpnr
+Fri Nov 13 06:23:42 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-sta3.log | tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E 
+"^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall-sta3.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 
+| Select-Object -Last 5
+43-openroad-rcx
+44-openroad-stapostpnr
+                    'ÔÇª                                                                                               
+   
+Fri Nov 13 06:28:50 CET 2026
+ 06:28:50 up 7 min
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 300; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-sta3.log | tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E 
+"^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall-sta3.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 
+| Select-Object -Last 5
+46-magic-streamout
+47-klayout-streamout
+EXIT=0
+Fri Nov 13 06:33:58 CET 2026
+ 06:33:58 up 12 mi
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall_kdrc.sh
+Created file successfully: reports/run_lvlsmall_kdrc.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall_kdrc.sh 
+/home/tim/chiplab-native/run_lvlsmall_kdrc.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall_kdrc.sh && echo 
+copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall_kdrc.sh'; Start-Sleep -Seconds 90; wsl -d Ubuntu bash -lc 
+'tail -2 /home/tim/chiplab-native/lvlsmall-kdrc.log | tr -d "\000"; date' 2>&1 | Select-Object -Last 3
+copied
+    Elapsed: 0.010s  Memory: 1287.00M                                                                                  
+ 
+"drc" in: sky130A_mr.drc:938                                                                                           
+ 
+Fri Nov 13 06:35:44 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-kdrc.log | tail -1; tail -2 /home/tim/chiplab-native/lvlsmall-kdrc.log | tr -d 
+"\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 5
+EXIT=0
+Fri Nov 13 06:44:40 CET 2026
+ 06:44:40 up 0 min
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl --shutdown 2>&1 | Out-Null; Start-Sleep -Seconds 10; wsl -d Ubuntu bash -lc 'grep -cE "\": [1-9]" 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2/*klayout-drc/reports/drc.klayout.json 2>/dev/null; ls -d 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2/*klayout-drc 2>/dev/null | tail -1'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ 5
+/home/tim/chiplab-native/openlane/runs/lvlsmall2/48-klayout-drc
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -E "\": [1-9]" 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2/48-klayout-drc/reports/drc.klayout.json'
+"nwell.1": 2814,
+    "hvtp.1": 2814,
+    "hvtp.2": 2816,
+    "nwell.2a": 14056,
+    "total": 22500
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall_lvs.sh
+Created file successfully: reports/run_lvlsmall_lvs.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall_lvs.sh 
+/home/tim/chiplab-native/run_lvlsmall_lvs.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall_lvs.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall_lvs.sh'; 
+Start-Sleep -Seconds 90; wsl -d Ubuntu bash -lc 'tail -1 /home/tim/chiplab-native/lvlsmall-lvs.log | tr -d "\000"; 
+date' 2>&1 | Select-Object -Last 2
+copied
+Fri Nov 13 06:48:31 CET 2026
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|LVS" 
+/home/tim/chiplab-native/lvlsmall-lvs.log | tail -3; tail -2 /home/tim/chiplab-native/lvlsmall-lvs.log | tr -d "\000"; 
+ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E "^[0-9]" | tail -2; date' 2>&1 | Select-Object -Last 5
+[06:46:26] ERROR    LibreLane will now quit.                                                             
+__main__.py:186
+EXIT=1
+48-klayout-drc
+49-netgen-lvs
+Fri Nov 13 06:56:38 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'tail -c 1200 /home/tim/chiplab-native/lvlsmall-lvs.log | tr -d "\000" | tail -10'
+SPICE Extraction'ÔÇª                                                  sequential.py:370
+[06:46:26] INFO     Skipping step 'Illegal Overlap Checker'ÔÇª                                           
+sequential.py:370
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
+ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Netgen LVS ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔ
+öÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+[06:46:26] VERBOSE  Running 'Netgen.LVS' at 'openlane/runs/lvlsmall2/49-netgen-lvs'ÔÇª                        
+step.py:1138
+Classic - Stage 73 - Netgen LVS 
+ÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöüÔöü     72/80 
+0:00:00
+[06:46:26] ERROR    The flow has encountered an unexpected error:                                        
+__main__.py:185
+                    LVS: missing required input 'spice'                                                                
+ 
+[06:46:26] ERROR    LibreLane will now quit.                                                             
+__main__.py:186
+EXIT=1
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall_lvs2.sh
+Created file successfully: reports/run_lvlsmall_lvs2.sh
+> build ┬À deepseek-v4.1-flash
+[93m[1m! [0mretrying (attempt 2): EPROTO: The TLS handshake failed. Does the server speak TLS on this port?
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall_lvs2.sh 
+/home/tim/chiplab-native/run_lvlsmall_lvs2.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall_lvs2.sh && echo 
+copied'; Start-Process -FilePath wsl.exe -ArgumentList 
+'-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall_lvs2.sh'; Start-Sleep -Seconds 90; wsl -d Ubuntu bash -lc 
+'tail -1 /home/tim/chiplab-native/lvlsmall-lvs2.log | tr -d "\000"; ls 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E "^[0-9]" | tail -2; date' 2>&1 | Select-Object -Last 3
+copied
+49-netgen-lvs
+50-magic-spiceextraction
+Fri Nov 13 06:58:38 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 480; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" 
+/home/tim/chiplab-native/lvlsmall-lvs2.log | tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall2 | grep -E 
+"^[0-9]" | tail -2; tail -2 /home/tim/chiplab-native/lvlsmall-lvs2.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 
+| Select-Object -Last 6
+58-misc-reportmanufacturability
+[07:00:18] ERROR    LibreLane will now quit.                                                             
+__main__.py:190
+EXIT=2
+Fri Nov 13 07:07:27 CET 2026
+ 07:07:27 up 0 min
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -oE "\"(design__lvs_error__count|klayout__drc_error__count|magic__drc_error__cou
+nt|timing__setup__ws|timing__hold__ws|design__instance__count__stdcell|design__instance__area__stdcell)\": ?[^,}]*" 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2/final/metrics.json 2>/dev/null; ls 
+/home/tim/chiplab-native/openlane/runs/lvlsmall2/final 2>/dev/null | head -3'
+"timing__hold__ws": -0.06239675619468383
+"timing__setup__ws": -15.281163433826654
+"design__instance__count__stdcell": 75703
+"design__instance__area__stdcell": 538745
+"klayout__drc_error__count": 22500
+"design__lvs_error__count": 11240
+def
+gds
+json_h
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,25 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-13 05:59 - Autonomy tick + chunked small flow completes but is not clean
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `33f943b` **success**.
++- Chunked the reduced flow (`sky130_leveltable_small.json`, 8/2/4, 30 ns, 1400 ┬Ám):
++  - DRT chunk: **EXIT=0**, all passes ended at 0 violations
++  - RCX + 2-corner STA + streamout chunk: **EXIT=0** (GDS written)
++  - KLayout DRC chunk: **EXIT=0** in ~9 min
++  - SPICE extraction + Netgen LVS chunk: ran to the last step, **EXIT=2** (checker)
++- Result is **not clean**: KLayout DRC **22,500** (all nwell/hvtp rules: nwell.1 2814,
++  hvtp.1 2814, hvtp.2 2816, nwell.2a 14056), **LVS 11,240 errors**, setup **ÔêÆ15.28 ns**,
++  hold ÔêÆ0.062 ns, 75,703 stdcells ÔÇö the reduced parameters did not shrink the block, and
++  the chunked resume mixed differently-flagged invocations (resizers/Magic DRC skipped in
++  some chunks), so the layout and the extracted netlist disagree.
++- Conclusion: chunking is mechanically viable on this host, but a sign-off needs one
++  consistent invocation (or identical flags in every chunk). Nothing is claimed from this
++  run; the 32/4/4 pre-PnR number stands.
++
+ ## 2026-11-13 01:59 - Autonomy tick + chunked small-config flow stays alive
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `84d348f` **success**.
+ - The full 32/4/4 flow cannot fit the host's windows, so a **reduced config** plus
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_lvlsmall_sta.sh,reports\run_lvlsmall_sta2.sh,reports\run_lvlsmall_s
+ta3.sh,reports\run_lvlsmall_kdrc.sh,reports\run_lvlsmall_lvs.sh,reports\run_lvlsmall_lvs2.sh -ErrorAction 
+SilentlyContinue; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 | 
+Select-Object -Last 2; git add -A; git commit -m "feat(openlane): chunked small-config flow runs; result not clean 
+(documented)" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, 69 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_leveltable_small.json', LF will be replaced by CRLF the next time Git 
+touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 39 insertions(+), 18 deletions(-)
+[31;1m   33f943b..87bcf1a  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci 
+$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+ci 87bcf1a completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 05:59ÔÇô07:15 abgeschlossen ÔÇö **Chunking l├ñuft mechanisch, Ergebnis des kleinen Laufs ist aber nicht clean**.
+
+## Ergebnisse
+| Chunk | Ergebnis |
+|---|---|
+| Detailed Routing | **EXIT=0**, alle P├ñsse ÔåÆ 0 Violations |
+| RCX + 2-Corner-STA + Streamout | **EXIT=0**, GDS geschrieben |
+| KLayout DRC | **EXIT=0** in ~9 min |
+| SPICE-Extraktion + Netgen LVS | lief bis zum letzten Schritt, **EXIT=2** (Checker) |
+
+**Gesamtergebnis des reduzierten Laufs (8/2/4, 30 ns, 1400 ┬Ám):**
+- KLayout DRC **22.500** (nwell.1 2.814, hvtp.1 2.814, hvtp.2 2.816, nwell.2a 14.056)
+- **LVS 11.240 Fehler**
+- Setup **ÔêÆ15,28 ns**, Hold ÔêÆ0,062 ns, 75.703 Std-Zellen
+
+Damit ist der Lauf **nicht sign-off-f├ñhig**. Zwei Ursachen: (a) die reduzierten Parameter verkleinern den Block nicht (Hash/Order-Store dominiert), (b) die Chunks wurden mit **unterschiedlichen Skip-Flags** aufgerufen (Resizer/Magic DRC), sodass Layout und extrahierte Netzliste auseinanderlaufen.
+
+**Lehre:** Chunking funktioniert auf diesem Host mechanisch, ein Sign-off braucht aber **eine konsistente Invocation** (oder identische Flags in jedem Chunk). Es wird nichts aus diesem Lauf behauptet; die 32/4/4-Pre-PnR-Zahl bleibt die Evidenz.
+
+## Verifikation
+Gate **13/13**; Docs-Links 25/25, 69 Report-Referenzen; CI auf `87bcf1a` **success**.
+
+## Status
+Wrapper 25 ns: signiert. Level-Tabelle: Pre-PnR-Evidenz; Vollfluss weiterhin offen ÔÇö jetzt mit klarer Ursache (Konsistenz der Flags, Blockgr├Â├ƒe) statt nur ÔÇ×Host-Limit".
+[2026-11-13T07:59:20.0041498+01:00] hallo, es ist 07:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_leveltable_sma
+ll.json','utf8'));j.RUN_MAGIC_DRC=false;fs.writeFileSync('openlane/sky130_leveltable_small2.json',JSON.stringify(j,null
+,2)+'\n');console.log('small2 written')"
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci 87bcf1a completed success
+small2 written

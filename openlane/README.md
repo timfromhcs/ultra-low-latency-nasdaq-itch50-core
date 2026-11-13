@@ -90,6 +90,29 @@ Worst path in both: a shifter-counter flip-flop → `raw_payload[0]` (the asynch
 bypass output). The limit is the bypass/decoder combinational cone, not the pipeline
 depth. **Pre-PnR only — no placement/routing, no sign-off.**
 
+## Level-table full flow, reduced config (2026-11-13) — first complete run
+
+`openlane/sky130_leveltable_small2.json` (`itch_top_of_book`, ORDERS=8/LOCATES=2/LEVELS=4,
+30 ns, 1400 µm at 15 %, resizers skipped, Magic DRC off) ran **end-to-end in one
+invocation** on the shared host:
+
+| Result | Value |
+|---|---|
+| Magic DRC | not run (disabled for runtime) |
+| KLayout DRC | **0** |
+| LVS | **0 errors** |
+| Setup (max_ss) | **−10.3496 ns** → timing **not** closed |
+| Hold (min_ff) | **+0.0163 ns** |
+| Fmax estimate | **24.78 MHz** |
+| Cells / area / util | 74,683 stdcells, 544,490 µm², 29.5 % |
+
+Scope: this is the **reduced** parameter set with the resizers skipped, so it is a
+flow/DRC/LVS result for the level table, not the 32/4/4 sign-off and not a timing
+closure. It also shows why chunked resumes must use identical flags: an earlier chunked
+attempt with mixed `--skip` sets ended at 22,500 well-layer DRC violations and 11,240 LVS
+errors, while this single consistent invocation is clean. Artifact:
+`reports/openlane_lvlsmall-full.json`.
+
 ## Level-table pre-PnR STA (2026-11-12) — measured, not a sign-off
 
 `openlane/sky130_leveltable_sta.json` targets the **level table + reduction**

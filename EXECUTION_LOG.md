@@ -271,6 +271,23 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 07:59 - Autonomy tick + first complete level-table flow (reduced config)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `87bcf1a` **success**.
+- Ran the reduced level table **continuously** (single invocation, consistent flags,
+  `sky130_leveltable_small2.json`: 8/2/4, 30 ns, 1400 µm, resizers skipped, Magic DRC
+  off) — the host held for the whole run (~2 h):
+  - detailed routing: two passes, both ended at **0 violations**
+  - **KLayout DRC 0**, **LVS 0**
+  - **hold +0.0163 ns** (min_ff), **setup −10.3496 ns** (max_ss) → timing not closed
+  - Fmax ≈ **24.8 MHz**, 74,683 stdcells, 544,490 µm², 29.5 % utilisation
+- This also proves the earlier chunked failure was a flag/state mismatch (mixed `--skip`
+  sets → 22,500 DRC + 11,240 LVS), not the design.
+- Imported with `scripts/import_openlane_run.sh` → `reports/openlane_lvlsmall-full.json`;
+  documented in `openlane/README.md`, the datasheet evidence table and the plan item.
+- Remaining for the level table: timing closure (resizers or a slower clock) and the
+  full 32/4/4 parameter set.
+
 ## 2026-11-13 05:59 - Autonomy tick + chunked small flow completes but is not clean
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `33f943b` **success**.

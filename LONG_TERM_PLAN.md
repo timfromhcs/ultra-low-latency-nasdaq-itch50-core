@@ -97,6 +97,13 @@ MDN PWA best practices, GitHub Actions docs.
       steps — which need **~9 GiB RSS**, so the WSL VM must have **12 GB** (6/10 GB OOM at
       the hold report) — but the host restarts the VM after ≈15–16 min of sustained load
       while DRT needs 20+ min and DRC 40+. **Blocked on a stable host**, not the design.
+      **2026-11-13 update:** a **reduced** config (`sky130_leveltable_small2.json`,
+      ORDERS=8/LOCATES=2/LEVELS=4, 30 ns, 1400 µm, resizers skipped, Magic DRC off)
+      completed the **whole flow in one invocation**: KLayout DRC **0**, LVS **0**,
+      hold **+0.0163 ns**, setup **−10.3496 ns** (Fmax ≈ 24.8 MHz), 74,683 stdcells
+      (`reports/openlane_lvlsmall-full.json`). So the level table can be taken through a
+      clean DRC/LVS flow on this host; what remains is timing (resizers or a slower
+      clock) and the full 32/4/4 parameter set.
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and
