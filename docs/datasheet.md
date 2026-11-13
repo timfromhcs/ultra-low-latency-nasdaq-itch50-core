@@ -60,13 +60,19 @@ Two egress paths exist:
 > (2026-11-03/04) measure WNS −9.14 ns at 3.10 ns for the raw parser (≈81.5 MHz),
 > −8.62 ns for the 128-bit wrapper (≈85.3 MHz) and **−6.55 ns for the 32-bit wrapper
 > (≈103.7 MHz)**, all at the ss corner — honest pre-place-and-route numbers, not
-> sign-offs. First **completed** wrapper P&R (2026-11-11, 50 ns, AREA synthesis):
-> 0 Magic/KLayout DRC, 0 LVS, setup +17.49 ns, hold +0.0088 ns, Fmax ≈ 30.8 MHz
-> (`reports/openlane_routetest-full.json`). A 25 ns DELAY run on a 2200 µm die reaches
-> **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0, setup +1.4597 ns,
-> hold −0.0069 ns (worst case −0.0123 ns at max_ff)** (`reports/openlane_25xl-full.json`);
-> thousands of max-cap/max-slew violations remain, so the parser itself has **no**
-> physical sign-off.
+> sign-offs.
+>
+> **Signed-off block (2026-11-12):** the wrapper (`itch_wishbone_wrap`, i.e. the parser
+> plus the 32-bit host port) completes the whole Sky130 flow at **25 ns on a 2200 µm
+> die with the resizers enabled**: **Magic DRC 0, KLayout DRC 0, LVS 0**, setup
+> **+1.3333 ns** and hold **+0.0840 ns** (0 violations over nine corners),
+> **Fmax ≈ 42.25 MHz** (`reports/openlane_25fx-full.json`). The same 25 ns run without
+> the resizers was hold-limited (−12.3 ps), and the 50 ns AREA variant closes at
+> ≈30.8 MHz (`reports/openlane_routetest-full.json`).
+>
+> Not signed off: the 10 ns target (post-route setup −13.77 ns), the standalone BBO
+> level table (pre-PnR only: WNS −1.9742 ns, ≈37.1 MHz), and the advisory max-cap /
+> max-slew counts of the wrapper flow.
 
 ## 4. Area estimate
 
