@@ -280,6 +280,9 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
   skipped for memory/runtime.
 - Run `lvlfull50` started; after ~30 min it is inside `OpenROAD.ResizerTimingPostCTS`
   (~750 iterations). Expected total ~3 h (the 42 ns run took 3 h16m).
+- **Status at 00:45:** still in the post-CTS resizer (~2,360 iterations, VM up 1 h44m).
+  The resizer dominates; GRT/DRT/DRC/LVS have not started, so the run will take longer
+  than the 42 ns one.
 - No result claimed yet; the reduced 8/2/4 42 ns sign-off and the 32/4/4 DRC/LVS result
   remain the published evidence.
 
