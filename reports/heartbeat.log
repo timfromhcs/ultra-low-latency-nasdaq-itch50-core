@@ -1748,3 +1748,91 @@ CI auf `ff22a03` **success**; keine neuen physischen Zahlen behauptet.
 Wrapper 25 ns und Level-Tabelle (8/2/4) 42 ns sind signiert; die volle 32/4/4-Tabelle ist host-limitiert (11 GiB STA). Externe Blocker unver├ñndert: FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
 [2026-11-13T16:59:20.8997736+01:00] hallo, es ist 16:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; Select-String -Path README.md -Pattern "LibreLane full flow" -Context 0,0
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci ff22a03 completed success
+
+README.md:259:| [7mLibreLane [0m[7mfull [0m[7mflow[0m | **wrapper completes the whole flow at 25 ns (2200 ´┐¢m, 
+resizers): 0 Magic/KLayout 
+DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns, Fmax ~ 42.25 MHz** (`reports/openlane_25fx-full.json`) | 
+`openlane/README.md` |
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit README.md
+Index: README.md
+===================================================================
+--- README.md
++++ README.md
+@@ -256,8 +256,9 @@
+ | Mold back-pressure | **329 bytes under random `m_axis_tready`, no loss or reordering** | `tb/test_mold_pipeline.py` 
+|
+ | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
+ | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; 
+risk limits | `tb/test_book.py` |
+ | LibreLane full flow | **wrapper completes the whole flow at 25 ns (2200 ┬Ám, resizers): 0 Magic/KLayout DRC, 0 LVS, 
+setup +1.3333 ns, hold +0.0840 ns, Fmax Ôëê 42.25 MHz** (`reports/openlane_25fx-full.json`) | `openlane/README.md` |
++| Level-table flow (reduced) | **8/2/4 at 42 ns: KLayout DRC 0, LVS 0, setup +0.1200 ns, hold +0.0163 ns, Fmax Ôëê 
+23.88 MHz** (`reports/openlane_lvlsmall42-full.json`) | `openlane/README.md` |
+ | Sky130 pre-PnR STA | **250 MHz WNS ÔêÆ8.27 ns ┬À 322 MHz WNS ÔêÆ9.14 ns ┬À Fmax Ôëê 81.5 MHz**; worst path FF ÔåÆ 
+`raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
+ | GF180 pre-PnR STA | **322 MHz WNS ÔêÆ19.87 ns ┬À Fmax Ôëê 43.5 MHz**; worst path FF ÔåÆ `raw_order_data[260]` 
+(ss/125 ┬░C, pre-PnR) | `reports/openlane_gf180-sta.json` |
+ | IHP SG13G2 pre-PnR STA | **322 MHz WNS ÔêÆ3.08 ns ┬À Fmax Ôëê 161.9 MHz**; hold WNS ÔêÆ0.052 ns; worst path FF ÔåÆ 
+FF (slow/125 ┬░C, pre-PnR) | `reports/openlane_ihp-sta.json` |
+ | Wrapper pre-PnR STA | **322 MHz WNS ÔêÆ8.62 ns ┬À Fmax Ôëê 85.3 MHz**; worst path FF ÔåÆ FF, no debug bus (ss, 
+pre-PnR) | `reports/openlane_wrap-sta.json` |
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(readme): add the level-table 42 ns result to the evidence 
+table" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, 78 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 62 insertions(+), 19 deletions(-)
+[31;1m   ff22a03..30695d8  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/gate.mjs --deep 2>&1 | Select-Object -Last 3
+PASS native-bins (674 ms)
+
+scorecard: 100% (15/15) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,17 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-13 16:59 - Autonomy tick + README evidence row and deep gate
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ff22a03` **success**.
++- Added the **level-table 42 ns result** to the main README evidence table (KLayout DRC 0,
++  LVS 0, setup +0.1200 ns, hold +0.0163 ns, Fmax Ôëê 23.88 MHz) next to the wrapper 25 ns
++  row, so both sign-offs are visible without opening `openlane/README.md`.
++- `node scripts/gate.mjs --deep` ÔåÆ **15/15** (fast 13 + formal-z3 + native bins).
++- No physical run; the full 32/4/4 table remains limited by the 11 GiB STA footprint.
++
+ ## 2026-11-13 15:59 - Autonomy tick + machine-readable physical evidence index
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `629ff3f` **success**.
+ - Added `scripts/physical_index.mjs`: aggregates every `reports/openlane_*.json` into
+

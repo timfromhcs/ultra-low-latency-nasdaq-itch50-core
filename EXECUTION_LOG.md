@@ -271,6 +271,15 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 16:59 - Autonomy tick + README evidence row and deep gate
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ff22a03` **success**.
+- Added the **level-table 42 ns result** to the main README evidence table (KLayout DRC 0,
+  LVS 0, setup +0.1200 ns, hold +0.0163 ns, Fmax ≈ 23.88 MHz) next to the wrapper 25 ns
+  row, so both sign-offs are visible without opening `openlane/README.md`.
+- `node scripts/gate.mjs --deep` → **15/15** (fast 13 + formal-z3 + native bins).
+- No physical run; the full 32/4/4 table remains limited by the 11 GiB STA footprint.
+
 ## 2026-11-13 15:59 - Autonomy tick + machine-readable physical evidence index
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `629ff3f` **success**.
