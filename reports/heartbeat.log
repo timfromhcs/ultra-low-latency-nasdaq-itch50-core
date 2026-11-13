@@ -1991,3 +1991,139 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ff22a03` **success**.
  - Added the **level-table 42 ns result** to the main README evidence table (KLayout DRC 0,
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: log the reporting-rule cleanup" 2>&1 | Select-Object 
+-Last 1; git push origin main 2>&1 | Select-Object -Last 1; Start-Sleep -Seconds 240; gh run list --repo 
+timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json headSha,status,conclusion | 
+ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }; git status 
+--porcelain
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+ 2 files changed, 136 insertions(+)
+[31;1m   8349b67..05f6a86  main -> main[0m
+ci 05f6a86 completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 17:59ÔÇô18:15 abgeschlossen ÔÇö **Reporting-Regeln an die zwei signierten Flows angepasst**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks; CI auf `4671a77` gr├╝n |
+| `docs/long-runs.md` ┬º7 | nennt jetzt korrekt die Bl├Âcke **mit** abgeschlossenem Flow (Wrapper 25 ns, reduzierte Level-Tabelle 42 ns, `itch_metrics`) und die **ohne** (volle 32/4/4-Tabelle, BBO) |
+| `docs/research-v2.md` | ÔÇ×OpenLane-Configs sind flow-ready, nicht signiert" ersetzt durch Verweis auf die zwei Sign-offs + Pre-PnR-Caveat |
+| CI-Abdeckung gepr├╝ft | Der `wasm-web`-Job f├╝hrt bereits `node scripts/gate.mjs` aus ÔÇö die neuen `reports`- und `mcp-docs`-Checks laufen also auch in CI (keine Workflow-├änderung n├Âtig) |
+| Gate | **13/13**; Docs-Links 25/25, 78 Report-Referenzen |
+
+## Verifikation
+CI auf `05f6a86` **success**; Commits `8349b67`, `05f6a86`.
+
+## Status
+Unver├ñndert: Wrapper 25 ns und Level-Tabelle (8/2/4) 42 ns signiert; 32/4/4-Level-Tabelle RAM-limitiert; externe Blocker (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle) bestehen.
+[2026-11-13T18:59:21.7126876+01:00] hallo, es ist 18:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; wsl -d Ubuntu bash -lc 'free -g | sed -n 2p' 2>&1 | Select-Object -Last 2
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci 05f6a86 completed success
+Mem:              11           0          10           0           1          11
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlfull42c.sh
+Created file successfully: reports/run_lvlfull42c.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlfull42c.sh 
+/home/tim/chiplab-native/run_lvlfull42c.sh && chmod +x /home/tim/chiplab-native/run_lvlfull42c.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlfull42c.sh'; 
+Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail -2 /home/tim/chiplab-native/lvlfull42c.log | tr -d "\000"; date' 
+2>&1 | Select-Object -Last 3
+copied
+                                                                                                                       
+ 
+156.1. Extracting gate netlist of module `\itch_top_of_book' to `/tmp/yosys-abc-10o5G3/input.blif'..                   
+ 
+Fri Nov 13 19:02:05 CET 2026
+> build ┬À deepseek-v4.1-flash
+[2026-11-13T19:59:23.4889916+01:00] hallo, es ist 19:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "EXIT=|Number of violations =" /home/tim/chiplab-native/lvlfull42c.log | 
+tail -3; ls /home/tim/chiplab-native/openlane/runs/lvlfull42c 2>/dev/null | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/lvlfull42c.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 6
+[INFO DRT-0199]   Number of violations = 96996.                                                                        
+ 
+38-openroad-stamidpnr-3
+39-openroad-detailedrouting
+    elapsed time = 00:02:19, memory = 6322.37 (MB).                                                                    
+ 
+Fri Nov 13 20:10:49 CET 2026
+ 20:10:49 up  1:10
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+?? reports/run_lvlfull42c.sh
+ci 05f6a86 completed success
+> build ┬À deepseek-v4.1-flash
+[2026-11-13T20:59:20.7690672+01:00] hallo, es ist 20:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" /home/tim/chiplab-native/lvlfull42c.log | tail -1; ls 
+/home/tim/chiplab-native/openlane/runs/lvlfull42c 2>/dev/null | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/lvlfull42c.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 5
+49-openroad-rcx
+50-openroad-stapostpnr
+                    'openlane/runs/lvlfull42c/50-openroad-stapostpnr/max_ss_100C_1v60/sta.log'ÔÇª                      
+   
+Fri Nov 13 21:01:20 CET 2026
+ 21:01:20 up  2:01
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+?? reports/run_lvlfull42c.sh
+ci 05f6a86 completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" /home/tim/chiplab-native/lvlfull42c.log 
+| tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlfull42c 2>/dev/null | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/lvlfull42c.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 5
+50-openroad-stapostpnr
+51-openroad-irdropreport
+[INFO] Using voltage extracted from lib (1.8000000000V) for power nets and 0V for ground netsÔÇª                       
+   
+Fri Nov 13 21:14:51 CET 2026
+ 21:14:51 up  2:14
+> build ┬À deepseek-v4.1-flash
+[2026-11-13T21:59:23.1558503+01:00] hallo, es ist 21:59
+[tick] ran 0, failed 0

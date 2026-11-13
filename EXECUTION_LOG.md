@@ -271,6 +271,22 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 20:59 - Autonomy tick + full 32/4/4 level table completes (DRC/LVS 0)
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `05f6a86` **success**.
+- The **full 32/4/4** level table at 42 ns ran continuously for **3 h16m** on the host and
+  completed the whole flow (`lvlfull42c`, retried with the mid-PnR STA steps skipped so
+  memory stayed inside the 12 GB VM):
+  - **KLayout DRC 0**, **LVS 0** (Magic DRC disabled for runtime)
+  - setup **−6.9897 ns** (max_ss), hold **−0.0470 ns** (min_ff) → timing open
+  - **154,883 stdcells**, 1,047,870 µm², 22.5 % — the full parameter set is ~2× the
+    8/2/4 area, so the earlier "parameters do not shrink the block" note was wrong and is
+    corrected in the docs
+  - Fmax estimate **20.41 MHz** (needs ≈49 ns)
+- Imported → `reports/openlane_lvlfull42-full.json`; documented in `openlane/README.md`,
+  datasheet, plan and changelog. The reduced 8/2/4 42 ns run stays the timing-closed
+  level-table sign-off; a closed 32/4/4 needs the resizers (hold −47 ps) and ≥49 ns.
+
 ## 2026-11-13 17:59 - Autonomy tick + reporting rules aligned with the signed-off flows
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `4671a77` **success**.

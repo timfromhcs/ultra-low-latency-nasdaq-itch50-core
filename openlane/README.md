@@ -130,8 +130,26 @@ consistent invocation is clean. Artifact: `reports/openlane_lvlsmall-full.json`.
 
 So the level table (reduced 8/2/4 parameters, resizers skipped, Magic DRC off) has a
 **complete DRC/LVS-clean, timing-closed flow at 42 ns**:
-`reports/openlane_lvlsmall42-full.json`. The full 32/4/4 parameter set and Magic DRC
-remain open.
+`reports/openlane_lvlsmall42-full.json`.
+
+### Full 32/4/4 parameters: complete flow, DRC/LVS clean, timing open
+
+`openlane/sky130_leveltable_full42.json` is the **full** parameter set (ORDERS=32,
+LOCATES=4, LEVELS=4) at 42 ns on a 2200 µm die; the single run (`lvlfull42c`) completed
+after ≈3 h16m on the host:
+
+| Result | Value |
+|---|---|
+| KLayout DRC / LVS | **0 / 0** |
+| Magic DRC | not run (disabled for runtime) |
+| Setup (max_ss) | **−6.9897 ns** |
+| Hold (min_ff) | **−0.0470 ns** |
+| Fmax estimate | **20.41 MHz** (needs ≈49 ns) |
+| Cells / area / util | **154,883 stdcells**, 1,047,870 µm², 22.5 % |
+
+So the full parameter set is **roughly twice the area** of the 8/2/4 variant and misses
+42 ns by ≈7 ns; `reports/openlane_lvlfull42-full.json` records it. A timing-closed
+32/4/4 sign-off needs the resizers (hold −47 ps) and a ≥49 ns clock.
 
 ## Level-table pre-PnR STA (2026-11-12) — measured, not a sign-off
 

@@ -15,6 +15,7 @@ All notable changes to ChipLab are documented here. The format follows
   `reports/openlane_areasized-full.json`; the 10 ns target is unreachable (post-route
   setup −13.77 ns).
 - **Level-table physical flow (reduced 8/2/4)**: the block completes the whole Sky130 flow in one invocation at **42 ns** with **setup +0.1200 ns, hold +0.0163 ns, KLayout DRC 0, LVS 0** (Fmax ~ 23.88 MHz, `reports/openlane_lvlsmall42-full.json`). At 30 ns the same netlist routes and is DRC/LVS-clean but misses setup by 10.35 ns (`reports/openlane_lvlsmall-full.json`). Magic DRC and the 32/4/4 parameter set remain open.
+- **Full 32/4/4 level table**: complete flow in one ~3 h run — **KLayout DRC 0, LVS 0**, setup −6.9897 ns, hold −0.0470 ns at 42 ns, 154,883 stdcells / 1.05 mm² (`reports/openlane_lvlfull42-full.json`). Timing closure still needs the resizers and ≥49 ns.
 - Docker-free LibreLane path inside WSL (`docs/long-runs.md` §2b), used for all
   multi-hour runs; parity with the container verified (same WNS/slew numbers).
 - Physical flow configs: `sky130_wrap32_{routetest,areasized,wide,fitted,25ns_xl,10ns_xl,25ns_fx2,25ns_slew}.json`,

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T15:00:25.537Z",
+  "generatedAt": "2026-11-13T21:19:16.494Z",
   "flows": [
     {
       "tag": "25fx-full",
@@ -74,6 +74,21 @@
       "klayoutDrc": null,
       "lvsErrors": null,
       "stdcells": null,
+      "caveat": null
+    },
+    {
+      "tag": "lvlfull42-full",
+      "report": "openlane_lvlfull42-full.json",
+      "kind": "full",
+      "clockPeriodNs": 42,
+      "fmaxMHz": 20.41,
+      "timingClosed": false,
+      "setupWs": -6.989719223478908,
+      "holdWs": -0.04704370359753349,
+      "magicDrc": null,
+      "klayoutDrc": 0,
+      "lvsErrors": 0,
+      "stdcells": 154883,
       "caveat": null
     },
     {
