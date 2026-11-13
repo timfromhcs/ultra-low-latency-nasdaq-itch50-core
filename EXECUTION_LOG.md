@@ -271,6 +271,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 13:59 - Autonomy tick + full 32/4/4 level table hits the memory wall
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `7b5b58f` **success**.
+- Tried the **full 32/4/4** level table at 42 ns (`sky130_leveltable_full42.json`): the
+  mid-PnR STA reports **peak RSS 11 GiB**, so the 12 GB VM OOM-killed it at the hold
+  report (`EXIT=1`).
+- Raised the VM to **14 GB** and resumed at `OpenROAD.STAMidPNR`: the STA passed and the
+  flow advanced to step 32, but the host then became unresponsive and the run died with
+  the VM (14 GB leaves too little for Windows on a 19.8 GB machine). Reverted to 12 GB.
+- So the full-parameter block needs ≥12 GB of STA footprint **and** a host that can spare
+  ~14 GB; this machine cannot do both. The **reduced 8/2/4 sign-off at 42 ns** stands as
+  the level-table evidence (`reports/openlane_lvlsmall42-full.json`).
+- Config committed for a host with more RAM.
+
 ## 2026-11-13 10:59 - Autonomy tick + level-table flow closes timing at 42 ns
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9250b65` **success**.

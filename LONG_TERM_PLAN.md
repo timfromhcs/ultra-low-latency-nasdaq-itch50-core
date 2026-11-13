@@ -108,7 +108,9 @@ MDN PWA best practices, GitHub Actions docs.
       KLayout DRC **0**, LVS **0**, Fmax ≈ **23.88 MHz**
       (`reports/openlane_lvlsmall42-full.json`). That is a complete, timing-closed
       level-table flow for the reduced 8/2/4 configuration; the 32/4/4 set and Magic DRC
-      are still open.
+      are still open. **Full 32/4/4 attempt (2026-11-13):** its mid-PnR STA needs
+      **11 GiB RSS** (12 GB VM OOMs), and a 14 GB VM makes this host unresponsive; the
+      full-parameter sign-off needs a machine that can spare ~14 GB for WSL.
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and

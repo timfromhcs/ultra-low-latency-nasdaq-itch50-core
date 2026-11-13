@@ -905,3 +905,396 @@ Gate **13/13**; `check_reports` **11/11**; Docs-Links 25/25, 72 Report-Referenze
 F├╝r die Level-Tabelle bleibt: Timing schlie├ƒen (Resizer oder langsamerer Takt) und die vollen 32/4/4-Parameter. Der Wrapper-25-ns-Signoff bleibt unver├ñndert die prim├ñre physische Evidenz.
 [2026-11-13T10:59:21.8295074+01:00] hallo, es ist 10:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_leveltable_sma
+ll2.json','utf8'));j.CLOCK_PERIOD=42.0;fs.writeFileSync('openlane/sky130_leveltable_small3.json',JSON.stringify(j,null,
+2)+'\n');console.log('small3 written (42 ns)')"
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci 9250b65 completed success
+small3 written (42 ns)
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlsmall4.sh
+Created file successfully: reports/run_lvlsmall4.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlsmall4.sh 
+/home/tim/chiplab-native/run_lvlsmall4.sh && chmod +x /home/tim/chiplab-native/run_lvlsmall4.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlsmall4.sh'; 
+Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail -1 /home/tim/chiplab-native/lvlsmall4.log | tr -d "\000"; date' 
+2>&1 | Select-Object -Last 2
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+156.1. Extracting gate netlist of module `\itch_top_of_book' to `/tmp/yosys-abc-P23OQI/input.blif'..                   
+ 
+Fri Nov 13 11:02:14 CET 2026
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 1800; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/lvlsmall4.log | tail -2; ls /home/tim/chiplab-native/openlane/runs/lvlsmall4 2>/dev/null | 
+grep -E "^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall4.log | tr -d "\000"; date; uptime | cut -c1-18' 
+2>&1 | Select-Object -Last 6
+[INFO DRT-0199]   Number of violations = 45433.                                                                        
+ 
+41-openroad-stamidpnr-3
+42-openroad-detailedrouting
+    elapsed time = 00:02:31, memory = 2626.26 (MB).                                                                    
+ 
+Fri Nov 13 11:32:25 CET 2026
+ 11:32:25 up 31 mi
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 1500; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/lvlsmall4.log | tail -3; ls /home/tim/chiplab-native/openlane/runs/lvlsmall4 2>/dev/null | 
+grep -E "^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall4.log | tr -d "\000"; date; uptime | cut -c1-18' 
+2>&1 | Select-Object -Last 6
+[INFO DRT-0199]   Number of violations = 15312.                                                                        
+ 
+41-openroad-stamidpnr-3
+42-openroad-detailedrouting
+    elapsed time = 00:00:33, memory = 3630.65 (MB).                                                                    
+ 
+Fri Nov 13 11:57:33 CET 2026
+ 11:57:33 up 57 mi
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 1500; wsl -d Ubuntu bash -lc 'grep -a -E "Number of violations =" 
+/home/tim/chiplab-native/lvlsmall4.log | tail -3; ls /home/tim/chiplab-native/openlane/runs/lvlsmall4 2>/dev/null | 
+grep -E "^[0-9]" | tail -2; tail -1 /home/tim/chiplab-native/lvlsmall4.log | tr -d "\000"; date; uptime | cut -c1-18' 
+2>&1 | Select-Object -Last 6
+[INFO DRT-0199]   Number of violations = 0.                                                                            
+ 
+52-openroad-rcx
+53-openroad-stapostpnr
+                    'openlane/runs/lvlsmall4/53-openroad-stapostpnr/min_ff_n40C_1v95/sta.log'ÔÇª                       
+   
+Fri Nov 13 12:22:39 CET 2026
+ 12:22:39 up  1:22
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 1200; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" /home/tim/chiplab-native/lvlsmall4.log 
+| tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall4 2>/dev/null | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/lvlsmall4.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 6
+61-checker-xor
+62-klayout-drc
+"-" in: sky130A_mr.drc:1010                                                                                            
+ 
+Fri Nov 13 12:42:47 CET 2026
+ 12:42:47 up  1:42
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 720; wsl -d Ubuntu bash -lc 'grep -a -E "EXIT=" /home/tim/chiplab-native/lvlsmall4.log 
+| tail -1; ls /home/tim/chiplab-native/openlane/runs/lvlsmall4 2>/dev/null | grep -E "^[0-9]" | tail -2; tail -1 
+/home/tim/chiplab-native/lvlsmall4.log | tr -d "\000"; date; uptime | cut -c1-18' 2>&1 | Select-Object -Last 6
+71-checker-maxcapviolations
+72-misc-reportmanufacturability
+EXIT=0
+Fri Nov 13 12:55:36 CET 2026
+ 12:55:36 up 0 min
+[31;1m [0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl --shutdown 2>&1 | Out-Null; Start-Sleep -Seconds 8; wsl -d Ubuntu bash -lc 'grep -oE "\"(design__lvs_erro
+r__count|klayout__drc_error__count|timing__setup__ws|timing__hold__ws|design__instance__count__stdcell|design__instance
+__area__stdcell|design__instance__utilization)\": ?[^,}]*" 
+/home/tim/chiplab-native/openlane/runs/lvlsmall4/final/metrics.json'
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ "timing__hold__ws": 0.016339707827039238
+"timing__setup__ws": 0.11995382804354605
+"design__instance__count__stdcell": 74683
+"design__instance__area__stdcell": 544490
+"design__instance__utilization": 0.295024
+"klayout__drc_error__count": 0
+"design__lvs_error__count": 0
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'sudo bash /mnt/e/chips/main/scripts/import_openlane_run.sh 
+/home/tim/chiplab-native/openlane/runs/lvlsmall4 lvlsmall42-full' 2>&1 | Select-Object -Last 6; cd E:\chips\main; node 
+scripts/openlane_summary.mjs openlane/runs/lvlsmall42-full 2>&1 | Select-Object -Last 8
+/mnt/e/chips/main/openlane/runs/lvlsmall42-full/sta:
+max.rpt
+min.rpt
+summary.rpt
+wns.max.rpt
+wns.min.rpt
+  timingClosed = true
+worst path:
+  file = openlane/runs/lvlsmall42-full/sta/max.rpt
+  startpoint = s_locate[0] (input port clocked by clk)
+  endpoint = _77517_ (rising edge-triggered flip-flop clocked by clk)
+  pathGroup = clk
+  slackNs = 0
+wrote reports/openlane_lvlsmall42-full.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const 
+j=require('./reports/openlane_lvlsmall42-full.json');console.log(JSON.stringify(j.derived))"
+{"clockPeriodNs":42,"fmaxEstimateMHz":23.88,"timingClosed":true}
+> build ┬À deepseek-v4.1-flash
+[0mÔåÆ [0mRead openlane/README.md [90m[limit=26, offset=96][0m
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit openlane/README.md
+Index: openlane/README.md
+===================================================================
+--- openlane/README.md
++++ openlane/README.md
+@@ -106,14 +106,31 @@
+ | Fmax estimate | **24.78 MHz** |
+ | Cells / area / util | 74,683 stdcells, 544,490 ┬Ám┬▓, 29.5 % |
+ 
+ Scope: this is the **reduced** parameter set with the resizers skipped, so it is a
+-flow/DRC/LVS result for the level table, not the 32/4/4 sign-off and not a timing
+-closure. It also shows why chunked resumes must use identical flags: an earlier chunked
+-attempt with mixed `--skip` sets ended at 22,500 well-layer DRC violations and 11,240 LVS
+-errors, while this single consistent invocation is clean. Artifact:
+-`reports/openlane_lvlsmall-full.json`.
++flow/DRC/LVS result for the level table, not the 32/4/4 sign-off. It also shows why
++chunked resumes must use identical flags: an earlier chunked attempt with mixed `--skip`
++sets ended at 22,500 well-layer DRC violations and 11,240 LVS errors, while this single
++consistent invocation is clean. Artifact: `reports/openlane_lvlsmall-full.json`.
+ 
++### The same config at 42 ns closes everything
++
++`openlane/sky130_leveltable_small3.json` is the same design retargeted to **42 ns**
++(measured path Ôëê 40.35 ns). The single run (`lvlsmall4`) completed with:
++
++| Result | Value |
++|---|---|
++| KLayout DRC / LVS | **0 / 0** |
++| Setup (max_ss) | **+0.1200 ns** |
++| Hold (min_ff) | **+0.0163 ns** |
++| Fmax estimate | **23.88 MHz** |
++| Cells / area | 74,683 stdcells, 544,490 ┬Ám┬▓, 29.5 % |
++
++So the level table (reduced 8/2/4 parameters, resizers skipped, Magic DRC off) has a
++**complete DRC/LVS-clean, timing-closed flow at 42 ns**:
++`reports/openlane_lvlsmall42-full.json`. The full 32/4/4 parameter set and Magic DRC
++remain open.
++
+ ## Level-table pre-PnR STA (2026-11-12) ÔÇö measured, not a sign-off
+ 
+ `openlane/sky130_leveltable_sta.json` targets the **level table + reduction**
+ (`itch_top_of_book`, `ORDERS=32`, `LOCATES=4`, `LEVELS=4`) at 25 ns on sky130. It is the
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit LONG_TERM_PLAN.md
+Index: LONG_TERM_PLAN.md
+===================================================================
+--- LONG_TERM_PLAN.md
++++ LONG_TERM_PLAN.md
+@@ -103,8 +103,13 @@
+       hold **+0.0163 ns**, setup **ÔêÆ10.3496 ns** (Fmax Ôëê 24.8 MHz), 74,683 stdcells
+       (`reports/openlane_lvlsmall-full.json`). So the level table can be taken through a
+       clean DRC/LVS flow on this host; what remains is timing (resizers or a slower
+       clock) and the full 32/4/4 parameter set.
++      **Same config at 42 ns closes:** setup **+0.1200 ns**, hold **+0.0163 ns**,
++      KLayout DRC **0**, LVS **0**, Fmax Ôëê **23.88 MHz**
++      (`reports/openlane_lvlsmall42-full.json`). That is a complete, timing-closed
++      level-table flow for the reduced 8/2/4 configuration; the 32/4/4 set and Magic DRC
++      are still open.
+ - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
+       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
+ - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and
+       pipeline, beats held until accepted; 329 bytes under random stalls, no loss.
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -174,8 +174,9 @@
+ | Wrapper 25 ns XL (2200 ┬Ám) | **0 DRT violations, Magic DRC 0, KLayout DRC 0 (257 rules), LVS 0**, setup +1.4597 
+ns, hold ÔêÆ0.0069 ns | `reports/openlane_25xl-full.json` |
+ | Wrapper 25 ns + resizers (25fx) | **complete flow: Magic/KLayout DRC 0, LVS 0, setup +1.3333 ns, hold +0.0840 ns (0 
+violations), Fmax Ôëê 42.25 MHz**; max-cap/slew advisory counts remain | `reports/openlane_25fx-full.json` |
+ | Level table pre-PnR (32/4/4, 25 ns) | setup **WNS ÔêÆ1.9742 ns**, TNS ÔêÆ1,753 ns, Fmax Ôëê 37.1 MHz, 769,484 ┬Ám┬▓ 
+generic, worst path `s_locate[1]` ÔåÆ FF (pre-PnR, not a sign-off) | `openlane/README.md` ┬ºlevel-table |
+ | Level table full flow (reduced 8/2/4, 30 ns) | **complete flow: KLayout DRC 0, LVS 0, hold +0.0163 ns, setup 
+ÔêÆ10.3496 ns** (Fmax Ôëê 24.8 MHz), 74,683 stdcells; Magic DRC off, resizers skipped | 
+`reports/openlane_lvlsmall-full.json` |
++| Level table full flow (reduced 8/2/4, 42 ns) | **timing-closed: setup +0.1200 ns, hold +0.0163 ns, KLayout DRC 0, 
+LVS 0**, Fmax Ôëê **23.88 MHz** | `reports/openlane_lvlsmall42-full.json` |
+ 
+ ## 8. Known limitations
+ 
+ See `errata.md`. In short: no 100G MAC, no PCIe/DMA, **no parser physical sign-off**
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -6,10 +6,9 @@
+ 
+ ## Unreleased
+ 
+ ### Added
+-- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 ┬Ám
+-  die with the post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow ÔÇö
++- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 ┬Ám  die with the 
+post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow ÔÇö
+   **0 Magic/KLayout DRC, 0 LVS**, setup **+1.3333 ns**, hold **+0.0840 ns** (0 violations
+   over nine corners), **Fmax Ôëê 42.25 MHz**
+   (`reports/openlane_25fx-full.json`). Flow/DRC/LVS evidence for the 50 ns and 30 ns
+   variants is in `reports/openlane_routetest-full.json` and
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Get-Content CHANGELOG.md | Select-Object -Skip 7 -First 12
+### Added
+- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 ´┐¢m  die with the 
+post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow -
+  **0 Magic/KLayout DRC, 0 LVS**, setup **+1.3333 ns**, hold **+0.0840 ns** (0 violations
+  over nine corners), **Fmax ~ 42.25 MHz**
+  (`reports/openlane_25fx-full.json`). Flow/DRC/LVS evidence for the 50 ns and 30 ns
+  variants is in `reports/openlane_routetest-full.json` and
+  `reports/openlane_areasized-full.json`; the 10 ns target is unreachable (post-route
+  setup -13.77 ns).
+- Docker-free LibreLane path inside WSL (`docs/long-runs.md` ´┐¢2b), used for all
+  multi-hour runs; parity with the container verified (same WNS/slew numbers).
+- Physical flow configs: `sky130_wrap32_{routetest,areasized,wide,fitted,25ns_xl,10ns_xl,25ns_fx2,25ns_slew}.json`,
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');let 
+s=fs.readFileSync('CHANGELOG.md','utf8');s=s.split(/\r?\n/).map(l=>l.startsWith('- **Physical sign-off for the 
+wrapper')?'- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 um die with the 
+post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow 
+-':l).join('\n');fs.writeFileSync('CHANGELOG.md',s);console.log('fixed')"
+fixed
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node -e "const fs=require('fs');let s=fs.readFileSync('CHANGELOG.md','utf8');const 
+anchor='- Docker-free LibreLane path inside WSL';const add='- **Level-table physical flow (reduced 8/2/4)**: the block 
+completes the whole Sky130 flow in one invocation at **42 ns** with **setup +0.1200 ns, hold +0.0163 ns, KLayout DRC 
+0, LVS 0** (Fmax ~ 23.88 MHz, `reports/openlane_lvlsmall42-full.json`). At 30 ns the same netlist routes and is 
+DRC/LVS-clean but misses setup by 10.35 ns (`reports/openlane_lvlsmall-full.json`). Magic DRC and the 32/4/4 parameter 
+set remain open.\n';s=s.replace(anchor,add+anchor);fs.writeFileSync('CHANGELOG.md',s);console.log('bullet added')"
+[eval]:1
+const fs=require('fs');let s=fs.readFileSync('CHANGELOG.md','utf8');const anchor='- Docker-free LibreLane path inside 
+WSL';const add='- **Level-table physical flow (reduced 8/2/4)**: the block completes the whole Sky130 flow in one 
+invocation at **42 ns** with **setup +0.1200 ns, hold +0.0163 ns, KLayout DRC 0, LVS 0** (Fmax ~ 23.88 MHz, 
+                                                                                                                       
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Expected ';', '}' or <eof>
+
+SyntaxError: Invalid or unexpected token
+    at makeContextifyScript (node:internal/vm:185:14)
+    at compileScript (node:internal/process/execution:383:10)
+    at evalTypeScript (node:internal/process/execution:256:22)
+    at node:internal/main/eval_string:74:3
+
+Node.js v22.23.1
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit CHANGELOG.md
+Index: CHANGELOG.md
+===================================================================
+--- CHANGELOG.md
++++ CHANGELOG.md
+@@ -13,8 +13,9 @@
+   (`reports/openlane_25fx-full.json`). Flow/DRC/LVS evidence for the 50 ns and 30 ns
+   variants is in `reports/openlane_routetest-full.json` and
+   `reports/openlane_areasized-full.json`; the 10 ns target is unreachable (post-route
+   setup ÔêÆ13.77 ns).
++- **Level-table physical flow (reduced 8/2/4)**: the block completes the whole Sky130 flow in one invocation at **42 
+ns** with **setup +0.1200 ns, hold +0.0163 ns, KLayout DRC 0, LVS 0** (Fmax ~ 23.88 MHz, 
+`reports/openlane_lvlsmall42-full.json`). At 30 ns the same netlist routes and is DRC/LVS-clean but misses setup by 
+10.35 ns (`reports/openlane_lvlsmall-full.json`). Magic DRC and the 32/4/4 parameter set remain open.
+ - Docker-free LibreLane path inside WSL (`docs/long-runs.md` ┬º2b), used for all
+   multi-hour runs; parity with the container verified (same WNS/slew numbers).
+ - Physical flow configs: `sky130_wrap32_{routetest,areasized,wide,fitted,25ns_xl,10ns_xl,25ns_fx2,25ns_slew}.json`,
+   plus `sky130_book_sta.json` and `sky130_leveltable_sta.json` for the BBO/level-table
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,23 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-13 10:59 - Autonomy tick + level-table flow closes timing at 42 ns
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9250b65` **success**.
++- The 30 ns reduced run showed setup ÔêÆ10.35 ns, so the same design was retargeted to
++  **42 ns** (`sky130_leveltable_small3.json`, path Ôëê40.35 ns). The single continuous run
++  (`lvlsmall4`) completed on the host:
++  - **KLayout DRC 0**, **LVS 0**
++  - **setup +0.1200 ns** (max_ss), **hold +0.0163 ns** (min_ff)
++  - **Fmax Ôëê 23.88 MHz**, 74,683 stdcells, 544,490 ┬Ám┬▓, 29.5 %
++- Imported with `scripts/import_openlane_run.sh` ÔåÆ `reports/openlane_lvlsmall42-full.json`.
++  This is the first **timing-closed, DRC/LVS-clean** level-table flow (reduced 8/2/4
++  parameters, resizers skipped, Magic DRC off).
++- Documented in `openlane/README.md`, the datasheet evidence table, the plan item and the
++  changelog.
++
+ ## 2026-11-13 07:59 - Autonomy tick + first complete level-table flow (reduced config)
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `87bcf1a` **success**.
+ - Ran the reduced level table **continuously** (single invocation, consistent flags,
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Remove-Item reports\run_lvlsmall4.sh -ErrorAction SilentlyContinue; node 
+scripts/check_reports.mjs; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2
+[OK] 12 openlane report artifacts valid
+[OK] 25 Markdown files, 77 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "feat(openlane): level table closes at 42 ns with 0 DRC/0 LVS" 
+2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'openlane/sky130_leveltable_small3.json', LF will be replaced by CRLF the next time 
+Git touches it
+warning: in the working copy of 'reports/openlane_lvlsmall42-full.json', LF will be replaced by CRLF the next time Git 
+touches it
+ create mode 100644 reports/openlane_lvlsmall42-full.json
+[31;1m   9250b65..7b5b58f  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci 
+$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+ci 7b5b58f completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 10:59ÔÇô13:10 abgeschlossen ÔÇö **Level-Tabelle jetzt vollst├ñndig signiert (42 ns, DRC/LVS 0, Timing zu)**.
+
+## Ergebnis `lvlsmall4` (8/2/4, 42 ns, 1400 ┬Ám, ein einziger Lauf)
+| Pr├╝fung | Wert |
+|---|---|
+| KLayout DRC | **0** |
+| LVS | **0 Fehler** |
+| Setup (max_ss) | **+0,1200 ns** |
+| Hold (min_ff) | **+0,0163 ns** |
+| **Fmax-Sch├ñtzung** | **23,88 MHz** |
+| Zellen / Fl├ñche / Util. | 74.683 Std-Zellen, 544.490 ┬Ám┬▓, 29,5 % |
+
+Damit liegt erstmals ein **kompletter, timing-geschlossener Level-Table-Flow** vor (reduzierte 8/2/4-Parameter, Resizer geskippt, Magic DRC aus). Der 30-ns-Lauf derselben Netzliste war DRC/LVS-clean, verfehlte Setup um 10,35 ns ÔÇö die 42-ns-Retargeting-Entscheidung war also physikalisch begr├╝ndet.
+
+## Artefakte/Doku
+- `reports/openlane_lvlsmall42-full.json` (Import + Summary, `timingClosed: true`)
+- Konfig `openlane/sky130_leveltable_small3.json`
+- `openlane/README.md` (neue Sektion), `docs/datasheet.md`, `LONG_TERM_PLAN.md`, `CHANGELOG.md`, `EXECUTION_LOG.md`
+
+## Verifikation
+Gate **13/13**; `check_reports` **12/12**; Docs-Links 25/25, 77 Report-Referenzen; CI auf `7b5b58f` **success**.
+
+## Status
+- **Wrapper 25 ns**: signiert (42,25 MHz).
+- **Level-Tabelle (reduziert) 42 ns**: signiert (23,88 MHz).
+- Offen: Level-Tabelle mit vollen 32/4/4-Parametern + Magic DRC; externe Blocker (FPGA, Caravel, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-13T13:59:21.8066257+01:00] hallo, es ist 13:59
+[tick] ran 0, failed 0
