@@ -271,6 +271,23 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 05:59 - Autonomy tick + chunked small flow completes but is not clean
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `33f943b` **success**.
+- Chunked the reduced flow (`sky130_leveltable_small.json`, 8/2/4, 30 ns, 1400 µm):
+  - DRT chunk: **EXIT=0**, all passes ended at 0 violations
+  - RCX + 2-corner STA + streamout chunk: **EXIT=0** (GDS written)
+  - KLayout DRC chunk: **EXIT=0** in ~9 min
+  - SPICE extraction + Netgen LVS chunk: ran to the last step, **EXIT=2** (checker)
+- Result is **not clean**: KLayout DRC **22,500** (all nwell/hvtp rules: nwell.1 2814,
+  hvtp.1 2814, hvtp.2 2816, nwell.2a 14056), **LVS 11,240 errors**, setup **−15.28 ns**,
+  hold −0.062 ns, 75,703 stdcells — the reduced parameters did not shrink the block, and
+  the chunked resume mixed differently-flagged invocations (resizers/Magic DRC skipped in
+  some chunks), so the layout and the extracted netlist disagree.
+- Conclusion: chunking is mechanically viable on this host, but a sign-off needs one
+  consistent invocation (or identical flags in every chunk). Nothing is claimed from this
+  run; the 32/4/4 pre-PnR number stands.
+
 ## 2026-11-13 01:59 - Autonomy tick + chunked small-config flow stays alive
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `84d348f` **success**.
