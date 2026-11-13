@@ -271,6 +271,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 17:59 - Autonomy tick + reporting rules aligned with the signed-off flows
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `4671a77` **success**.
+- Corrected two stale statements:
+  - `docs/long-runs.md` §7 now names the blocks that actually have completed flows
+    (wrapper 25 ns, reduced level table 42 ns, `itch_metrics`) and the ones that do not
+    (full 32/4/4 level table, BBO block).
+  - `docs/research-v2.md` no longer says the OpenLane configs are simply "flow-ready, not
+    signed off"; it points at the two signed-off flows and keeps the pre-PnR caveat.
+- Noted that CI's `wasm-web` job already runs `node scripts/gate.mjs`, so the new
+  `reports` and `mcp-docs` checks are enforced in CI too — no workflow change needed.
+- Gate 13/13; docs links and 78 report references valid.
+
 ## 2026-11-13 16:59 - Autonomy tick + README evidence row and deep gate
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `ff22a03` **success**.
