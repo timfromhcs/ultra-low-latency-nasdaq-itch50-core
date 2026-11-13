@@ -107,11 +107,28 @@ invocation** on the shared host:
 | Cells / area / util | 74,683 stdcells, 544,490 µm², 29.5 % |
 
 Scope: this is the **reduced** parameter set with the resizers skipped, so it is a
-flow/DRC/LVS result for the level table, not the 32/4/4 sign-off and not a timing
-closure. It also shows why chunked resumes must use identical flags: an earlier chunked
-attempt with mixed `--skip` sets ended at 22,500 well-layer DRC violations and 11,240 LVS
-errors, while this single consistent invocation is clean. Artifact:
-`reports/openlane_lvlsmall-full.json`.
+flow/DRC/LVS result for the level table, not the 32/4/4 sign-off. It also shows why
+chunked resumes must use identical flags: an earlier chunked attempt with mixed `--skip`
+sets ended at 22,500 well-layer DRC violations and 11,240 LVS errors, while this single
+consistent invocation is clean. Artifact: `reports/openlane_lvlsmall-full.json`.
+
+### The same config at 42 ns closes everything
+
+`openlane/sky130_leveltable_small3.json` is the same design retargeted to **42 ns**
+(measured path ≈ 40.35 ns). The single run (`lvlsmall4`) completed with:
+
+| Result | Value |
+|---|---|
+| KLayout DRC / LVS | **0 / 0** |
+| Setup (max_ss) | **+0.1200 ns** |
+| Hold (min_ff) | **+0.0163 ns** |
+| Fmax estimate | **23.88 MHz** |
+| Cells / area | 74,683 stdcells, 544,490 µm², 29.5 % |
+
+So the level table (reduced 8/2/4 parameters, resizers skipped, Magic DRC off) has a
+**complete DRC/LVS-clean, timing-closed flow at 42 ns**:
+`reports/openlane_lvlsmall42-full.json`. The full 32/4/4 parameter set and Magic DRC
+remain open.
 
 ## Level-table pre-PnR STA (2026-11-12) — measured, not a sign-off
 

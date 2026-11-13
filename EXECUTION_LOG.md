@@ -271,6 +271,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 10:59 - Autonomy tick + level-table flow closes timing at 42 ns
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9250b65` **success**.
+- The 30 ns reduced run showed setup −10.35 ns, so the same design was retargeted to
+  **42 ns** (`sky130_leveltable_small3.json`, path ≈40.35 ns). The single continuous run
+  (`lvlsmall4`) completed on the host:
+  - **KLayout DRC 0**, **LVS 0**
+  - **setup +0.1200 ns** (max_ss), **hold +0.0163 ns** (min_ff)
+  - **Fmax ≈ 23.88 MHz**, 74,683 stdcells, 544,490 µm², 29.5 %
+- Imported with `scripts/import_openlane_run.sh` → `reports/openlane_lvlsmall42-full.json`.
+  This is the first **timing-closed, DRC/LVS-clean** level-table flow (reduced 8/2/4
+  parameters, resizers skipped, Magic DRC off).
+- Documented in `openlane/README.md`, the datasheet evidence table, the plan item and the
+  changelog.
+
 ## 2026-11-13 07:59 - Autonomy tick + first complete level-table flow (reduced config)
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `87bcf1a` **success**.

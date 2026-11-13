@@ -1,0 +1,38 @@
+{
+  "DESIGN_NAME": "itch_top_of_book",
+  "VERILOG_FILES": [
+    "dir::../rtl/itch_pkg.sv",
+    "dir::../rtl/itch_top_of_book.sv"
+  ],
+  "SYNTH_PARAMETERS": [
+    "ORDERS=8",
+    "LOCATES=2",
+    "LEVELS=4"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 42,
+  "PDN_MULTILAYER": 1,
+  "FP_SIZING": "absolute",
+  "DIE_AREA": "0 0 1400 1400",
+  "CORE_AREA": "20 20 1380 1380",
+  "PL_TARGET_DENSITY_PCT": 15,
+  "GRT_ALLOW_CONGESTION": 1,
+  "GRT_OVERFLOW_ITERS": 20,
+  "GRT_ADJUSTMENT": 0.2,
+  "SYNTH_STRATEGY": "DELAY 0",
+  "MAX_FANOUT_CONSTRAINT": 12,
+  "SYNTH_ABC_BUFFERING": 1,
+  "SYNTH_SIZING": 1,
+  "CTS_APPLY_NDR": "none",
+  "CTS_SINK_CLUSTERING_ENABLE": true,
+  "KLAYOUT_DRC_THREADS": 6,
+  "RUN_ANTENNA_REPAIR": false,
+  "RUN_HEURISTIC_DIODE_INSERTION": false,
+  "RUN_KLAYOUT_DRC": true,
+  "RUN_MAGIC_DRC": false,
+  "RUN_LVS": true,
+  "STA_CORNERS": [
+    "max_ss_100C_1v60",
+    "min_ff_n40C_1v95"
+  ]
+}

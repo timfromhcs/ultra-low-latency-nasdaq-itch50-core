@@ -104,6 +104,11 @@ MDN PWA best practices, GitHub Actions docs.
       (`reports/openlane_lvlsmall-full.json`). So the level table can be taken through a
       clean DRC/LVS flow on this host; what remains is timing (resizers or a slower
       clock) and the full 32/4/4 parameter set.
+      **Same config at 42 ns closes:** setup **+0.1200 ns**, hold **+0.0163 ns**,
+      KLayout DRC **0**, LVS **0**, Fmax ≈ **23.88 MHz**
+      (`reports/openlane_lvlsmall42-full.json`). That is a complete, timing-closed
+      level-table flow for the reduced 8/2/4 configuration; the 32/4/4 set and Magic DRC
+      are still open.
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and

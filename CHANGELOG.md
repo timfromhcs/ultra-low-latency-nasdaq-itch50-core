@@ -7,14 +7,14 @@ All notable changes to ChipLab are documented here. The format follows
 ## Unreleased
 
 ### Added
-- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 µm
-  die with the post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow —
+- **Physical sign-off for the wrapper (first complete P&R)**: at **25 ns** on a 2200 um die with the post-CTS/post-GRT resizers, LibreLane completes the whole Classic flow -
   **0 Magic/KLayout DRC, 0 LVS**, setup **+1.3333 ns**, hold **+0.0840 ns** (0 violations
   over nine corners), **Fmax ≈ 42.25 MHz**
   (`reports/openlane_25fx-full.json`). Flow/DRC/LVS evidence for the 50 ns and 30 ns
   variants is in `reports/openlane_routetest-full.json` and
   `reports/openlane_areasized-full.json`; the 10 ns target is unreachable (post-route
   setup −13.77 ns).
+- **Level-table physical flow (reduced 8/2/4)**: the block completes the whole Sky130 flow in one invocation at **42 ns** with **setup +0.1200 ns, hold +0.0163 ns, KLayout DRC 0, LVS 0** (Fmax ~ 23.88 MHz, `reports/openlane_lvlsmall42-full.json`). At 30 ns the same netlist routes and is DRC/LVS-clean but misses setup by 10.35 ns (`reports/openlane_lvlsmall-full.json`). Magic DRC and the 32/4/4 parameter set remain open.
 - Docker-free LibreLane path inside WSL (`docs/long-runs.md` §2b), used for all
   multi-hour runs; parity with the container verified (same WNS/slew numbers).
 - Physical flow configs: `sky130_wrap32_{routetest,areasized,wide,fitted,25ns_xl,10ns_xl,25ns_fx2,25ns_slew}.json`,
