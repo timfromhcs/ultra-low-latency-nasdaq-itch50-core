@@ -271,6 +271,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 01:59 - Autonomy tick + chunked small-config flow stays alive
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `84d348f` **success**.
+- The full 32/4/4 flow cannot fit the host's windows, so a **reduced config** plus
+  **step chunking** was tried: `openlane/sky130_leveltable_small.json`
+  (`itch_top_of_book`, ORDERS=8/LOCATES=2/LEVELS=4, 30 ns, 1400 µm at 15 %).
+- Chunk 1 (`--to OpenROAD.GlobalRouting`, resizers skipped) **completed EXIT=0** in
+  ~25 min; the VM stayed up for **>2 h** with this smaller design (vs ≈16 min before),
+  so memory/CPU pressure was the real trigger.
+- Chunk 2 (`--from/--to OpenROAD.DetailedRouting`) converged **46,494 → 0** in the first
+  pass, a second pass **61,931 → 0**, and a third pass was converging (122 → 62) at the
+  end of the tick. Still running.
+- Next: finish DRT, then chunk KLayout DRC and Netgen LVS separately; only then is a
+  reduced-config level-table sign-off claimable.
+
 ## 2026-11-13 00:59 - Autonomy tick + datasheet physical note corrected
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `950b92e` **success**.
