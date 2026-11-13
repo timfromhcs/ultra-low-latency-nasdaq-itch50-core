@@ -1706,3 +1706,45 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `7b5b58f` **success**.
  - Tried the **full 32/4/4** level table at 42 ns (`sky130_leveltable_full42.json`): the
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_reports.mjs; node scripts/check_docs_links.mjs 2>&1 | Select-Object 
+-Last 1; node scripts/gate.mjs 2>&1 | Select-Object -Last 2; git add -A; git commit -m "feat(reports): physical 
+evidence index over all openlane reports" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object 
+-Last 1
+[OK] 12 openlane report artifacts valid
+[OK] 25 Markdown files, 77 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/physical.json', LF will be replaced by CRLF the next time Git touches it
+ create mode 100644 scripts/physical_index.mjs
+[31;1m   629ff3f..ff22a03  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci 
+$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+ci ff22a03 completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 15:59ÔÇô16:15 abgeschlossen ÔÇö **maschinenlesbarer Physik-Index ├╝ber alle Flows**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks; CI auf `629ff3f` gr├╝n |
+| **Neu: `scripts/physical_index.mjs`** | aggregiert alle `reports/openlane_*.json` zu `reports/physical.json` (Art, Takt, Fmax, Setup/Hold, Magic/KLayout-DRC, LVS, Zellen) und gibt eine Tabelle aus ÔÇö **12 Flows** indexiert |
+| Caveat-Marker | Flows mit Hinweis-Notiz (25xl: aggregierter Setup-Wert aus min_ff, 108 MHz ist kein Sign-off) werden mit `*` markiert |
+| README | `openlane/README.md` verweist auf den Index + Regenerationsbefehl; veralteter ÔÇ×no completed P&R"-Introtext ersetzt |
+| Gate | **13/13**; `check_reports` 12/12; Docs-Links 25/25, 77 Referenzen |
+
+## Verifikation
+CI auf `ff22a03` **success**; keine neuen physischen Zahlen behauptet.
+
+## Status
+Wrapper 25 ns und Level-Tabelle (8/2/4) 42 ns sind signiert; die volle 32/4/4-Tabelle ist host-limitiert (11 GiB STA). Externe Blocker unver├ñndert: FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-13T16:59:20.8997736+01:00] hallo, es ist 16:59
+[tick] ran 0, failed 0

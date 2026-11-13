@@ -257,6 +257,7 @@ Reports live in [`reports/`](reports/).
 | Sequence recovery | **gap request, replay recovery, timeout abandon, duplicates** | `tb/test_recovery.py` |
 | RTL top-of-book | **400 random events + 100 back-to-back (1 event/cycle, no stall)**, 0 mismatches; top-4 depth; risk limits | `tb/test_book.py` |
 | LibreLane full flow | **wrapper completes the whole flow at 25 ns (2200 µm, resizers): 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns, Fmax ≈ 42.25 MHz** (`reports/openlane_25fx-full.json`) | `openlane/README.md` |
+| Level-table flow (reduced) | **8/2/4 at 42 ns: KLayout DRC 0, LVS 0, setup +0.1200 ns, hold +0.0163 ns, Fmax ≈ 23.88 MHz** (`reports/openlane_lvlsmall42-full.json`) | `openlane/README.md` |
 | Sky130 pre-PnR STA | **250 MHz WNS −8.27 ns · 322 MHz WNS −9.14 ns · Fmax ≈ 81.5 MHz**; worst path FF → `raw_payload[0]` (ss, pre-PnR, no sign-off) | `reports/openlane_sky130-250mhz-sta.json` |
 | GF180 pre-PnR STA | **322 MHz WNS −19.87 ns · Fmax ≈ 43.5 MHz**; worst path FF → `raw_order_data[260]` (ss/125 °C, pre-PnR) | `reports/openlane_gf180-sta.json` |
 | IHP SG13G2 pre-PnR STA | **322 MHz WNS −3.08 ns · Fmax ≈ 161.9 MHz**; hold WNS −0.052 ns; worst path FF → FF (slow/125 °C, pre-PnR) | `reports/openlane_ihp-sta.json` |
