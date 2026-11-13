@@ -1836,3 +1836,35 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `629ff3f` **success**.
  - Added `scripts/physical_index.mjs`: aggregates every `reports/openlane_*.json` into
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs: log the README row and the 15/15 deep gate" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1; Start-Sleep -Seconds 240; gh run list --repo 
+timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json headSha,status,conclusion | 
+ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 4 files changed, 129 insertions(+), 18 deletions(-)
+[31;1m   30695d8..4671a77  main -> main[0m
+ci 4671a77 completed success
+> build ┬À deepseek-v4.1-flash
+Tick 16:59ÔÇô17:20 abgeschlossen ÔÇö **beide Sign-offs jetzt in der Haupt-README sichtbar, Deep-Gate 15/15**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks; CI auf `ff22a03` gr├╝n |
+| **README-Evidenztabelle** | neue Zeile f├╝r den **Level-Table-Signoff** (8/2/4, 42 ns: KLayout DRC 0, LVS 0, Setup +0,1200 ns, Hold +0,0163 ns, Fmax Ôëê 23,88 MHz) neben dem Wrapper-25-ns-Eintrag |
+| **Deep Gate** | `node scripts/gate.mjs --deep` ÔåÆ **15/15** (13 fast + formal-z3 + native bins) |
+| Physischer Lauf | keiner; volle 32/4/4-Tabelle bleibt durch 11 GiB STA-Footprint limitiert |
+
+## Verifikation
+Gate **15/15**; Docs-Links 25/25, 78 Report-Referenzen; CI auf `4671a77` **success**; Commits `30695d8`, `4671a77`.
+
+## Status
+- **Wrapper 25 ns**: signiert (42,25 MHz).
+- **Level-Tabelle 8/2/4 42 ns**: signiert (23,88 MHz).
+- Offen: 32/4/4-Level-Tabelle (RAM), Magic DRC f├╝r die Level-Table-L├ñufe, externe Blocker (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-13T17:59:24.6402888+01:00] hallo, es ist 17:59
+[tick] ran 0, failed 0

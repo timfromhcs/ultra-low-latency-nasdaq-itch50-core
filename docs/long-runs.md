@@ -205,6 +205,8 @@ node scripts/openlane_summary.mjs openlane/runs/<tag>
 
 ## 7. Reporting rule
 
-A completed flow is evidence for **that block and configuration only**. The parser has
-no completed P&R/DRC/LVS; the `itch_metrics` block does. Never turn one into a claim
-about the other, and never call pre-PnR STA a sign-off.
+A completed flow is evidence for **that block and configuration only**. As of
+2026-11-13: the wrapper (`itch_wishbone_wrap`, 25 ns) and the reduced level table
+(`itch_top_of_book` 8/2/4, 42 ns) have completed flows; the `itch_metrics` block does;
+the full 32/4/4 level table and the BBO block do not. Never turn one into a claim about
+the other, and never call pre-PnR STA a sign-off.

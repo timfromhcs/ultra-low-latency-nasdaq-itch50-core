@@ -22,7 +22,9 @@ claim that every source was benchmarked locally.
 - SymbiYosys + Z3/CVC5 for BMC, k-induction, covers. Boolector 1.5 in Ubuntu 24.04 is too
   old for the generated SMT-LIB path; record it as unsupported rather than hiding it.
 - Mutation testing (10 mutants) proves the regression is not vacuous.
-- Synthesis evidence in `reports/synth_*.log`; OpenLane configs are flow-ready, not signed off.
+- Synthesis evidence in `reports/synth_*.log`. Two physical flows are signed off
+  (wrapper 25 ns, reduced level table 42 ns; `reports/openlane_*_full.json`); the full
+  32/4/4 level table and the BBO block are not, and pre-PnR STA is never called sign-off.
 
 ## 3. Browser / WebGPU / persistence
 
