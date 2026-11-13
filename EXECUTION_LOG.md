@@ -271,6 +271,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-13 00:59 - Autonomy tick + datasheet physical note corrected
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `950b92e` **success**.
+- `docs/datasheet.md`: the physical note now leads with the **signed-off 25 ns wrapper**
+  (Magic/KLayout DRC 0, LVS 0, setup +1.3333 ns, hold +0.0840 ns, Fmax ≈ 42.25 MHz) and
+  lists what is *not* signed off (10 ns target, BBO level table, advisory cap/slew),
+  instead of only describing the older 50 ns and 25xl runs.
+- One more level-table resume (STA step 55) ran ~16 min and died with `WSAETIMEDOUT`;
+  the host limit is unchanged. No new physical number.
+
 ## 2026-11-13 00:00 - Autonomy tick + full deep verification with the new checks
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `731da62` **success**.
