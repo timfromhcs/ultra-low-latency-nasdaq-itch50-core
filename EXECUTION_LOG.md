@@ -271,6 +271,18 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 06:59 - Autonomy tick + 50 ns run killed in DRT
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `088432b` **success**.
+- The 50 ns full 32/4/4 run (no resizer, as discovered) was still in detailed routing at
+  **1 h 48 min** (58,771 → 21,372 violations) when the host restarted the WSL VM at
+  07:50 and killed it. No result.
+- So the 50 ns netlist routes more slowly than the 42 ns one on this die; a completion
+  needs a longer stable window (the 42 ns run took 3 h16m).
+- Next: start the 32/4/4 at 50 ns with **`RUN_POST_GRT_RESIZER_TIMING: true`** (the untried
+  hold lever) and an abort criterion if that resizer also fails to converge within
+  ~45 min.
+
 ## 2026-11-14 05:59 - Autonomy tick + found the post-GRT resizer is gated off by default
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b167358` **success**.
