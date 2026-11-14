@@ -271,6 +271,17 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 03:59 - Autonomy tick + LLM-facing summary covers the level-table results
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `94c033c` **success**.
+- `llms-full.txt` section 8 now lists both level-table flows with scope:
+  - reduced 8/2/4 at 42 ns: DRC/LVS 0, setup +0.1200 ns, hold +0.0163 ns, ≈23.88 MHz,
+    74,683 cells; at 30 ns setup misses by 10.35 ns
+  - full 32/4/4 at 42 ns: DRC/LVS 0, setup −6.9897 ns, hold −0.0470 ns, 154,883 cells,
+    ≈20.4 MHz; the default resizer does not converge (documented)
+  - pointer to `reports/physical.json` and `scripts/physical_index.mjs`
+- No physical run; gate 13/13, docs links and 82 report references valid.
+
 ## 2026-11-14 02:59 - Autonomy tick + bounded resizer knobs do not help either
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a26392e` **success**.

@@ -96,10 +96,21 @@ C 36, X 23, D 19, U 35, P 44, Q 40, B 19, I 50, N 20 bytes.
 - Full flow, `itch_metrics` at 10 ns: 0 routing/Magic/KLayout DRC, 0 LVS errors, timing
   closed (WNS +0.12 ns, Fmax ~101 MHz), 6,776 cells, 42,127 um2 on a 500 um die.
 - Wrapper full P&R (2026-11-12): 25 ns on a 2200 um die with the resizers completes the
-  whole flow — 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
+  whole flow - 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
   violations, 9 corners), Fmax ~42.25 MHz, 100,348 stdcells. The 10 ns netlist routes but
   fails post-route STA (setup -13.77 ns). Earlier attempts failed on GRT-0116/GPL-0305/
   DPL-0036/GRT-0183 and host restarts; see `openlane/README.md` and `docs/long-runs.md`.
+- Level table, reduced 8/2/4 (2026-11-13): full flow in one run at 42 ns - KLayout DRC 0,
+  LVS 0, setup +0.1200 ns, hold +0.0163 ns, Fmax ~23.88 MHz, 74,683 stdcells
+  (`reports/openlane_lvlsmall42-full.json`). At 30 ns the same netlist is DRC/LVS-clean
+  but misses setup by 10.35 ns.
+- Level table, full 32/4/4 (2026-11-13): full flow at 42 ns - KLayout DRC 0, LVS 0, but
+  setup -6.9897 ns and hold -0.0470 ns; 154,883 stdcells / 1.05 mm2, Fmax ~20.4 MHz
+  (`reports/openlane_lvlfull42-full.json`). The default post-CTS resizer does not converge
+  (2 h 50 min / ~3,620 iterations, and again with hold-first knobs), so a closed 32/4/4
+  needs a manual hold fix. Magic DRC is disabled for runtime on both level-table runs.
+- `reports/physical.json` indexes every measured flow (kind, clock, Fmax, slack, DRC,
+  LVS, cells); regenerate with `node scripts/physical_index.mjs`.
 
 ## 9. Reproducibility and supply chain
 - WASM: rustc pinned 1.98.1; two clean builds and the shipped binary are identical.
