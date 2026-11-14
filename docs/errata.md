@@ -121,18 +121,22 @@ pinned oss-cad-suite bundle in CI for the opt-in solver matrix.
 
 ## E12 — Physical limits of the wrapper and the missing level-table sign-off
 
-**Status:** open (advisory findings + host limit)
+**Status:** open (advisory findings + one open timing closure)
 **Impact:** the 25 ns wrapper sign-off is DRC/LVS/timing clean, but post-route STA still
 reports **max-cap 2,529–3,320** and **max-slew up to 15,084–19,788** violations in the
 advisory checkers (they do not fail the flow). Neither `RUN_POST_GRT_DESIGN_REPAIR` nor a
 `MAX_FANOUT_CONSTRAINT: 8` retry reduces them (the latter makes slew worse), so they come
-from the design/library limits at the ss corner. The level table
-(`itch_top_of_book`, 32/4/4) has only a **pre-PnR** number (WNS −1.9742 ns, ≈37.1 MHz at
-25 ns): its full flow needs ~9 GiB RSS (12 GB WSL) and 20+ min of routing plus 40+ min of
-DRC, while this host restarts the WSL VM every ≈15 min under sustained load.
-**Workaround:** treat the 25 ns wrapper as the signed-off evidence, use the level-table
-pre-PnR number only as an estimate, and rerun the level-table flow on a stable host with
-`openlane/sky130_leveltable.json`.
+from the design/library limits at the ss corner.
+The level table (`itch_top_of_book`) now has two completed flows: the **reduced 8/2/4**
+variant is timing-closed and DRC/LVS clean at **42 ns**
+(`reports/openlane_lvlsmall42-full.json`), while the **full 32/4/4** variant completes with
+KLayout DRC 0 / LVS 0 but misses setup by 6.99 ns and hold by 47 ps at 42 ns
+(`reports/openlane_lvlfull42-full.json`). The default post-CTS resizer does not converge on
+that block (2 h 50 min / ≈3,620 iterations, and again with hold-first knobs), and Magic DRC
+is disabled on both level-table runs for runtime.
+**Workaround:** treat the 25 ns wrapper and the 8/2/4 42 ns level table as the signed-off
+evidence; a closed 32/4/4 needs a targeted manual hold fix (or a different repair strategy)
+plus the Magic DRC pass.
 
 ---
 

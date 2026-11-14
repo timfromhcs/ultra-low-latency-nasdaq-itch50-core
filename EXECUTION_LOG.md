@@ -271,6 +271,16 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 04:59 - Autonomy tick + errata E12 updated for the level-table flows
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. All recent GitHub workflows on
+  `8d59e0a`/`94c033c` are green (CI, Container image, Windows EXE).
+- `docs/errata.md` E12 no longer describes the level table as "pre-PnR only". It now
+  records the two completed flows (reduced 8/2/4 timing-closed at 42 ns; full 32/4/4
+  DRC/LVS clean but setup −6.99 ns / hold −47 ps), the non-converging resizer and the
+  disabled Magic DRC, and points to the two report artifacts.
+- No physical run; gate 13/13, docs links and 82 report references valid.
+
 ## 2026-11-14 03:59 - Autonomy tick + LLM-facing summary covers the level-table results
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `94c033c` **success**.

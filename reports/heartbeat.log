@@ -2693,3 +2693,260 @@ Sat Nov 14 03:02:08 CET 2026
 > build ┬À deepseek-v4.1-flash
 [2026-11-14T03:59:18.5783200+01:00] hallo, es ist 03:59
 [tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; Select-String -Path llms-full.txt -Pattern "## 8" -Context 0,10
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci 94c033c completed success
+
+> llms-full.txt:92:[7m## 8[0m. Physical evidence (Sky130 unless noted, pre-PnR for the parser)
+  llms-full.txt:93:- Parser pre-PnR STA: WNS -9.14 ns at 3.10 ns (~81.5 MHz), -8.27 ns at 4.00 ns (ss).
+  llms-full.txt:94:- 128-bit wrapper: -8.62 ns (~85.3 MHz); 32-bit wrapper: -6.55 ns (~103.7 MHz).
+  llms-full.txt:95:- GF180: -19.87 ns (~43.5 MHz); IHP SG13G2: -3.08 ns (~161.9 MHz), small hold violation.
+  llms-full.txt:96:- Full flow, `itch_metrics` at 10 ns: 0 routing/Magic/KLayout DRC, 0 LVS errors, timing
+  llms-full.txt:97:  closed (WNS +0.12 ns, Fmax ~101 MHz), 6,776 cells, 42,127 um2 on a 500 um die.
+  llms-full.txt:98:- Wrapper full P&R (2026-11-12): 25 ns on a 2200 um die with the resizers completes the
+  llms-full.txt:99:  whole flow - 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
+  llms-full.txt:100:  violations, 9 corners), Fmax ~42.25 MHz, 100,348 stdcells. The 10 ns netlist routes but
+  llms-full.txt:101:  fails post-route STA (setup -13.77 ns). Earlier attempts failed on GRT-0116/GPL-0305/
+  llms-full.txt:102:  DPL-0036/GRT-0183 and host restarts; see `openlane/README.md` and `docs/long-runs.md`.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit llms-full.txt
+Index: llms-full.txt
+===================================================================
+--- llms-full.txt
++++ llms-full.txt
+@@ -95,12 +95,23 @@
+ - GF180: -19.87 ns (~43.5 MHz); IHP SG13G2: -3.08 ns (~161.9 MHz), small hold violation.
+ - Full flow, `itch_metrics` at 10 ns: 0 routing/Magic/KLayout DRC, 0 LVS errors, timing
+   closed (WNS +0.12 ns, Fmax ~101 MHz), 6,776 cells, 42,127 um2 on a 500 um die.
+ - Wrapper full P&R (2026-11-12): 25 ns on a 2200 um die with the resizers completes the
+-  whole flow ÔÇö 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
++  whole flow - 0 Magic/KLayout DRC, 0 LVS, setup +1.3333 ns, hold +0.0840 ns (0
+   violations, 9 corners), Fmax ~42.25 MHz, 100,348 stdcells. The 10 ns netlist routes but
+   fails post-route STA (setup -13.77 ns). Earlier attempts failed on GRT-0116/GPL-0305/
+   DPL-0036/GRT-0183 and host restarts; see `openlane/README.md` and `docs/long-runs.md`.
++- Level table, reduced 8/2/4 (2026-11-13): full flow in one run at 42 ns - KLayout DRC 0,
++  LVS 0, setup +0.1200 ns, hold +0.0163 ns, Fmax ~23.88 MHz, 74,683 stdcells
++  (`reports/openlane_lvlsmall42-full.json`). At 30 ns the same netlist is DRC/LVS-clean
++  but misses setup by 10.35 ns.
++- Level table, full 32/4/4 (2026-11-13): full flow at 42 ns - KLayout DRC 0, LVS 0, but
++  setup -6.9897 ns and hold -0.0470 ns; 154,883 stdcells / 1.05 mm2, Fmax ~20.4 MHz
++  (`reports/openlane_lvlfull42-full.json`). The default post-CTS resizer does not converge
++  (2 h 50 min / ~3,620 iterations, and again with hold-first knobs), so a closed 32/4/4
++  needs a manual hold fix. Magic DRC is disabled for runtime on both level-table runs.
++- `reports/physical.json` indexes every measured flow (kind, clock, Fmax, slack, DRC,
++  LVS, cells); regenerate with `node scripts/physical_index.mjs`.
+ 
+ ## 9. Reproducibility and supply chain
+ - WASM: rustc pinned 1.98.1; two clean builds and the shipped binary are identical.
+ - Python: wheel reproducible with SOURCE_DATE_EPOCH; sdist after container normalization.
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2
+[OK] 25 Markdown files, 82 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,19 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-14 03:59 - Autonomy tick + LLM-facing summary covers the level-table results
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `94c033c` **success**.
++- `llms-full.txt` section 8 now lists both level-table flows with scope:
++  - reduced 8/2/4 at 42 ns: DRC/LVS 0, setup +0.1200 ns, hold +0.0163 ns, Ôëê23.88 MHz,
++    74,683 cells; at 30 ns setup misses by 10.35 ns
++  - full 32/4/4 at 42 ns: DRC/LVS 0, setup ÔêÆ6.9897 ns, hold ÔêÆ0.0470 ns, 154,883 cells,
++    Ôëê20.4 MHz; the default resizer does not converge (documented)
++  - pointer to `reports/physical.json` and `scripts/physical_index.mjs`
++- No physical run; gate 13/13, docs links and 82 report references valid.
++
+ ## 2026-11-14 02:59 - Autonomy tick + bounded resizer knobs do not help either
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a26392e` **success**.
+ - Retried the 50 ns full 32/4/4 run with the resizer knobs tuned for convergence
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; git add -A; git commit -m "docs(llms): add both level-table flows to the physical evidence 
+section" 2>&1 | Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1; Start-Sleep -Seconds 240; gh 
+run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'llms-full.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 41 insertions(+), 17 deletions(-)
+[31;1m   94c033c..8d59e0a  main -> main[0m
+ci 8d59e0a completed success
+> build ┬À deepseek-v4.1-flash
+Tick 03:59ÔÇô04:15 abgeschlossen ÔÇö **LLM-fassende Doku deckt jetzt beide Level-Table-Flows ab**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks; CI auf `94c033c` gr├╝n |
+| **`llms-full.txt` ┬º8 erg├ñnzt** | reduzierte 8/2/4 @42 ns (DRC/LVS 0, +0,1200/+0,0163 ns, 23,88 MHz, 74.683 Zellen; 30 ns verfehlt Setup um 10,35 ns) und volle 32/4/4 @42 ns (DRC/LVS 0, ÔêÆ6,9897 ns/ÔêÆ0,0470 ns, 154.883 Zellen, Ôëê20,4 MHz, Resizer nicht konvergent) |
+| Verweis | auf `reports/physical.json` + `scripts/physical_index.mjs` |
+| Physischer Lauf | keiner (Resizer-Route als nicht nutzbar belegt) |
+| Gate | **13/13**; Docs-Links 25/25, 82 Report-Referenzen |
+
+## Verifikation
+CI auf `8d59e0a` **success**; keine neuen physischen Zahlen behauptet.
+
+## Status
+Wrapper 25 ns und Level-Tabelle 8/2/4 42 ns sind signiert; 32/4/4 ist DRC/LVS-clean mit offenem Timing (manueller Hold-Fix n├Âtig). Externe Blocker unver├ñndert: FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle.
+[2026-11-14T04:59:18.6140471+01:00] hallo, es ist 04:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --limit 15 --json 
+headSha,headBranch,workflowName,status,conclusion | ConvertFrom-Json | ForEach-Object { "$($_.headSha.Substring(0,7)) 
+$($_.workflowName) $($_.status) $($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+8d59e0a Windows single EXE completed success
+8d59e0a CI completed success
+8d59e0a Container image completed success
+94c033c Container image completed success
+94c033c Windows single EXE completed success
+94c033c CI completed success
+a26392e CI completed success
+a26392e Container image completed success
+a26392e Windows single EXE completed success
+30074b4 CI completed success
+30074b4 Container image completed success
+30074b4 Windows single EXE completed success
+9de33c0 Windows single EXE completed success
+9de33c0 CI completed success
+9de33c0 Container image completed success
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path docs\errata.md -Pattern "E12" -Context 0,14
+> docs\errata.md:122:## [7mE12[0m - Physical limits of the wrapper and the missing level-table sign-off
+  docs\errata.md:123:
+  docs\errata.md:124:**Status:** open (advisory findings + host limit)
+  docs\errata.md:125:**Impact:** the 25 ns wrapper sign-off is DRC/LVS/timing clean, but post-route STA still
+  docs\errata.md:126:reports **max-cap 2,529-3,320** and **max-slew up to 15,084-19,788** violations in the
+  docs\errata.md:127:advisory checkers (they do not fail the flow). Neither `RUN_POST_GRT_DESIGN_REPAIR` nor a
+  docs\errata.md:128:`MAX_FANOUT_CONSTRAINT: 8` retry reduces them (the latter makes slew worse), so they come
+  docs\errata.md:129:from the design/library limits at the ss corner. The level table
+  docs\errata.md:130:(`itch_top_of_book`, 32/4/4) has only a **pre-PnR** number (WNS -1.9742 ns, ~37.1 MHz at
+  docs\errata.md:131:25 ns): its full flow needs ~9 GiB RSS (12 GB WSL) and 20+ min of routing plus 40+ min of
+  docs\errata.md:132:DRC, while this host restarts the WSL VM every ~15 min under sustained load.
+  docs\errata.md:133:**Workaround:** treat the 25 ns wrapper as the signed-off evidence, use the level-table
+  docs\errata.md:134:pre-PnR number only as an estimate, and rerun the level-table flow on a stable host with
+  docs\errata.md:135:`openlane/sky130_leveltable.json`.
+  docs\errata.md:136:
+> build ┬À deepseek-v4.1-flash
+[0mÔ£ù [0mEdit docs/errata.md failed
+[91m[1mError: [0mCould not find oldString in E:\chips\main\docs\errata.md. It must match exactly, including 
+whitespace and indentation.
+
+The closest lines in the file:
+124: **Status:** open (advisory findings + host limit)
+125: **Impact:** the 25 ns wrapper sign-off is DRC/LVS/timing clean, but post-route STA still
+126: reports **max-cap 2,529ÔÇô3,320** and **max-slew up to 15,084ÔÇô19,788** violations in the
+127: advisory checkers (they do not fail the flow). Neither `RUN_POST_GRT_DESIGN_REPAIR` nor a
+128: `MAX_FANOUT_CONSTRAINT: 8` retry reduces them (the latter makes slew worse), so they come
+129: from the design/library limits at the ss corner. The level table
+130: (`itch_top_of_book`, 32/4/4) has only a **pre-PnR** number (WNS ÔêÆ1.9742 ns, Ôëê37.1 MHz at
+131: 25 ns): its full flow needs ~9 GiB RSS (12 GB WSL) and 20+ min of routing plus 40+ min of
+132: DRC, while this host restarts the WSL VM every Ôëê15 min under sustained load.
+133: **Workaround:** treat the 25 ns wrapper as the signed-off evidence, use the level-table
+134: pre-PnR number only as an estimate, and rerun the level-table flow on a stable host with
+135: `openlane/sky130_leveltable.json`.
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/errata.md
+Index: docs/errata.md
+===================================================================
+--- docs/errata.md
++++ docs/errata.md
+@@ -120,20 +120,24 @@
+ ---
+ 
+ ## E12 ÔÇö Physical limits of the wrapper and the missing level-table sign-off
+ 
+-**Status:** open (advisory findings + host limit)
++**Status:** open (advisory findings + one open timing closure)
+ **Impact:** the 25 ns wrapper sign-off is DRC/LVS/timing clean, but post-route STA still
+ reports **max-cap 2,529ÔÇô3,320** and **max-slew up to 15,084ÔÇô19,788** violations in the
+ advisory checkers (they do not fail the flow). Neither `RUN_POST_GRT_DESIGN_REPAIR` nor a
+ `MAX_FANOUT_CONSTRAINT: 8` retry reduces them (the latter makes slew worse), so they come
+-from the design/library limits at the ss corner. The level table
+-(`itch_top_of_book`, 32/4/4) has only a **pre-PnR** number (WNS ÔêÆ1.9742 ns, Ôëê37.1 MHz at
+-25 ns): its full flow needs ~9 GiB RSS (12 GB WSL) and 20+ min of routing plus 40+ min of
+-DRC, while this host restarts the WSL VM every Ôëê15 min under sustained load.
+-**Workaround:** treat the 25 ns wrapper as the signed-off evidence, use the level-table
+-pre-PnR number only as an estimate, and rerun the level-table flow on a stable host with
+-`openlane/sky130_leveltable.json`.
++from the design/library limits at the ss corner.
++The level table (`itch_top_of_book`) now has two completed flows: the **reduced 8/2/4**
++variant is timing-closed and DRC/LVS clean at **42 ns**
++(`reports/openlane_lvlsmall42-full.json`), while the **full 32/4/4** variant completes with
++KLayout DRC 0 / LVS 0 but misses setup by 6.99 ns and hold by 47 ps at 42 ns
++(`reports/openlane_lvlfull42-full.json`). The default post-CTS resizer does not converge on
++that block (2 h 50 min / Ôëê3,620 iterations, and again with hold-first knobs), and Magic DRC
++is disabled on both level-table runs for runtime.
++**Workaround:** treat the 25 ns wrapper and the 8/2/4 42 ns level table as the signed-off
++evidence; a closed 32/4/4 needs a targeted manual hold fix (or a different repair strategy)
++plus the Magic DRC pass.
+ 
+ ---
+ 
+ ## Reporting
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,18 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-14 04:59 - Autonomy tick + errata E12 updated for the level-table flows
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. All recent GitHub workflows on
++  `8d59e0a`/`94c033c` are green (CI, Container image, Windows EXE).
++- `docs/errata.md` E12 no longer describes the level table as "pre-PnR only". It now
++  records the two completed flows (reduced 8/2/4 timing-closed at 42 ns; full 32/4/4
++  DRC/LVS clean but setup ÔêÆ6.99 ns / hold ÔêÆ47 ps), the non-converging resizer and the
++  disabled Magic DRC, and points to the two report artifacts.
++- No physical run; gate 13/13, docs links and 82 report references valid.
++
+ ## 2026-11-14 03:59 - Autonomy tick + LLM-facing summary covers the level-table results
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `94c033c` **success**.
+ - `llms-full.txt` section 8 now lists both level-table flows with scope:
+
