@@ -271,6 +271,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 01:59 - Autonomy tick + datasheet sign-off scope corrected for the level table
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `30074b4` **success**.
+- No physical run: the 32/4/4 timing closure needs either a converging resizer (the
+  default ran 2 h50m without converging) or a manual hold fix; both are out of reach in
+  one tick, and the risk of another multi-hour non-converging pass is not justified.
+- `docs/datasheet.md` no longer says the level table is "pre-PnR only". It now states the
+  actual scope: the **reduced 8/2/4 level table is signed off at 42 ns**, while the
+  **full 32/4/4** completes with KLayout DRC 0 / LVS 0 but misses setup by 6.99 ns and
+  hold by 47 ps at 42 ns.
+- Reviewed the resizer knobs (`PL_RESIZER_FIX_HOLD_FIRST`, `PL_RESIZER_ALLOW_SETUP_VIOS`,
+  `PL_RESIZER_HOLD_MAX_BUFFER_PCT`, …) as the next lever for a closed 32/4/4.
+
 ## 2026-11-14 00:59 - Autonomy tick + post-CTS resizer does not converge in 2h50m
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9de33c0` **success**.

@@ -70,9 +70,11 @@ Two egress paths exist:
 > the resizers was hold-limited (−12.3 ps), and the 50 ns AREA variant closes at
 > ≈30.8 MHz (`reports/openlane_routetest-full.json`).
 >
-> Not signed off: the 10 ns target (post-route setup −13.77 ns), the standalone BBO
-> level table (pre-PnR only: WNS −1.9742 ns, ≈37.1 MHz), and the advisory max-cap /
-> max-slew counts of the wrapper flow.
+> Not signed off: the 10 ns target (post-route setup −13.77 ns), the advisory max-cap /
+> max-slew counts, and the **full 32/4/4 BBO level table** — it completes the flow with
+> KLayout DRC 0 / LVS 0, but its 42 ns run misses setup by 6.99 ns and hold by 47 ps, and
+> the default resizer does not converge. The **reduced 8/2/4** level table is signed off
+> at 42 ns (setup +0.1200 ns, hold +0.0163 ns, DRC/LVS 0, ≈23.88 MHz).
 
 ## 4. Area estimate
 
