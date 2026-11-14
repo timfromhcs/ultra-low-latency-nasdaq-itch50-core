@@ -113,7 +113,9 @@ MDN PWA best practices, GitHub Actions docs.
       **−0.0470 ns** at 42 ns, 154,883 stdcells / 1.05 mm²
       (`reports/openlane_lvlfull42-full.json`). The full set is ~2× the 8/2/4 area and
       needs the resizers plus ≥49 ns; the reduced 42 ns run stays the timing-closed
-      level-table sign-off.
+      level-table sign-off. **Resizer retry (2026-11-14):** the post-CTS resizer ran
+      **2 h50m / ≈3,620 iterations** without converging and was stopped, so a closed
+      32/4/4 needs a manual hold fix or tuned/bounded repair passes.
 - [x] End-to-end parser -> BBO wrapper: 152 raw messages, 0 mismatches
       (`rtl/itch_top_book.sv`, `tb/test_book_top.py`).
 - [x] Pipeline downstream back-pressure: `m_axis_tready` through the depacketizer and

@@ -271,6 +271,21 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 00:59 - Autonomy tick + post-CTS resizer does not converge in 2h50m
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9de33c0` **success**.
+- The 50 ns run with the post-CTS resizer stayed inside
+  `OpenROAD.ResizerTimingPostCTS` for **2 h 50 min / ≈3,620 iterations** with only +3.8 %
+  improvement in the last stretch; it was stopped rather than left running indefinitely.
+- Measured conclusion: for the full 32/4/4 block, the default resizer is not a usable
+  lever on this design — it neither converges quickly nor reaches a stable point. The
+  42 ns run without resizers remains the full-config evidence (KLayout DRC 0, LVS 0,
+  setup −6.9897 ns, hold −0.0470 ns), and the reduced 8/2/4 42 ns run remains the
+  timing-closed level-table sign-off.
+- Next options for a closed 32/4/4: a manual hold fix (few buffers) plus a 49–50 ns
+  clock, or resizer settings tuned to converge (e.g. bounded timing-repair passes).
+- No new sign-off claimed.
+
 ## 2026-11-13 22:59 - Autonomy tick + full 32/4/4 retarget to 50 ns with the resizer
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `7112a8d` **success**.
