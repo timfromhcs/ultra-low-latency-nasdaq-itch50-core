@@ -2556,3 +2556,138 @@ w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w 
 "PL_RESIZER_SETUP_SLACK_MARGIN"
 "PL_RESIZER_TIE_SEPERATION"
 "PL_ROUTABILITY_DRIVEN"
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; Select-String -Path docs\datasheet.md -Pattern "Not signed off" -Context 0,3
+> docs\datasheet.md:73:> [7mNot signed off[0m: the 10 ns target (post-route setup -13.77 ns), the standalone BBO
+  docs\datasheet.md:74:> level table (pre-PnR only: WNS -1.9742 ns, ~37.1 MHz), and the advisory max-cap /
+  docs\datasheet.md:75:> max-slew counts of the wrapper flow.
+  docs\datasheet.md:76:
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit docs/datasheet.md
+Index: docs/datasheet.md
+===================================================================
+--- docs/datasheet.md
++++ docs/datasheet.md
+@@ -69,11 +69,13 @@
+ > **Fmax Ôëê 42.25 MHz** (`reports/openlane_25fx-full.json`). The same 25 ns run without
+ > the resizers was hold-limited (ÔêÆ12.3 ps), and the 50 ns AREA variant closes at
+ > Ôëê30.8 MHz (`reports/openlane_routetest-full.json`).
+ >
+-> Not signed off: the 10 ns target (post-route setup ÔêÆ13.77 ns), the standalone BBO
+-> level table (pre-PnR only: WNS ÔêÆ1.9742 ns, Ôëê37.1 MHz), and the advisory max-cap /
+-> max-slew counts of the wrapper flow.
++> Not signed off: the 10 ns target (post-route setup ÔêÆ13.77 ns), the advisory max-cap /
++> max-slew counts, and the **full 32/4/4 BBO level table** ÔÇö it completes the flow with
++> KLayout DRC 0 / LVS 0, but its 42 ns run misses setup by 6.99 ns and hold by 47 ps, and
++> the default resizer does not converge. The **reduced 8/2/4** level table is signed off
++> at 42 ns (setup +0.1200 ns, hold +0.0163 ns, DRC/LVS 0, Ôëê23.88 MHz).
+ 
+ ## 4. Area estimate
+ 
+ Reduced configuration (`ORDERS=32`, `LOCATES=4`, `LEVELS=4`), Yosys 0.52 generic
+
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mEdit EXECUTION_LOG.md
+Index: EXECUTION_LOG.md
+===================================================================
+--- EXECUTION_LOG.md
++++ EXECUTION_LOG.md
+@@ -270,8 +270,21 @@
+   this experiment yet** ÔÇö it is resumable with `--from OpenROAD.STAPostPNR`.
+ - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
+   **0 mismatches**, deep **13/13**.
+ 
++## 2026-11-14 01:59 - Autonomy tick + datasheet sign-off scope corrected for the level table
++
++- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `30074b4` **success**.
++- No physical run: the 32/4/4 timing closure needs either a converging resizer (the
++  default ran 2 h50m without converging) or a manual hold fix; both are out of reach in
++  one tick, and the risk of another multi-hour non-converging pass is not justified.
++- `docs/datasheet.md` no longer says the level table is "pre-PnR only". It now states the
++  actual scope: the **reduced 8/2/4 level table is signed off at 42 ns**, while the
++  **full 32/4/4** completes with KLayout DRC 0 / LVS 0 but misses setup by 6.99 ns and
++  hold by 47 ps at 42 ns.
++- Reviewed the resizer knobs (`PL_RESIZER_FIX_HOLD_FIRST`, `PL_RESIZER_ALLOW_SETUP_VIOS`,
++  `PL_RESIZER_HOLD_MAX_BUFFER_PCT`, ÔÇª) as the next lever for a closed 32/4/4.
++
+ ## 2026-11-14 00:59 - Autonomy tick + post-CTS resizer does not converge in 2h50m
+ 
+ - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `9de33c0` **success**.
+ - The 50 ns run with the post-CTS resizer stayed inside
+
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(datasheet): correct the level-table sign-off scope" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, 82 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 5 files changed, 89 insertions(+), 20 deletions(-)
+[31;1m   30074b4..a26392e  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci 
+$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+ci a26392e completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 01:59ÔÇô02:10 abgeschlossen ÔÇö **Datasheet-Sign-off-Scope f├╝r die Level-Tabelle korrigiert**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks; CI auf `30074b4` gr├╝n |
+| Physischer Lauf | keiner ÔÇö 32/4/4-Timing braucht einen konvergierenden Resizer oder manuellen Hold-Fix; ein weiterer mehrst├╝ndiger Nicht-konvergierender Lauf ist nicht gerechtfertigt |
+| **Datasheet korrigiert** | statt ÔÇ×Level-Tabelle nur Pre-PnR": **reduzierte 8/2/4 ist bei 42 ns signiert** (Setup +0,12 ns, Hold +0,016 ns, DRC/LVS 0, 23,88 MHz); **volle 32/4/4** l├ñuft DRC/LVS-clean durch, verfehlt bei 42 ns aber Setup um 6,99 ns und Hold um 47 ps |
+| Resizer-Kn├Âpfe gepr├╝ft | `PL_RESIZER_FIX_HOLD_FIRST`, `PL_RESIZER_ALLOW_SETUP_VIOS`, `PL_RESIZER_HOLD_MAX_BUFFER_PCT` als n├ñchster Hebel f├╝r ein geschlossenes 32/4/4 |
+| Gate | **13/13**; Docs-Links 25/25, 82 Report-Referenzen |
+
+## Verifikation
+CI auf `a26392e` **success**; keine neuen physischen Zahlen behauptet.
+
+## Status
+Wrapper 25 ns und Level-Tabelle 8/2/4 42 ns sind signiert; 32/4/4 ist DRC/LVS-clean mit offenem Timing; externe Blocker (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle) bestehen.
+[2026-11-14T02:59:18.5571132+01:00] hallo, es ist 02:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }; node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('openlane/sky130_leveltable_ful
+l50.json','utf8'));j.PL_RESIZER_FIX_HOLD_FIRST=true;j.PL_RESIZER_ALLOW_SETUP_VIOS=true;j.PL_RESIZER_HOLD_MAX_BUFFER_PCT
+=20;fs.writeFileSync('openlane/sky130_leveltable_full50b.json',JSON.stringify(j,null,2)+'\n');console.log('full50b 
+written')"
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci a26392e completed success
+full50b written
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlfull50b.sh
+Created file successfully: reports/run_lvlfull50b.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlfull50b.sh 
+/home/tim/chiplab-native/run_lvlfull50b.sh && chmod +x /home/tim/chiplab-native/run_lvlfull50b.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlfull50b.sh'; 
+Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail -1 /home/tim/chiplab-native/lvlfull50b.log | tr -d "\000"; date' 
+2>&1 | Select-Object -Last 2
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+156.1. Extracting gate netlist of module `\itch_top_of_book' to `/tmp/yosys-abc-IJRRE0/input.blif'..                   
+ 
+Sat Nov 14 03:02:08 CET 2026
+> build ┬À deepseek-v4.1-flash

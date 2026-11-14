@@ -271,6 +271,20 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 02:59 - Autonomy tick + bounded resizer knobs do not help either
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `a26392e` **success**.
+- Retried the 50 ns full 32/4/4 run with the resizer knobs tuned for convergence
+  (`PL_RESIZER_FIX_HOLD_FIRST: true`, `PL_RESIZER_ALLOW_SETUP_VIOS: true`,
+  `PL_RESIZER_HOLD_MAX_BUFFER_PCT: 20`, config `sky130_leveltable_full50b.json`). After
+  30 min it was again inside `OpenROAD.ResizerTimingPostCTS` (≈850 iterations, +0.9 %),
+  i.e. the same non-converging behaviour, so the run was stopped.
+- Conclusion: on this block the default post-CTS resizer is not a usable lever, with or
+  without the hold-first/allow-setup-VIO knobs. A closed 32/4/4 needs a targeted manual
+  hold fix (few buffers) or a different repair strategy.
+- Published evidence is unchanged: wrapper 25 ns and reduced 8/2/4 42 ns are signed off;
+  the full 32/4/4 is DRC/LVS clean at 42 ns with setup −6.99 ns / hold −47 ps.
+
 ## 2026-11-14 01:59 - Autonomy tick + datasheet sign-off scope corrected for the level table
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `30074b4` **success**.
