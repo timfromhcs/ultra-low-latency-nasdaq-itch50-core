@@ -2950,3 +2950,74 @@ Index: EXECUTION_LOG.md
  - `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `94c033c` **success**.
  - `llms-full.txt` section 8 now lists both level-table flows with scope:
 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/check_docs_links.mjs 2>&1 | Select-Object -Last 1; node scripts/gate.mjs 2>&1 
+| Select-Object -Last 2; git add -A; git commit -m "docs(errata): E12 now records both level-table flows" 2>&1 | 
+Select-Object -Last 1; git push origin main 2>&1 | Select-Object -Last 1
+[OK] 25 Markdown files, 84 report references, no dead links
+
+scorecard: 100% (13/13) ÔåÆ reports/scorecard.json
+warning: in the working copy of 'EXECUTION_LOG.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'autonomy/queue.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/links.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/sbom.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'reports/scorecard.json', LF will be replaced by CRLF the next time Git touches it
+ 6 files changed, 298 insertions(+), 27 deletions(-)
+[31;1m   8d59e0a..b167358  main -> main[0m
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mStart-Sleep -Seconds 240; gh run list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow 
+ci.yml --limit 1 --json headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci 
+$($_.headSha.Substring(0,7)) $($_.status) $($_.conclusion)" }; cd E:\chips\main; git status --porcelain
+ci b167358 completed success
+ M reports/heartbeat.log
+> build ┬À deepseek-v4.1-flash
+Tick 04:59ÔÇô05:10 abgeschlossen ÔÇö **Errata E12 auf beide Level-Table-Flows aktualisiert**.
+
+## Diese Runde
+| Aufgabe | Ergebnis |
+|---|---|
+| Autonomy | 0 Tasks; alle letzten GitHub-Workflows (CI, Container image, Windows EXE) auf `8d59e0a`/`94c033c` **gr├╝n** |
+| **`docs/errata.md` E12** | beschreibt die Level-Tabelle nicht mehr als ÔÇ×nur Pre-PnR", sondern: reduzierte 8/2/4 bei 42 ns **timing-geschlossen + DRC/LVS 0**; volle 32/4/4 **DRC/LVS 0** aber Setup ÔêÆ6,99 ns / Hold ÔêÆ47 ps; Resizer nicht konvergent; Magic DRC deaktiviert ÔÇö mit beiden Report-Artefakten |
+| Physischer Lauf | keiner |
+| Gate | **13/13**; Docs-Links 25/25, **84** Report-Referenzen |
+
+## Verifikation
+CI auf `b167358` **success**; keine neuen Zahlen behauptet.
+
+## Status
+Unver├ñndert: Wrapper 25 ns und Level-Tabelle 8/2/4 42 ns signiert; 32/4/4 DRC/LVS-clean mit offenem Timing; externe Blocker (FPGA, Caravel-Harness, PCIe/100G, Registry-OIDC, Shuttle).
+[2026-11-14T05:59:18.5995482+01:00] hallo, es ist 05:59
+[tick] ran 0, failed 0
+opencode.exe : [0m
+In C:\Users\hcsme\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.22_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v
+22.23.1-win-x64\opencode.ps1:14 Zeichen:3
++   & "$basedir/node_modules/@opencode/cli/bin/opencode.exe"   $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mcd E:\chips\main; node scripts/autonomy.mjs 2>&1 | Select-Object -Last 3; git status --porcelain; gh run 
+list --repo timfromhcs/ultra-low-latency-nasdaq-itch50-core --workflow ci.yml --limit 1 --json 
+headSha,status,conclusion | ConvertFrom-Json | ForEach-Object { "ci $($_.headSha.Substring(0,7)) $($_.status) 
+$($_.conclusion)" }
+[tick] ran 0, failed 0
+ M reports/heartbeat.log
+ci b167358 completed success
+> build ┬À deepseek-v4.1-flash
+[0mÔåÉ [0mWrite reports/run_lvlfull50c.sh
+Created file successfully: reports/run_lvlfull50c.sh
+> build ┬À deepseek-v4.1-flash
+[0m$ [0mwsl -d Ubuntu bash -lc 'cp /mnt/e/chips/main/reports/run_lvlfull50c.sh 
+/home/tim/chiplab-native/run_lvlfull50c.sh && chmod +x /home/tim/chiplab-native/run_lvlfull50c.sh && echo copied'; 
+Start-Process -FilePath wsl.exe -ArgumentList '-d','Ubuntu','bash','/home/tim/chiplab-native/run_lvlfull50c.sh'; 
+Start-Sleep -Seconds 60; wsl -d Ubuntu bash -lc 'tail -1 /home/tim/chiplab-native/lvlfull50c.log | tr -d "\000"; date' 
+2>&1 | Select-Object -Last 2
+w s l :   F e h l e r   b e i m   K o n f i g u r i e r e n   d e s   N e t z w e r k s  
+ ( n e t w o r k i n g M o d e   N a t ) .   F a l l b a c k   a u f   n e t w o r k i n g M o d e   C o n s o m m e . 
+ 
+ copied
+156.1. Extracting gate netlist of module `\itch_top_of_book' to `/tmp/yosys-abc-OPAoxy/input.blif'..                   
+ 
+Sat Nov 14 06:02:22 CET 2026
+> build ┬À deepseek-v4.1-flash

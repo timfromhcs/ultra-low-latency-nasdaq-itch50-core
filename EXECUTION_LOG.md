@@ -271,6 +271,19 @@ The full plan is in [`AUTONOMOUS_PLAN_V2.md`](AUTONOMOUS_PLAN_V2.md).
 - `make verify-deep` from WSL is green again: fast **11/11**, 1,000,000 records
   **0 mismatches**, deep **13/13**.
 
+## 2026-11-14 05:59 - Autonomy tick + found the post-GRT resizer is gated off by default
+
+- `node scripts/autonomy.mjs`: queue empty, 0 tasks. CI on `b167358` **success**.
+- Started a 50 ns full 32/4/4 run with **only** the post-CTS resizer skipped, expecting the
+  post-GRT resizer to repair the −47 ps hold. The step list showed **no post-GRT resizer
+  directory**: `OpenROAD.ResizerTimingPostGRT` is gated by
+  **`RUN_POST_GRT_RESIZER_TIMING`, which defaults to false** (verified in `classic.py`).
+  So `--skip` on that step is a no-op, and this run has no resizer at all.
+- Documented the gating in `docs/long-runs.md` — the post-GRT resizer is the untried lever
+  for the full 32/4/4 hold violation.
+- The run itself continues (DRT at 27 k → converging); its expected value is "50 ns, setup
+  closed, hold still −47 ps, DRC/LVS clean", not a sign-off.
+
 ## 2026-11-14 04:59 - Autonomy tick + errata E12 updated for the level-table flows
 
 - `node scripts/autonomy.mjs`: queue empty, 0 tasks. All recent GitHub workflows on

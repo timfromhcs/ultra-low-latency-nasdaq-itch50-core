@@ -144,6 +144,12 @@ alone and close other memory consumers first.
   (54 k instances, 1400 µm die) 33 iterations took ≈1 h, so the 200 used in the first
   fitted attempt implied a >6 h global-routing phase. Keep evidence runs at 20–30;
   `GRT_ALLOW_CONGESTION: 1` lets the flow continue to detailed routing anyway.
+- **Resizer gating:** `OpenROAD.ResizerTimingPostCTS` is on by default
+  (`RUN_POST_CTS_RESIZER_TIMING`) but **`OpenROAD.ResizerTimingPostGRT` is off by default**
+  (`RUN_POST_GRT_RESIZER_TIMING`). Passing `--skip` for the post-GRT resizer therefore
+  changes nothing; set the config variable if you want it. On the full 32/4/4 level table
+  the post-CTS resizer did not converge (2 h 50 min / ≈3,620 iterations), so the post-GRT
+  variant is the untried lever for its −47 ps hold.
 - When global routing is congested, the flow retries the whole `global_route` pass and
   disables NDR on one clock net per retry (`GRT-0273`), which costs ≈11 min per pass on
   this block. `CTS_APPLY_NDR` takes an enum — `"none" | "root_only" | "half" | "full"`,
