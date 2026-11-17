@@ -8,7 +8,7 @@ name = "chiplab-native"
 path = "src/main.rs"
 
 [dependencies]
-wgpu = "0.19"
+wgpu = "30.0"
 pollster = "0.3"
 bytemuck = { version = "1", features = ["derive"] }
 
